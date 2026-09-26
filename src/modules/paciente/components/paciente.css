@@ -1,0 +1,106 @@
+.paciente-tabela {
+  overflow: hidden;
+  animation: fadeInUp 0.6s var(--ease) 0.15s backwards;
+}
+
+.paciente-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+}
+
+.paciente-toolbar .search {
+  max-width: 420px;
+}
+
+.paciente-toolbar__contagem {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.paciente-table {
+  min-width: 760px;
+}
+
+.paciente-table th,
+.paciente-table td {
+  padding-inline: 16px;
+}
+
+.pessoa {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  min-width: 200px;
+}
+
+.pessoa__avatar {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  font-size: 0.8rem;
+  font-weight: 750;
+  letter-spacing: 0.03em;
+  color: var(--on-primary);
+  background: var(--gradient-primary);
+  border-radius: 50%;
+  box-shadow: var(--shadow-primary);
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.paciente-table tbody tr:hover .pessoa__avatar {
+  transform: scale(1.1) rotate(-6deg);
+}
+
+.pessoa__dados {
+  display: grid;
+  min-width: 0;
+}
+
+.pessoa__nome {
+  font-weight: 650;
+}
+
+.pessoa__sub {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.paciente-confirmar {
+  display: inline-flex;
+  gap: 4px;
+  align-items: center;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--danger);
+  animation: popIn 0.25s var(--ease) backwards;
+}
+
+.pessoa__dados--contato {
+  max-width: 210px;
+}
+
+.pessoa__sub--corta {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.paciente-vinculos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+
+.paciente-vinculos__empresa {
+  max-width: 170px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

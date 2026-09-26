@@ -1,0 +1,57 @@
+import { formatDataBR } from '@/utils/date';
+import { IconeImpressora, IconeLapis } from '@/components/CrudCard/icones';
+import '../prontuario.css';
+
+const STATUS_AGENDA = {
+  aguardando: ['Aguardando', 'badge--info'],
+  realizado: ['Realizado', 'badge--success'],
+  cancelado: ['Cancelado', 'badge--danger'],
+};
+
+export default function ResumoAgendamento({ agendamento, onEditar, onCancelar, onImprimir }) {
+  const [rotulo, classe] = STATUS_AGENDA[agendamento.status] ?? [agendamento.status, ''];
+  const cancelado = agendamento.status === 'cancelado';
+
+  return (
+    <section className="pront-agenda" aria-label="Agendamento">
+      <div className="pront-agenda__cab">
+        <div>
+          <span className="pront-agenda__rotulo">Agendamento</span>
+          <strong className="pront-agenda__horario">
+            {formatDataBR(agendamento.data)} · {agendamento.horaInicio} – {agendamento.horaFim}
+          </strong>
+        </div>
+        <span className={`badge ${classe}`}>{rotulo}</span>
+      </div>
+
+      <dl className="pront-agenda__dados">
+        <div><dt>Profissional</dt><dd>{agendamento.profissionalId?.nome ?? '—'}</dd></div>
+        <div><dt>Serviço</dt><dd>{agendamento.servicoId?.nome ?? '—'}</dd></div>
+        <div><dt>Sala</dt><dd>{agendamento.salaId?.nome ?? '—'}</dd></div>
+        <div><dt>Convênio</dt><dd>{agendamento.convenioId?.nome ?? 'Particular'}</dd></div>
+      </dl>
+
+      {(onEditar || onCancelar || onImprimir) && (
+        <div className="pront-agenda__acoes pront-no-print">
+          {onEditar && !cancelado && (
+            <button type="button" className="btn btn--ghost btn--sm" onClick={() => onEditar(agendamento)}>
+              <IconeLapis />
+              Editar agendamento
+            </button>
+          )}
+          {onImprimir && (
+            <button type="button" className="btn btn--ghost btn--sm" onClick={() => onImprimir(agendamento)}>
+              <IconeImpressora />
+              Comprovante
+            </button>
+          )}
+          {onCancelar && !cancelado && (
+            <button type="button" className="btn btn--danger btn--sm" onClick={() => onCancelar(agendamento)}>
+              Cancelar agendamento
+            </button>
+          )}
+        </div>
+      )}
+    </section>
+  );
+}

@@ -1,0 +1,23 @@
+.dash-admin {
+  width: min(1240px, 100%);
+  container-type: inline-size;
+}
+
+.dash-admin__colunas {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+  align-items: start;
+}
+
+.dash-admin__coluna {
+  display: grid;
+  gap: 20px;
+  min-width: 0;
+}
+
+@container (max-width: 820px) {
+  .dash-admin__colunas {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

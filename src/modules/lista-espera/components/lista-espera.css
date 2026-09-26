@@ -1,0 +1,154 @@
+.espera-select {
+  flex: 1 1 200px;
+  width: auto;
+  min-width: 0;
+}
+
+.espera-form__resto {
+  display: contents;
+}
+
+.espera-form .input {
+  background: var(--surface);
+}
+
+.espera-form .search {
+  flex: none;
+  width: 100%;
+}
+
+.espera-abas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 4px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+}
+
+.espera-aba {
+  display: inline-flex;
+  flex: 1 1 auto;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+  padding: 0.45rem 0.7rem;
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 650;
+  color: var(--text-muted);
+  cursor: pointer;
+  background: transparent;
+  border: 0;
+  border-radius: var(--radius-sm);
+  transition:
+    color 0.2s var(--ease),
+    background-color 0.2s var(--ease),
+    box-shadow 0.2s var(--ease);
+}
+
+.espera-aba:hover {
+  color: var(--primary);
+}
+
+.espera-aba[aria-pressed='true'] {
+  color: var(--primary);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm), 0 0 0 1px var(--primary-ring);
+}
+
+.espera-aba__total {
+  min-width: 22px;
+  padding: 1px 6px;
+  font-size: 0.72rem;
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+  background: var(--border);
+  border-radius: 999px;
+}
+
+.espera-aba[aria-pressed='true'] .espera-aba__total {
+  color: var(--on-primary);
+  background: var(--gradient-primary);
+}
+
+.espera-item {
+  --marca: var(--warning);
+  --marca-soft: var(--warning-soft);
+  align-items: flex-start;
+}
+
+.espera-item[data-status='chamado'] {
+  --marca: var(--info);
+  --marca-soft: var(--info-soft);
+  border-color: color-mix(in srgb, var(--info) 35%, transparent);
+}
+
+.espera-item[data-status='atendido'] {
+  --marca: var(--success);
+  --marca-soft: var(--success-soft);
+  opacity: 0.75;
+}
+
+.espera-item__marca {
+  font-size: 0.8rem;
+  font-weight: 750;
+  color: var(--marca);
+  background: var(--marca-soft);
+  border-radius: 50%;
+}
+
+.espera-item[data-status='chamado'] .espera-item__marca {
+  animation: floatSm 1.6s ease-in-out infinite;
+}
+
+.espera-item .crud-item__sub {
+  white-space: normal;
+}
+
+.espera-item__obs {
+  overflow: hidden;
+  font-size: 0.8rem;
+  font-style: italic;
+  color: var(--text-muted);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.espera-item__acoes {
+  display: flex;
+  flex: none;
+  gap: 4px;
+  align-items: center;
+}
+
+.crud-item .espera-item__acoes,
+.crud-item .crud-item__confirmar {
+  align-self: center;
+}
+
+@container (max-width: 500px) {
+  .espera-item {
+    display: grid;
+    grid-template-columns: 36px minmax(0, 1fr);
+    grid-template-areas:
+      'marca info'
+      '. acoes';
+    gap: 8px 12px;
+  }
+
+  .espera-item .espera-item__marca {
+    grid-area: marca;
+  }
+
+  .espera-item .crud-item__info {
+    grid-area: info;
+  }
+
+  .espera-item .espera-item__acoes,
+  .espera-item .crud-item__confirmar {
+    grid-area: acoes;
+    justify-self: start;
+  }
+}

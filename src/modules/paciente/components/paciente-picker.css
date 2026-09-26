@@ -1,0 +1,91 @@
+.picker__novo {
+  justify-self: start;
+  margin-top: 6px;
+}
+
+.picker__aninhado {
+  margin-top: 8px;
+  animation: slideDown 0.3s var(--ease) backwards;
+}
+
+.picker__aninhado .crud-card__form {
+  background: var(--surface-2);
+}
+
+.picker__sugestoes {
+  display: grid;
+  gap: 2px;
+  padding: 4px;
+  margin: 4px 0 0;
+  list-style: none;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  animation: slideDown 0.2s var(--ease) backwards;
+}
+
+.picker__sugestoes button {
+  display: flex;
+  gap: 12px;
+  align-items: baseline;
+  justify-content: space-between;
+  width: 100%;
+  padding: 9px 12px;
+  font: inherit;
+  color: var(--text);
+  text-align: left;
+  cursor: pointer;
+  background: transparent;
+  border: 0;
+  border-radius: var(--radius-sm);
+  transition: background-color 0.15s var(--ease);
+}
+
+.picker__sugestoes button:hover,
+.picker__sugestoes button:focus-visible {
+  background: var(--primary-soft);
+}
+
+.picker__sugestoes span {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.picker__paciente {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  padding: 8px 8px 8px 10px;
+  background: var(--primary-soft);
+  border: 1px solid var(--primary-ring);
+  border-radius: var(--radius-md);
+  animation: popIn 0.25s var(--ease) backwards;
+}
+
+.picker__paciente-avatar {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  font-size: 0.75rem;
+  font-weight: 750;
+  color: var(--on-primary);
+  background: var(--gradient-primary);
+  border-radius: 50%;
+}
+
+.picker__paciente-nome {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  font-weight: 650;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.picker__paciente-cpf {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}

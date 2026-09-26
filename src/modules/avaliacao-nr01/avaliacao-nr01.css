@@ -1,0 +1,268 @@
+.nr01-tabela {
+  overflow: hidden;
+  container-type: inline-size;
+  animation: fadeInUp 0.6s var(--ease) 0.15s backwards;
+}
+
+.nr01-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  padding: 16px 20px 12px;
+}
+
+.nr01-toolbar .search {
+  max-width: 420px;
+}
+
+.nr01-toolbar__empresa {
+  flex: 0 1 240px;
+  width: auto;
+  min-width: 0;
+}
+
+/* ---------- Filtro por risco ---------- */
+
+.nr01-filtros {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 0 20px 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.nr01-filtro {
+  --cor: var(--primary);
+  --cor-suave: var(--primary-soft);
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+  padding: 6px 12px;
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  transition:
+    color 0.2s var(--ease),
+    background-color 0.2s var(--ease),
+    border-color 0.2s var(--ease),
+    transform 0.2s var(--ease);
+}
+
+.nr01-filtro[data-risco='alto'] { --cor: var(--danger); --cor-suave: var(--danger-soft); }
+.nr01-filtro[data-risco='medio'] { --cor: var(--warning); --cor-suave: var(--warning-soft); }
+.nr01-filtro[data-risco='baixo'] { --cor: var(--success); --cor-suave: var(--success-soft); }
+
+.nr01-filtro:hover {
+  color: var(--cor);
+  border-color: color-mix(in srgb, var(--cor) 40%, transparent);
+  transform: translateY(-1px);
+}
+
+.nr01-filtro[aria-pressed='true'] {
+  color: var(--cor);
+  background: var(--cor-suave);
+  border-color: color-mix(in srgb, var(--cor) 45%, transparent);
+}
+
+.nr01-filtro:focus-visible {
+  outline: 2px solid var(--cor);
+  outline-offset: 2px;
+}
+
+.nr01-filtro__contagem {
+  display: inline-grid;
+  place-items: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--cor);
+  background: var(--cor-suave);
+  border-radius: 999px;
+}
+
+.nr01-filtro[aria-pressed='true'] .nr01-filtro__contagem {
+  background: var(--surface);
+}
+
+/* ---------- Tabela ---------- */
+
+.nr01-table {
+  min-width: 700px;
+}
+
+.nr01-table th,
+.nr01-table td {
+  padding-inline: 16px;
+}
+
+.nr01-table tbody tr[data-risco='alto'] { --marca: var(--danger); }
+.nr01-table tbody tr[data-risco='medio'] { --marca: var(--warning); }
+.nr01-table tbody tr[data-risco='baixo'] { --marca: var(--success); }
+
+.nr01-table tbody tr[data-risco] > td:first-child {
+  box-shadow: inset 3px 0 0 var(--marca, transparent);
+}
+
+.nr01-empresa {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  min-width: 220px;
+}
+
+.nr01-empresa__dados {
+  display: grid;
+  min-width: 0;
+}
+
+.nr01-empresa__nome {
+  font-weight: 650;
+}
+
+.nr01-empresa__sub {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.nr01-expandir {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  color: var(--text-muted);
+  cursor: pointer;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 50%;
+  transition:
+    color 0.2s var(--ease),
+    background-color 0.2s var(--ease),
+    transform 0.3s var(--ease);
+}
+
+.nr01-expandir svg {
+  width: 16px;
+  height: 16px;
+}
+
+.nr01-expandir:hover {
+  color: var(--primary);
+  background: var(--primary-soft);
+}
+
+.nr01-expandir[aria-expanded='true'] {
+  color: var(--primary);
+  transform: rotate(180deg);
+}
+
+.nr01-confirmar {
+  display: inline-flex;
+  gap: 4px;
+  align-items: center;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--danger);
+  animation: popIn 0.25s var(--ease) backwards;
+}
+
+/* ---------- Detalhes da avaliação ---------- */
+
+.nr01-table tbody tr.nr01-detalhe:hover {
+  background: transparent;
+}
+
+.nr01-detalhe td {
+  padding: 4px 0 20px;
+  text-align: left;
+  background: var(--surface-2);
+}
+
+/* Fica na largura visível do cartão, mesmo com a tabela rolando na horizontal. */
+.nr01-detalhe__conteudo {
+  position: sticky;
+  left: 52px;
+  width: calc(100cqw - 68px);
+  text-align: left;
+}
+
+.nr01-detalhe__bloco {
+  animation: fadeInUp 0.35s var(--ease) backwards;
+}
+
+.nr01-detalhe__bloco + .nr01-detalhe__bloco {
+  margin-top: 16px;
+}
+
+.nr01-detalhe h4 {
+  margin: 12px 0 8px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--text-subtle);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.nr01-detalhe p {
+  margin: 0;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+
+.nr01-detalhe__vazio {
+  padding-top: 12px;
+  color: var(--text-muted);
+}
+
+.nr01-fatores {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 8px;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.nr01-fatores li {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  font-size: 0.875rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+}
+
+.nr01-fatores strong {
+  flex: none;
+  max-width: 45%;
+  text-align: right;
+  overflow-wrap: anywhere;
+}
+
+.nr01-fatores strong.is-vazio {
+  font-weight: 500;
+  color: var(--text-subtle);
+}
+
+@media (max-width: 520px) {
+  .nr01-detalhe__conteudo {
+    left: 16px;
+    width: calc(100cqw - 32px);
+  }
+
+  .nr01-toolbar__empresa {
+    flex-basis: 100%;
+  }
+}

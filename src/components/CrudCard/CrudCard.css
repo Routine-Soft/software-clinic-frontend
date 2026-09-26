@@ -1,0 +1,345 @@
+.crud-card {
+  position: relative;
+  display: grid;
+  gap: 18px;
+  align-content: start;
+  width: 100%;
+  padding: 24px;
+  overflow: hidden;
+  container-type: inline-size;
+  animation: fadeInUp 0.6s var(--ease) backwards;
+}
+
+.crud-card::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto;
+  height: 3px;
+  background: var(--gradient-primary);
+  transform-origin: left;
+  animation: growBar 0.9s var(--ease) 0.25s backwards;
+}
+
+.crud-card__head {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+}
+
+.crud-card__icon {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  color: var(--on-primary);
+  background: var(--gradient-primary);
+  border-radius: 14px;
+  box-shadow: var(--shadow-primary);
+  animation: floatSm 5s ease-in-out infinite;
+}
+
+.crud-card__icon svg {
+  width: 24px;
+  height: 24px;
+}
+
+.crud-card__novo-btn {
+  flex: none;
+}
+
+.crud-card__titulos {
+  flex: 1;
+  min-width: 0;
+}
+
+.crud-card__titulo {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 750;
+  letter-spacing: -0.02em;
+}
+
+.crud-card__subtitulo {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.crud-card__alertas {
+  margin: 0;
+}
+
+.crud-card__form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: end;
+  padding: 16px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+}
+
+.crud-card__form .field {
+  flex: 1 1 200px;
+}
+
+.crud-card__form .input {
+  background: var(--surface);
+}
+
+.crud-card__form--campos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+}
+
+.crud-card__form--campos .field {
+  flex: none;
+}
+
+.crud-card__form--campos .btn {
+  grid-column: 1 / -1;
+  justify-self: end;
+}
+
+.crud-lista {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 8px;
+  max-height: 420px;
+  padding: 0;
+  margin: 0;
+  overflow-y: auto;
+  list-style: none;
+}
+
+.crud-item {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  min-height: 58px;
+  padding: 10px 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  animation: fadeInUp 0.45s var(--ease) backwards;
+  animation-delay: calc(var(--i, 0) * 55ms + 150ms);
+  transition:
+    transform 0.25s var(--ease),
+    border-color 0.25s var(--ease),
+    background-color 0.25s var(--ease),
+    box-shadow 0.25s var(--ease);
+}
+
+.crud-item:hover {
+  background: var(--primary-soft);
+  border-color: var(--primary-ring);
+  box-shadow: var(--shadow-sm);
+  transform: translateX(3px);
+}
+
+.crud-item--editando {
+  border-color: var(--primary);
+  box-shadow: var(--shadow-glow);
+}
+
+.crud-item__icone,
+.crud-item__icone-skeleton {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+}
+
+.crud-item__icone {
+  color: var(--primary);
+  background: var(--primary-soft);
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.crud-item:hover .crud-item__icone {
+  transform: scale(1.1) rotate(-6deg);
+}
+
+.crud-item__icone svg {
+  width: 20px;
+  height: 20px;
+}
+
+.crud-item__nome {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  font-weight: 650;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.crud-item__info {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  flex: 1;
+  gap: 3px;
+  min-width: 0;
+}
+
+.crud-item__info .crud-item__nome {
+  flex: none;
+}
+
+.crud-item__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 8px;
+  align-items: center;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.crud-item__icone--iniciais {
+  font-size: 0.8rem;
+  font-weight: 750;
+  letter-spacing: 0.03em;
+  color: var(--on-primary);
+  background: var(--gradient-primary);
+  border-radius: 50%;
+  box-shadow: var(--shadow-primary);
+}
+
+.crud-item__sub {
+  overflow: hidden;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.crud-card__barra {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+
+.crud-card__novo {
+  animation: slideDown 0.3s var(--ease) backwards;
+}
+
+.crud-card__dica {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.crud-item__meta .badge {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.crud-item__valor {
+  flex: none;
+  font-weight: 750;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.crud-item__acoes,
+.crud-item__confirmar {
+  display: flex;
+  flex: none;
+  gap: 4px;
+  align-items: center;
+}
+
+.crud-item__acoes {
+  opacity: 0.55;
+  transition: opacity 0.2s var(--ease);
+}
+
+.crud-item:hover .crud-item__acoes,
+.crud-item:focus-within .crud-item__acoes {
+  opacity: 1;
+}
+
+.crud-item__confirmar {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--danger);
+  animation: popIn 0.25s var(--ease) backwards;
+}
+
+.crud-item--skeleton {
+  pointer-events: none;
+  animation-delay: calc(var(--i, 0) * 90ms);
+}
+
+.crud-item--skeleton:hover {
+  transform: none;
+}
+
+.crud-vazio {
+  display: grid;
+  gap: 8px;
+  justify-items: center;
+  padding: 32px 16px;
+  color: var(--text-muted);
+  text-align: center;
+  border: 2px dashed var(--border);
+  border-radius: var(--radius-lg);
+  animation: fadeIn 0.5s var(--ease) backwards;
+}
+
+.crud-vazio svg {
+  width: 34px;
+  height: 34px;
+  color: var(--text-subtle);
+}
+
+.crud-vazio p {
+  margin: 0;
+}
+
+@container (max-width: 460px) {
+  .crud-item:has(.crud-item__valor) {
+    display: grid;
+    grid-template-columns: 36px minmax(0, 1fr) auto;
+    grid-template-areas:
+      'icone info acoes'
+      '. valor valor';
+    gap: 4px 12px;
+    align-items: center;
+  }
+
+  .crud-item:has(.crud-item__valor) .crud-item__icone {
+    grid-area: icone;
+  }
+
+  .crud-item:has(.crud-item__valor) .crud-item__info {
+    grid-area: info;
+  }
+
+  .crud-item:has(.crud-item__valor) .crud-item__valor {
+    grid-area: valor;
+  }
+
+  .crud-item:has(.crud-item__valor) .crud-item__acoes,
+  .crud-item:has(.crud-item__valor) .crud-item__confirmar {
+    grid-area: acoes;
+  }
+}
+
+@container (max-width: 420px) {
+  .crud-card__rotulo {
+    display: none;
+  }
+
+  .crud-card__novo-btn {
+    width: 36px;
+    height: 36px;
+    padding: 0;
+  }
+}

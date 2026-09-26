@@ -1,0 +1,729 @@
+/* ---------- Página do prontuário ---------- */
+
+.pront-pagina {
+  padding: clamp(16px, 3vw, 28px);
+  animation: fadeInUp 0.6s var(--ease) 0.1s backwards;
+}
+
+.pront-voltar {
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
+  margin-bottom: 6px;
+  font-size: 0.875rem;
+}
+
+.pront-voltar svg {
+  width: 1em;
+  height: 1em;
+  transition: transform 0.25s var(--ease);
+}
+
+.pront-voltar:hover svg {
+  transform: translateX(-3px);
+}
+
+.pront-link-nome {
+  color: inherit;
+  text-decoration: none;
+  transition: color 0.2s var(--ease);
+}
+
+.pront-link-nome:hover {
+  color: var(--primary);
+}
+
+.skeleton--bloco {
+  height: 180px;
+}
+
+/* ---------- Janela (modal) do prontuário ---------- */
+
+.modal--prontuario {
+  width: min(100%, 900px);
+}
+
+/* ---------- Ficha ---------- */
+
+.prontuario {
+  display: grid;
+  gap: 18px;
+  container-type: inline-size;
+}
+
+.pront-head {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.pront-head__avatar {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  font-size: 1.05rem;
+  font-weight: 750;
+  letter-spacing: 0.03em;
+  color: var(--on-primary);
+  background: var(--gradient-primary);
+  border-radius: 50%;
+  box-shadow: var(--shadow-primary);
+  animation: popIn 0.5s var(--ease) backwards;
+}
+
+.pront-head__dados {
+  flex: 1;
+  min-width: 0;
+}
+
+.pront-head__nome {
+  margin: 0;
+  font-size: 1.35rem;
+  font-weight: 750;
+  letter-spacing: -0.02em;
+  overflow-wrap: anywhere;
+}
+
+.pront-head__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px 14px;
+  margin: 4px 0 0;
+  font-size: 0.875rem;
+  color: var(--text-muted);
+}
+
+.pront-head__selos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.pront-head__imprimir {
+  flex: none;
+}
+
+/* ---------- Agendamento ---------- */
+
+.pront-agenda {
+  display: grid;
+  gap: 12px;
+  padding: 14px 16px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--primary);
+  border-radius: var(--radius-md);
+  animation: fadeInUp 0.5s var(--ease) 0.05s backwards;
+}
+
+.pront-agenda__cab {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.pront-agenda__rotulo {
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--text-subtle);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.pront-agenda__horario {
+  font-size: 1.05rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.pront-agenda__dados {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 10px 16px;
+  margin: 0;
+}
+
+.pront-agenda__dados dt,
+.pront-resumo dt {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--text-subtle);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.pront-agenda__dados dd {
+  margin: 2px 0 0;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.pront-agenda__acoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+
+/* ---------- Alergias e resumo clínico ---------- */
+
+.pront-alergia {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  padding: 12px 14px;
+  color: var(--warning);
+  background: var(--warning-soft);
+  border: 1px solid color-mix(in srgb, var(--warning) 35%, transparent);
+  border-radius: var(--radius-md);
+  animation: slideDown 0.4s var(--ease) backwards;
+}
+
+.pront-alergia svg {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  margin-top: 1px;
+}
+
+.pront-alergia p {
+  margin: 0;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+
+.pront-resumo {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 10px;
+  margin: 0;
+}
+
+.pront-resumo > div {
+  padding: 10px 14px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+}
+
+.pront-resumo dd {
+  margin: 2px 0 0;
+  font-size: 0.875rem;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+
+.pront-resumo .is-vazio dd {
+  color: var(--text-subtle);
+}
+
+/* ---------- Abas ---------- */
+
+.pront-abas {
+  display: flex;
+  gap: 4px;
+  padding: 4px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+}
+
+.pront-aba {
+  position: relative;
+  display: inline-flex;
+  flex: 1;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+  padding: 9px 14px;
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+  background: transparent;
+  border: 0;
+  border-radius: calc(var(--radius-md) - 3px);
+  transition:
+    color 0.2s var(--ease),
+    background-color 0.2s var(--ease),
+    box-shadow 0.25s var(--ease);
+}
+
+.pront-aba:hover {
+  color: var(--text);
+}
+
+.pront-aba[aria-selected='true'] {
+  color: var(--primary);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm), 0 0 0 1px var(--primary-ring);
+}
+
+.pront-aba:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+.pront-aba__contagem {
+  display: inline-grid;
+  place-items: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--primary);
+  background: var(--primary-soft);
+  border-radius: 999px;
+}
+
+.pront-aba__ponto {
+  width: 8px;
+  height: 8px;
+  background: var(--success);
+  border-radius: 50%;
+  animation: pulseRing 1.8s ease-out infinite;
+}
+
+/* ---------- Avisos ---------- */
+
+.pront-avisos {
+  position: sticky;
+  top: 0;
+  z-index: 3;
+  display: grid;
+  gap: 8px;
+  padding-block: 2px;
+  background: var(--surface);
+}
+
+/* ---------- Painel ---------- */
+
+.pront-painel {
+  min-width: 0;
+  animation: fadeInUp 0.35s var(--ease) backwards;
+}
+
+.pront-vazio,
+.pront-evolucao__vazio,
+.pront-section__vazio {
+  margin: 0;
+  color: var(--text-muted);
+}
+
+.pront-vazio {
+  padding: 32px 16px;
+  text-align: center;
+  background: var(--surface-2);
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--radius-md);
+}
+
+.pront-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.pront-grid--sinais {
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+}
+
+.pront-campos {
+  display: grid;
+  gap: 16px;
+}
+
+.pront-section {
+  display: grid;
+  gap: 12px;
+  min-width: 0;
+  padding: 14px 16px 16px;
+  margin: 0;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+}
+
+.pront-section legend {
+  padding: 0 6px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+
+.pront-section__add {
+  justify-self: start;
+}
+
+.pront-anexo-form {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr) 110px auto;
+  gap: 8px;
+  align-items: center;
+  animation: fadeInUp 0.3s var(--ease) backwards;
+}
+
+.pront-rodape {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: flex-end;
+  margin-top: 4px;
+}
+
+.pront-rodape--fixo {
+  position: sticky;
+  bottom: 0;
+  z-index: 2;
+  padding: 12px 0 2px;
+  margin-top: 16px;
+  background: linear-gradient(to top, var(--surface) 70%, transparent);
+}
+
+/* ---------- Atendimento ---------- */
+
+.pront-ativo {
+  display: grid;
+  gap: 16px;
+}
+
+.pront-ativo__banner {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  align-items: center;
+  padding: 10px 14px;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  background: var(--success-soft);
+  border: 1px solid color-mix(in srgb, var(--success) 30%, transparent);
+  border-radius: var(--radius-md);
+}
+
+.pront-ativo__banner strong {
+  color: var(--text);
+}
+
+.pront-novo {
+  display: grid;
+  gap: 16px;
+  padding: 18px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+}
+
+.pront-novo__intro h4 {
+  margin: 0;
+  font-size: 1.05rem;
+}
+
+.pront-novo__intro p {
+  margin: 4px 0 0;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+/* ---------- Histórico (linha do tempo) ---------- */
+
+.pront-timeline {
+  display: grid;
+  gap: 14px;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.pront-evolucao {
+  position: relative;
+  padding-left: 26px;
+  animation: fadeInUp 0.45s var(--ease) backwards;
+}
+
+.pront-evolucao::before {
+  content: '';
+  position: absolute;
+  top: 18px;
+  bottom: -16px;
+  left: 6px;
+  width: 2px;
+  background: var(--border);
+}
+
+.pront-evolucao:last-child::before {
+  display: none;
+}
+
+.pront-evolucao__ponto {
+  position: absolute;
+  top: 8px;
+  left: 0;
+  width: 14px;
+  height: 14px;
+  background: var(--surface);
+  border: 3px solid var(--primary);
+  border-radius: 50%;
+  box-shadow: 0 0 0 4px var(--primary-soft);
+}
+
+.pront-evolucao__corpo {
+  padding: 14px 16px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  transition:
+    border-color 0.25s var(--ease),
+    box-shadow 0.25s var(--ease);
+}
+
+.pront-evolucao__corpo:hover,
+.pront-evolucao.is-editing .pront-evolucao__corpo {
+  border-color: var(--primary-ring);
+  box-shadow: var(--shadow-sm);
+}
+
+.pront-evolucao--destaque .pront-evolucao__ponto {
+  border-color: var(--success);
+  box-shadow: 0 0 0 4px var(--success-soft);
+}
+
+.pront-evolucao--destaque .pront-evolucao__corpo {
+  border-color: color-mix(in srgb, var(--success) 40%, transparent);
+}
+
+.pront-evolucao__topo {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  align-items: center;
+}
+
+.pront-evolucao__quando {
+  display: grid;
+  flex: 1 1 200px;
+  min-width: 0;
+}
+
+.pront-evolucao__quando span {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.pront-evolucao__selos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.pront-evolucao__acoes {
+  display: flex;
+  gap: 2px;
+}
+
+.pront-confirmar {
+  display: inline-flex;
+  gap: 4px;
+  align-items: center;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--danger);
+  animation: popIn 0.25s var(--ease) backwards;
+}
+
+.pront-evolucao__conteudo,
+.pront-evolucao__edicao {
+  display: grid;
+  gap: 12px;
+  padding-top: 12px;
+  margin-top: 12px;
+  border-top: 1px solid var(--border);
+}
+
+.pront-texto {
+  display: grid;
+  gap: 2px;
+}
+
+.pront-texto__rotulo {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--text-subtle);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.pront-texto p {
+  margin: 0;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+
+.pront-sinais,
+.pront-anexos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.pront-sinais li {
+  display: grid;
+  min-width: 78px;
+  padding: 6px 12px;
+  text-align: center;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+}
+
+.pront-sinais span {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--text-subtle);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.pront-sinais strong {
+  font-size: 0.95rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.pront-anexos li {
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.pront-retorno {
+  padding: 8px 12px;
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  background: var(--primary-soft);
+  border-radius: var(--radius-sm);
+}
+
+.pront-retorno strong {
+  color: var(--primary);
+}
+
+/* ---------- Perfil clínico ---------- */
+
+.pront-perfil {
+  display: grid;
+  gap: 16px;
+}
+
+.pront-perfil__intro {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+/* ---------- Responsivo (pela largura do próprio card/modal) ---------- */
+
+@container (max-width: 560px) {
+  .pront-head {
+    flex-wrap: wrap;
+  }
+
+  .pront-head__imprimir {
+    order: 3;
+  }
+
+  .pront-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .pront-anexo-form {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .pront-anexo-form .input:nth-child(2),
+  .pront-anexo-form select {
+    grid-column: 1 / -1;
+    grid-row: auto;
+  }
+
+  .pront-anexo-form .icon-btn {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .pront-aba {
+    padding-inline: 8px;
+    font-size: 0.82rem;
+  }
+
+  .pront-head__avatar {
+    width: 46px;
+    height: 46px;
+    font-size: 0.95rem;
+  }
+
+  .pront-rodape .btn,
+  .pront-agenda__acoes .btn {
+    flex: 1 1 auto;
+  }
+}
+
+/* ---------- Impressão ---------- */
+
+@media print {
+  body:has(.modal-overlay) #root {
+    display: none;
+  }
+
+  .modal-overlay {
+    position: static;
+    display: block;
+    padding: 0;
+    overflow: visible;
+    background: none;
+    backdrop-filter: none;
+  }
+
+  .modal--prontuario {
+    width: 100%;
+    max-height: none;
+    padding: 0;
+    overflow: visible;
+    border: 0;
+    box-shadow: none;
+  }
+
+  .modal--prontuario::before,
+  .modal--prontuario .modal__close {
+    display: none;
+  }
+
+  .pront-no-print {
+    display: none !important;
+  }
+
+  .pront-evolucao__corpo,
+  .pront-resumo,
+  .pront-agenda {
+    break-inside: avoid;
+    box-shadow: none;
+  }
+}
+
+/* ---------- Pré-visualização do modal ---------- */
+
+.pront-preview {
+  display: grid;
+  gap: 16px;
+  padding: 24px;
+  animation: fadeInUp 0.6s var(--ease) 0.1s backwards;
+}

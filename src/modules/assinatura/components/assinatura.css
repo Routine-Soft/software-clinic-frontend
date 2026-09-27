@@ -254,3 +254,115 @@
   color: var(--text-muted);
   text-align: center;
 }
+
+/* ---------- Ações quando o pagamento está pendente ---------- */
+
+.assinatura-card__acoes {
+  display: grid;
+  gap: 8px;
+}
+
+/* ---------- Tela de retorno do checkout ---------- */
+
+.assinatura-retorno {
+  --cor: var(--info);
+  --cor-suave: var(--info-soft);
+  display: grid;
+  gap: 12px;
+  justify-items: center;
+  padding: 40px 28px 32px;
+  text-align: center;
+  animation: fadeInUp 0.5s var(--ease) backwards;
+}
+
+.assinatura-retorno[data-situacao='ativa'] { --cor: var(--success); --cor-suave: var(--success-soft); }
+.assinatura-retorno[data-situacao='bloqueado'],
+.assinatura-retorno[data-situacao='pendente'] { --cor: var(--warning); --cor-suave: var(--warning-soft); }
+.assinatura-retorno[data-situacao='problema'] { --cor: var(--danger); --cor-suave: var(--danger-soft); }
+
+.assinatura-retorno__icone {
+  display: grid;
+  place-items: center;
+  width: 84px;
+  height: 84px;
+  color: var(--cor);
+  background: var(--cor-suave);
+  border-radius: 50%;
+  box-shadow: 0 0 0 10px color-mix(in srgb, var(--cor) 10%, transparent);
+  animation: popIn 0.5s var(--ease) backwards;
+}
+
+.assinatura-retorno__icone svg {
+  width: 40px;
+  height: 40px;
+}
+
+.assinatura-retorno[data-situacao='verificando'] .assinatura-retorno__icone svg {
+  animation: spin 0.9s linear infinite;
+}
+
+.assinatura-retorno__titulo {
+  margin: 8px 0 0;
+  font-size: 1.5rem;
+  font-weight: 750;
+  letter-spacing: -0.02em;
+}
+
+.assinatura-retorno__texto {
+  max-width: 44ch;
+  margin: 0;
+  color: var(--text-muted);
+}
+
+.assinatura-retorno__acoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 12px;
+}
+
+/* ---------- Cancelar assinatura ---------- */
+
+.assinatura-card__cancelar {
+  justify-self: center;
+  padding: 6px 10px;
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+  background: transparent;
+  border: 0;
+  border-radius: var(--radius-sm);
+  transition:
+    color 0.2s var(--ease),
+    background-color 0.2s var(--ease);
+}
+
+.assinatura-card__cancelar:hover {
+  color: var(--danger);
+  background: var(--danger-soft);
+}
+
+.assinatura-card__confirmar {
+  display: grid;
+  gap: 10px;
+  padding: 14px;
+  background: var(--danger-soft);
+  border: 1px solid color-mix(in srgb, var(--danger) 30%, transparent);
+  border-radius: var(--radius-md);
+  animation: slideDown 0.3s var(--ease) backwards;
+}
+
+.assinatura-card__confirmar p {
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.assinatura-card__acoes--linha {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: flex-end;
+}

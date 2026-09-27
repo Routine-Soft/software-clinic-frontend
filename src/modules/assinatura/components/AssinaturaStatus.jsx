@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useAssinatura } from '../assinatura.hooks';
 import './assinatura.css';
 
@@ -77,7 +78,8 @@ function IconeAssinatura() {
 }
 
 export default function AssinaturaStatus({ className = '' }) {
-  const { assinatura, loading, error, iniciandoCheckout, iniciarCheckout } = useAssinatura();
+  const { assinatura, loading, error, iniciandoCheckout, iniciarCheckout, sincronizando, sincronizar, cancelando, cancelar, erroAcao } = useAssinatura();
+  const [confirmandoCancelamento, setConfirmandoCancelamento] = useState(false);
   const classes = `card assinatura-card ${className}`.trim();
 
   if (loading) {
@@ -115,6 +117,9 @@ export default function AssinaturaStatus({ className = '' }) {
 
   const status = STATUS[assinatura.status] ?? { rotulo: assinatura.status, badge: 'muted', pulsa: false, mensagem: '' };
   const podeAssinar = STATUS_QUE_PODEM_ASSINAR.includes(assinatura.status);
+  const aguardandoPagamento = assinatura.status === 'pendente';
+  const podeCancelar = ['ativa', 'inadimplente'].includes(assinatura.status);
+  const acessoAte = assinatura.status === 'cancelada' && assinatura.acesso?.liberado ? assinatura.acesso.ate : null;
   const emTrial = assinatura.status === 'trial' && assinatura.dataFimTrial;
   const trial = emTrial ? calcularTrial(assinatura) : null;
   const preco = assinatura.planoId?.preco;
@@ -159,12 +164,18 @@ export default function AssinaturaStatus({ className = '' }) {
         </div>
       )}
 
-      {(assinatura.dataInicio || (assinatura.status === 'ativa' && assinatura.proximaCobranca)) && (
+      {(assinatura.dataInicio || acessoAte || (assinatura.status === 'ativa' && assinatura.proximaCobranca)) && (
         <dl className="assinatura-card__info">
           {assinatura.dataInicio && (
             <div>
               <dt>{assinatura.status === 'trial' ? 'Teste iniciado em' : 'Assinante desde'}</dt>
               <dd>{formatarData(assinatura.dataInicio)}</dd>
+            </div>
+          )}
+          {acessoAte && (
+            <div>
+              <dt>Acesso liberado até</dt>
+              <dd>{formatarData(acessoAte)}</dd>
             </div>
           )}
           {assinatura.status === 'ativa' && assinatura.proximaCobranca && (
@@ -176,7 +187,51 @@ export default function AssinaturaStatus({ className = '' }) {
         </dl>
       )}
 
-      {status.mensagem && <p className="assinatura-card__mensagem">{status.mensagem}</p>}
+      {acessoAte
+        ? <p className="assinatura-card__mensagem">Assinatura cancelada. Você continua com acesso até {formatarData(acessoAte)}; depois disso, o sistema será bloqueado.</p>
+        : status.mensagem && <p className="assinatura-card__mensagem">{status.mensagem}</p>}
+
+      {erroAcao && <p className="alert alert--error" role="alert">{erroAcao.message}</p>}
+
+      {aguardandoPagamento && (
+        <div className="assinatura-card__acoes">
+          <button
+            type="button"
+            className={`btn btn--primary btn--block assinatura-card__cta${sincronizando ? ' btn--loading' : ''}`}
+            onClick={sincronizar}
+            disabled={sincronizando}
+          >
+            {sincronizando ? 'Verificando...' : 'Já paguei — verificar agora'}
+          </button>
+          <button type="button" className="btn btn--ghost btn--block" onClick={iniciarCheckout} disabled={iniciandoCheckout}>
+            {iniciandoCheckout ? 'Redirecionando...' : 'Refazer o pagamento'}
+          </button>
+        </div>
+      )}
+
+      {podeCancelar && (confirmandoCancelamento ? (
+        <div className="assinatura-card__confirmar" role="alertdialog" aria-label="Confirmar cancelamento">
+          <p>
+            Cancelar a assinatura?
+            {assinatura.proximaCobranca ? ` Você continua com acesso até ${formatarData(assinatura.proximaCobranca)}, e nenhuma nova cobrança será feita.` : ' Nenhuma nova cobrança será feita.'}
+          </p>
+          <div className="assinatura-card__acoes assinatura-card__acoes--linha">
+            <button type="button" className="btn btn--ghost btn--sm" onClick={() => setConfirmandoCancelamento(false)} disabled={cancelando}>Manter assinatura</button>
+            <button
+              type="button"
+              className={`btn btn--danger btn--sm${cancelando ? ' btn--loading' : ''}`}
+              disabled={cancelando}
+              onClick={async () => { if (await cancelar()) setConfirmandoCancelamento(false); }}
+            >
+              {cancelando ? 'Cancelando...' : 'Sim, cancelar'}
+            </button>
+          </div>
+        </div>
+      ) : (
+        <button type="button" className="assinatura-card__cancelar" onClick={() => setConfirmandoCancelamento(true)}>
+          Cancelar assinatura
+        </button>
+      ))}
 
       {podeAssinar && (
         <button

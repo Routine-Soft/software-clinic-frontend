@@ -98,8 +98,13 @@ async function makeRequest(url, options = {}) {
       const errorData = await response.json().catch(() => ({
         message: `HTTP Error: ${response.status}`,
       }))
+      if (response.status === 402 && errorData.code === 'ASSINATURA_INATIVA') {
+        window.dispatchEvent(new CustomEvent('assinatura:inativa', { detail: { motivo: errorData.message } }))
+      }
+
       throw {
         status: response.status,
+        code: errorData.code,
         message: errorData.message || 'Erro na requisição',
         data: errorData,
       }

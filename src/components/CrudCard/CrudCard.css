@@ -106,6 +106,10 @@
 .crud-lista {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
+  /* Cada linha tem a altura do próprio conteúdo. Sem isso, com max-height o grid espreme as
+     linhas para caber e o texto de itens com várias informações vaza por cima do vizinho. */
+  grid-auto-rows: max-content;
+  align-content: start;
   gap: 8px;
   max-height: 420px;
   padding: 0;
@@ -341,5 +345,21 @@
     width: 36px;
     height: 36px;
     padding: 0;
+  }
+}
+
+/* Em cartões estreitos o texto quebra em mais linhas em vez de ser cortado com reticências. */
+@container (max-width: 460px) {
+  .crud-item__info .crud-item__nome,
+  .crud-item__info .crud-item__sub {
+    overflow-wrap: anywhere;
+    white-space: normal;
+  }
+
+  .crud-item__meta .badge {
+    max-width: 100%;
+    overflow: visible;
+    text-align: left;
+    white-space: normal;
   }
 }

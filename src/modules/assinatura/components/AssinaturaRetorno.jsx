@@ -69,7 +69,7 @@ export default function AssinaturaRetorno() {
     verificando: ['Confirmando seu pagamento...', 'Estamos conferindo com o Mercado Pago. Isso leva só alguns segundos.'],
     ativa: ['Assinatura ativa!', assinatura?.proximaCobranca ? `Tudo certo. A próxima cobrança será em ${formatarData(assinatura.proximaCobranca)}.` : 'Tudo certo. Obrigado por assinar!'],
     pendente: ['Aguardando a confirmação', 'O Mercado Pago ainda não confirmou o pagamento. Assim que ele confirmar, sua assinatura será ativada. Você pode verificar de novo agora ou voltar mais tarde.'],
-    problema: [erro ? 'Não foi possível verificar' : 'Pagamento não concluído', erro ? erro.message : 'A assinatura não foi ativada. Você pode tentar novamente pelo botão "Assinar plano pago".'],
+    problema: [erro ? 'Não foi possível verificar' : 'Pagamento não concluído', erro ? erro.message : 'O Mercado Pago não aprovou o pagamento, e nada foi cobrado. Você continua no plano gratuito e pode tentar de novo, no cartão ou por Pix.'],
   }[situacao];
 
   return (
@@ -86,9 +86,10 @@ export default function AssinaturaRetorno() {
 
         <div className="assinatura-retorno__acoes">
           {situacao === 'ativa' && <Link to="/home" className="btn btn--primary">Ir para o início</Link>}
-          {(situacao === 'pendente' || situacao === 'problema') && (
+          {(situacao === 'pendente' || (situacao === 'problema' && erro)) && (
             <button type="button" className="btn btn--primary" onClick={verificarNovamente}>Verificar novamente</button>
           )}
+          {situacao === 'problema' && !erro && <Link to="/assinaturas" className="btn btn--primary">Ver planos e tentar de novo</Link>}
           {situacao !== 'verificando' && <Link to="/assinatura" className="btn btn--ghost">Ver minha assinatura</Link>}
         </div>
       </section>

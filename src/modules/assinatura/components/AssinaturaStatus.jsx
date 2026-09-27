@@ -119,7 +119,10 @@ export default function AssinaturaStatus({ className = '' }) {
   const status = STATUS[assinatura.status] ?? { rotulo: assinatura.status, badge: 'muted', pulsa: false, mensagem: '' };
   const podeAssinar = STATUS_QUE_PODEM_ASSINAR.includes(assinatura.status);
   const aguardandoPagamento = assinatura.status === 'pendente';
-  const podeCancelar = ['ativa', 'inadimplente'].includes(assinatura.status);
+  // Em "pendente" não há nada pago: cancelar aqui é desistir do checkout e voltar ao plano gratuito.
+  const desistindo = aguardandoPagamento;
+  const podeCancelar = ['ativa', 'inadimplente', 'pendente'].includes(assinatura.status);
+  const testeVigente = !!assinatura.dataFimTrial && new Date(assinatura.dataFimTrial) > new Date();
   const acessoAte = assinatura.status === 'cancelada' && assinatura.acesso?.liberado ? assinatura.acesso.ate : null;
   const emTrial = assinatura.status === 'trial' && assinatura.dataFimTrial;
   const trial = emTrial ? calcularTrial(assinatura) : null;
@@ -211,26 +214,35 @@ export default function AssinaturaStatus({ className = '' }) {
       )}
 
       {podeCancelar && (confirmandoCancelamento ? (
-        <div className="assinatura-card__confirmar" role="alertdialog" aria-label="Confirmar cancelamento">
-          <p>
-            Cancelar a assinatura?
-            {assinatura.proximaCobranca ? ` Você continua com acesso até ${formatarData(assinatura.proximaCobranca)}, e nenhuma nova cobrança será feita.` : ' Nenhuma nova cobrança será feita.'}
-          </p>
+        <div className="assinatura-card__confirmar" role="alertdialog" aria-label={desistindo ? 'Confirmar desistência' : 'Confirmar cancelamento'}>
+          {desistindo ? (
+            <p>
+              Desistir da assinatura? O pagamento pendente é cancelado e você volta ao plano gratuito
+              {testeVigente
+                ? `, com o teste até ${formatarData(assinatura.dataFimTrial)}.`
+                : '. O período de teste já terminou, então será preciso assinar um plano para continuar usando o sistema.'}
+            </p>
+          ) : (
+            <p>
+              Cancelar a assinatura?
+              {assinatura.proximaCobranca ? ` Você continua com acesso até ${formatarData(assinatura.proximaCobranca)}, e nenhuma nova cobrança será feita.` : ' Nenhuma nova cobrança será feita.'}
+            </p>
+          )}
           <div className="assinatura-card__acoes assinatura-card__acoes--linha">
-            <button type="button" className="btn btn--ghost btn--sm" onClick={() => setConfirmandoCancelamento(false)} disabled={cancelando}>Manter assinatura</button>
+            <button type="button" className="btn btn--ghost btn--sm" onClick={() => setConfirmandoCancelamento(false)} disabled={cancelando}>{desistindo ? 'Continuar aguardando' : 'Manter assinatura'}</button>
             <button
               type="button"
               className={`btn btn--danger btn--sm${cancelando ? ' btn--loading' : ''}`}
               disabled={cancelando}
               onClick={async () => { if (await cancelar()) setConfirmandoCancelamento(false); }}
             >
-              {cancelando ? 'Cancelando...' : 'Sim, cancelar'}
+              {cancelando ? (desistindo ? 'Desistindo...' : 'Cancelando...') : (desistindo ? 'Sim, desistir' : 'Sim, cancelar')}
             </button>
           </div>
         </div>
       ) : (
         <button type="button" className="assinatura-card__cancelar" onClick={() => setConfirmandoCancelamento(true)}>
-          Cancelar assinatura
+          {desistindo ? 'Desistir e voltar ao gratuito' : 'Cancelar assinatura'}
         </button>
       ))}
 

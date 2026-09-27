@@ -3,6 +3,7 @@ import { useAuthContext } from '@/hooks/useAuthContext';
 import { usePlanos } from '@/modules/plano/plano.hooks';
 import { useAssinatura } from '../assinatura.hooks';
 import { formatDataBR } from '@/utils/date';
+import './assinatura.css';
 import './assinaturas-planos.css';
 
 // O rótulo diz o que o plano é para a clínica (o plano da assinatura atual ganha um selo com o estado dela).
@@ -83,8 +84,9 @@ function BeneficiosDoPlano({ plano }) {
 export default function AssinaturasPlanos() {
   const { user } = useAuthContext();
   const { planos, loading: carregandoPlanos, error: erroPlanos } = usePlanos();
-  const { assinatura, loading: carregandoAssinatura, error: erroAssinatura, iniciandoCheckout, iniciarCheckout, erroAcao } = useAssinatura();
+  const { assinatura, loading: carregandoAssinatura, error: erroAssinatura, iniciandoCheckout, iniciarCheckout, cancelando, cancelar, erroAcao } = useAssinatura();
   const [planoEscolhido, setPlanoEscolhido] = useState(null);
+  const [confirmandoDesistencia, setConfirmandoDesistencia] = useState(false);
 
   const carregando = carregandoPlanos || carregandoAssinatura;
   const erro = erroPlanos || erroAssinatura;
@@ -199,6 +201,29 @@ export default function AssinaturasPlanos() {
                     {carregandoEste ? 'Redirecionando...' : textoDoBotao(plano, assinatura ?? {})}
                   </button>
                 )}
+
+                {podeContratar && ehAtual && assinatura.status === 'pendente' && (confirmandoDesistencia ? (
+                  <div className="assinatura-card__confirmar" role="alertdialog" aria-label="Confirmar desistência">
+                    <p>Desistir da assinatura? O pagamento pendente é cancelado e você volta ao plano gratuito.</p>
+                    <div className="assinatura-card__acoes assinatura-card__acoes--linha">
+                      <button type="button" className="btn btn--ghost btn--sm" onClick={() => setConfirmandoDesistencia(false)} disabled={cancelando}>
+                        Continuar aguardando
+                      </button>
+                      <button
+                        type="button"
+                        className={`btn btn--danger btn--sm${cancelando ? ' btn--loading' : ''}`}
+                        disabled={cancelando}
+                        onClick={async () => { if (await cancelar()) setConfirmandoDesistencia(false); }}
+                      >
+                        {cancelando ? 'Desistindo...' : 'Sim, desistir'}
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <button type="button" className="assinatura-card__cancelar" onClick={() => setConfirmandoDesistencia(true)}>
+                    Desistir e voltar ao gratuito
+                  </button>
+                ))}
               </article>
             );
           })}

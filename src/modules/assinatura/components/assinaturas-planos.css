@@ -130,8 +130,22 @@
   color: var(--primary);
 }
 
-.plano-opcao__cta {
+.plano-opcao__acoes {
+  display: grid;
+  gap: 8px;
   margin-top: 4px;
+}
+
+/* Pix é o meio que a maioria prefere: fica com destaque mesmo quando não é o botão principal. */
+.plano-opcao__pix:not(.btn--primary, :disabled) {
+  color: var(--primary);
+  border-color: var(--primary-ring);
+  background: var(--primary-soft);
+}
+
+.plano-opcao__pix svg {
+  width: 18px;
+  height: 18px;
 }
 
 @media (prefers-reduced-motion: reduce) {

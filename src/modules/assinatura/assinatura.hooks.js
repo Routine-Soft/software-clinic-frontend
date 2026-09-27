@@ -101,5 +101,6 @@ export function useAssinatura() {
     cancelar,
     erroAcao,
     refreshAssinatura,
+    atualizarAssinatura: setAssinatura,
   };
 }

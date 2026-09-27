@@ -2,7 +2,8 @@ import { useState } from 'react';
 import { useAuthContext } from '@/hooks/useAuthContext';
 import { usePlanos } from '@/modules/plano/plano.hooks';
 import { useAssinatura } from '../assinatura.hooks';
-import { formatDataBR } from '@/utils/date';
+import { formatarData, formatarPreco } from '../assinatura.utils';
+import PixModal from './PixModal';
 import './assinatura.css';
 import './assinaturas-planos.css';
 
@@ -25,10 +26,6 @@ const ROTULO_DA_ASSINATURA = {
   expirada: 'com o teste encerrado',
 };
 
-function formatarPreco(preco) {
-  return preco.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-}
-
 // Gratuito primeiro, depois os pagos do mais barato ao mais caro.
 function ordenarPlanos(planos) {
   return [...planos].sort((a, b) => {
@@ -37,14 +34,22 @@ function ordenarPlanos(planos) {
   });
 }
 
-function textoDoBotao(plano, assinatura) {
+function textoDoBotaoCartao(plano, assinatura) {
   const status = assinatura.status;
   const ehAtual = assinatura.planoId?._id === plano._id;
 
   if (status === 'ativa') return ehAtual ? 'Plano atual' : 'Indisponível';
   if (ehAtual && status === 'pendente') return 'Refazer o pagamento';
-  if (ehAtual && status === 'inadimplente') return 'Regularizar pagamento';
-  return 'Assinar este plano';
+  if (ehAtual && status === 'inadimplente') return 'Regularizar no cartão';
+  return 'Assinar no cartão';
+}
+
+function IconePix() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="m12 3 4.5 4.5L12 12 7.5 7.5zM3 12l4.5-4.5L12 12l-4.5 4.5zM12 12l4.5-4.5L21 12l-4.5 4.5zM12 12l4.5 4.5L12 21l-4.5-4.5z" />
+    </svg>
+  );
 }
 
 function IconeCheck() {
@@ -64,7 +69,8 @@ function BeneficiosDoPlano({ plano }) {
       ]
     : [
         'Acesso completo ao sistema',
-        'Cobrança mensal recorrente',
+        'No cartão, renova sozinho todo mês',
+        'No Pix, cada pagamento vale 30 dias',
         'Cancele quando quiser, sem multa',
         'Pagamento seguro pelo Mercado Pago',
       ];
@@ -84,8 +90,9 @@ function BeneficiosDoPlano({ plano }) {
 export default function AssinaturasPlanos() {
   const { user } = useAuthContext();
   const { planos, loading: carregandoPlanos, error: erroPlanos } = usePlanos();
-  const { assinatura, loading: carregandoAssinatura, error: erroAssinatura, iniciandoCheckout, iniciarCheckout, cancelando, cancelar, erroAcao } = useAssinatura();
+  const { assinatura, loading: carregandoAssinatura, error: erroAssinatura, iniciandoCheckout, iniciarCheckout, cancelando, cancelar, erroAcao, atualizarAssinatura } = useAssinatura();
   const [planoEscolhido, setPlanoEscolhido] = useState(null);
+  const [pix, setPix] = useState(null);
   const [confirmandoDesistencia, setConfirmandoDesistencia] = useState(false);
 
   const carregando = carregandoPlanos || carregandoAssinatura;
@@ -94,6 +101,10 @@ export default function AssinaturasPlanos() {
   const podeContratar = user?.role === 'admin' || user?.role === 'super_admin';
   const planosAtivos = ordenarPlanos(planos.filter((plano) => plano.ativo));
   const assinaturaAtiva = assinatura?.status === 'ativa';
+  // Pix é pago período a período e não renova sozinho; o cartão renova todo mês no Mercado Pago.
+  const ativaPorPix = assinaturaAtiva && assinatura.cobranca === 'pix';
+  const ativaNoCartao = assinaturaAtiva && !ativaPorPix;
+  const aguardandoCartao = assinatura?.status === 'pendente';
 
   function escolher(plano) {
     setPlanoEscolhido(plano._id);
@@ -118,9 +129,9 @@ export default function AssinaturasPlanos() {
       {assinatura && (
         <p className="assinaturas__resumo" data-status={assinatura.status}>
           <span>
-            Sua assinatura atual: <strong>{assinatura.planoId?.nome ?? '—'}</strong>, {ROTULO_DA_ASSINATURA[assinatura.status] ?? assinatura.status}
-            {assinatura.acesso?.liberado && assinatura.status === 'cancelada' && assinatura.acesso.ate && ` (acesso até ${formatDataBR(assinatura.acesso.ate)})`}
-            {assinatura.status === 'trial' && assinatura.dataFimTrial && ` (até ${formatDataBR(assinatura.dataFimTrial)})`}
+            Sua assinatura atual: <strong>{assinatura.planoId?.nome ?? '—'}</strong>, {ativaPorPix ? 'ativa por Pix' : (ROTULO_DA_ASSINATURA[assinatura.status] ?? assinatura.status)}
+            {assinatura.acesso?.liberado && ['cancelada', 'ativa'].includes(assinatura.status) && assinatura.acesso.ate && ` (acesso até ${formatarData(assinatura.acesso.ate)})`}
+            {assinatura.status === 'trial' && assinatura.dataFimTrial && ` (até ${formatarData(assinatura.dataFimTrial)})`}
             .
           </span>
         </p>
@@ -130,9 +141,22 @@ export default function AssinaturasPlanos() {
         <p className="alert alert--info" role="status">Só o administrador da clínica pode contratar ou trocar de plano.</p>
       )}
 
-      {podeContratar && assinaturaAtiva && (
+      {podeContratar && ativaNoCartao && (
         <p className="alert alert--info" role="status">
           Para trocar de plano, cancele a assinatura atual em <strong>Minha assinatura</strong> e escolha o novo plano aqui.
+        </p>
+      )}
+
+      {podeContratar && ativaPorPix && (
+        <p className="alert alert--info" role="status">
+          Seu período pago por Pix vai até <strong>{formatarData(assinatura.proximaCobranca)}</strong>. Você pode renovar o plano atual a qualquer momento;
+          para trocar de plano ou assinar no cartão, aguarde o fim do período.
+        </p>
+      )}
+
+      {podeContratar && aguardandoCartao && (
+        <p className="alert alert--info" role="status">
+          Há um pagamento no cartão aguardando confirmação. Para pagar por Pix, conclua ou desista dele primeiro.
         </p>
       )}
 
@@ -159,7 +183,9 @@ export default function AssinaturasPlanos() {
             const gratuito = plano.tipo === 'gratis';
             const ehAtual = assinatura?.planoId?._id === plano._id;
             const selo = ehAtual ? SELO_DO_PLANO_ATUAL[assinatura.status] : null;
-            const desabilitado = iniciandoCheckout || (assinaturaAtiva && !gratuito);
+            const cartaoDesabilitado = iniciandoCheckout || assinaturaAtiva;
+            const pixDesabilitado = iniciandoCheckout || ativaNoCartao || aguardandoCartao || (ativaPorPix && !ehAtual);
+            const renovando = ativaPorPix && ehAtual;
             const carregandoEste = iniciandoCheckout && planoEscolhido === plano._id;
 
             return (
@@ -192,14 +218,25 @@ export default function AssinaturasPlanos() {
                 <BeneficiosDoPlano plano={plano} />
 
                 {!gratuito && podeContratar && (
-                  <button
-                    type="button"
-                    className={`btn ${ehAtual && assinaturaAtiva ? 'btn--ghost' : 'btn--primary'} btn--block plano-opcao__cta${carregandoEste ? ' btn--loading' : ''}`}
-                    onClick={() => escolher(plano)}
-                    disabled={desabilitado}
-                  >
-                    {carregandoEste ? 'Redirecionando...' : textoDoBotao(plano, assinatura ?? {})}
-                  </button>
+                  <div className="plano-opcao__acoes">
+                    <button
+                      type="button"
+                      className={`btn ${ehAtual && assinaturaAtiva ? 'btn--ghost' : 'btn--primary'} btn--block plano-opcao__cta${carregandoEste ? ' btn--loading' : ''}`}
+                      onClick={() => escolher(plano)}
+                      disabled={cartaoDesabilitado}
+                    >
+                      {carregandoEste ? 'Redirecionando...' : textoDoBotaoCartao(plano, assinatura ?? {})}
+                    </button>
+                    <button
+                      type="button"
+                      className={`btn ${renovando ? 'btn--primary' : 'btn--ghost'} btn--block plano-opcao__pix`}
+                      onClick={() => setPix({ plano, renovacao: renovando })}
+                      disabled={pixDesabilitado}
+                    >
+                      <IconePix />
+                      {renovando ? 'Renovar por Pix' : 'Pagar com Pix'}
+                    </button>
+                  </div>
                 )}
 
                 {podeContratar && ehAtual && assinatura.status === 'pendente' && (confirmandoDesistencia ? (
@@ -228,6 +265,15 @@ export default function AssinaturasPlanos() {
             );
           })}
         </div>
+      )}
+
+      {pix && (
+        <PixModal
+          plano={pix.plano}
+          renovacao={pix.renovacao}
+          onPago={atualizarAssinatura}
+          onClose={() => setPix(null)}
+        />
       )}
     </div>
   );

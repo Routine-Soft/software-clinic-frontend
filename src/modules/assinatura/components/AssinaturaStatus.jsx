@@ -121,8 +121,14 @@ export default function AssinaturaStatus({ className = '' }) {
   const aguardandoPagamento = assinatura.status === 'pendente';
   // Em "pendente" não há nada pago: cancelar aqui é desistir do checkout e voltar ao plano gratuito.
   const desistindo = aguardandoPagamento;
-  const podeCancelar = ['ativa', 'inadimplente', 'pendente'].includes(assinatura.status);
+  // Pago por Pix: cada pagamento vale 30 dias e não renova sozinho, então não há cobrança recorrente para cancelar.
+  const porPix = assinatura.cobranca === 'pix';
+  const ativaPorPix = assinatura.status === 'ativa' && porPix;
+  const podeCancelar = ['ativa', 'inadimplente', 'pendente'].includes(assinatura.status) && !ativaPorPix;
   const testeVigente = !!assinatura.dataFimTrial && new Date(assinatura.dataFimTrial) > new Date();
+  let mensagem = status.mensagem;
+  if (ativaPorPix) mensagem = `Você paga por Pix, que não renova sozinho. Renove antes de ${formatarData(assinatura.proximaCobranca)} para não perder o acesso.`;
+  if (assinatura.status === 'expirada' && porPix) mensagem = 'O período pago por Pix terminou. Renove para continuar usando o sistema.';
   const acessoAte = assinatura.status === 'cancelada' && assinatura.acesso?.liberado ? assinatura.acesso.ate : null;
   const emTrial = assinatura.status === 'trial' && assinatura.dataFimTrial;
   const trial = emTrial ? calcularTrial(assinatura) : null;
@@ -184,8 +190,14 @@ export default function AssinaturaStatus({ className = '' }) {
           )}
           {assinatura.status === 'ativa' && assinatura.proximaCobranca && (
             <div>
-              <dt>Próxima cobrança</dt>
+              <dt>{porPix ? 'Acesso liberado até' : 'Próxima cobrança'}</dt>
               <dd>{formatarData(assinatura.proximaCobranca)}</dd>
+            </div>
+          )}
+          {ativaPorPix && (
+            <div>
+              <dt>Forma de pagamento</dt>
+              <dd>Pix</dd>
             </div>
           )}
         </dl>
@@ -193,7 +205,7 @@ export default function AssinaturaStatus({ className = '' }) {
 
       {acessoAte
         ? <p className="assinatura-card__mensagem">Assinatura cancelada. Você continua com acesso até {formatarData(acessoAte)}; depois disso, o sistema será bloqueado.</p>
-        : status.mensagem && <p className="assinatura-card__mensagem">{status.mensagem}</p>}
+        : mensagem && <p className="assinatura-card__mensagem">{mensagem}</p>}
 
       {erroAcao && <p className="alert alert--error" role="alert">{erroAcao.message}</p>}
 
@@ -245,6 +257,10 @@ export default function AssinaturaStatus({ className = '' }) {
           {desistindo ? 'Desistir e voltar ao gratuito' : 'Cancelar assinatura'}
         </button>
       ))}
+
+      {ativaPorPix && (
+        <Link to="/assinaturas" className="btn btn--primary btn--block assinatura-card__cta">Renovar por Pix</Link>
+      )}
 
       {podeAssinar && (
         <Link to="/assinaturas" className="btn btn--primary btn--block assinatura-card__cta">

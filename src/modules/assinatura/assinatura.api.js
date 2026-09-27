@@ -5,8 +5,9 @@ export async function getAssinaturaAtual() {
   return response;
 }
 
-export async function iniciarCheckoutAssinatura() {
-  const response = await httpClient.post('/assinaturas/checkout');
+// Sem planoId, o backend mantém o plano pago que a assinatura já tem (usado no "refazer pagamento").
+export async function iniciarCheckoutAssinatura(planoId) {
+  const response = await httpClient.post('/assinaturas/checkout', { planoId });
   return response;
 }
 

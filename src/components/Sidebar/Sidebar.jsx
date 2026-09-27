@@ -37,6 +37,7 @@ const GRUPOS = [
     {
         titulo: 'Conta',
         itens: [
+            { label: 'Assinaturas', path: '/assinaturas', icone: 'assinatura', roles: ['super_admin', 'admin', 'recepcao'] },
             { label: 'Minha conta', path: '/minha-conta', icone: 'usuarios', roles: TODOS },
         ],
     },

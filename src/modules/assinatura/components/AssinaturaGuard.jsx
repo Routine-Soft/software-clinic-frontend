@@ -5,7 +5,7 @@ import { getAssinaturaAtual } from '../assinatura.api';
 import './assinatura.css';
 
 // Telas que continuam abertas mesmo com o acesso bloqueado, para o cliente conseguir regularizar.
-const ROTAS_LIVRES = ['/assinatura', '/minha-conta'];
+const ROTAS_LIVRES = ['/assinatura', '/assinaturas', '/minha-conta'];
 
 function AcessoBloqueado({ motivo, ehAdmin }) {
   return (
@@ -25,7 +25,7 @@ function AcessoBloqueado({ motivo, ehAdmin }) {
         )}
 
         <div className="assinatura-retorno__acoes">
-          {ehAdmin && <Link to="/assinatura" className="btn btn--primary">Regularizar assinatura</Link>}
+          {ehAdmin && <Link to="/assinaturas" className="btn btn--primary">Regularizar assinatura</Link>}
           <Link to="/minha-conta" className="btn btn--ghost">Minha conta</Link>
         </div>
       </section>

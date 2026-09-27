@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useAssinatura } from '../assinatura.hooks';
 import './assinatura.css';
 
@@ -203,7 +204,7 @@ export default function AssinaturaStatus({ className = '' }) {
           >
             {sincronizando ? 'Verificando...' : 'Já paguei — verificar agora'}
           </button>
-          <button type="button" className="btn btn--ghost btn--block" onClick={iniciarCheckout} disabled={iniciandoCheckout}>
+          <button type="button" className="btn btn--ghost btn--block" onClick={() => iniciarCheckout()} disabled={iniciandoCheckout}>
             {iniciandoCheckout ? 'Redirecionando...' : 'Refazer o pagamento'}
           </button>
         </div>
@@ -234,14 +235,9 @@ export default function AssinaturaStatus({ className = '' }) {
       ))}
 
       {podeAssinar && (
-        <button
-          type="button"
-          className={`btn btn--primary btn--block assinatura-card__cta${iniciandoCheckout ? ' btn--loading' : ''}`}
-          onClick={iniciarCheckout}
-          disabled={iniciandoCheckout}
-        >
-          {iniciandoCheckout ? 'Redirecionando...' : 'Assinar plano pago'}
-        </button>
+        <Link to="/assinaturas" className="btn btn--primary btn--block assinatura-card__cta">
+          {assinatura.status === 'inadimplente' ? 'Regularizar pagamento' : 'Ver planos e assinar'}
+        </Link>
       )}
     </section>
   );

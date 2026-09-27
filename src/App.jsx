@@ -19,6 +19,7 @@ import ListaEsperaADM from './modules/lista-espera/components/ListaEsperaADM';
 import PlanoADM from './modules/plano/components/PlanoADM';
 import AssinaturaStatus from './modules/assinatura/components/AssinaturaStatus';
 import AssinaturaRetorno from './modules/assinatura/components/AssinaturaRetorno';
+import AssinaturasPlanos from './modules/assinatura/components/AssinaturasPlanos';
 import PacienteCard from './modules/paciente/components/PacienteCard';
 import DashboardAdmin from './pages/DashboardAdmin/DashboardAdmin';
 
@@ -269,6 +270,17 @@ function App() {
               <ProtectedRoute requiredRoles={['admin', 'super_admin']}>
                 <MainLayout>
                   <AssinaturaRetorno />
+                </MainLayout>
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/assinaturas"
+            element={
+              <ProtectedRoute requiredRoles={['super_admin', 'admin', 'recepcao']}>
+                <MainLayout>
+                  <AssinaturasPlanos />
                 </MainLayout>
               </ProtectedRoute>
             }

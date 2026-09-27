@@ -48,11 +48,11 @@ export function useAssinatura() {
     };
   }, []);
 
-  async function iniciarCheckout() {
+  async function iniciarCheckout(planoId) {
     setErroAcao(null);
     try {
       setIniciandoCheckout(true);
-      const { data } = await iniciarCheckoutAssinatura();
+      const { data } = await iniciarCheckoutAssinatura(planoId);
       window.location.href = data.url;
     } catch (err) {
       setErroAcao(err);

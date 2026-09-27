@@ -465,6 +465,13 @@ select.input {
   animation: slideDown 0.4s var(--ease) backwards;
 }
 
+.alert--info {
+  color: var(--info);
+  background: var(--info-soft);
+  border-color: color-mix(in srgb, var(--info) 30%, transparent);
+  animation: slideDown 0.4s var(--ease) backwards;
+}
+
 /* ---------- Badges ---------- */
 
 .badge {

@@ -3,6 +3,7 @@ import { useServicos } from '../servico.hooks';
 import EditarServicoModal from './EditarServicoModal';
 import NovoServicoModal from './NovoServicoModal';
 import { Icone, IconeMais, IconeLapis, IconeLixeira, IconeCheck, IconeX } from '@/components/CrudCard/icones';
+import { formatarPreco } from '../servico.utils';
 import '@/components/CrudCard/CrudCard.css';
 
 const IconeServicos = () => (
@@ -29,10 +30,6 @@ const IconePacote = () => (
     <path d="m3.3 7 8.7 5 8.7-5M12 22V12" />
   </Icone>
 );
-
-function formatarPreco(preco) {
-  return preco.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-}
 
 function rotuloDias(qtdDias) {
   return qtdDias === 1 ? '1 dia' : `${qtdDias} dias`;
@@ -124,6 +121,7 @@ export default function ServicoADM({ className = '' }) {
                   <span className="crud-item__meta">
                     <span className={`badge ${ehPacote ? 'badge--primary' : 'badge--info'}`}>{ehPacote ? 'Pacote' : 'Consulta'}</span>
                     {ehPacote && servico.qtdDias ? <span>{rotuloDias(servico.qtdDias)}</span> : null}
+                    {servico.comissao > 0 ? <span>Comissão {formatarPreco(servico.comissao)}{ehPacote ? ' por sessão' : ''}</span> : null}
                   </span>
                 </div>
 

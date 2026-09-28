@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Modal from '@/components/Modal/Modal';
 import ModalForm from '@/components/Modal/ModalForm';
+import { dicaComissao } from '../servico.utils';
 
 export default function EditarServicoModal({ servico, erro, onSave, onClose }) {
   const [formEdicao, setFormEdicao] = useState({
@@ -8,6 +9,7 @@ export default function EditarServicoModal({ servico, erro, onSave, onClose }) {
     tipo: servico.tipo,
     qtdDias: servico.qtdDias ?? '',
     preco: servico.preco,
+    comissao: servico.comissao ?? 0,
   });
 
   function handleChangeEdicao(field, value) {
@@ -19,6 +21,7 @@ export default function EditarServicoModal({ servico, erro, onSave, onClose }) {
       nome: formEdicao.nome,
       tipo: formEdicao.tipo,
       preco: Number(formEdicao.preco),
+      comissao: Number(formEdicao.comissao) || 0,
       qtdDias: formEdicao.tipo === 'pacote' ? Number(formEdicao.qtdDias) : null,
     };
   }
@@ -70,22 +73,43 @@ export default function EditarServicoModal({ servico, erro, onSave, onClose }) {
             )}
           </div>
 
-          <div className="field">
-            <label className="field__label" htmlFor="editar-servico-preco">Preço</label>
-            <div className="input-group">
-              <span className="input-group__prefix">R$</span>
-              <input
-                id="editar-servico-preco"
-                className="input"
-                type="number"
-                min="0"
-                step="0.01"
-                value={formEdicao.preco}
-                onChange={(e) => handleChangeEdicao('preco', e.target.value)}
-                required
-              />
+          <div className="modal-form__row">
+            <div className="field">
+              <label className="field__label" htmlFor="editar-servico-preco">Preço</label>
+              <div className="input-group">
+                <span className="input-group__prefix">R$</span>
+                <input
+                  id="editar-servico-preco"
+                  className="input"
+                  type="number"
+                  min="0"
+                  step="0.01"
+                  value={formEdicao.preco}
+                  onChange={(e) => handleChangeEdicao('preco', e.target.value)}
+                  required
+                />
+              </div>
+            </div>
+
+            <div className="field">
+              <label className="field__label" htmlFor="editar-servico-comissao">Comissão do profissional</label>
+              <div className="input-group">
+                <span className="input-group__prefix">R$</span>
+                <input
+                  id="editar-servico-comissao"
+                  className="input"
+                  type="number"
+                  min="0"
+                  max={formEdicao.preco || undefined}
+                  step="0.01"
+                  value={formEdicao.comissao}
+                  onChange={(e) => handleChangeEdicao('comissao', e.target.value)}
+                  aria-describedby="editar-servico-comissao-dica"
+                />
+              </div>
             </div>
           </div>
+          <p id="editar-servico-comissao-dica" className="field__hint">{dicaComissao(formEdicao.preco, formEdicao.comissao)}</p>
         </ModalForm>
       )}
     </Modal>

@@ -63,7 +63,7 @@ function IconeCheck() {
 function BeneficiosDoPlano({ plano }) {
   const itens = plano.tipo === 'gratis'
     ? [
-        `Acesso completo por ${plano.duracaoDiasTrial ?? 15} dias`,
+        `Acesso completo por ${plano.duracaoDiasTrial ?? 3} dias`,
         'Sem cartão de crédito',
         'Depois do teste, é preciso assinar um plano pago',
       ]

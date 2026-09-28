@@ -1,0 +1,47 @@
+.filtro-periodo {
+  display: inline-flex;
+  gap: 2px;
+  width: fit-content;
+  max-width: 100%;
+  padding: 3px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+}
+
+.filtro-periodo__btn {
+  padding: 6px 14px;
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+  background: transparent;
+  border: 0;
+  border-radius: calc(var(--radius-md) - 3px);
+  transition:
+    color 0.2s var(--ease),
+    background-color 0.2s var(--ease),
+    box-shadow 0.25s var(--ease);
+}
+
+.filtro-periodo__btn:hover {
+  color: var(--text);
+}
+
+.filtro-periodo__btn[aria-pressed='true'] {
+  color: var(--tom, var(--primary));
+  background: var(--surface);
+  box-shadow: var(--shadow-sm), 0 0 0 1px var(--tom-suave, var(--primary-ring));
+}
+
+.filtro-periodo__btn:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+@media (max-width: 380px) {
+  .filtro-periodo__btn {
+    padding: 6px 10px;
+  }
+}

@@ -221,6 +221,12 @@
   white-space: nowrap;
 }
 
+/* Contato (e-mail, telefone) aparece inteiro, quebrando linha se precisar, em vez de cortar com "...". */
+.crud-item__sub--inteiro {
+  overflow-wrap: break-word;
+  white-space: normal;
+}
+
 .crud-card__barra {
   display: flex;
   flex-wrap: wrap;

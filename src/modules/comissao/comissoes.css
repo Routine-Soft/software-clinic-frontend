@@ -1,0 +1,210 @@
+/* ---------- Página ---------- */
+
+.comissao-page {
+  display: grid;
+  gap: 20px;
+  align-content: start;
+}
+
+.comissao-page > .page-header,
+.comissao-page > .alerts {
+  margin-bottom: 0;
+}
+
+/* ---------- Indicadores ---------- */
+
+.comissao-kpis {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+}
+
+.comissao-kpi {
+  --tom: var(--primary);
+  --tom-suave: var(--primary-soft);
+  position: relative;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 2px 12px;
+  align-items: center;
+  padding: 20px;
+  overflow: hidden;
+  animation: fadeInUp 0.55s var(--ease) backwards;
+}
+
+.comissao-kpi[data-tom='success'] { --tom: var(--success); --tom-suave: var(--success-soft); }
+.comissao-kpi[data-tom='warning'] { --tom: var(--warning); --tom-suave: var(--warning-soft); }
+
+.comissao-kpi::after {
+  content: '';
+  position: absolute;
+  right: -30px;
+  bottom: -40px;
+  width: 110px;
+  height: 110px;
+  background: var(--tom-suave);
+  border-radius: 50%;
+  opacity: 0.7;
+}
+
+.comissao-kpi__icone {
+  display: grid;
+  grid-row: span 2;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  color: var(--tom);
+  background: var(--tom-suave);
+  border-radius: 14px;
+}
+
+.comissao-kpi__icone svg {
+  width: 22px;
+  height: 22px;
+}
+
+.comissao-kpi__rotulo {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.comissao-kpi__valor {
+  font-size: 1.75rem;
+  font-weight: 750;
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+
+.comissao-kpi__skeleton {
+  width: 90px;
+  height: 28px;
+}
+
+.comissao-kpi__detalhe {
+  grid-column: 1 / -1;
+  z-index: 1;
+  margin-top: 8px;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+/* ---------- Tabela por profissional ---------- */
+
+.comissao-pessoa {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  min-width: 0;
+}
+
+.comissao-pessoa__avatar {
+  display: grid;
+  flex-shrink: 0;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--primary);
+  background: var(--primary-soft);
+  border-radius: 50%;
+}
+
+.comissao-pessoa__dados,
+.comissao-valor {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.comissao-pessoa__nome {
+  font-weight: 650;
+}
+
+.comissao-pessoa__sub {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.comissao-confirmar {
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
+  font-size: 0.85rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.comissao-confirmar__ok {
+  color: var(--on-primary);
+  background: var(--gradient-primary);
+  border-color: transparent;
+}
+
+.comissao-nota {
+  margin: 0;
+  font-size: 0.85rem;
+}
+
+.comissao-total td {
+  font-weight: 700;
+  background: var(--surface-2);
+  border-top: 1px solid var(--border);
+}
+
+/* ---------- Histórico ---------- */
+
+.comissao-historico {
+  padding: 20px;
+}
+
+.comissao-historico__titulo {
+  margin: 0 0 12px;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.comissao-historico__lista {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.comissao-historico__item {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.comissao-historico__item:last-child {
+  border-bottom: 0;
+}
+
+/* ---------- Sem vínculo ---------- */
+
+.comissao-vazio {
+  display: grid;
+  justify-items: center;
+  gap: 12px;
+  max-width: 560px;
+  padding: 32px 24px;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+.comissao-vazio svg {
+  width: 36px;
+  height: 36px;
+  color: var(--primary);
+}
+
+.comissao-vazio p {
+  margin: 0;
+}

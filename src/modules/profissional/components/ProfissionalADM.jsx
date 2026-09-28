@@ -19,13 +19,18 @@ const IconeProfissionais = () => (
 export default function ProfissionalADM({ className = '' }) {
   const { profissionais, loading, error, successMessage, addProfissional, editProfissional, removeProfissional } = useProfissionais();
   const { especialidades } = useEspecialidades();
-  const { usuarios } = useUsuariosDaClinica();
+  const { usuarios, loading: loadingUsuarios } = useUsuariosDaClinica();
 
   const [profissionalEditando, setProfissionalEditando] = useState(null);
   const [confirmandoId, setConfirmandoId] = useState(null);
   const [criandoProfissional, setCriandoProfissional] = useState(false);
 
-  const usuariosProfissionais = usuarios.filter((u) => u.role === 'profissional');
+  // Podem ser vinculados profissionais e administradores (dono da clínica que também atende), um login por profissional.
+  function usuariosVinculaveis(profissionalAtual = null) {
+    const idAtual = String(profissionalAtual?.usuarioId?._id ?? profissionalAtual?.usuarioId ?? '');
+    const jaVinculados = new Set(profissionais.map((p) => String(p.usuarioId?._id ?? p.usuarioId ?? '')).filter(Boolean));
+    return usuarios.filter((u) => ['profissional', 'admin'].includes(u.role) && (!jaVinculados.has(String(u._id)) || String(u._id) === idAtual));
+  }
 
   async function handleSalvarCriacao(dados) {
     return await addProfissional(dados);
@@ -145,7 +150,8 @@ export default function ProfissionalADM({ className = '' }) {
           key={profissionalEditando._id}
           profissional={profissionalEditando}
           especialidades={especialidades}
-          usuariosProfissionais={usuariosProfissionais}
+          usuariosVinculaveis={usuariosVinculaveis(profissionalEditando)}
+          loadingUsuarios={loadingUsuarios}
           erro={error}
           onSave={handleSalvarEdicao}
           onClose={() => setProfissionalEditando(null)}
@@ -155,7 +161,8 @@ export default function ProfissionalADM({ className = '' }) {
       {criandoProfissional && (
         <NovoProfissionalModal
           especialidades={especialidades}
-          usuariosProfissionais={usuariosProfissionais}
+          usuariosVinculaveis={usuariosVinculaveis()}
+          loadingUsuarios={loadingUsuarios}
           erro={error}
           onSave={handleSalvarCriacao}
           onClose={() => setCriandoProfissional(false)}

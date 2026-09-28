@@ -14,6 +14,8 @@ export default function ProntuarioModal({
   onEditarAgendamento,
   onCancelarAgendamento,
   onImprimirAgendamento,
+  onMarcarRealizado,
+  erroAgendamento,
   onClose,
 }) {
   if (somenteAgendamento && agendamento) {
@@ -32,6 +34,8 @@ export default function ProntuarioModal({
             onEditar={onEditarAgendamento}
             onCancelar={onCancelarAgendamento}
             onImprimir={onImprimirAgendamento}
+            onMarcarRealizado={onMarcarRealizado}
+            erro={erroAgendamento}
           />
         </div>
       </Modal>
@@ -46,6 +50,8 @@ export default function ProntuarioModal({
         onEditarAgendamento={onEditarAgendamento}
         onCancelarAgendamento={onCancelarAgendamento}
         onImprimirAgendamento={onImprimirAgendamento}
+        onMarcarRealizado={onMarcarRealizado}
+        erroAgendamento={erroAgendamento}
       />
     </Modal>
   );

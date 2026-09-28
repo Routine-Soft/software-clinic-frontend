@@ -17,11 +17,15 @@ import ProntuarioPacientePage from './modules/prontuario/components/ProntuarioPa
 import ProntuarioModalPreview from './modules/prontuario/components/ProntuarioModalPreview';
 import ListaEsperaADM from './modules/lista-espera/components/ListaEsperaADM';
 import PlanoADM from './modules/plano/components/PlanoADM';
+import PainelSuperAdmin from './pages/PainelSuperAdmin/PainelSuperAdmin';
+import ClinicasADM from './modules/user/components/ClinicasADM';
 import AssinaturaStatus from './modules/assinatura/components/AssinaturaStatus';
 import AssinaturaRetorno from './modules/assinatura/components/AssinaturaRetorno';
 import AssinaturasPlanos from './modules/assinatura/components/AssinaturasPlanos';
 import PacienteCard from './modules/paciente/components/PacienteCard';
 import DashboardAdmin from './pages/DashboardAdmin/DashboardAdmin';
+import ComissoesADM from './modules/comissao/components/ComissoesADM';
+import MinhasComissoes from './modules/comissao/components/MinhasComissoes';
 
 
 
@@ -232,6 +236,28 @@ function App() {
           />
 
           <Route
+            path="/comissoes"
+            element={
+              <ProtectedRoute requiredRoles={['admin', 'super_admin']}>
+                <MainLayout>
+                  <ComissoesADM />
+                </MainLayout>
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/minhas-comissoes"
+            element={
+              <ProtectedRoute requiredRoles={['profissional', 'super_admin']}>
+                <MainLayout>
+                  <MinhasComissoes />
+                </MainLayout>
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
             path="/usuarios"
             element={
               <ProtectedRoute requiredRoles={['admin', 'super_admin']}>
@@ -248,6 +274,28 @@ function App() {
               <ProtectedRoute requiredRoles={['admin', 'profissional', 'recepcao', 'super_admin']}>
                 <MainLayout>
                   <MinhaConta />
+                </MainLayout>
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/super-admin"
+            element={
+              <ProtectedRoute requiredRoles={['super_admin']}>
+                <MainLayout>
+                  <PainelSuperAdmin />
+                </MainLayout>
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/clinicas"
+            element={
+              <ProtectedRoute requiredRoles={['super_admin']}>
+                <MainLayout>
+                  <ClinicasADM />
                 </MainLayout>
               </ProtectedRoute>
             }

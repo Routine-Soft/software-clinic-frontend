@@ -47,3 +47,27 @@ export const IconeAlerta = () => (
 export const IconeChevron = () => <Icone><path d="m6 9 6 6 6-6" /></Icone>
 export const IconeSetaEsq = () => <Icone><path d="m15 18-6-6 6-6" /></Icone>
 export const IconeSetaDir = () => <Icone><path d="m9 18 6-6-6-6" /></Icone>
+export const IconeCadeado = () => (
+  <Icone>
+    <rect width="18" height="11" x="3" y="11" rx="2" />
+    <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+  </Icone>
+)
+export const IconeCadeadoAberto = () => (
+  <Icone>
+    <rect width="18" height="11" x="3" y="11" rx="2" />
+    <path d="M7 11V7a5 5 0 0 1 9.9-1" />
+  </Icone>
+)
+export const IconeTrocar = () => (
+  <Icone>
+    <path d="m17 2 4 4-4 4M3 11V9a4 4 0 0 1 4-4h14M7 22l-4-4 4-4M21 13v2a4 4 0 0 1-4 4H3" />
+  </Icone>
+)
+export const IconeRelogioMais = () => (
+  <Icone>
+    <circle cx="11" cy="13" r="8" />
+    <path d="M11 9v4l2.5 2.5" />
+    <path d="M18 2v4M16 4h4" />
+  </Icone>
+)

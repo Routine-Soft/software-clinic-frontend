@@ -142,6 +142,12 @@
   color: var(--primary);
 }
 
+.field__hint {
+  margin: -4px 0 0;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
 .input {
   width: 100%;
   padding: 0.7rem 0.9rem;
@@ -725,4 +731,11 @@ select.input {
   padding: 48px 20px;
   color: var(--text-muted);
   text-align: center;
+}
+
+/* Links dentro de textos de apoio (dicas de formulário e de cards). */
+.modal-form__hint a,
+.crud-card__dica a {
+  font-weight: 600;
+  color: var(--primary);
 }

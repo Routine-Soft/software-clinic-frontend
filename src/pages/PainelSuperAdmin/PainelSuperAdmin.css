@@ -1,0 +1,123 @@
+.painel-sa__grade {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+}
+
+.painel-sa__card {
+  --tom: var(--primary);
+  --tom-suave: var(--primary-soft);
+  position: relative;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 2px 12px;
+  align-items: center;
+  padding: 20px;
+  overflow: hidden;
+  animation: fadeInUp 0.55s var(--ease) backwards;
+}
+
+.painel-sa__card[data-tom='success'] { --tom: var(--success); --tom-suave: var(--success-soft); }
+.painel-sa__card[data-tom='warning'] { --tom: var(--warning); --tom-suave: var(--warning-soft); }
+
+.painel-sa__card::after {
+  content: '';
+  position: absolute;
+  right: -30px;
+  bottom: -40px;
+  width: 110px;
+  height: 110px;
+  background: var(--tom-suave);
+  border-radius: 50%;
+  opacity: 0.7;
+}
+
+.painel-sa__icone {
+  display: grid;
+  grid-row: span 2;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  color: var(--tom);
+  background: var(--tom-suave);
+  border-radius: 14px;
+}
+
+.painel-sa__icone svg {
+  width: 22px;
+  height: 22px;
+}
+
+.painel-sa__rotulo {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.painel-sa__valor {
+  font-size: 2rem;
+  font-weight: 750;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+}
+
+.painel-sa__skeleton {
+  width: 50px;
+  height: 30px;
+}
+
+.painel-sa__detalhe {
+  grid-column: 1 / -1;
+  z-index: 1;
+  margin-top: 8px;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+/* ---------- Card de receita (com filtro de período) ---------- */
+
+.painel-sa__card--receita {
+  grid-column: span 2;
+}
+
+@media (max-width: 560px) {
+  .painel-sa__card--receita {
+    grid-column: span 1;
+  }
+}
+
+.painel-sa__periodo {
+  grid-column: 1 / -1;
+  z-index: 1;
+  margin-top: 10px;
+}
+
+/* ---------- Card de ação (cadastrar clínica) ---------- */
+
+.painel-sa__card--acao {
+  grid-template-columns: auto 1fr;
+  align-content: start;
+  border: 2px dashed var(--border-strong);
+}
+
+.painel-sa__card--acao::after {
+  display: none;
+}
+
+.painel-sa__card--acao .painel-sa__icone {
+  color: var(--on-primary);
+  background: var(--gradient-primary);
+  box-shadow: var(--shadow-primary);
+}
+
+.painel-sa__acao-texto {
+  grid-column: 1 / -1;
+  margin: 6px 0 4px;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.painel-sa__card--acao .btn {
+  grid-column: 1 / -1;
+}

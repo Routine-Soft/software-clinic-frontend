@@ -24,7 +24,11 @@ const ATALHOS = [
     { label: 'Prontuário', descricao: 'Atendimentos e histórico clínico', to: '/prontuario', icone: 'prontuario', roles: ['admin', 'profissional'] },
     { label: 'Lista de espera', descricao: 'Fila de pacientes aguardando vaga', to: '/lista-espera', icone: 'espera', roles: ['admin', 'profissional', 'recepcao'] },
     { label: 'Avaliações NR-01', descricao: 'Riscos psicossociais das empresas', to: '/avaliacoes-nr01', icone: 'nr01', roles: ['admin', 'profissional'] },
+    { label: 'Comissões', descricao: 'O que pagar a cada profissional', to: '/comissoes', icone: 'receita', roles: ['admin'] },
+    { label: 'Minhas comissões', descricao: 'Quanto você tem a receber', to: '/minhas-comissoes', icone: 'receita', roles: ['profissional'] },
     { label: 'Usuários', descricao: 'Colaboradores e permissões da clínica', to: '/usuarios', icone: 'usuarios', roles: ['admin'] },
+    { label: 'Painel Super Admin', descricao: 'Total de clínicas e quem está pagando', to: '/super-admin', icone: 'painel', roles: ['super_admin'] },
+    { label: 'Clínicas', descricao: 'Clínicas cadastradas na plataforma', to: '/clinicas', icone: 'empresas', roles: ['super_admin'] },
     { label: 'Planos', descricao: 'Planos de assinatura da plataforma', to: '/planos', icone: 'planos', roles: ['super_admin'] },
     { label: 'Minha conta', descricao: 'Seus dados e senha', to: '/minha-conta', icone: 'usuarios', roles: ['super_admin', 'admin', 'profissional', 'recepcao'] },
 ]

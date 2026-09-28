@@ -3,6 +3,7 @@ import {
   getAllAgendas,
   createAgenda,
   updateAgenda,
+  definirRealizadoAgenda,
   cancelarAgenda,
   cancelarGrupoRecorrencia,
   deleteAgenda,
@@ -82,6 +83,20 @@ export function useAgendas(filtros = {}) {
     }
   }
 
+  // Devolve o agendamento atualizado (para a janela aberta refletir o novo status) ou null se falhar.
+  async function marcarRealizado(id, realizado) {
+    limparAvisos();
+    try {
+      const response = await definirRealizadoAgenda(id, realizado);
+      setSuccessMessage(response.message);
+      await refreshAgendas();
+      return response.data;
+    } catch (err) {
+      setError(err);
+      return null;
+    }
+  }
+
   async function cancelAgenda(id) {
     limparAvisos();
     try {
@@ -125,6 +140,7 @@ export function useAgendas(filtros = {}) {
     successMessage,
     addAgenda,
     editAgenda,
+    marcarRealizado,
     cancelAgenda,
     cancelGrupo,
     removeAgenda,

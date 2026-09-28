@@ -18,7 +18,7 @@ const ABAS = [
   ['perfil', 'Perfil clínico'],
 ];
 
-export default function ProntuarioPaciente({ paciente, agendamento = null, onEditarAgendamento, onCancelarAgendamento, onImprimirAgendamento }) {
+export default function ProntuarioPaciente({ paciente, agendamento = null, onEditarAgendamento, onCancelarAgendamento, onImprimirAgendamento, onMarcarRealizado, erroAgendamento }) {
   const { profissionais } = useProfissionais();
   const { convenios } = useConvenios();
   const { prontuarios, loading, error, successMessage, addProntuario, editProntuario, removeProntuario, finalizarProntuario } =
@@ -109,6 +109,8 @@ export default function ProntuarioPaciente({ paciente, agendamento = null, onEdi
           onEditar={onEditarAgendamento}
           onCancelar={onCancelarAgendamento}
           onImprimir={onImprimirAgendamento}
+          onMarcarRealizado={onMarcarRealizado}
+          erro={erroAgendamento}
         />
       )}
 

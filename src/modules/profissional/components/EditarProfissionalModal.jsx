@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import Modal from '@/components/Modal/Modal';
 import ModalForm from '@/components/Modal/ModalForm';
+import CampoUsuarioVinculado from './CampoUsuarioVinculado';
 
-export default function EditarProfissionalModal({ profissional, especialidades, usuariosProfissionais, erro, onSave, onClose }) {
+export default function EditarProfissionalModal({ profissional, especialidades, usuariosVinculaveis, loadingUsuarios, erro, onSave, onClose }) {
   const [formEdicao, setFormEdicao] = useState({
     nome: profissional.usuarioId?.nomeCompleto ?? profissional.nome,
     tipoRegistro: profissional.tipoRegistro,
@@ -24,7 +25,7 @@ export default function EditarProfissionalModal({ profissional, especialidades, 
   }
 
   function handleUsuarioChange(usuarioId) {
-    const usuario = usuariosProfissionais.find((u) => u._id === usuarioId);
+    const usuario = usuariosVinculaveis.find((u) => u._id === usuarioId);
     setFormEdicao({ ...formEdicao, usuarioId, nome: usuario ? usuario.nomeCompleto : formEdicao.nome });
   }
 
@@ -41,22 +42,13 @@ export default function EditarProfissionalModal({ profissional, especialidades, 
           onSubmit={() => onSave(profissional._id, montarPayload())}
           submitDisabled={formEdicao.especialidadeIds.length === 0}
         >
-          {usuariosProfissionais.length > 0 && (
-            <div className="field">
-              <label className="field__label" htmlFor="editar-profissional-usuario">Usuário vinculado (opcional)</label>
-              <select
-                id="editar-profissional-usuario"
-                className="input"
-                value={formEdicao.usuarioId}
-                onChange={(e) => handleUsuarioChange(e.target.value)}
-              >
-                <option value="">Nenhum</option>
-                {usuariosProfissionais.map((usuario) => (
-                  <option key={usuario._id} value={usuario._id}>{usuario.nomeCompleto} ({usuario.email})</option>
-                ))}
-              </select>
-            </div>
-          )}
+          <CampoUsuarioVinculado
+            id="editar-profissional-usuario"
+            usuarios={usuariosVinculaveis}
+            valor={formEdicao.usuarioId}
+            onChange={handleUsuarioChange}
+            loading={loadingUsuarios}
+          />
 
           <div className="field">
             <label className="field__label" htmlFor="editar-profissional-nome">Nome</label>

@@ -6,10 +6,11 @@ import ServicoADM from '@/modules/servico/components/ServicoADM'
 import SalaADM from '@/modules/sala/components/SalaADM'
 import EspecialidadeADM from '@/modules/especialidade/components/EspecialidadeADM'
 import ConvenioADM from '@/modules/convenio/components/ConvenioADM'
+import UsuariosClinicaCard from '@/modules/user/components/UsuariosClinicaCard'
 import './DashboardAdmin.css'
 
 // Dashboard do administrador: reúne os cadastros da clínica em cartões.
-// Esquerda: pessoas, clientes e convênios. Direita: a estrutura do atendimento (serviços, salas, especialidades).
+// Esquerda: pessoas, clientes e convênios. Direita: a estrutura do atendimento (serviços, salas, especialidades) e quem acessa o sistema.
 export function DashboardAdmin() {
     const { user } = useAuthContext()
 
@@ -36,6 +37,7 @@ export function DashboardAdmin() {
                     <ServicoADM />
                     <SalaADM />
                     <EspecialidadeADM />
+                    <UsuariosClinicaCard />
                 </div>
             </div>
         </div>

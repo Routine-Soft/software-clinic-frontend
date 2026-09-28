@@ -26,6 +26,11 @@ export async function updateAgenda(id, agendaData) {
   return response;
 }
 
+export async function definirRealizadoAgenda(id, realizado) {
+  const response = await httpClient.patch(`/agendas/${id}/realizado`, { realizado });
+  return response;
+}
+
 export async function cancelarAgenda(id) {
   const response = await httpClient.post(`/agendas/${id}/cancelar`);
   return response;

@@ -1,5 +1,7 @@
+import { useState } from 'react';
 import { formatDataBR } from '@/utils/date';
-import { IconeImpressora, IconeLapis } from '@/components/CrudCard/icones';
+import { formatarPreco } from '@/modules/servico/servico.utils';
+import { IconeCheck, IconeImpressora, IconeLapis } from '@/components/CrudCard/icones';
 import '../prontuario.css';
 
 const STATUS_AGENDA = {
@@ -8,9 +10,30 @@ const STATUS_AGENDA = {
   cancelado: ['Cancelado', 'badge--danger'],
 };
 
-export default function ResumoAgendamento({ agendamento, onEditar, onCancelar, onImprimir }) {
+// Datas de agendamento são "dia puro" (meia-noite UTC); comparamos só o AAAA-MM-DD com o hoje de Brasília.
+function jaChegouODia(data) {
+  const hoje = new Date().toLocaleDateString('en-CA', { timeZone: 'America/Sao_Paulo' });
+  return String(data).slice(0, 10) <= hoje;
+}
+
+export default function ResumoAgendamento({ agendamento, erro, onEditar, onCancelar, onImprimir, onMarcarRealizado }) {
   const [rotulo, classe] = STATUS_AGENDA[agendamento.status] ?? [agendamento.status, ''];
   const cancelado = agendamento.status === 'cancelado';
+  const realizado = agendamento.status === 'realizado';
+  const comissaoPaga = !!agendamento.comissao?.pagamentoId;
+  const [salvando, setSalvando] = useState(false);
+  const [falhou, setFalhou] = useState(false);
+
+  async function alternarRealizado(valor) {
+    setSalvando(true);
+    setFalhou(false);
+    const atualizado = await onMarcarRealizado(agendamento, valor);
+    setSalvando(false);
+    if (!atualizado) setFalhou(true);
+  }
+
+  const podeMarcar = onMarcarRealizado && agendamento.status === 'aguardando' && jaChegouODia(agendamento.data);
+  const podeDesmarcar = onMarcarRealizado && realizado && !comissaoPaga;
 
   return (
     <section className="pront-agenda" aria-label="Agendamento">
@@ -29,10 +52,29 @@ export default function ResumoAgendamento({ agendamento, onEditar, onCancelar, o
         <div><dt>Serviço</dt><dd>{agendamento.servicoId?.nome ?? '—'}</dd></div>
         <div><dt>Sala</dt><dd>{agendamento.salaId?.nome ?? '—'}</dd></div>
         <div><dt>Convênio</dt><dd>{agendamento.convenioId?.nome ?? 'Particular'}</dd></div>
+        {realizado && agendamento.comissao?.valor > 0 && (
+          <div>
+            <dt>Comissão do profissional</dt>
+            <dd>{formatarPreco(agendamento.comissao.valor)} · {comissaoPaga ? 'paga' : 'pendente'}</dd>
+          </div>
+        )}
       </dl>
 
-      {(onEditar || onCancelar || onImprimir) && (
+      {falhou && erro && <p className="alert alert--error pront-no-print" role="alert">{erro.message}</p>}
+
+      {(onEditar || onCancelar || onImprimir || podeMarcar || podeDesmarcar) && (
         <div className="pront-agenda__acoes pront-no-print">
+          {podeMarcar && (
+            <button type="button" className="btn btn--primary btn--sm" disabled={salvando} onClick={() => alternarRealizado(true)}>
+              <IconeCheck />
+              {salvando ? 'Salvando...' : 'Marcar como realizado'}
+            </button>
+          )}
+          {podeDesmarcar && (
+            <button type="button" className="btn btn--ghost btn--sm" disabled={salvando} onClick={() => alternarRealizado(false)}>
+              {salvando ? 'Salvando...' : 'Desmarcar realizado'}
+            </button>
+          )}
           {onEditar && !cancelado && (
             <button type="button" className="btn btn--ghost btn--sm" onClick={() => onEditar(agendamento)}>
               <IconeLapis />
@@ -45,7 +87,7 @@ export default function ResumoAgendamento({ agendamento, onEditar, onCancelar, o
               Comprovante
             </button>
           )}
-          {onCancelar && !cancelado && (
+          {onCancelar && !cancelado && !comissaoPaga && (
             <button type="button" className="btn btn--danger btn--sm" onClick={() => onCancelar(agendamento)}>
               Cancelar agendamento
             </button>

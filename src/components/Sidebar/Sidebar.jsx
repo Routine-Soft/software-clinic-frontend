@@ -26,11 +26,16 @@ const GRUPOS = [
             { label: 'Pacientes', path: '/pacientes', icone: 'pacientes', roles: ['admin', 'profissional', 'recepcao'] },
             { label: 'Prontuário', path: '/prontuario', icone: 'prontuario', roles: ['admin', 'profissional'] },
             { label: 'Avaliações NR-01', path: '/avaliacoes-nr01', icone: 'nr01', roles: ['admin', 'profissional'] },
+            { label: 'Comissões', path: '/comissoes', icone: 'receita', roles: ['admin'] },
+            { label: 'Usuários', path: '/usuarios', icone: 'usuarios', roles: ['admin'] },
+            { label: 'Minhas comissões', path: '/minhas-comissoes', icone: 'receita', roles: ['profissional'] },
         ],
     },
     {
-        titulo: 'Administração',
+        titulo: 'Super Admin',
         itens: [
+            { label: 'Painel Super Admin', path: '/super-admin', icone: 'painel', roles: ['super_admin'] },
+            { label: 'Clínicas', path: '/clinicas', icone: 'empresas', roles: ['super_admin'] },
             { label: 'Planos', path: '/planos', icone: 'planos', roles: ['super_admin'] },
         ],
     },

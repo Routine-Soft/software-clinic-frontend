@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import Modal from '@/components/Modal/Modal';
 import ModalForm from '@/components/Modal/ModalForm';
+import CampoUsuarioVinculado from './CampoUsuarioVinculado';
 
 const FORM_CRIAR_INICIAL = { nome: '', tipoRegistro: '', numeroRegistro: '', especialidadeIds: [], usuarioId: '' };
 
-export default function NovoProfissionalModal({ especialidades, usuariosProfissionais, erro, onSave, onClose }) {
+export default function NovoProfissionalModal({ especialidades, usuariosVinculaveis, loadingUsuarios, erro, onSave, onClose }) {
   const [formCriar, setFormCriar] = useState(FORM_CRIAR_INICIAL);
 
   function handleChangeCriar(field, value) {
@@ -20,7 +21,7 @@ export default function NovoProfissionalModal({ especialidades, usuariosProfissi
   }
 
   function handleUsuarioChange(usuarioId) {
-    const usuario = usuariosProfissionais.find((u) => u._id === usuarioId);
+    const usuario = usuariosVinculaveis.find((u) => u._id === usuarioId);
     setFormCriar({ ...formCriar, usuarioId, nome: usuario ? usuario.nomeCompleto : formCriar.nome });
   }
 
@@ -35,22 +36,13 @@ export default function NovoProfissionalModal({ especialidades, usuariosProfissi
           submitDisabled={formCriar.especialidadeIds.length === 0}
           onSubmit={() => onSave({ ...formCriar, usuarioId: formCriar.usuarioId || null })}
         >
-          {usuariosProfissionais.length > 0 && (
-            <div className="field">
-              <label className="field__label" htmlFor="novo-profissional-usuario">Usuário vinculado (opcional)</label>
-              <select
-                id="novo-profissional-usuario"
-                className="input"
-                value={formCriar.usuarioId}
-                onChange={(e) => handleUsuarioChange(e.target.value)}
-              >
-                <option value="">Nenhum</option>
-                {usuariosProfissionais.map((usuario) => (
-                  <option key={usuario._id} value={usuario._id}>{usuario.nomeCompleto} ({usuario.email})</option>
-                ))}
-              </select>
-            </div>
-          )}
+          <CampoUsuarioVinculado
+            id="novo-profissional-usuario"
+            usuarios={usuariosVinculaveis}
+            valor={formCriar.usuarioId}
+            onChange={handleUsuarioChange}
+            loading={loadingUsuarios}
+          />
 
           <div className="field">
             <label className="field__label" htmlFor="novo-profissional-nome">Nome</label>

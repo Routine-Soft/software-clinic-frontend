@@ -33,7 +33,7 @@ function visaoInicial() {
 }
 
 export default function AgendaCalendario() {
-  const { hasRole } = useAuthContext();
+  const { user, hasRole } = useAuthContext();
   const podeVerProntuario = hasRole('admin') || hasRole('profissional') || hasRole('super_admin');
   const { profissionais } = useProfissionais();
 
@@ -57,7 +57,7 @@ export default function AgendaCalendario() {
   const intervalo = useMemo(() => intervaloDaVisao(visao, dataReferencia), [visao, dataReferencia]);
   const dias = useMemo(() => diasDoIntervalo(intervalo), [intervalo]);
 
-  const { agendas, loading, error, successMessage, addAgenda, editAgenda, cancelAgenda, cancelGrupo } = useAgendas({
+  const { agendas, loading, error, successMessage, addAgenda, editAgenda, marcarRealizado, cancelAgenda, cancelGrupo } = useAgendas({
     profissionalId: profissionalId || undefined,
     dataInicio: paraISO(intervalo.inicio),
     dataFim: paraISO(intervalo.fim),
@@ -104,6 +104,18 @@ export default function AgendaCalendario() {
       if (cancelarTudo) return await cancelGrupo(agenda.grupoRecorrenciaId);
     }
     return await cancelAgenda(agenda._id);
+  }
+
+  // O profissional só marca os próprios atendimentos (o backend confere de novo); admin e recepção marcam qualquer um.
+  function podeMarcarRealizado(agenda) {
+    if (user?.role !== 'profissional') return true;
+    return String(agenda.profissionalId?.usuarioId ?? '') === String(user?._id ?? user?.id ?? '');
+  }
+
+  async function handleRealizado(agenda, realizado) {
+    const atualizada = await marcarRealizado(agenda._id, realizado);
+    if (atualizada) setAgendaDetalhes(atualizada);
+    return atualizada;
   }
 
   async function handleImprimir(agendaId) {
@@ -237,6 +249,8 @@ export default function AgendaCalendario() {
           onEditarAgendamento={(agenda) => { setAgendaDetalhes(null); setAgendaEditando(agenda); }}
           onCancelarAgendamento={async (agenda) => { const cancelado = await handleCancelar(agenda); if (cancelado) setAgendaDetalhes(null); }}
           onImprimirAgendamento={(agenda) => handleImprimir(agenda._id)}
+          onMarcarRealizado={podeMarcarRealizado(agendaDetalhes) ? handleRealizado : undefined}
+          erroAgendamento={error}
           onClose={() => setAgendaDetalhes(null)}
         />
       )}

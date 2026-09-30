@@ -18,9 +18,11 @@ export function valorDaComissao({ comissao, comissaoTipo }, preco) {
   return comissaoTipo === 'percentual' ? Math.round((Number(preco) || 0) * valor) / 100 : valor;
 }
 
-// "20%" ou "R$ 40,00": como a comissão foi definida.
-export function textoComissao({ comissao, comissaoTipo }) {
-  return comissaoTipo === 'percentual' ? formatarPercentual(comissao) : formatarPreco(comissao);
+// Comissão de uma linha da tabela, para a lista de serviços: "20% (R$ 20,00)", "R$ 40,00" ou "sem comissão".
+export function textoComissaoDaLinha(regra) {
+  if (!(Number(regra.comissao) > 0)) return 'sem comissão';
+  if (regra.comissaoTipo !== 'percentual') return `comissão ${formatarPreco(regra.comissao)}`;
+  return `comissão ${formatarPercentual(regra.comissao)} (${formatarPreco(valorDaComissao(regra, regra.preco))})`;
 }
 
 // Comissão já calculada de um atendimento, com o percentual quando foi por percentual: "R$ 60,00 (20%)".

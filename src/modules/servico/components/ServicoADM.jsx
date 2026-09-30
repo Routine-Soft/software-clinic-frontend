@@ -3,7 +3,8 @@ import { useServicos } from '../servico.hooks';
 import EditarServicoModal from './EditarServicoModal';
 import NovoServicoModal from './NovoServicoModal';
 import { Icone, IconeMais, IconeLapis, IconeLixeira, IconeCheck, IconeX } from '@/components/CrudCard/icones';
-import { formatarPreco, textoComissao } from '../servico.utils';
+import { formatarPreco, textoComissaoDaLinha } from '../servico.utils';
+import '../servico.css';
 import { useConvenios } from '@/modules/convenio/convenio.hooks';
 import '@/components/CrudCard/CrudCard.css';
 
@@ -118,10 +119,11 @@ export default function ServicoADM({ className = '' }) {
         <ul className="crud-lista">
           {servicos.map((servico, index) => {
             const ehPacote = servico.tipo === 'pacote';
+            const temComissao = [servico, ...(servico.tabelaConvenios ?? [])].some((regra) => regra.comissao > 0);
             return (
               <li
                 key={servico._id}
-                className={`crud-item${servicoEditando?._id === servico._id ? ' crud-item--editando' : ''}`}
+                className={`crud-item crud-item--servico${servicoEditando?._id === servico._id ? ' crud-item--editando' : ''}`}
                 style={{ '--i': index }}
               >
                 <div className="crud-item__icone">{ehPacote ? <IconePacote /> : <IconeConsulta />}</div>
@@ -131,17 +133,17 @@ export default function ServicoADM({ className = '' }) {
                   <span className="crud-item__meta">
                     <span className={`badge ${ehPacote ? 'badge--primary' : 'badge--info'}`}>{ehPacote ? 'Pacote' : 'Consulta'}</span>
                     {ehPacote && servico.qtdDias ? <span>{rotuloDias(servico.qtdDias)}</span> : null}
-                    {servico.comissao > 0 ? <span>Comissão {textoComissao(servico)}{ehPacote ? ' por sessão' : ''}</span> : null}
+                    {ehPacote && temComissao ? <span>comissão por sessão</span> : null}
                   </span>
-                  {(servico.tabelaConvenios ?? []).map((linha) => (
-                    <span key={String(linha.convenioId)} className="crud-item__sub">
-                      {nomeDoConvenio(linha.convenioId)}: {formatarPreco(linha.preco)}
-                      {linha.comissao > 0 ? ` · comissão ${textoComissao(linha)}` : ''}
-                    </span>
-                  ))}
                 </div>
 
-                <span className="crud-item__valor">{formatarPreco(servico.preco)}</span>
+                <ul className="servico-precos">
+                  {[{ nome: 'Particular', regra: servico }, ...(servico.tabelaConvenios ?? []).map((linha) => ({ nome: nomeDoConvenio(linha.convenioId), regra: linha }))].map(({ nome, regra }, i) => (
+                    <li key={i}>
+                      <strong>{nome}:</strong> <span>{formatarPreco(regra.preco)} ·</span> <span>{textoComissaoDaLinha(regra)}</span>
+                    </li>
+                  ))}
+                </ul>
 
                 {confirmandoId === servico._id ? (
                   <div className="crud-item__confirmar">

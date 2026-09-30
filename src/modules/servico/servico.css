@@ -97,3 +97,43 @@
 .tabela-preco__linha .modal-form__row {
   align-items: start;
 }
+
+/* ---------- Lista de serviços: uma linha de preço por particular/convênio ---------- */
+
+/* Nome e ações na primeira linha; os preços ocupam a largura toda do item, embaixo. */
+.crud-item--servico {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  grid-template-areas:
+    'icone info acoes'
+    'precos precos precos';
+  gap: 10px 12px;
+  align-items: center;
+}
+
+.crud-item--servico .crud-item__icone { grid-area: icone; }
+.crud-item--servico .crud-item__info { grid-area: info; }
+.crud-item--servico .crud-item__acoes,
+.crud-item--servico .crud-item__confirmar { grid-area: acoes; }
+
+.servico-precos {
+  display: grid;
+  grid-area: precos;
+  gap: 2px;
+  margin: 0;
+  padding: 0;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  list-style: none;
+  overflow-wrap: break-word;
+}
+
+.servico-precos strong {
+  font-weight: 650;
+  color: var(--text);
+}
+
+/* Preço e comissão são blocos inteiros: a linha só quebra entre eles, nunca no meio de um valor. */
+.servico-precos span {
+  display: inline-block;
+}

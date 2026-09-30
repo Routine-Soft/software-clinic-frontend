@@ -21,3 +21,28 @@
     grid-template-columns: minmax(0, 1fr);
   }
 }
+
+/* Número do passo no canto do card: a ordem em que os cadastros costumam ser feitos. */
+.dash-admin__passo {
+  position: relative;
+  min-width: 0;
+}
+
+.dash-admin__passo::before {
+  content: attr(data-passo);
+  position: absolute;
+  top: -9px;
+  left: -9px;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  font-size: 0.8rem;
+  font-weight: 750;
+  color: var(--on-primary);
+  background: var(--gradient-primary);
+  border: 2px solid var(--bg, var(--surface));
+  border-radius: 50%;
+  box-shadow: var(--shadow-sm);
+}

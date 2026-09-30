@@ -471,6 +471,18 @@ select.input {
   animation: slideDown 0.4s var(--ease) backwards;
 }
 
+.alert--warning {
+  color: var(--warning);
+  background: var(--warning-soft);
+  border-color: color-mix(in srgb, var(--warning) 30%, transparent);
+  animation: slideDown 0.4s var(--ease) backwards;
+}
+
+.alert--warning a {
+  font-weight: 700;
+  color: inherit;
+}
+
 .alert--info {
   color: var(--info);
   background: var(--info-soft);

@@ -50,9 +50,9 @@ function BadgeRisco({ risco }) {
 
 export default function AvaliacaoNr01ADM() {
   const { avaliacoes, loading, error, successMessage, addAvaliacao, editAvaliacao, removeAvaliacao } = useAvaliacoesNr01();
-  const { empresas, error: erroEmpresa, successMessage: sucessoEmpresa, addEmpresa } = useEmpresas();
+  const { empresas, loading: carregandoEmpresas, error: erroEmpresa, successMessage: sucessoEmpresa, addEmpresa } = useEmpresas();
   const { pacientes } = usePacientes();
-  const { profissionais } = useProfissionais();
+  const { profissionais, loading: carregandoProfissionais } = useProfissionais();
 
   const [criandoAvaliacao, setCriandoAvaliacao] = useState(false);
   const [criandoEmpresa, setCriandoEmpresa] = useState(false);
@@ -309,6 +309,7 @@ export default function AvaliacaoNr01ADM() {
           empresas={empresas}
           pacientes={pacientes}
           profissionais={profissionais}
+          carregando={carregandoEmpresas || carregandoProfissionais}
           perguntasPadrao={respostasPadrao()}
           hoje={hojeISO()}
           erro={error}
@@ -330,6 +331,7 @@ export default function AvaliacaoNr01ADM() {
           empresas={empresas}
           pacientes={pacientes}
           profissionais={profissionais}
+          carregando={carregandoEmpresas || carregandoProfissionais}
           perguntasPadrao={respostasPadrao()}
           hoje={hojeISO()}
           erro={error}

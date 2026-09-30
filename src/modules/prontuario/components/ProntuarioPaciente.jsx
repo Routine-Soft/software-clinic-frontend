@@ -10,6 +10,7 @@ import { CAMPOS_PERFIL_CLINICO, perfilClinicoDoPaciente, atendimentoEmAndamento,
 import AtendimentoAtivo from './AtendimentoAtivo';
 import EvolucaoItem from './EvolucaoItem';
 import ResumoAgendamento from './ResumoAgendamento';
+import AvisoPreRequisito from '@/components/AvisoPreRequisito/AvisoPreRequisito';
 import '../prontuario.css';
 
 const ABAS = [
@@ -19,7 +20,7 @@ const ABAS = [
 ];
 
 export default function ProntuarioPaciente({ paciente, agendamento = null, onEditarAgendamento, onCancelarAgendamento, onImprimirAgendamento, onMarcarRealizado, erroAgendamento }) {
-  const { profissionais } = useProfissionais();
+  const { profissionais, loading: carregandoProfissionais } = useProfissionais();
   const { convenios } = useConvenios();
   const { prontuarios, loading, error, successMessage, addProntuario, editProntuario, removeProntuario, finalizarProntuario } =
     useProntuarios(paciente._id);
@@ -178,6 +179,11 @@ export default function ProntuarioPaciente({ paciente, agendamento = null, onEdi
                     : 'Escolha o profissional para abrir um novo registro de atendimento.'}
                 </p>
               </div>
+
+              <AvisoPreRequisito
+                acao="iniciar um atendimento"
+                faltando={!carregandoProfissionais && profissionais.length === 0 ? ['um profissional'] : []}
+              />
 
               <div className="pront-grid">
                 <div className="field">

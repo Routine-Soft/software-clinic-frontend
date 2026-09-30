@@ -1,0 +1,99 @@
+/* ---------- Tabela de preços e comissões do serviço ---------- */
+
+.tabela-preco {
+  display: grid;
+  gap: 12px;
+}
+
+.tabela-preco__titulo {
+  margin: 4px 0 0;
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.tabela-preco__linha {
+  display: grid;
+  gap: 10px;
+  padding: 14px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  animation: fadeInUp 0.35s var(--ease) backwards;
+}
+
+.tabela-preco__linha .input {
+  background: var(--surface);
+}
+
+.tabela-preco__nome {
+  font-weight: 700;
+}
+
+.tabela-preco__cab {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.tabela-preco__convenio {
+  flex: 1;
+  min-width: 0;
+  font-weight: 650;
+}
+
+.tabela-preco__adicionar {
+  justify-self: start;
+}
+
+/* ---------- Comissão: R$ ou % ---------- */
+
+.comissao-campo {
+  display: flex;
+  gap: 6px;
+  align-items: stretch;
+}
+
+.comissao-campo .input {
+  flex: 1;
+  min-width: 0;
+}
+
+.comissao-campo__tipo {
+  display: inline-flex;
+  flex: none;
+  gap: 2px;
+  padding: 3px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+}
+
+.comissao-campo__tipo button {
+  min-width: 36px;
+  padding: 0 8px;
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  cursor: pointer;
+  background: transparent;
+  border: 0;
+  border-radius: calc(var(--radius-md) - 3px);
+  transition: color 0.2s var(--ease), background-color 0.2s var(--ease), box-shadow 0.25s var(--ease);
+}
+
+.comissao-campo__tipo button[aria-pressed='true'] {
+  color: var(--primary);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm), 0 0 0 1px var(--primary-ring);
+}
+
+.comissao-campo__tipo button:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* Preço e comissão alinhados pelo topo: a dica embaixo da comissão não empurra o campo de preço. */
+.tabela-preco__linha .modal-form__row {
+  align-items: start;
+}

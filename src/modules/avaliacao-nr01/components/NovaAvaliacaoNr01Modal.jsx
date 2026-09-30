@@ -1,8 +1,14 @@
 import { useState } from 'react';
 import Modal from '@/components/Modal/Modal';
 import ModalForm from '@/components/Modal/ModalForm';
+import AvisoPreRequisito from '@/components/AvisoPreRequisito/AvisoPreRequisito';
 
-export default function NovaAvaliacaoNr01Modal({ empresas, pacientes, profissionais, perguntasPadrao, hoje, erro, onSave, onClose }) {
+export default function NovaAvaliacaoNr01Modal({ empresas, pacientes, profissionais, carregando = false, perguntasPadrao, hoje, erro, onSave, onClose }) {
+  const faltando = carregando ? [] : [
+    empresas.length === 0 && 'uma empresa',
+    profissionais.length === 0 && 'um profissional',
+  ].filter(Boolean);
+  const soFaltaEmpresa = faltando.length === 1 && empresas.length === 0;
   const [formCriar, setFormCriar] = useState({
     empresaId: '',
     pacienteId: '',
@@ -47,7 +53,13 @@ export default function NovaAvaliacaoNr01Modal({ empresas, pacientes, profission
   return (
     <Modal title="Nova avaliação NR-01" wide onClose={onClose}>
       {(fechar) => (
-        <ModalForm erro={erro} fechar={fechar} submitLabel="Cadastrar avaliação" loadingLabel="Cadastrando..." onSubmit={() => onSave(montarPayload())}>
+        <ModalForm erro={erro} fechar={fechar} submitLabel="Cadastrar avaliação" loadingLabel="Cadastrando..." submitDisabled={faltando.length > 0} onSubmit={() => onSave(montarPayload())}>
+          <AvisoPreRequisito
+            acao="criar uma avaliação NR-01"
+            faltando={faltando}
+            onde={soFaltaEmpresa ? 'Feche esta janela e use o botão “Cadastrar empresa” desta tela.' : undefined}
+          />
+
           <div className="modal-form__row">
             <div className="field">
               <label className="field__label" htmlFor="nova-nr01-empresa">Empresa</label>
@@ -65,7 +77,7 @@ export default function NovaAvaliacaoNr01Modal({ empresas, pacientes, profission
                   ))}
                 </select>
               ) : (
-                <p className="modal-form__hint">Cadastre uma empresa antes de criar uma avaliação NR-01.</p>
+                <p className="modal-form__hint">Nenhuma empresa cadastrada.</p>
               )}
             </div>
 

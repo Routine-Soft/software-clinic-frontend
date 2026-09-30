@@ -1,6 +1,9 @@
 .crud-card {
   position: relative;
   display: grid;
+  /* A coluna nunca passa da largura do card: sem isso, um cabeçalho ou item largo alarga a coluna
+     e o que sobra (botão "Adicionar", ações dos itens) é cortado pela borda no celular. */
+  grid-template-columns: minmax(0, 1fr);
   gap: 18px;
   align-content: start;
   width: 100%;
@@ -347,6 +350,25 @@
     display: none;
   }
 
+  /* Cabeçalho em grade: ícone, título e botão na primeira linha; o contador desce para baixo do título. */
+  .crud-card__head {
+    display: grid;
+    grid-template-columns: 46px minmax(0, 1fr) auto;
+    grid-template-areas:
+      'icone titulos novo'
+      '. badge badge';
+    gap: 6px 12px;
+  }
+
+  .crud-card__head > .crud-card__icon { grid-area: icone; }
+  .crud-card__head > .crud-card__titulos { grid-area: titulos; }
+  .crud-card__head > .crud-card__novo-btn { grid-area: novo; }
+
+  .crud-card__head > .badge {
+    grid-area: badge;
+    justify-self: start;
+  }
+
   .crud-card__novo-btn {
     width: 36px;
     height: 36px;
@@ -356,7 +378,7 @@
 
 /* Em cartões estreitos o texto quebra em mais linhas em vez de ser cortado com reticências. */
 @container (max-width: 460px) {
-  .crud-item__info .crud-item__nome,
+  .crud-item .crud-item__nome,
   .crud-item__info .crud-item__sub {
     overflow-wrap: anywhere;
     white-space: normal;

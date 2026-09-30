@@ -3,8 +3,9 @@ import Modal from '@/components/Modal/Modal';
 import ModalForm from '@/components/Modal/ModalForm';
 import PacientePicker from '@/modules/paciente/components/PacientePicker';
 import { useDadosAgendamento } from '../useDadosAgendamento';
-import { DIAS_SEMANA, formularioNovo, horarioInvalido, montarPayload } from '../agendamento.form';
+import { DIAS_SEMANA, formularioNovo, horarioInvalido, montarPayload, comPrecoDaTabela } from '../agendamento.form';
 import AgendamentoCampos from './AgendamentoCampos';
+import AvisoPreRequisito from '@/components/AvisoPreRequisito/AvisoPreRequisito';
 import '../agenda.css';
 
 export default function NovoAgendamentoModal({ slotInicial, erro, onSave, onClose }) {
@@ -14,6 +15,15 @@ export default function NovoAgendamentoModal({ slotInicial, erro, onSave, onClos
   const [repetir, setRepetir] = useState(false);
   const [diasSemana, setDiasSemana] = useState([]);
   const [repetirAte, setRepetirAte] = useState('');
+
+  // Paciente com convênio no cadastro já traz esse convênio (e o preço dele), se ainda não foi escolhido outro.
+  function escolherPaciente(novo) {
+    setPaciente(novo);
+    const convenioDoPaciente = String(novo?.convenioId?._id ?? novo?.convenioId ?? '');
+    if (convenioDoPaciente) {
+      setForm((atual) => (atual.convenioId ? atual : comPrecoDaTabela({ ...atual, convenioId: convenioDoPaciente }, dados.servicos)));
+    }
+  }
 
   function alternarDia(valor) {
     setDiasSemana((atual) => (atual.includes(valor) ? atual.filter((d) => d !== valor) : [...atual, valor]));
@@ -30,12 +40,14 @@ export default function NovoAgendamentoModal({ slotInicial, erro, onSave, onClos
     <Modal title="Novo agendamento" wide onClose={onClose}>
       {(fechar) => (
         <div className="modal-form">
+          <AvisoPreRequisito acao="agendar" faltando={dados.faltando} />
+
           <PacientePicker
             pacientes={dados.pacientes}
             convenios={dados.convenios}
             empresas={dados.empresas}
             valor={paciente}
-            onChange={setPaciente}
+            onChange={escolherPaciente}
             onCriarPaciente={dados.criarPaciente}
           />
 
@@ -44,7 +56,7 @@ export default function NovoAgendamentoModal({ slotInicial, erro, onSave, onClos
             fechar={fechar}
             submitLabel={repetir ? 'Agendar série' : 'Agendar'}
             loadingLabel="Agendando..."
-            submitDisabled={!paciente || horarioInvalido(form) || recorrenciaIncompleta}
+            submitDisabled={!paciente || horarioInvalido(form) || recorrenciaIncompleta || dados.faltando.length > 0}
             onSubmit={() => onSave(payload())}
           >
             <AgendamentoCampos form={form} setForm={setForm} {...dados} />

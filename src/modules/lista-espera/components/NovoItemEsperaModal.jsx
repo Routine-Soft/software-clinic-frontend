@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import Modal from '@/components/Modal/Modal';
 import ModalForm from '@/components/Modal/ModalForm';
 import PacientePicker from '@/modules/paciente/components/PacientePicker';
+import AvisoPreRequisito from '@/components/AvisoPreRequisito/AvisoPreRequisito';
 import './lista-espera.css';
 
 const FORM_INICIAL = { especialidadeId: '', profissionalId: '', dataDesejada: '', observacao: '' };
@@ -11,6 +12,7 @@ export default function NovoItemEsperaModal({
   convenios,
   empresas,
   especialidades,
+  carregandoEspecialidades = false,
   profissionais,
   onCriarPaciente,
   erro,
@@ -19,6 +21,7 @@ export default function NovoItemEsperaModal({
 }) {
   const [form, setForm] = useState(FORM_INICIAL);
   const [pacienteSelecionado, setPacienteSelecionado] = useState(null);
+  const faltando = !carregandoEspecialidades && especialidades.length === 0 ? ['uma especialidade'] : [];
 
   const profissionaisFiltrados = useMemo(() => {
     if (!form.especialidadeId) return profissionais;
@@ -45,6 +48,8 @@ export default function NovoItemEsperaModal({
     <Modal title="Adicionar à lista de espera" wide onClose={onClose}>
       {(fechar) => (
         <div className="modal-form">
+          <AvisoPreRequisito acao="colocar alguém na lista de espera" faltando={faltando} />
+
           <PacientePicker
             pacientes={pacientes}
             convenios={convenios}
@@ -59,7 +64,7 @@ export default function NovoItemEsperaModal({
             fechar={fechar}
             submitLabel="Adicionar à fila"
             loadingLabel="Adicionando..."
-            submitDisabled={!pacienteSelecionado}
+            submitDisabled={!pacienteSelecionado || faltando.length > 0}
             onSubmit={() => onSave(montarPayload())}
           >
             <div className="modal-form__row">

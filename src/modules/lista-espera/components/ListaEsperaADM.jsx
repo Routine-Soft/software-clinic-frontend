@@ -52,7 +52,7 @@ export default function ListaEsperaADM({ className = '' }) {
   const { pacientes, refreshPacientes } = usePacientes();
   const { convenios } = useConvenios();
   const { empresas } = useEmpresas();
-  const { especialidades } = useEspecialidades();
+  const { especialidades, loading: carregandoEspecialidades } = useEspecialidades();
   const { profissionais } = useProfissionais();
 
   const [filtroEspecialidade, setFiltroEspecialidade] = useState('');
@@ -235,6 +235,7 @@ export default function ListaEsperaADM({ className = '' }) {
           convenios={convenios}
           empresas={empresas}
           especialidades={especialidades}
+          carregandoEspecialidades={carregandoEspecialidades}
           profissionais={profissionais}
           onCriarPaciente={handleCriarPaciente}
           erro={error}

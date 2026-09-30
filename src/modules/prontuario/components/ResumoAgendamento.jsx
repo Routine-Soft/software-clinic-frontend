@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { formatDataBR } from '@/utils/date';
-import { formatarPreco } from '@/modules/servico/servico.utils';
+import { textoComissaoCalculada } from '@/modules/servico/servico.utils';
 import { IconeCheck, IconeImpressora, IconeLapis } from '@/components/CrudCard/icones';
 import '../prontuario.css';
 
@@ -55,7 +55,7 @@ export default function ResumoAgendamento({ agendamento, erro, onEditar, onCance
         {realizado && agendamento.comissao?.valor > 0 && (
           <div>
             <dt>Comissão do profissional</dt>
-            <dd>{formatarPreco(agendamento.comissao.valor)} · {comissaoPaga ? 'paga' : 'pendente'}</dd>
+            <dd>{textoComissaoCalculada(agendamento.comissao.valor, agendamento.comissao.percentual)} · {comissaoPaga ? 'paga' : 'pendente'}</dd>
           </div>
         )}
       </dl>

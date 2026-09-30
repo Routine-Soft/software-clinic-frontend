@@ -3,7 +3,8 @@ import { useServicos } from '../servico.hooks';
 import EditarServicoModal from './EditarServicoModal';
 import NovoServicoModal from './NovoServicoModal';
 import { Icone, IconeMais, IconeLapis, IconeLixeira, IconeCheck, IconeX } from '@/components/CrudCard/icones';
-import { formatarPreco } from '../servico.utils';
+import { formatarPreco, textoComissao } from '../servico.utils';
+import { useConvenios } from '@/modules/convenio/convenio.hooks';
 import '@/components/CrudCard/CrudCard.css';
 
 const IconeServicos = () => (
@@ -37,6 +38,8 @@ function rotuloDias(qtdDias) {
 
 export default function ServicoADM({ className = '' }) {
   const { servicos, loading, error, successMessage, addServico, editServico, removeServico } = useServicos();
+  const { convenios, refreshConvenios } = useConvenios();
+  const nomeDoConvenio = (id) => convenios.find((c) => c._id === String(id))?.nome ?? 'Convênio';
 
   const [servicoEditando, setServicoEditando] = useState(null);
   const [confirmandoId, setConfirmandoId] = useState(null);
@@ -46,9 +49,16 @@ export default function ServicoADM({ className = '' }) {
     return await addServico(dados);
   }
 
+  // Convênios podem ter acabado de ser criados no card ao lado: recarrega antes de abrir o formulário.
   function handleEdit(servico) {
     setConfirmandoId(null);
+    refreshConvenios();
     setServicoEditando(servico);
+  }
+
+  function handleNovo() {
+    refreshConvenios();
+    setCriandoServico(true);
   }
 
   async function handleSalvarEdicao(id, dados) {
@@ -77,7 +87,7 @@ export default function ServicoADM({ className = '' }) {
             {servicos.length} {servicos.length === 1 ? 'serviço' : 'serviços'}
           </span>
         )}
-        <button type="button" className="btn btn--primary btn--sm crud-card__novo-btn" onClick={() => setCriandoServico(true)} aria-label="Adicionar serviço">
+        <button type="button" className="btn btn--primary btn--sm crud-card__novo-btn" onClick={handleNovo} aria-label="Adicionar serviço">
           <IconeMais />
           <span className="crud-card__rotulo">Adicionar</span>
         </button>
@@ -121,8 +131,14 @@ export default function ServicoADM({ className = '' }) {
                   <span className="crud-item__meta">
                     <span className={`badge ${ehPacote ? 'badge--primary' : 'badge--info'}`}>{ehPacote ? 'Pacote' : 'Consulta'}</span>
                     {ehPacote && servico.qtdDias ? <span>{rotuloDias(servico.qtdDias)}</span> : null}
-                    {servico.comissao > 0 ? <span>Comissão {formatarPreco(servico.comissao)}{ehPacote ? ' por sessão' : ''}</span> : null}
+                    {servico.comissao > 0 ? <span>Comissão {textoComissao(servico)}{ehPacote ? ' por sessão' : ''}</span> : null}
                   </span>
+                  {(servico.tabelaConvenios ?? []).map((linha) => (
+                    <span key={String(linha.convenioId)} className="crud-item__sub">
+                      {nomeDoConvenio(linha.convenioId)}: {formatarPreco(linha.preco)}
+                      {linha.comissao > 0 ? ` · comissão ${textoComissao(linha)}` : ''}
+                    </span>
+                  ))}
                 </div>
 
                 <span className="crud-item__valor">{formatarPreco(servico.preco)}</span>
@@ -157,6 +173,7 @@ export default function ServicoADM({ className = '' }) {
         <EditarServicoModal
           key={servicoEditando._id}
           servico={servicoEditando}
+          convenios={convenios}
           erro={error}
           onSave={handleSalvarEdicao}
           onClose={() => setServicoEditando(null)}
@@ -165,6 +182,7 @@ export default function ServicoADM({ className = '' }) {
 
       {criandoServico && (
         <NovoServicoModal
+          convenios={convenios}
           erro={error}
           onSave={handleSalvarCriacao}
           onClose={() => setCriandoServico(false)}

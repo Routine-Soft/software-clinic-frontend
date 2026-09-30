@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useMinhasComissoes } from '../comissao.hooks';
-import { formatarPreco } from '@/modules/servico/servico.utils';
+import { formatarPreco, textoComissaoCalculada } from '@/modules/servico/servico.utils';
 import { formatarData } from '@/modules/assinatura/assinatura.utils';
 import { formatDataBR } from '@/utils/date';
 import { Icone } from '@/components/CrudCard/icones';
@@ -111,8 +111,8 @@ export default function MinhasComissoes() {
                 <tr key={item._id} style={{ '--i': Math.min(index, 12) }}>
                   <td className="nowrap">{formatDataBR(item.data)} · {item.horaInicio}</td>
                   <td>{item.paciente ?? '—'}</td>
-                  <td>{item.servico ?? '—'}</td>
-                  <td className="table__num">{item.comissao > 0 ? formatarPreco(item.comissao) : '—'}</td>
+                  <td>{item.servico ?? '—'}<span className="comissao-pessoa__sub"> · {item.convenio ?? 'Particular'}</span></td>
+                  <td className="table__num">{item.comissao > 0 ? textoComissaoCalculada(item.comissao, item.comissaoPercentual) : '—'}</td>
                   <td>
                     {item.comissao <= 0
                       ? <span className="badge">Sem comissão</span>

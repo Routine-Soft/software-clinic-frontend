@@ -1,6 +1,6 @@
 import { useId, useMemo } from 'react';
 import { IconeMais, IconeX } from '@/components/CrudCard/icones';
-import { FORMAS_PAGAMENTO, horarioInvalido, somarMinutos, DURACAO_PADRAO_MINUTOS } from '../agendamento.form';
+import { FORMAS_PAGAMENTO, horarioInvalido, somarMinutos, DURACAO_PADRAO_MINUTOS, comPrecoDaTabela } from '../agendamento.form';
 
 // Campos comuns de criar e editar agendamento. O paciente é escolhido fora (PacientePicker).
 export default function AgendamentoCampos({ form, setForm, profissionais, especialidades, salas, servicos, convenios }) {
@@ -19,13 +19,13 @@ export default function AgendamentoCampos({ form, setForm, profissionais, especi
     setForm((atual) => ({ ...atual, financeiro: { ...atual.financeiro, [campo]: valor } }));
   }
 
+  // O valor vem da tabela do serviço para o convênio escolhido (ou do particular); dá para ajustar à mão depois.
   function handleServico(servicoId) {
-    const servico = servicos.find((s) => s._id === servicoId);
-    setForm((atual) => ({
-      ...atual,
-      servicoId,
-      financeiro: { ...atual.financeiro, valor: servico ? servico.preco : atual.financeiro.valor },
-    }));
+    setForm((atual) => comPrecoDaTabela({ ...atual, servicoId }, servicos));
+  }
+
+  function handleConvenio(convenioId) {
+    setForm((atual) => comPrecoDaTabela({ ...atual, convenioId }, servicos));
   }
 
   function handleHoraInicio(valor) {
@@ -120,7 +120,7 @@ export default function AgendamentoCampos({ form, setForm, profissionais, especi
 
       <div className="field">
         <label className="field__label" htmlFor={`${id}-convenio`}>Convênio</label>
-        <select id={`${id}-convenio`} className="input" value={form.convenioId} onChange={(e) => set('convenioId', e.target.value)}>
+        <select id={`${id}-convenio`} className="input" value={form.convenioId} onChange={(e) => handleConvenio(e.target.value)}>
           <option value="">Particular</option>
           {convenios.map((c) => (
             <option key={c._id} value={c._id}>{c.nome}</option>

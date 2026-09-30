@@ -1,4 +1,5 @@
 import { horarioDosMinutos, minutosDoHorario, paraISO } from './agenda.utils';
+import { regraDoServico } from '@/modules/servico/servico.utils';
 
 export const DURACAO_PADRAO_MINUTOS = 30;
 
@@ -79,4 +80,11 @@ export function montarPayload(form, paciente) {
       formasPagamento: form.financeiro.formasPagamento.map((f) => ({ ...f, valor: Number(f.valor) })),
     },
   };
+}
+
+// Preenche o valor pelo serviço + convênio do formulário (tabela do serviço, ou preço particular).
+export function comPrecoDaTabela(form, servicos) {
+  const servico = servicos.find((s) => s._id === form.servicoId);
+  if (!servico) return form;
+  return { ...form, financeiro: { ...form.financeiro, valor: regraDoServico(servico, form.convenioId).preco } };
 }

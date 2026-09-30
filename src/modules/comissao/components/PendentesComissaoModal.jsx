@@ -1,6 +1,6 @@
 import Modal from '@/components/Modal/Modal';
 import { usePendentesComissao } from '../comissao.hooks';
-import { formatarPreco } from '@/modules/servico/servico.utils';
+import { formatarPreco, textoComissaoCalculada } from '@/modules/servico/servico.utils';
 import { formatDataBR } from '@/utils/date';
 
 // Detalhe do que entra no próximo pagamento, com a divisão entre o profissional e a clínica.
@@ -34,9 +34,9 @@ export default function PendentesComissaoModal({ profissional, onClose }) {
                 <tr key={item._id} style={{ '--i': Math.min(index, 12) }}>
                   <td className="nowrap">{formatDataBR(item.data)} · {item.horaInicio}</td>
                   <td>{item.paciente ?? '—'}</td>
-                  <td>{item.servico ?? '—'}</td>
+                  <td>{item.servico ?? '—'}<span className="comissao-pessoa__sub"> · {item.convenio ?? 'Particular'}</span></td>
                   <td className="table__num">{formatarPreco(item.valorAtendimento)}</td>
-                  <td className="table__num">{formatarPreco(item.comissao)}</td>
+                  <td className="table__num">{textoComissaoCalculada(item.comissao, item.comissaoPercentual)}</td>
                   <td className="table__num">{formatarPreco(item.parteClinica)}</td>
                 </tr>
               ))

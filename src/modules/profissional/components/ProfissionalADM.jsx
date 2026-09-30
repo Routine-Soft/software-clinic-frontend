@@ -4,6 +4,7 @@ import { useEspecialidades } from '@/modules/especialidade/especialidade.hooks';
 import { useUsuariosDaClinica } from '@/modules/user/user.hooks';
 import EditarProfissionalModal from './EditarProfissionalModal';
 import NovoProfissionalModal from './NovoProfissionalModal';
+import AvisoPreRequisito from '@/components/AvisoPreRequisito/AvisoPreRequisito';
 import { Icone, IconeMais, IconeLapis, IconeLixeira, IconeCheck, IconeX } from '@/components/CrudCard/icones';
 import { iniciais } from '@/utils/nome';
 import '@/components/CrudCard/CrudCard.css';
@@ -18,7 +19,7 @@ const IconeProfissionais = () => (
 
 export default function ProfissionalADM({ className = '' }) {
   const { profissionais, loading, error, successMessage, addProfissional, editProfissional, removeProfissional } = useProfissionais();
-  const { especialidades } = useEspecialidades();
+  const { especialidades, loading: carregandoEspecialidades } = useEspecialidades();
   const { usuarios, loading: loadingUsuarios } = useUsuariosDaClinica();
 
   const [profissionalEditando, setProfissionalEditando] = useState(null);
@@ -77,6 +78,12 @@ export default function ProfissionalADM({ className = '' }) {
         <div className="alerts crud-card__alertas">
           {error && !algumModalAberto && <p className="alert alert--error" role="alert">{error.message}</p>}
           {successMessage && <p className="alert alert--success" role="status">{successMessage}</p>}
+        </div>
+      )}
+
+      {!carregandoEspecialidades && especialidades.length === 0 && (
+        <div className="alerts crud-card__alertas">
+          <AvisoPreRequisito acao="adicionar profissionais" faltando={['uma especialidade']} onde="Use o card Especialidades, passo 1 do Dashboard admin." />
         </div>
       )}
 

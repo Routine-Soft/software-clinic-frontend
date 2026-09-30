@@ -330,3 +330,71 @@
   height: 50px;
   border-radius: 50%;
 }
+
+/* ==========================================================================
+   Login com o Google
+   ========================================================================== */
+
+.auth-divisor {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin: 22px 0 16px;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.auth-divisor::before,
+.auth-divisor::after {
+  flex: 1;
+  height: 1px;
+  content: '';
+  background: var(--border);
+}
+
+.auth-divisor--topo {
+  margin: 16px 0 22px;
+}
+
+.auth-google {
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+}
+
+/* O Google desenha o botão com a largura medida aqui; a altura fixa evita o salto enquanto ele carrega. */
+.auth-google__botao {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  max-width: 400px;
+  min-height: 44px;
+}
+
+.auth-google-conta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+  align-items: center;
+  justify-content: space-between;
+  grid-column: 1 / -1;
+  padding: 12px 14px;
+  font-size: 0.9rem;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  overflow-wrap: anywhere;
+}
+
+.auth-google-conta strong {
+  font-weight: 650;
+}
+
+.auth-google-conta button.link {
+  padding: 0;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  background-color: transparent;
+  border: 0;
+}

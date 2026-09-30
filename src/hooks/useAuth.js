@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import httpClient from '@/services/httpClient'
-import { loginUser, logoutUser } from '@/modules/user/user.api'
+import { loginUser, logoutUser, entrarComGoogle as entrarComGoogleApi } from '@/modules/user/user.api'
 
 const CURRENT_USER_KEY = 'currentUser'
 
@@ -22,15 +22,35 @@ export function useAuth() {
             setError(null)
 
             const response = await loginUser({ email, password })
-            const { accessToken, refreshToken, user: loggedUser } = response.data
+            return iniciarSessao(response.data)
+        } catch (err) {
+            setError(err)
+            throw err
+        } finally {
+            setLoading(false)
+        }
+    }
 
-            httpClient.tokenManager.setTokens(accessToken, refreshToken)
-            localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(loggedUser))
+    function iniciarSessao({ accessToken, refreshToken, user: loggedUser }) {
+        httpClient.tokenManager.setTokens(accessToken, refreshToken)
+        localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(loggedUser))
 
-            setUser(loggedUser)
-            setIsAuthenticated(true)
+        setUser(loggedUser)
+        setIsAuthenticated(true)
 
-            return loggedUser
+        return loggedUser
+    }
+
+    // Login/cadastro pelo Google. Devolve o usuário logado, ou { novoCadastro, nomeCompleto, email }
+    // quando o e-mail ainda não tem conta e é preciso pedir os dados da clínica (enviados em `cadastro`).
+    async function entrarComGoogle(credential, cadastro) {
+        try {
+            setLoading(true)
+            setError(null)
+
+            const response = await entrarComGoogleApi(credential, cadastro)
+            if (response.data.novoCadastro) return response.data
+            return iniciarSessao(response.data)
         } catch (err) {
             setError(err)
             throw err
@@ -70,6 +90,7 @@ export function useAuth() {
         loading,
         error,
         login,
+        entrarComGoogle,
         logout,
         hasRole,
         atualizarUsuarioLogado,

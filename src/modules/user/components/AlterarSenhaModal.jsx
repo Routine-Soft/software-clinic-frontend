@@ -4,7 +4,8 @@ import ModalForm from '@/components/Modal/ModalForm';
 
 const FORM_SENHA_INICIAL = { senhaAtual: '', novaSenha: '', confirmarSenha: '' };
 
-export default function AlterarSenhaModal({ erro, onSave, onClose }) {
+// Sem senha (conta criada pelo Google), vira "Criar senha" e não pede a senha atual.
+export default function AlterarSenhaModal({ temSenha = true, erro, onSave, onClose }) {
   const [formSenha, setFormSenha] = useState(FORM_SENHA_INICIAL);
 
   const senhasDiferentes = formSenha.confirmarSenha !== '' && formSenha.novaSenha !== formSenha.confirmarSenha;
@@ -14,27 +15,33 @@ export default function AlterarSenhaModal({ erro, onSave, onClose }) {
   }
 
   return (
-    <Modal title="Alterar senha" onClose={onClose}>
+    <Modal title={temSenha ? 'Alterar senha' : 'Criar senha'} onClose={onClose}>
       {(fechar) => (
         <ModalForm
           erro={erro}
           fechar={fechar}
-          submitLabel="Alterar senha"
+          submitLabel={temSenha ? 'Alterar senha' : 'Criar senha'}
           submitDisabled={senhasDiferentes}
           onSubmit={() => onSave({ currentPassword: formSenha.senhaAtual, newPassword: formSenha.novaSenha })}
         >
-          <div className="field">
-            <label className="field__label" htmlFor="senha-atual">Senha atual</label>
-            <input
-              id="senha-atual"
-              className="input"
-              type="password"
-              autoComplete="current-password"
-              value={formSenha.senhaAtual}
-              onChange={(e) => handleChangeSenha('senhaAtual', e.target.value)}
-              required
-            />
-          </div>
+          {!temSenha && (
+            <p className="modal-form__hint">Sua conta entra pelo Google. Com uma senha, você também pode entrar com e-mail e senha.</p>
+          )}
+
+          {temSenha && (
+            <div className="field">
+              <label className="field__label" htmlFor="senha-atual">Senha atual</label>
+              <input
+                id="senha-atual"
+                className="input"
+                type="password"
+                autoComplete="current-password"
+                value={formSenha.senhaAtual}
+                onChange={(e) => handleChangeSenha('senhaAtual', e.target.value)}
+                required
+              />
+            </div>
+          )}
 
           <div className="modal-form__row">
             <div className="field">

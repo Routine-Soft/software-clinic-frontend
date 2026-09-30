@@ -5,6 +5,11 @@ export async function loginUser(credentials) {
   return response;
 }
 
+export async function entrarComGoogle(credential, cadastro) {
+  const response = await httpClient.post('/users/google', { credential, cadastro });
+  return response;
+}
+
 export async function logoutUser() {
   const response = await httpClient.post('/users/logout');
   return response;

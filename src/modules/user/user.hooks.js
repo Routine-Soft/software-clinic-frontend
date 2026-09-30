@@ -248,6 +248,7 @@ export function useMinhaConta() {
     setError(null);
     try {
       const response = await updateMyPassword(dados);
+      setPerfil((atual) => (atual ? { ...atual, temSenha: true } : atual));
       setSuccessMessage(response.message);
       return true;
     } catch (err) {

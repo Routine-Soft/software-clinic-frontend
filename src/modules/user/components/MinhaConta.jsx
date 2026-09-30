@@ -18,6 +18,8 @@ export default function MinhaConta() {
 
   const ehAdmin = hasRole('admin') || hasRole('super_admin');
   const algumModalAberto = editandoDados || alterandoSenha;
+  // Conta criada pelo Google começa sem senha: a primeira é criada sem pedir a atual.
+  const temSenha = perfil?.temSenha !== false;
 
   return (
     <div className="page">
@@ -85,7 +87,7 @@ export default function MinhaConta() {
 
             <div className="conta-perfil__acoes">
               <button type="button" className="btn btn--primary" onClick={() => setEditandoDados(true)}>Editar dados</button>
-              <button type="button" className="btn btn--ghost" onClick={() => setAlterandoSenha(true)}>Alterar senha</button>
+              <button type="button" className="btn btn--ghost" onClick={() => setAlterandoSenha(true)}>{temSenha ? 'Alterar senha' : 'Criar senha'}</button>
             </div>
           </section>
         ) : (
@@ -109,6 +111,7 @@ export default function MinhaConta() {
 
       {alterandoSenha && (
         <AlterarSenhaModal
+          temSenha={temSenha}
           erro={error}
           onSave={alterarSenha}
           onClose={() => setAlterandoSenha(false)}

@@ -4,6 +4,7 @@ import { createUser } from '../user.api';
 import { useAuthContext } from '@/hooks/useAuthContext';
 import AuthLayout from './AuthLayout';
 import BotaoGoogle from './BotaoGoogle';
+import { normalizarEmail } from '@/utils/email';
 
 export default function RegistroClinica() {
   const navigate = useNavigate();
@@ -155,7 +156,7 @@ export default function RegistroClinica() {
                 className="input"
                 type="email"
                 value={form.email}
-                onChange={(e) => handleChange('email', e.target.value)}
+                onChange={(e) => handleChange('email', normalizarEmail(e.target.value))}
                 required
               />
             </div>

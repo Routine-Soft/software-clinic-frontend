@@ -1,5 +1,6 @@
 import { useId, useState } from 'react';
 import { IconeMais } from '@/components/CrudCard/icones';
+import { normalizarEmail } from '@/utils/email';
 
 const FORM_CRIAR_INICIAL = { nome: '', telefone: '', email: '', cpf: '', dataNascimento: '', convenioId: '', empresaId: '' };
 
@@ -59,7 +60,7 @@ export default function NovoPacienteForm({ convenios, empresas, onSubmit }) {
           className="input"
           type="email"
           value={formCriar.email}
-          onChange={(e) => handleChangeCriar('email', e.target.value)}
+          onChange={(e) => handleChangeCriar('email', normalizarEmail(e.target.value))}
           required
         />
       </div>

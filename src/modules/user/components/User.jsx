@@ -3,6 +3,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { useAuthContext } from "@/hooks/useAuthContext";
 import AuthLayout from "./AuthLayout";
 import BotaoGoogle from "./BotaoGoogle";
+import { normalizarEmail } from "@/utils/email";
 
 export default function User() {
   const { isAuthenticated, loading, error, login, entrarComGoogle } = useAuthContext();
@@ -56,7 +57,7 @@ export default function User() {
             className="input"
             type="email"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(e) => setEmail(normalizarEmail(e.target.value))}
             placeholder="seu@email.com"
             required
           />

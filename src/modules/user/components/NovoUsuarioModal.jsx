@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Modal from '@/components/Modal/Modal';
 import ModalForm from '@/components/Modal/ModalForm';
+import { normalizarEmail } from '@/utils/email';
 
 const FORM_CRIAR_INICIAL = { nomeCompleto: '', email: '', telefone: '', password: '', role: 'recepcao' };
 
@@ -46,7 +47,7 @@ export default function NovoUsuarioModal({ erro, onSave, onClose }) {
               className="input"
               type="email"
               value={formCriar.email}
-              onChange={(e) => handleChangeCriar('email', e.target.value)}
+              onChange={(e) => handleChangeCriar('email', normalizarEmail(e.target.value))}
               required
             />
           </div>

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import Modal from '@/components/Modal/Modal';
 import ModalForm from '@/components/Modal/ModalForm';
 import { ROTULO_FUNCAO } from '../user.constants';
+import { normalizarEmail } from '@/utils/email';
 
 const FUNCOES_EDITAVEIS = ['profissional', 'recepcao'];
 
@@ -52,7 +53,7 @@ export default function EditarUsuarioModal({ usuario, erro, onSave, onClose }) {
               className="input"
               type="email"
               value={formEdicao.email}
-              onChange={(e) => handleChangeEdicao('email', e.target.value)}
+              onChange={(e) => handleChangeEdicao('email', normalizarEmail(e.target.value))}
               required
             />
           </div>

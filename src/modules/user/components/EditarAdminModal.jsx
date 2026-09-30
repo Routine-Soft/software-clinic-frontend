@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Modal from '@/components/Modal/Modal';
 import ModalForm from '@/components/Modal/ModalForm';
+import { normalizarEmail } from '@/utils/email';
 
 export default function EditarAdminModal({ admin, erro, onSave, onClose }) {
   const [form, setForm] = useState({
@@ -77,7 +78,7 @@ export default function EditarAdminModal({ admin, erro, onSave, onClose }) {
                 className="input"
                 type="email"
                 value={form.email}
-                onChange={(e) => handleChange('email', e.target.value)}
+                onChange={(e) => handleChange('email', normalizarEmail(e.target.value))}
                 required
               />
             </div>

@@ -1,16 +1,13 @@
 import { useMemo, useState } from 'react';
-import { useProfissionais } from '@/modules/profissional/profissional.hooks';
 import { useConvenios } from '@/modules/convenio/convenio.hooks';
-import { updatePaciente } from '@/modules/paciente/paciente.api';
 import { formatDataBR, calcularIdade } from '@/utils/date';
 import { iniciais } from '@/utils/nome';
 import { IconeMais, IconeImpressora, IconeAlerta } from '@/components/CrudCard/icones';
 import { useProntuarios } from '../prontuario.hooks';
-import { CAMPOS_PERFIL_CLINICO, perfilClinicoDoPaciente, atendimentoEmAndamento, formatDataInstanteBR } from '../prontuario.utils';
+import { CAMPOS_PERFIL_CLINICO, perfilClinicoDoPaciente, atendimentoEmAndamento, ehDoProfissional, formatDataInstanteBR } from '../prontuario.utils';
 import AtendimentoAtivo from './AtendimentoAtivo';
 import EvolucaoItem from './EvolucaoItem';
 import ResumoAgendamento from './ResumoAgendamento';
-import AvisoPreRequisito from '@/components/AvisoPreRequisito/AvisoPreRequisito';
 import '../prontuario.css';
 
 const ABAS = [
@@ -19,37 +16,43 @@ const ABAS = [
   ['perfil', 'Perfil clínico'],
 ];
 
-export default function ProntuarioPaciente({ paciente, agendamento = null, onEditarAgendamento, onCancelarAgendamento, onImprimirAgendamento, onMarcarRealizado, erroAgendamento }) {
-  const { profissionais, loading: carregandoProfissionais } = useProfissionais();
+// `profissional` é o cadastro de profissional do login (quem abre a ficha já passou pela checagem de acesso).
+export default function ProntuarioPaciente({ paciente, profissional, agendamento = null, onEditarAgendamento, onCancelarAgendamento, onImprimirAgendamento, onMarcarRealizado, erroAgendamento }) {
   const { convenios } = useConvenios();
-  const { prontuarios, loading, error, successMessage, addProntuario, editProntuario, removeProntuario, finalizarProntuario } =
-    useProntuarios(paciente._id);
+  const {
+    prontuarios, completo, perfilClinico, loading, error, successMessage,
+    addProntuario, editProntuario, addAdendo, salvarPerfil, finalizarProntuario,
+  } = useProntuarios(paciente._id);
 
   const [aba, setAba] = useState('atendimento');
   const [novoAtendimento, setNovoAtendimento] = useState(() => ({
-    profissionalId: agendamento?.profissionalId?._id ?? '',
     convenioId: agendamento ? (agendamento.convenioId?._id ?? '') : (paciente.convenioId?._id ?? paciente.convenioId ?? ''),
   }));
   const [iniciando, setIniciando] = useState(false);
 
-  const [perfilSalvo, setPerfilSalvo] = useState(() => perfilClinicoDoPaciente(paciente));
-  const [perfilForm, setPerfilForm] = useState(() => perfilClinicoDoPaciente(paciente));
+  // O perfil clínico vem do servidor só para quem atende o paciente; null enquanto carrega ou sem acesso.
+  const perfilSalvo = useMemo(() => (perfilClinico ? perfilClinicoDoPaciente(perfilClinico) : null), [perfilClinico]);
+  const [perfilEditado, setPerfilEditado] = useState(null);
+  const perfilForm = perfilEditado ?? perfilSalvo ?? perfilClinicoDoPaciente({});
   const [salvandoPerfil, setSalvandoPerfil] = useState(false);
   const [avisoPerfil, setAvisoPerfil] = useState(null);
 
-  const atendimentoAtivo = useMemo(() => prontuarios.find(atendimentoEmAndamento), [prontuarios]);
+  // Só o próprio atendimento em andamento abre para edição; o de outro profissional aparece no histórico.
+  const atendimentoAtivo = useMemo(
+    () => prontuarios.find((p) => atendimentoEmAndamento(p) && ehDoProfissional(p, profissional._id)),
+    [prontuarios, profissional._id]
+  );
   const historico = useMemo(() => prontuarios.filter((p) => p._id !== atendimentoAtivo?._id), [prontuarios, atendimentoAtivo]);
   const primeiraConsulta = prontuarios.length > 0 ? prontuarios[prontuarios.length - 1].createdAt : null;
 
   const idade = calcularIdade(paciente.dataNascimento);
-  const perfilAlterado = CAMPOS_PERFIL_CLINICO.some(([campo]) => perfilForm[campo] !== perfilSalvo[campo]);
+  const perfilAlterado = !!perfilSalvo && CAMPOS_PERFIL_CLINICO.some(([campo]) => perfilForm[campo] !== perfilSalvo[campo]);
   // Com alergia registrada ela sobe para o banner de aviso; sem, aparece no resumo como qualquer outro campo.
-  const camposResumo = perfilSalvo.alergias ? CAMPOS_PERFIL_CLINICO.filter(([campo]) => campo !== 'alergias') : CAMPOS_PERFIL_CLINICO;
+  const camposResumo = perfilSalvo?.alergias ? CAMPOS_PERFIL_CLINICO.filter(([campo]) => campo !== 'alergias') : CAMPOS_PERFIL_CLINICO;
 
   async function handleIniciar() {
     await addProntuario({
       pacienteId: paciente._id,
-      profissionalId: novoAtendimento.profissionalId,
       convenioId: novoAtendimento.convenioId || null,
       agendamentoId: agendamento?._id ?? null,
     });
@@ -65,8 +68,8 @@ export default function ProntuarioPaciente({ paciente, agendamento = null, onEdi
     setSalvandoPerfil(true);
     setAvisoPerfil(null);
     try {
-      await updatePaciente(paciente._id, perfilForm);
-      setPerfilSalvo(perfilForm);
+      await salvarPerfil(perfilForm);
+      setPerfilEditado(null);
       setAvisoPerfil({ tipo: 'success', texto: 'Perfil clínico salvo.' });
     } catch (err) {
       setAvisoPerfil({ tipo: 'error', texto: err.message || 'Não foi possível salvar o perfil clínico.' });
@@ -115,21 +118,23 @@ export default function ProntuarioPaciente({ paciente, agendamento = null, onEdi
         />
       )}
 
-      {perfilSalvo.alergias && (
+      {perfilSalvo?.alergias && (
         <div className="pront-alergia" role="note">
           <IconeAlerta />
           <p><strong>Alergias:</strong> {perfilSalvo.alergias}</p>
         </div>
       )}
 
-      <dl className="pront-resumo">
-        {camposResumo.map(([campo, rotulo]) => (
-          <div key={campo} className={perfilSalvo[campo] ? undefined : 'is-vazio'}>
-            <dt>{rotulo}</dt>
-            <dd>{perfilSalvo[campo] || 'Nenhum registrado'}</dd>
-          </div>
-        ))}
-      </dl>
+      {perfilSalvo && (
+        <dl className="pront-resumo">
+          {camposResumo.map(([campo, rotulo]) => (
+            <div key={campo} className={perfilSalvo[campo] ? undefined : 'is-vazio'}>
+              <dt>{rotulo}</dt>
+              <dd>{perfilSalvo[campo] || 'Nenhum registrado'}</dd>
+            </div>
+          ))}
+        </dl>
+      )}
 
       <div className="pront-abas pront-no-print" role="tablist" aria-label="Seções do prontuário">
         {ABAS.map(([chave, rotulo]) => (
@@ -159,6 +164,12 @@ export default function ProntuarioPaciente({ paciente, agendamento = null, onEdi
       )}
 
       <section className="pront-painel" id="pront-painel" role="tabpanel" aria-labelledby={`pront-aba-${aba}`}>
+        {!loading && !completo && aba !== 'perfil' && (
+          <p className="pront-parcial" role="note">
+            Você não tem agendamento com este paciente, então vê apenas os atendimentos que você mesmo registrou.
+          </p>
+        )}
+
         {aba === 'atendimento' && (
           loading ? (
             <div className="skeleton skeleton--bloco" />
@@ -176,30 +187,14 @@ export default function ProntuarioPaciente({ paciente, agendamento = null, onEdi
                 <p>
                   {agendamento
                     ? 'O atendimento ficará vinculado a este agendamento.'
-                    : 'Escolha o profissional para abrir um novo registro de atendimento.'}
+                    : 'O atendimento fica registrado em seu nome, e só você poderá alterá-lo até finalizar.'}
                 </p>
               </div>
 
-              <AvisoPreRequisito
-                acao="iniciar um atendimento"
-                faltando={!carregandoProfissionais && profissionais.length === 0 ? ['um profissional'] : []}
-              />
-
               <div className="pront-grid">
-                <div className="field">
-                  <label className="field__label" htmlFor="pront-novo-profissional">Profissional</label>
-                  <select
-                    id="pront-novo-profissional"
-                    className="input"
-                    value={novoAtendimento.profissionalId}
-                    onChange={(e) => setNovoAtendimento({ ...novoAtendimento, profissionalId: e.target.value })}
-                    required
-                  >
-                    <option value="">Selecione</option>
-                    {profissionais.map((p) => (
-                      <option key={p._id} value={p._id}>{p.nome}</option>
-                    ))}
-                  </select>
+                <div className="pront-profissional-fixo">
+                  <span className="field__label">Profissional</span>
+                  <strong>{profissional.nome}</strong>
                 </div>
 
                 <div className="field">
@@ -222,7 +217,7 @@ export default function ProntuarioPaciente({ paciente, agendamento = null, onEdi
                 <button
                   type="button"
                   className={`btn btn--primary${iniciando ? ' btn--loading' : ''}`}
-                  disabled={!novoAtendimento.profissionalId || iniciando}
+                  disabled={iniciando}
                   onClick={async () => { setIniciando(true); await handleIniciar(); setIniciando(false); }}
                 >
                   <IconeMais />
@@ -245,15 +240,21 @@ export default function ProntuarioPaciente({ paciente, agendamento = null, onEdi
                   key={prontuario._id}
                   prontuario={prontuario}
                   destaque={!!agendamento && prontuario.agendamentoId === agendamento._id}
-                  onEditar={editProntuario}
-                  onExcluir={removeProntuario}
+                  souAutor={ehDoProfissional(prontuario, profissional._id)}
+                  onAdendo={addAdendo}
                 />
               ))}
             </ol>
           )
         )}
 
-        {aba === 'perfil' && (
+        {aba === 'perfil' && !loading && !perfilSalvo && (
+          <p className="pront-vazio">
+            O perfil clínico aparece para quem atende o paciente. Inicie um atendimento para consultá-lo e atualizá-lo.
+          </p>
+        )}
+
+        {aba === 'perfil' && perfilSalvo && (
           <form className="pront-perfil" onSubmit={handleSalvarPerfil}>
             <p className="pront-perfil__intro">Esses dados valem para todos os atendimentos deste paciente, não apenas para o atual.</p>
 
@@ -266,7 +267,7 @@ export default function ProntuarioPaciente({ paciente, agendamento = null, onEdi
                     className="input textarea"
                     rows={linhas}
                     value={perfilForm[campo]}
-                    onChange={(e) => { setPerfilForm({ ...perfilForm, [campo]: e.target.value }); setAvisoPerfil(null); }}
+                    onChange={(e) => { setPerfilEditado({ ...perfilForm, [campo]: e.target.value }); setAvisoPerfil(null); }}
                   />
                 </div>
               ))}

@@ -8,15 +8,34 @@ import { filtrarPacientes, ordenarPacientes } from '@/modules/paciente/paciente.
 import { formatDataBR, calcularIdade } from '@/utils/date';
 import { iniciais } from '@/utils/nome';
 import { IconeBusca, IconeMais, IconeFicha, IconeAbrirJanela } from '@/components/CrudCard/icones';
-import { useTodosProntuarios } from '../prontuario.hooks';
+import { useTodosProntuarios, useAcessoProntuario } from '../prontuario.hooks';
 import { atendimentoEmAndamento, idDoPaciente, formatDataInstanteBR } from '../prontuario.utils';
 import ProntuarioModal from './ProntuarioModal';
+import SemAcessoProntuario from './SemAcessoProntuario';
 import '@/modules/paciente/components/paciente.css';
 import '../prontuario.css';
 
 const COLUNAS = 5;
 
+// A lista só carrega para quem pode abrir prontuários; os demais veem a explicação do sigilo.
 export default function ProntuarioADM() {
+  const acesso = useAcessoProntuario();
+
+  if (acesso.profissional) return <ListaDeProntuarios />;
+
+  return (
+    <div className="page">
+      <header className="page-header">
+        <div>
+          <h2 className="page-title">Prontuário</h2>
+        </div>
+      </header>
+      {acesso.carregando ? <div className="skeleton skeleton--bloco" /> : <SemAcessoProntuario />}
+    </div>
+  );
+}
+
+function ListaDeProntuarios() {
   const navigate = useNavigate();
   const { pacientes, loading, error, addPaciente, refreshPacientes } = usePacientes();
   const { convenios } = useConvenios();

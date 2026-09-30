@@ -28,7 +28,18 @@ export async function finalizarAtendimento(id, prontuarioData) {
   return response;
 }
 
-export async function deleteProntuario(id) {
-  const response = await httpClient.delete(`/prontuarios/${id}`);
+export async function adicionarAdendo(id, texto) {
+  const response = await httpClient.post(`/prontuarios/${id}/adendos`, { texto });
+  return response;
+}
+
+export async function salvarPerfilClinico(pacienteId, perfil) {
+  const response = await httpClient.patch(`/prontuarios/perfil/${pacienteId}`, perfil);
+  return response;
+}
+
+// { profissional: { _id, nome } } quando o login pode abrir prontuários; { profissional: null } quando não.
+export async function getAcessoProntuario() {
+  const response = await httpClient.get('/prontuarios/acesso');
   return response;
 }

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Modal from '@/components/Modal/Modal';
 import ModalForm from '@/components/Modal/ModalForm';
+import { normalizarEmail } from '@/utils/email';
 
 const FORM_INICIAL = { nomeCompleto: '', email: '', nomeEmpresa: '', cnpj: '', telefone: '', password: '' };
 
@@ -80,7 +81,7 @@ export default function NovoAdminModal({ erro, onSave, onClose }) {
                 className="input"
                 type="email"
                 value={form.email}
-                onChange={(e) => handleChange('email', e.target.value)}
+                onChange={(e) => handleChange('email', normalizarEmail(e.target.value))}
                 required
               />
             </div>

@@ -727,3 +727,87 @@
   padding: 24px;
   animation: fadeInUp 0.6s var(--ease) 0.1s backwards;
 }
+
+/* ---------- Sigilo: sem acesso, acesso parcial e adendos ---------- */
+
+.pront-sem-acesso {
+  display: grid;
+  justify-items: center;
+  gap: 12px;
+  max-width: 560px;
+  padding: 32px 24px;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+.pront-sem-acesso svg {
+  width: 36px;
+  height: 36px;
+  color: var(--primary);
+}
+
+.pront-sem-acesso p {
+  margin: 0;
+}
+
+.pront-parcial {
+  padding: 10px 14px;
+  margin: 0 0 14px;
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+}
+
+.pront-profissional-fixo {
+  display: grid;
+  gap: 4px;
+}
+
+.pront-profissional-fixo strong {
+  padding: 0.7rem 0.9rem;
+  font-weight: 600;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+}
+
+.pront-adendos {
+  display: grid;
+  gap: 8px;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.pront-adendo {
+  padding: 10px 12px;
+  background: var(--surface-2);
+  border-left: 3px solid var(--primary);
+  border-radius: var(--radius-sm);
+}
+
+.pront-adendo__meta {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.pront-adendo p {
+  margin: 0;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.pront-adendo-form {
+  display: grid;
+  gap: 10px;
+}
+
+.pront-trava {
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--text-subtle);
+}

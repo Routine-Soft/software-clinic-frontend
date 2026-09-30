@@ -128,3 +128,8 @@ export function atendimentoEmAndamento(prontuario) {
 export function idDoPaciente(prontuario) {
   return prontuario.pacienteId?._id ?? prontuario.pacienteId;
 }
+
+// O atendimento foi registrado pelo profissional logado (só o autor edita, finaliza e acrescenta adendos).
+export function ehDoProfissional(prontuario, profissionalId) {
+  return !!profissionalId && (prontuario.profissionalId?._id ?? prontuario.profissionalId) === profissionalId;
+}

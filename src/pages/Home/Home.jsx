@@ -7,7 +7,7 @@ import { usePacientes } from '@/modules/paciente/paciente.hooks'
 import { useListaEspera } from '@/modules/lista-espera/lista-espera.hooks'
 import { useProfissionais } from '@/modules/profissional/profissional.hooks'
 import { useEmpresas } from '@/modules/empresa/empresa.hooks'
-import { useTodosProntuarios } from '@/modules/prontuario/prontuario.hooks'
+import { useTodosProntuarios, useAcessoProntuario } from '@/modules/prontuario/prontuario.hooks'
 import { atendimentoEmAndamento } from '@/modules/prontuario/prontuario.utils'
 import ProntuarioModal from '@/modules/prontuario/components/ProntuarioModal'
 import AssinaturaStatus from '@/modules/assinatura/components/AssinaturaStatus'
@@ -83,6 +83,12 @@ function Kpi({ icone, rotulo, valor, detalhe, tom = 'primary', to, indice }) {
     return to
         ? <Link to={to} className="card home-kpi" data-tom={tom} style={{ '--i': indice }}>{conteudo}</Link>
         : <div className="card home-kpi" data-tom={tom} style={{ '--i': indice }}>{conteudo}</div>
+}
+
+// Só para quem pode abrir prontuários (profissional com login vinculado); os demais não veem o contador.
+function KpiEmAtendimentoSeTiverAcesso({ indice }) {
+    const { profissional } = useAcessoProntuario()
+    return profissional ? <KpiEmAtendimento indice={indice} /> : null
 }
 
 function KpiEmAtendimento({ indice }) {
@@ -207,7 +213,7 @@ function PainelDaClinica({ agora, clinico, admin, hasRole }) {
                 />
                 <Kpi icone="espera" rotulo="Na lista de espera" valor={carregandoFila ? null : fila.length} detalhe="aguardando vaga" tom="warning" to="/lista-espera" indice={1} />
                 <Kpi icone="pacientes" rotulo="Pacientes" valor={carregandoPacientes ? null : pacientes.length} detalhe="cadastrados" tom="info" to="/pacientes" indice={2} />
-                {clinico && <KpiEmAtendimento indice={3} />}
+                {clinico && <KpiEmAtendimentoSeTiverAcesso indice={3} />}
                 <Kpi
                     icone="profissionais"
                     rotulo="Profissionais"

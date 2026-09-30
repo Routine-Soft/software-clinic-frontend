@@ -13,12 +13,14 @@ import {
   IconeX,
   IconeTrocar,
   IconeRelogioMais,
+  IconeChave,
   IconeCadeado,
   IconeCadeadoAberto,
 } from '@/components/CrudCard/icones';
 import NovoAdminModal from './NovoAdminModal';
 import EditarAdminModal from './EditarAdminModal';
 import TrocarPlanoModal from './TrocarPlanoModal';
+import RedefinirSenhaAdminModal from './RedefinirSenhaAdminModal';
 import './clinicas-adm.css';
 
 const COBRANCA_ROTULO = { recorrente: 'Cartão', pix: 'Pix', manual: 'Manual' };
@@ -34,15 +36,16 @@ const STATUS_INFO = {
 
 export default function ClinicasADM() {
   const [busca, setBusca] = useState('');
-  const { admins, loading, error, successMessage, addAdmin, editAdmin, removeAdmin, trocarPlano, estenderTeste, definirRevogacao } = useAdmins(busca);
+  const { admins, loading, error, successMessage, addAdmin, editAdmin, removeAdmin, trocarPlano, estenderTeste, definirRevogacao, redefinirSenha } = useAdmins(busca);
 
   const [criando, setCriando] = useState(false);
   const [editando, setEditando] = useState(null);
   const [trocandoPlanoDe, setTrocandoPlanoDe] = useState(null);
+  const [redefinindoSenhaDe, setRedefinindoSenhaDe] = useState(null);
   const [confirmando, setConfirmando] = useState(null); // { id, acao: 'excluir' | 'revogar' }
 
   const resumoContagem = useMemo(() => `${admins.length} ${admins.length === 1 ? 'clínica' : 'clínicas'}`, [admins.length]);
-  const algumModalAberto = criando || !!editando || !!trocandoPlanoDe;
+  const algumModalAberto = criando || !!editando || !!trocandoPlanoDe || !!redefinindoSenhaDe;
 
   function fecharConfirmacao() {
     setConfirmando(null);
@@ -205,12 +208,15 @@ export default function ClinicasADM() {
                           </button>
                         </div>
                       ) : (
-                        <div className="table__actions">
+                        <div className="table__actions clinica-acoes">
                           <button type="button" className="icon-btn" title="Editar" aria-label={`Editar ${admin.nomeEmpresa}`} onClick={() => setEditando(admin)}>
                             <IconeLapis />
                           </button>
                           <button type="button" className="icon-btn" title="Trocar plano" aria-label={`Trocar plano de ${admin.nomeEmpresa}`} onClick={() => setTrocandoPlanoDe(admin)}>
                             <IconeTrocar />
+                          </button>
+                          <button type="button" className="icon-btn" title="Redefinir senha" aria-label={`Redefinir senha de ${admin.nomeEmpresa}`} onClick={() => setRedefinindoSenhaDe(admin)}>
+                            <IconeChave />
                           </button>
                           {podeEstenderTeste && (
                             <button
@@ -277,6 +283,16 @@ export default function ClinicasADM() {
           erro={error}
           onSave={editAdmin}
           onClose={() => setEditando(null)}
+        />
+      )}
+
+      {redefinindoSenhaDe && (
+        <RedefinirSenhaAdminModal
+          key={redefinindoSenhaDe._id}
+          admin={redefinindoSenhaDe}
+          erro={error}
+          onSave={redefinirSenha}
+          onClose={() => setRedefinindoSenhaDe(null)}
         />
       )}
 

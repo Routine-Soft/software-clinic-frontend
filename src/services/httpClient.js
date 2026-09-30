@@ -19,6 +19,15 @@ class TokenManager {
     localStorage.removeItem('refreshToken')
   }
 
+  // Conteúdo do token de acesso (id, role, via...), ou null sem sessão.
+  getPayload() {
+    try {
+      return JSON.parse(atob(this.getAccessToken().split('.')[1]))
+    } catch {
+      return null
+    }
+  }
+
   isTokenExpired(token) {
     if (!token) return true
     try {

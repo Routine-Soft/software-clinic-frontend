@@ -6,6 +6,7 @@ import AssinaturaStatus from '@/modules/assinatura/components/AssinaturaStatus';
 import EditarMinhaContaModal from './EditarMinhaContaModal';
 import AlterarSenhaModal from './AlterarSenhaModal';
 import { iniciais } from '@/utils/nome';
+import httpClient from '@/services/httpClient';
 import './user.css';
 import './minha-conta.css';
 
@@ -20,6 +21,8 @@ export default function MinhaConta() {
   const algumModalAberto = editandoDados || alterandoSenha;
   // Conta criada pelo Google começa sem senha: a primeira é criada sem pedir a atual.
   const temSenha = perfil?.temSenha !== false;
+  // Quem entrou pelo Google (inclusive quem esqueceu a senha) troca a senha sem informar a atual.
+  const pedirSenhaAtual = temSenha && httpClient.tokenManager.getPayload()?.via !== 'google';
 
   return (
     <div className="page">
@@ -112,6 +115,7 @@ export default function MinhaConta() {
       {alterandoSenha && (
         <AlterarSenhaModal
           temSenha={temSenha}
+          pedirSenhaAtual={pedirSenhaAtual}
           erro={error}
           onSave={alterarSenha}
           onClose={() => setAlterandoSenha(false)}

@@ -398,3 +398,37 @@
   background-color: transparent;
   border: 0;
 }
+
+/* ---------- Esqueceu a senha ---------- */
+
+.auth-esqueci {
+  justify-self: end;
+  padding: 0;
+  margin-top: 2px;
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  background-color: transparent;
+  border: 0;
+}
+
+.auth-ajuda {
+  display: grid;
+  gap: 8px;
+  padding: 12px 14px;
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  animation: fadeInUp 0.3s var(--ease) backwards;
+}
+
+.auth-ajuda p {
+  margin: 0;
+}
+
+.auth-ajuda strong {
+  color: var(--text);
+}

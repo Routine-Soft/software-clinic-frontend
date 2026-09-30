@@ -38,6 +38,11 @@ export async function trocarPlanoAdmin(id, planoId) {
   return response;
 }
 
+export async function redefinirSenhaAdmin(id, novaSenha) {
+  const response = await httpClient.patch(`/users/admins/${id}/senha`, { novaSenha });
+  return response;
+}
+
 export async function estenderTesteAdmin(id) {
   const response = await httpClient.patch(`/users/admins/${id}/estender-teste`);
   return response;

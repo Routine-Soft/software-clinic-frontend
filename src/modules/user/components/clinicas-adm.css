@@ -133,3 +133,11 @@
   font-weight: 600;
   color: var(--text-muted);
 }
+
+/* Seis ações por clínica: em duas linhas de três, a tabela cabe no card sem rolar para o lado. */
+.clinica-acoes {
+  display: inline-grid;
+  grid-template-columns: repeat(3, auto);
+  gap: 6px 8px;
+  justify-content: end;
+}

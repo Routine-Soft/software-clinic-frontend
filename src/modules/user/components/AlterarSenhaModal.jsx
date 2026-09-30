@@ -4,8 +4,9 @@ import ModalForm from '@/components/Modal/ModalForm';
 
 const FORM_SENHA_INICIAL = { senhaAtual: '', novaSenha: '', confirmarSenha: '' };
 
-// Sem senha (conta criada pelo Google), vira "Criar senha" e não pede a senha atual.
-export default function AlterarSenhaModal({ temSenha = true, erro, onSave, onClose }) {
+// Sem senha (conta criada pelo Google), vira "Criar senha". A senha atual só é pedida quando a sessão
+// não veio do Google: entrar pelo Google é o caminho de quem esqueceu a senha.
+export default function AlterarSenhaModal({ temSenha = true, pedirSenhaAtual = temSenha, erro, onSave, onClose }) {
   const [formSenha, setFormSenha] = useState(FORM_SENHA_INICIAL);
 
   const senhasDiferentes = formSenha.confirmarSenha !== '' && formSenha.novaSenha !== formSenha.confirmarSenha;
@@ -28,7 +29,11 @@ export default function AlterarSenhaModal({ temSenha = true, erro, onSave, onClo
             <p className="modal-form__hint">Sua conta entra pelo Google. Com uma senha, você também pode entrar com e-mail e senha.</p>
           )}
 
-          {temSenha && (
+          {temSenha && !pedirSenhaAtual && (
+            <p className="modal-form__hint">Você entrou pelo Google, então não precisa informar a senha atual.</p>
+          )}
+
+          {pedirSenhaAtual && (
             <div className="field">
               <label className="field__label" htmlFor="senha-atual">Senha atual</label>
               <input

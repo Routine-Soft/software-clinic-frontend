@@ -9,6 +9,7 @@ import {
   trocarPlanoAdmin,
   estenderTesteAdmin,
   definirRevogacaoAdmin,
+  redefinirSenhaAdmin,
 } from "./clinica-admin.api";
 
 // Números para os cards do painel super admin.
@@ -166,6 +167,19 @@ export function useAdmins(busca = '') {
     }
   }
 
+  async function redefinirSenha(id, novaSenha) {
+    setError(null);
+    setSuccessMessage(null);
+    try {
+      const response = await redefinirSenhaAdmin(id, novaSenha);
+      setSuccessMessage(response.message);
+      return true;
+    } catch (err) {
+      setError(err);
+      return false;
+    }
+  }
+
   async function estenderTeste(id) {
     setError(null);
     setSuccessMessage(null);
@@ -204,6 +218,7 @@ export function useAdmins(busca = '') {
     removeAdmin,
     trocarPlano,
     estenderTeste,
+    redefinirSenha,
     definirRevogacao,
     refreshAdmins,
   };

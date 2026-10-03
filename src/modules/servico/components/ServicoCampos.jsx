@@ -1,15 +1,15 @@
 import { useId } from 'react';
 import { IconeMais, IconeLixeira } from '@/components/CrudCard/icones';
 import { dicaComissao } from '../servico.utils';
-import { linhaConvenioVazia } from '../servico.form';
+import { linhaConvenioVazia, MODULOS_SERVICO } from '../servico.form';
 import '../servico.css';
 
 function CampoComissao({ id, tipo, valor, preco, onTipo, onValor }) {
   return (
     <div className="field">
-      <label className="field__label" htmlFor={id}>Comissão do profissional</label>
+      <label className="field__label" htmlFor={id}>Repasse ao profissional</label>
       <div className="comissao-campo">
-        <div className="comissao-campo__tipo" role="group" aria-label="Tipo de comissão">
+        <div className="comissao-campo__tipo" role="group" aria-label="Tipo de repasse">
           <button type="button" aria-pressed={tipo === 'valor'} onClick={() => onTipo('valor')}>R$</button>
           <button type="button" aria-pressed={tipo === 'percentual'} onClick={() => onTipo('percentual')}>%</button>
         </div>
@@ -43,7 +43,7 @@ function CampoPreco({ id, valor, onChange, rotulo = 'Preço' }) {
   );
 }
 
-// Campos de criar e editar serviço: dados básicos, preço/comissão particular e a tabela por convênio.
+// Campos de criar e editar serviço: dados básicos, preço/repasse particular e a tabela por convênio.
 export default function ServicoCampos({ form, setForm, convenios }) {
   const id = useId();
 
@@ -82,11 +82,19 @@ export default function ServicoCampos({ form, setForm, convenios }) {
         )}
       </div>
 
-      <section className="tabela-preco" aria-label="Preços e comissões">
-        <h4 className="tabela-preco__titulo">Preços e comissões</h4>
+      <div className="field">
+        <label className="field__label" htmlFor={`${id}-modulo`}>Usado em</label>
+        <select id={`${id}-modulo`} className="input" value={form.modulo} onChange={(e) => set('modulo', e.target.value)}>
+          {MODULOS_SERVICO.map(([valor, rotulo]) => <option key={valor} value={valor}>{rotulo}</option>)}
+        </select>
+        <p className="field__hint">Marque quando o serviço for uma avaliação: ele passa a aparecer para escolher na tela da avaliação.</p>
+      </div>
+
+      <section className="tabela-preco" aria-label="Preços e repasses">
+        <h4 className="tabela-preco__titulo">Preços e repasses</h4>
         <p className="field__hint">
-          {form.tipo === 'pacote' ? 'A comissão vale por sessão realizada. ' : ''}
-          Convênio que não estiver na lista usa o preço e a comissão do particular.
+          {form.tipo === 'pacote' ? 'O repasse vale por sessão realizada. ' : ''}
+          Convênio que não estiver na lista usa o preço e o repasse do particular.
         </p>
 
         <div className="tabela-preco__linha">
@@ -138,7 +146,7 @@ export default function ServicoCampos({ form, setForm, convenios }) {
         ))}
 
         {convenios.length === 0 ? (
-          <p className="modal-form__hint">Para ter preço e comissão por convênio, cadastre os convênios antes (card Convênios, passo 4 do Dashboard admin).</p>
+          <p className="modal-form__hint">Para ter preço e repasse por convênio, cadastre os convênios antes (card Convênios, passo 4 do Dashboard admin).</p>
         ) : (
           <button type="button" className="btn btn--ghost btn--sm tabela-preco__adicionar" onClick={adicionarLinha} disabled={!podeAdicionar}>
             <IconeMais />

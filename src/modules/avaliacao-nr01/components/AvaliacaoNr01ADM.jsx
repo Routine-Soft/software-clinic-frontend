@@ -3,6 +3,7 @@ import { useAvaliacoesNr01 } from '../avaliacao-nr01.hooks';
 import { useEmpresas } from '@/modules/empresa/empresa.hooks';
 import { usePacientes } from '@/modules/paciente/paciente.hooks';
 import { useProfissionais } from '@/modules/profissional/profissional.hooks';
+import { useServicos } from '@/modules/servico/servico.hooks';
 import { formatDataBR } from '@/utils/date';
 import EditarAvaliacaoNr01Modal from './EditarAvaliacaoNr01Modal';
 import NovaAvaliacaoNr01Modal from './NovaAvaliacaoNr01Modal';
@@ -53,6 +54,7 @@ export default function AvaliacaoNr01ADM() {
   const { empresas, loading: carregandoEmpresas, error: erroEmpresa, successMessage: sucessoEmpresa, addEmpresa } = useEmpresas();
   const { pacientes } = usePacientes();
   const { profissionais, loading: carregandoProfissionais } = useProfissionais();
+  const { servicos } = useServicos();
 
   const [criandoAvaliacao, setCriandoAvaliacao] = useState(false);
   const [criandoEmpresa, setCriandoEmpresa] = useState(false);
@@ -309,6 +311,7 @@ export default function AvaliacaoNr01ADM() {
           empresas={empresas}
           pacientes={pacientes}
           profissionais={profissionais}
+          servicos={servicos}
           carregando={carregandoEmpresas || carregandoProfissionais}
           perguntasPadrao={respostasPadrao()}
           hoje={hojeISO()}
@@ -331,6 +334,7 @@ export default function AvaliacaoNr01ADM() {
           empresas={empresas}
           pacientes={pacientes}
           profissionais={profissionais}
+          servicos={servicos}
           carregando={carregandoEmpresas || carregandoProfissionais}
           perguntasPadrao={respostasPadrao()}
           hoje={hojeISO()}

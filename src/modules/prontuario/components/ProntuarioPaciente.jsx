@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import { useConvenios } from '@/modules/convenio/convenio.hooks';
+import { useEspecialidades } from '@/modules/especialidade/especialidade.hooks';
 import { formatDataBR, calcularIdade } from '@/utils/date';
 import { iniciais } from '@/utils/nome';
 import { IconeMais, IconeImpressora, IconeAlerta } from '@/components/CrudCard/icones';
@@ -8,6 +9,7 @@ import { CAMPOS_PERFIL_CLINICO, perfilClinicoDoPaciente, atendimentoEmAndamento,
 import AtendimentoAtivo from './AtendimentoAtivo';
 import EvolucaoItem from './EvolucaoItem';
 import ResumoAgendamento from './ResumoAgendamento';
+import { EscolhaEspecialidades } from './AcessoAtendimento';
 import '../prontuario.css';
 
 const ABAS = [
@@ -19,13 +21,16 @@ const ABAS = [
 // `profissional` é o cadastro de profissional do login (quem abre a ficha já passou pela checagem de acesso).
 export default function ProntuarioPaciente({ paciente, profissional, agendamento = null, onEditarAgendamento, onCancelarAgendamento, onImprimirAgendamento, onMarcarRealizado, erroAgendamento }) {
   const { convenios } = useConvenios();
+  const { especialidades } = useEspecialidades();
   const {
-    prontuarios, completo, perfilClinico, loading, error, successMessage,
-    addProntuario, editProntuario, addAdendo, salvarPerfil, finalizarProntuario,
+    prontuarios, perfilClinico, loading, error, successMessage,
+    addProntuario, editProntuario, addAdendo, compartilhar, salvarPerfil, finalizarProntuario,
   } = useProntuarios(paciente._id);
 
   const [aba, setAba] = useState('atendimento');
+  // compartilhadoCom começa vazio: só o autor lê até ele marcar outras especialidades.
   const [novoAtendimento, setNovoAtendimento] = useState(() => ({
+    compartilhadoCom: [],
     convenioId: agendamento ? (agendamento.convenioId?._id ?? '') : (paciente.convenioId?._id ?? paciente.convenioId ?? ''),
   }));
   const [iniciando, setIniciando] = useState(false);
@@ -53,6 +58,7 @@ export default function ProntuarioPaciente({ paciente, profissional, agendamento
   async function handleIniciar() {
     await addProntuario({
       pacienteId: paciente._id,
+      compartilhadoCom: novoAtendimento.compartilhadoCom,
       convenioId: novoAtendimento.convenioId || null,
       agendamentoId: agendamento?._id ?? null,
     });
@@ -164,9 +170,9 @@ export default function ProntuarioPaciente({ paciente, profissional, agendamento
       )}
 
       <section className="pront-painel" id="pront-painel" role="tabpanel" aria-labelledby={`pront-aba-${aba}`}>
-        {!loading && !completo && aba !== 'perfil' && (
+        {!loading && aba === 'historico' && (
           <p className="pront-parcial" role="note">
-            Você não tem agendamento com este paciente, então vê apenas os atendimentos que você mesmo registrou.
+            Aparecem aqui os seus atendimentos e os que outros profissionais liberaram para a sua especialidade.
           </p>
         )}
 
@@ -177,6 +183,8 @@ export default function ProntuarioPaciente({ paciente, profissional, agendamento
             <AtendimentoAtivo
               key={atendimentoAtivo._id}
               atendimento={atendimentoAtivo}
+              especialidades={especialidades}
+              onCompartilhar={compartilhar}
               onSalvarRascunho={editProntuario}
               onFinalizar={handleFinalizar}
             />
@@ -213,6 +221,19 @@ export default function ProntuarioPaciente({ paciente, profissional, agendamento
                 </div>
               </div>
 
+              <div className="pront-acesso pront-acesso--editando">
+                <span className="field__label" id="pront-novo-acesso-rotulo">Quem mais pode ler este atendimento</span>
+                <EscolhaEspecialidades
+                  id="pront-novo-acesso"
+                  especialidades={especialidades}
+                  selecionadas={novoAtendimento.compartilhadoCom}
+                  onChange={(ids) => setNovoAtendimento({ ...novoAtendimento, compartilhadoCom: ids })}
+                />
+                <p className="field__hint">
+                  Nada marcado: só você lê. Marcando uma especialidade, qualquer profissional dela na clínica poderá ler. Dá para mudar depois.
+                </p>
+              </div>
+
               <div className="pront-rodape pront-no-print">
                 <button
                   type="button"
@@ -241,6 +262,8 @@ export default function ProntuarioPaciente({ paciente, profissional, agendamento
                   prontuario={prontuario}
                   destaque={!!agendamento && prontuario.agendamentoId === agendamento._id}
                   souAutor={ehDoProfissional(prontuario, profissional._id)}
+                  especialidades={especialidades}
+                  onCompartilhar={compartilhar}
                   onAdendo={addAdendo}
                 />
               ))}

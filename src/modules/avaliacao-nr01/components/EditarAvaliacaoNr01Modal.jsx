@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import Modal from '@/components/Modal/Modal';
+import CampoServicoDoModulo from '@/modules/servico/components/CampoServicoDoModulo';
 import ModalForm from '@/components/Modal/ModalForm';
 
-export default function EditarAvaliacaoNr01Modal({ avaliacao, empresas, pacientes, profissionais, perguntasPadrao, hoje, erro, onSave, onClose }) {
+export default function EditarAvaliacaoNr01Modal({ avaliacao, empresas, pacientes, profissionais, servicos = [], perguntasPadrao, hoje, erro, onSave, onClose }) {
   const [formEdicao, setFormEdicao] = useState({
     empresaId: avaliacao.empresaId?._id ?? avaliacao.empresaId ?? '',
     pacienteId: avaliacao.pacienteId?._id ?? avaliacao.pacienteId ?? '',
+    servicoId: avaliacao.servicoId?._id ?? avaliacao.servicoId ?? '',
     profissionalId: avaliacao.profissionalId?._id ?? avaliacao.profissionalId ?? '',
     data: avaliacao.data ? avaliacao.data.substring(0, 10) : hoje,
     respostas: avaliacao.respostas?.length ? avaliacao.respostas : perguntasPadrao,
@@ -35,6 +37,7 @@ export default function EditarAvaliacaoNr01Modal({ avaliacao, empresas, paciente
     return {
       ...formEdicao,
       pacienteId: formEdicao.pacienteId || null,
+      servicoId: formEdicao.servicoId || null,
       classificacaoRisco: formEdicao.classificacaoRisco || null,
       respostas: formEdicao.respostas.filter((r) => r.pergunta.trim() !== ''),
     };
@@ -110,6 +113,14 @@ export default function EditarAvaliacaoNr01Modal({ avaliacao, empresas, paciente
               />
             </div>
           </div>
+
+          <CampoServicoDoModulo
+            id="editar-nr01-servico"
+            modulo="nr01"
+            servicos={servicos}
+            value={formEdicao.servicoId}
+            onChange={(valor) => handleChangeEdicao('servicoId', valor)}
+          />
 
           <fieldset className="modal-form__section">
             <legend>Fatores de risco psicossocial avaliados</legend>

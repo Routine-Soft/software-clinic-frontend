@@ -54,7 +54,7 @@ export default function ResumoAgendamento({ agendamento, erro, onEditar, onCance
         <div><dt>Convênio</dt><dd>{agendamento.convenioId?.nome ?? 'Particular'}</dd></div>
         {realizado && agendamento.comissao?.valor > 0 && (
           <div>
-            <dt>Comissão do profissional</dt>
+            <dt>Repasse ao profissional</dt>
             <dd>{textoComissaoCalculada(agendamento.comissao.valor, agendamento.comissao.percentual)} · {comissaoPaga ? 'paga' : 'pendente'}</dd>
           </div>
         )}

@@ -10,7 +10,7 @@ import UsuariosClinicaCard from '@/modules/user/components/UsuariosClinicaCard'
 import './DashboardAdmin.css'
 
 // Na ordem em que a clínica precisa cadastrar: o profissional exige especialidade (e usa o login do usuário);
-// o serviço tem preço e comissão por convênio; o agendamento exige profissional, serviço e sala;
+// o serviço tem preço e repasse por convênio; o agendamento exige profissional, serviço e sala;
 // o paciente pode usar convênio e empresa.
 const PASSOS = [
     { chave: 'especialidades', Card: EspecialidadeADM },

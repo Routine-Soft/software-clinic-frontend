@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { ROTULO_FUNCAO } from '@/modules/user/user.constants';
 
-// Login do profissional: com ele vinculado, o profissional marca os próprios atendimentos e vê as próprias comissões.
+// Login do profissional: com ele vinculado, o profissional marca os próprios atendimentos e vê os próprios repasses.
 export default function CampoUsuarioVinculado({ id, usuarios, valor, onChange, loading }) {
   const semOpcoes = !loading && usuarios.length === 0;
 
@@ -23,7 +23,7 @@ export default function CampoUsuarioVinculado({ id, usuarios, valor, onChange, l
             Profissional e depois volte aqui.
           </>
         ) : (
-          'Opcional. Com o login vinculado, o profissional marca os próprios atendimentos e vê as comissões dele.'
+          'Opcional. Com o login vinculado, o profissional marca os próprios atendimentos e vê os repasses dele.'
         )}
       </p>
     </div>

@@ -6,6 +6,7 @@ import {
   finalizarAtendimento,
   adicionarAdendo,
   salvarPerfilClinico,
+  compartilharProntuario,
   getAcessoProntuario,
 } from "./prontuario.api";
 
@@ -67,8 +68,6 @@ export function useTodosProntuarios() {
 
 export function useProntuarios(pacienteId) {
   const [prontuarios, setProntuarios] = useState([]);
-  // completo: o profissional atende o paciente e vê todos os atendimentos; senão, só os que ele registrou.
-  const [completo, setCompleto] = useState(true);
   const [perfilClinico, setPerfilClinico] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -76,7 +75,6 @@ export function useProntuarios(pacienteId) {
 
   function aplicar(response) {
     setProntuarios(response.data);
-    setCompleto(response.completo !== false);
     setPerfilClinico(response.perfilClinico ?? null);
   }
 
@@ -158,6 +156,18 @@ export function useProntuarios(pacienteId) {
     }
   }
 
+  async function compartilhar(id, especialidadeIds) {
+    limparAvisos();
+    try {
+      const response = await compartilharProntuario(id, especialidadeIds);
+      setSuccessMessage(response.message);
+      await refreshProntuarios();
+      return response.data;
+    } catch (err) {
+      setError(err);
+    }
+  }
+
   async function addAdendo(id, texto) {
     limparAvisos();
     try {
@@ -191,7 +201,6 @@ export function useProntuarios(pacienteId) {
 
   return {
     prontuarios,
-    completo,
     perfilClinico,
     loading,
     error,
@@ -199,6 +208,7 @@ export function useProntuarios(pacienteId) {
     addProntuario,
     editProntuario,
     addAdendo,
+    compartilhar,
     salvarPerfil,
     finalizarProntuario,
     refreshProntuarios,

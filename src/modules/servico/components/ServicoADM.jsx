@@ -4,6 +4,7 @@ import EditarServicoModal from './EditarServicoModal';
 import NovoServicoModal from './NovoServicoModal';
 import { Icone, IconeMais, IconeLapis, IconeLixeira, IconeCheck, IconeX } from '@/components/CrudCard/icones';
 import { formatarPreco, textoComissaoDaLinha } from '../servico.utils';
+import { ROTULO_MODULO } from '../servico.form';
 import '../servico.css';
 import { useConvenios } from '@/modules/convenio/convenio.hooks';
 import '@/components/CrudCard/CrudCard.css';
@@ -133,7 +134,8 @@ export default function ServicoADM({ className = '' }) {
                   <span className="crud-item__meta">
                     <span className={`badge ${ehPacote ? 'badge--primary' : 'badge--info'}`}>{ehPacote ? 'Pacote' : 'Consulta'}</span>
                     {ehPacote && servico.qtdDias ? <span>{rotuloDias(servico.qtdDias)}</span> : null}
-                    {ehPacote && temComissao ? <span>comissão por sessão</span> : null}
+                    {ehPacote && temComissao ? <span>repasse por sessão</span> : null}
+                    {servico.modulo && <span className="badge badge--success">{ROTULO_MODULO[servico.modulo]}</span>}
                   </span>
                 </div>
 

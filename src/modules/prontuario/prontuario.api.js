@@ -33,6 +33,12 @@ export async function adicionarAdendo(id, texto) {
   return response;
 }
 
+// Especialidades da clínica que podem ler o atendimento, além do autor.
+export async function compartilharProntuario(id, compartilhadoCom) {
+  const response = await httpClient.patch(`/prontuarios/${id}/compartilhamento`, { compartilhadoCom });
+  return response;
+}
+
 export async function salvarPerfilClinico(pacienteId, perfil) {
   const response = await httpClient.patch(`/prontuarios/perfil/${pacienteId}`, perfil);
   return response;

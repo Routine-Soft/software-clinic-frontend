@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import Modal from '@/components/Modal/Modal';
+import CampoServicoDoModulo from '@/modules/servico/components/CampoServicoDoModulo';
 import ModalForm from '@/components/Modal/ModalForm';
 import AvisoPreRequisito from '@/components/AvisoPreRequisito/AvisoPreRequisito';
 
-export default function NovaAvaliacaoNr01Modal({ empresas, pacientes, profissionais, carregando = false, perguntasPadrao, hoje, erro, onSave, onClose }) {
+export default function NovaAvaliacaoNr01Modal({ empresas, pacientes, profissionais, servicos = [], carregando = false, perguntasPadrao, hoje, erro, onSave, onClose }) {
   const faltando = carregando ? [] : [
     empresas.length === 0 && 'uma empresa',
     profissionais.length === 0 && 'um profissional',
@@ -12,6 +13,7 @@ export default function NovaAvaliacaoNr01Modal({ empresas, pacientes, profission
   const [formCriar, setFormCriar] = useState({
     empresaId: '',
     pacienteId: '',
+    servicoId: '',
     profissionalId: '',
     data: hoje,
     respostas: perguntasPadrao,
@@ -41,6 +43,7 @@ export default function NovaAvaliacaoNr01Modal({ empresas, pacientes, profission
     return {
       ...formCriar,
       pacienteId: formCriar.pacienteId || null,
+      servicoId: formCriar.servicoId || null,
       classificacaoRisco: formCriar.classificacaoRisco || null,
       respostas: formCriar.respostas.filter((r) => r.pergunta.trim() !== ''),
     };
@@ -126,6 +129,14 @@ export default function NovaAvaliacaoNr01Modal({ empresas, pacientes, profission
               />
             </div>
           </div>
+
+          <CampoServicoDoModulo
+            id="nova-nr01-servico"
+            modulo="nr01"
+            servicos={servicos}
+            value={formCriar.servicoId}
+            onChange={(valor) => handleChangeCriar('servicoId', valor)}
+          />
 
           <fieldset className="modal-form__section">
             <legend>Fatores de risco psicossocial avaliados</legend>

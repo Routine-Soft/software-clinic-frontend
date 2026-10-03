@@ -10,6 +10,8 @@ import EspecialidadeADM from './modules/especialidade/components/EspecialidadeAD
 import ConvenioADM from './modules/convenio/components/ConvenioADM';
 import EmpresaADM from './modules/empresa/components/EmpresaADM';
 import AvaliacaoNr01ADM from './modules/avaliacao-nr01/components/AvaliacaoNr01ADM';
+import AvaliacaoNeuroADM from './modules/avaliacao-neuropsicologica/components/AvaliacaoNeuroADM';
+import AvaliacaoNeuroPage from './modules/avaliacao-neuropsicologica/components/AvaliacaoNeuroPage';
 import ServicoADM from './modules/servico/components/ServicoADM';
 import AgendaCalendario from './modules/agenda/components/AgendaCalendario';
 import ProntuarioADM from './modules/prontuario/components/ProntuarioADM';
@@ -155,6 +157,28 @@ function App() {
           />
 
           <Route
+            path="/avaliacoes-neuropsicologicas"
+            element={
+              <ProtectedRoute requiredRoles={['admin', 'profissional', 'super_admin']}>
+                <MainLayout>
+                  <AvaliacaoNeuroADM />
+                </MainLayout>
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/avaliacoes-neuropsicologicas/:id"
+            element={
+              <ProtectedRoute requiredRoles={['admin', 'profissional', 'super_admin']}>
+                <MainLayout>
+                  <AvaliacaoNeuroPage />
+                </MainLayout>
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
             path="/avaliacoes-nr01"
             element={
               <ProtectedRoute requiredRoles={['admin', 'profissional', 'super_admin']}>
@@ -236,7 +260,7 @@ function App() {
           />
 
           <Route
-            path="/comissoes"
+            path="/repasses"
             element={
               <ProtectedRoute requiredRoles={['admin', 'super_admin']}>
                 <MainLayout>
@@ -247,7 +271,7 @@ function App() {
           />
 
           <Route
-            path="/minhas-comissoes"
+            path="/meus-repasses"
             element={
               <ProtectedRoute requiredRoles={['profissional', 'super_admin']}>
                 <MainLayout>
@@ -346,6 +370,10 @@ function App() {
               </ProtectedRoute>
             }
           />
+
+          {/* Endereços antigos, de quando o repasse se chamava comissão (favoritos e links salvos). */}
+          <Route path="/comissoes" element={<Navigate to="/repasses" replace />} />
+          <Route path="/minhas-comissoes" element={<Navigate to="/meus-repasses" replace />} />
 
           <Route path="/" element={<Navigate to="/login" replace />} />
           <Route path="*" element={<Navigate to="/login" replace />} />

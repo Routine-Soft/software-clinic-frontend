@@ -26,9 +26,10 @@ const GRUPOS = [
             { label: 'Pacientes', path: '/pacientes', icone: 'pacientes', roles: ['admin', 'profissional', 'recepcao'] },
             { label: 'Prontuário', path: '/prontuario', icone: 'prontuario', roles: ['admin', 'profissional'] },
             { label: 'Avaliações NR-01', path: '/avaliacoes-nr01', icone: 'nr01', roles: ['admin', 'profissional'] },
-            { label: 'Comissões', path: '/comissoes', icone: 'receita', roles: ['admin'] },
+            { label: 'Avaliação neuropsicológica', path: '/avaliacoes-neuropsicologicas', icone: 'neuro', roles: ['admin', 'profissional'] },
+            { label: 'Repasses', path: '/repasses', icone: 'receita', roles: ['admin'] },
             { label: 'Usuários', path: '/usuarios', icone: 'usuarios', roles: ['admin'] },
-            { label: 'Minhas comissões', path: '/minhas-comissoes', icone: 'receita', roles: ['profissional'] },
+            { label: 'Meus repasses', path: '/meus-repasses', icone: 'receita', roles: ['profissional'] },
         ],
     },
     {

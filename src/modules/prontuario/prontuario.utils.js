@@ -133,3 +133,8 @@ export function idDoPaciente(prontuario) {
 export function ehDoProfissional(prontuario, profissionalId) {
   return !!profissionalId && (prontuario.profissionalId?._id ?? prontuario.profissionalId) === profissionalId;
 }
+
+// Resumo de quem lê um atendimento: "Só o autor" ou "Autor e Psicologia, Fonoaudiologia".
+export function textoDeAcesso(nomesEspecialidades) {
+  return nomesEspecialidades.length === 0 ? 'Só o autor' : `Autor e ${nomesEspecialidades.join(', ')}`;
+}

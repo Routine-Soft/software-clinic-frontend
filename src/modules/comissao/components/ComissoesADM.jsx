@@ -31,7 +31,7 @@ export default function ComissoesADM() {
     <div className="page comissao-page">
       <header className="page-header">
         <div>
-          <h2 className="page-title">Comissões</h2>
+          <h2 className="page-title">Repasses</h2>
           <p className="page-subtitle">O que cada profissional tem a receber pelos atendimentos realizados</p>
         </div>
       </header>
@@ -44,7 +44,7 @@ export default function ComissoesADM() {
       )}
 
       <div className="comissao-kpis">
-        <ComissaoKpi icone="receita" tom="warning" rotulo="A pagar" valor={formatarPreco(totalPendente)} loading={loading} detalhe="Soma de todas as comissões pendentes" />
+        <ComissaoKpi icone="receita" tom="warning" rotulo="A pagar" valor={formatarPreco(totalPendente)} loading={loading} detalhe="Soma de todos os repasses pendentes" />
         <ComissaoKpi icone="agenda" rotulo="Atendimentos aguardando pagamento" valor={atendimentosPendentes} loading={loading} detalhe="Realizados e ainda não pagos" />
         <ComissaoKpi icone="assinatura" tom="success" rotulo="Já pago" valor={formatarPreco(totalPago)} loading={loading} detalhe="Total de todos os pagamentos feitos" />
       </div>
@@ -83,7 +83,7 @@ export default function ComissoesADM() {
                         <div className="comissao-pessoa__dados">
                           <span className="comissao-pessoa__nome">{profissional.nome}</span>
                           {!profissional.temLogin && (
-                            <span className="comissao-pessoa__sub" title="Sem um usuário vinculado, o profissional não consegue ver as próprias comissões">Sem login no sistema</span>
+                            <span className="comissao-pessoa__sub" title="Sem um usuário vinculado, o profissional não consegue ver os próprios repasses">Sem login no sistema</span>
                           )}
                         </div>
                       </div>
@@ -139,7 +139,7 @@ export default function ComissoesADM() {
                             disabled={!temPendente}
                             onClick={() => setConfirmandoId(profissional._id)}
                           >
-                            Pagar comissão
+                            Pagar repasse
                           </button>
                         </div>
                       )}
@@ -153,14 +153,14 @@ export default function ComissoesADM() {
       </section>
 
       <p className="page-subtitle comissao-nota">
-        A comissão nasce quando o atendimento é marcado como realizado na agenda, com o valor que o serviço tem naquele momento.
+        O repasse nasce quando o atendimento é marcado como realizado na agenda, com o valor que o serviço tem naquele momento.
         Pagar quita de uma vez tudo o que está pendente para o profissional.
       </p>
 
       <section className="card comissao-historico">
         <h3 className="comissao-historico__titulo">Pagamentos feitos</h3>
         {!loading && pagamentos.length === 0 ? (
-          <p className="comissao-pessoa__sub">Nenhum pagamento de comissão registrado ainda.</p>
+          <p className="comissao-pessoa__sub">Nenhum pagamento de repasse registrado ainda.</p>
         ) : (
           <ul className="comissao-historico__lista">
             {pagamentos.map((pagamento) => (

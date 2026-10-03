@@ -1,3 +1,28 @@
+// Para que a avaliação ofereça este serviço: null é atendimento comum (consulta ou pacote da agenda).
+export const MODULOS_SERVICO = [
+  ['', 'Atendimento comum'],
+  ['neuropsicologica', 'Avaliação neuropsicológica'],
+  ['nr01', 'Avaliação NR-01'],
+];
+
+export const ROTULO_MODULO = Object.fromEntries(MODULOS_SERVICO.filter(([valor]) => valor));
+
+// Modelos prontos do "Adicionar serviço": a clínica só confere e digita o preço.
+export const MODELOS_SERVICO = [
+  {
+    chave: 'neuropsicologica',
+    rotulo: 'Avaliação neuropsicológica',
+    dados: { nome: 'Avaliação neuropsicológica', tipo: 'pacote', qtdDias: 8, modulo: 'neuropsicologica' },
+    dica: 'Pacote de 8 sessões (anamnese, testagem e devolutiva). Ajuste a quantidade se precisar.',
+  },
+  {
+    chave: 'nr01',
+    rotulo: 'Avaliação NR-01',
+    dados: { nome: 'Avaliação NR-01 (riscos psicossociais)', tipo: 'consulta', qtdDias: '', modulo: 'nr01' },
+    dica: 'Avaliação de riscos psicossociais para empresas.',
+  },
+];
+
 export function linhaConvenioVazia() {
   return { convenioId: '', preco: '', comissaoTipo: 'valor', comissao: '' };
 }
@@ -6,6 +31,7 @@ export function formularioDoServico(servico = null) {
   return {
     nome: servico?.nome ?? '',
     tipo: servico?.tipo ?? 'consulta',
+    modulo: servico?.modulo ?? '',
     qtdDias: servico?.qtdDias ?? '',
     preco: servico?.preco ?? '',
     comissaoTipo: servico?.comissaoTipo ?? 'valor',
@@ -23,6 +49,7 @@ export function montarPayloadServico(form) {
   return {
     nome: form.nome,
     tipo: form.tipo,
+    modulo: form.modulo || null,
     qtdDias: form.tipo === 'pacote' ? Number(form.qtdDias) : null,
     preco: Number(form.preco),
     comissaoTipo: form.comissaoTipo,
@@ -41,8 +68,8 @@ export function problemaDoFormulario(form) {
   const linhas = [{ ...form, rotulo: 'do particular' }, ...form.tabelaConvenios.map((l) => ({ ...l, rotulo: 'de um convênio' }))];
   if (form.tabelaConvenios.some((l) => !l.convenioId)) return 'Escolha o convênio de cada linha da tabela.';
   for (const l of linhas) {
-    if (l.comissaoTipo === 'percentual' && Number(l.comissao) > 100) return `A comissão ${l.rotulo} não pode passar de 100%.`;
-    if (l.comissaoTipo === 'valor' && Number(l.comissao) > Number(l.preco)) return `A comissão ${l.rotulo} não pode ser maior que o preço.`;
+    if (l.comissaoTipo === 'percentual' && Number(l.comissao) > 100) return `O repasse ${l.rotulo} não pode passar de 100%.`;
+    if (l.comissaoTipo === 'valor' && Number(l.comissao) > Number(l.preco)) return `O repasse ${l.rotulo} não pode ser maior que o preço.`;
   }
   return null;
 }

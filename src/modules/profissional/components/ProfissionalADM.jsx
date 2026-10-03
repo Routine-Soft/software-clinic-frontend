@@ -30,7 +30,7 @@ export default function ProfissionalADM({ className = '' }) {
   function usuariosVinculaveis(profissionalAtual = null) {
     const idAtual = String(profissionalAtual?.usuarioId?._id ?? profissionalAtual?.usuarioId ?? '');
     const jaVinculados = new Set(profissionais.map((p) => String(p.usuarioId?._id ?? p.usuarioId ?? '')).filter(Boolean));
-    return usuarios.filter((u) => ['profissional', 'admin'].includes(u.role) && (!jaVinculados.has(String(u._id)) || String(u._id) === idAtual));
+    return usuarios.filter((u) => ['profissional', 'admin', 'super_admin'].includes(u.role) && (!jaVinculados.has(String(u._id)) || String(u._id) === idAtual));
   }
 
   async function handleSalvarCriacao(dados) {

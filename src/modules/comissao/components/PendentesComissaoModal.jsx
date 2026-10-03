@@ -10,7 +10,7 @@ export default function PendentesComissaoModal({ profissional, onClose }) {
   const soma = (campo) => pendentes.reduce((total, item) => total + item[campo], 0);
 
   return (
-    <Modal title={`Comissão pendente · ${profissional.nome}`} wide onClose={onClose}>
+    <Modal title={`Repasse pendente · ${profissional.nome}`} wide onClose={onClose}>
       {error && <p className="alert alert--error" role="alert">{error.message}</p>}
       <div className="table-wrap">
         <table className="table">
@@ -20,7 +20,7 @@ export default function PendentesComissaoModal({ profissional, onClose }) {
               <th>Paciente</th>
               <th>Serviço</th>
               <th>Atendimento</th>
-              <th>Comissão</th>
+              <th>Repasse</th>
               <th>Clínica</th>
             </tr>
           </thead>

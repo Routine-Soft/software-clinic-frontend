@@ -22,7 +22,7 @@ export default function MinhasComissoes() {
       <div className="page comissao-page">
         <header className="page-header">
           <div>
-            <h2 className="page-title">Minhas comissões</h2>
+            <h2 className="page-title">Meus repasses</h2>
           </div>
         </header>
         <section className="card comissao-vazio">
@@ -40,8 +40,8 @@ export default function MinhasComissoes() {
     <div className="page comissao-page">
       <header className="page-header">
         <div>
-          <h2 className="page-title">Minhas comissões</h2>
-          <p className="page-subtitle">{dados?.profissional?.nome ?? 'Comissões pelos atendimentos que você realizou'}</p>
+          <h2 className="page-title">Meus repasses</h2>
+          <p className="page-subtitle">{dados?.profissional?.nome ?? 'Repasses pelos atendimentos que você realizou'}</p>
         </div>
         <div className="page-header__acoes">
           <FiltroPeriodo valor={periodo} onChange={setPeriodo} rotulo="Período dos atendimentos" />
@@ -75,7 +75,7 @@ export default function MinhasComissoes() {
         <ComissaoKpi
           icone="assinatura"
           tom="success"
-          rotulo={`Comissão ${rotuloPeriodo}`}
+          rotulo={`Repasse ${rotuloPeriodo}`}
           valor={formatarPreco(dados?.noPeriodo?.comissao)}
           loading={loading}
           detalhe={`${formatarPreco(dados?.noPeriodo?.recebida)} já recebido`}
@@ -89,7 +89,7 @@ export default function MinhasComissoes() {
               <th>Data</th>
               <th>Paciente</th>
               <th>Serviço</th>
-              <th>Comissão</th>
+              <th>Repasse</th>
               <th>Situação</th>
             </tr>
           </thead>
@@ -115,9 +115,9 @@ export default function MinhasComissoes() {
                   <td className="table__num">{item.comissao > 0 ? textoComissaoCalculada(item.comissao, item.comissaoPercentual) : '—'}</td>
                   <td>
                     {item.comissao <= 0
-                      ? <span className="badge">Sem comissão</span>
+                      ? <span className="badge">Sem repasse</span>
                       : item.paga
-                        ? <span className="badge badge--success">Recebida</span>
+                        ? <span className="badge badge--success">Recebido</span>
                         : <span className="badge badge--warning">A receber</span>}
                   </td>
                 </tr>

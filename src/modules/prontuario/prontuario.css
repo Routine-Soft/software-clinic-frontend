@@ -811,3 +811,70 @@
   font-size: 0.8rem;
   color: var(--text-subtle);
 }
+
+/* ---------- Quem pode ler o atendimento ---------- */
+
+.pront-acesso {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  align-items: center;
+  margin-top: 10px;
+  font-size: 0.875rem;
+  color: var(--text-muted);
+}
+
+.pront-acesso strong {
+  color: var(--text);
+}
+
+.pront-acesso__alterar {
+  padding: 0;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  background-color: transparent;
+  border: 0;
+}
+
+.pront-acesso--editando {
+  display: grid;
+  gap: 8px;
+  padding: 12px 14px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+}
+
+.pront-acesso__opcoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.pront-acesso__opcao {
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+  padding: 7px 12px;
+  font-weight: 600;
+  color: var(--text);
+  cursor: pointer;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  transition: border-color 0.2s var(--ease), background-color 0.2s var(--ease);
+}
+
+.pront-acesso__opcao:has(input:checked) {
+  color: var(--primary);
+  background: var(--primary-soft);
+  border-color: var(--primary);
+}
+
+.pront-acesso__opcao input {
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  accent-color: var(--primary);
+}

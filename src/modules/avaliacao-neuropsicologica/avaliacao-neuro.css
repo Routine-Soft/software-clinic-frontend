@@ -1,0 +1,462 @@
+/* ==========================================================================
+   Avaliação neuropsicológica: lista, editor e laudo
+   ========================================================================== */
+
+.neuro-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+}
+
+.neuro-toolbar .search {
+  max-width: 420px;
+}
+
+.neuro-tabela {
+  animation: fadeInUp 0.5s var(--ease) 0.1s backwards;
+}
+
+.neuro-tabela .table {
+  min-width: 720px;
+}
+
+.neuro-link {
+  display: block;
+  font-weight: 650;
+  color: var(--text);
+  text-decoration: none;
+}
+
+.neuro-link:hover {
+  color: var(--primary);
+}
+
+.neuro-sub {
+  display: block;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.neuro-voltar {
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
+  margin-bottom: 6px;
+  font-size: 0.875rem;
+}
+
+.neuro-voltar svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* ---------- Editor ---------- */
+
+.neuro-editor {
+  display: grid;
+  gap: 18px;
+  padding: clamp(16px, 3vw, 28px);
+  animation: fadeInUp 0.5s var(--ease) 0.05s backwards;
+}
+
+.neuro-cab {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.neuro-cab__nome {
+  margin: 0 0 2px;
+  font-size: 1.3rem;
+  font-weight: 750;
+}
+
+.neuro-trava {
+  padding: 10px 14px;
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+}
+
+/* Seis etapas: rolam para o lado no celular em vez de espremer. */
+.neuro-abas {
+  display: flex;
+  gap: 4px;
+  padding: 4px;
+  overflow-x: auto;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  scrollbar-width: thin;
+}
+
+.neuro-aba {
+  display: inline-flex;
+  flex: 1 0 auto;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+  padding: 9px 14px;
+  font: inherit;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  white-space: nowrap;
+  cursor: pointer;
+  background: transparent;
+  border: 0;
+  border-radius: calc(var(--radius-md) - 3px);
+  transition: color 0.2s var(--ease), background-color 0.2s var(--ease), box-shadow 0.25s var(--ease);
+}
+
+.neuro-aba:hover {
+  color: var(--text);
+}
+
+.neuro-aba[aria-selected='true'] {
+  color: var(--primary);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm), 0 0 0 1px var(--primary-ring);
+}
+
+.neuro-aba:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+.neuro-aba__num {
+  display: inline-grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 50%;
+}
+
+.neuro-aba[aria-selected='true'] .neuro-aba__num {
+  color: var(--on-primary);
+  background: var(--primary);
+  border-color: var(--primary);
+}
+
+.neuro-fieldset {
+  min-width: 0;
+  padding: 0;
+  margin: 0;
+  border: 0;
+}
+
+.neuro-secao {
+  display: grid;
+  gap: 16px;
+}
+
+.neuro-secao--grade {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+}
+
+.neuro-lista-cab {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  align-items: baseline;
+}
+
+.neuro-lista-cab h4 {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+/* Linha de sessão ou de instrumento: campos à esquerda, remover à direita. */
+.neuro-linha {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 10px;
+  align-items: start;
+  padding: 14px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  animation: fadeInUp 0.3s var(--ease) backwards;
+}
+
+.neuro-linha .input {
+  background: var(--surface);
+}
+
+.neuro-linha > .icon-btn {
+  margin-top: 26px;
+}
+
+.neuro-linha__campos {
+  display: grid;
+  gap: 10px 12px;
+}
+
+.neuro-linha__campos--sessao {
+  grid-template-columns: 160px 120px minmax(0, 1fr);
+}
+
+.neuro-linha__campos--instrumento {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.neuro-linha__campos--instrumento .neuro-linha__largo {
+  grid-column: span 2;
+}
+
+.neuro-linha__inteiro {
+  grid-column: 1 / -1;
+}
+
+.neuro-adicionar {
+  justify-self: start;
+}
+
+/* Somente leitura (finalizada ou de outro profissional): sem botões de adicionar e remover. */
+.neuro-fieldset:disabled .neuro-adicionar,
+.neuro-fieldset:disabled .neuro-linha > .icon-btn {
+  display: none;
+}
+
+.neuro-fieldset:disabled .neuro-linha {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+@media (max-width: 720px) {
+  .neuro-linha__campos--sessao {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .neuro-linha__campos--sessao .neuro-linha__largo {
+    grid-column: 1 / -1;
+  }
+
+  .neuro-linha__campos--instrumento {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .neuro-linha__campos--instrumento .neuro-linha__largo {
+    grid-column: 1 / -1;
+  }
+}
+
+.neuro-rodape {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+
+.neuro-rodape__acoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  margin-left: auto;
+}
+
+.neuro-rodape__excluir {
+  color: var(--danger);
+}
+
+.neuro-confirmar {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+/* ---------- Laudo ---------- */
+
+.neuro-laudo {
+  display: grid;
+  gap: 14px;
+}
+
+.neuro-laudo__barra {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 16px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.neuro-laudo__barra .neuro-sub {
+  flex: 1 1 280px;
+  margin: 0;
+}
+
+/* Folha branca em qualquer tema: é o documento que vai para o paciente. */
+.laudo-doc {
+  display: grid;
+  gap: 18px;
+  max-width: 820px;
+  width: 100%;
+  padding: clamp(20px, 5vw, 56px);
+  margin: 0 auto;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #1a1a1a;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-sm);
+  overflow-wrap: break-word;
+}
+
+.laudo-doc__titulo {
+  text-align: center;
+}
+
+.laudo-doc__titulo h1 {
+  margin: 0;
+  font-size: 1.35rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.laudo-doc__titulo p {
+  margin: 2px 0 0;
+  color: #444;
+}
+
+.laudo-doc section {
+  display: grid;
+  gap: 8px;
+}
+
+.laudo-doc h2 {
+  margin: 0;
+  font-size: 1.02rem;
+  font-weight: 700;
+}
+
+.laudo-doc p {
+  margin: 0;
+  white-space: pre-wrap;
+}
+
+.laudo-doc__vazio {
+  font-style: italic;
+  color: #a33;
+}
+
+.laudo-doc__ident {
+  display: grid;
+  gap: 4px;
+  margin: 0;
+}
+
+.laudo-doc__ident div {
+  display: grid;
+  grid-template-columns: 110px minmax(0, 1fr);
+  gap: 8px;
+}
+
+.laudo-doc__ident dt {
+  font-weight: 700;
+}
+
+.laudo-doc__ident dd {
+  margin: 0;
+}
+
+.laudo-doc__tabela {
+  width: 100%;
+  font-family: system-ui, sans-serif;
+  font-size: 0.85rem;
+  border-collapse: collapse;
+}
+
+.laudo-doc__tabela th,
+.laudo-doc__tabela td {
+  padding: 6px 8px;
+  text-align: left;
+  border: 1px solid #ccc;
+}
+
+.laudo-doc__tabela th {
+  background: #f2f2f2;
+}
+
+.laudo-doc__assinatura {
+  display: grid;
+  justify-items: center;
+  gap: 2px;
+  margin-top: 24px;
+  text-align: center;
+}
+
+.laudo-doc__assinatura > p:first-child {
+  justify-self: end;
+  margin-bottom: 40px;
+}
+
+.laudo-doc__linha {
+  width: min(320px, 80%);
+  margin-bottom: 6px;
+  border-top: 1px solid #333;
+}
+
+@media (max-width: 520px) {
+  .laudo-doc__ident div {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+  }
+
+  .laudo-doc__tabela {
+    display: block;
+    overflow-x: auto;
+  }
+}
+
+/* Na impressão sai só a folha do laudo (as regras só valem com o laudo na tela). */
+@media print {
+  body:has(.laudo-doc) * {
+    visibility: hidden;
+  }
+
+  body:has(.laudo-doc) .laudo-doc,
+  body:has(.laudo-doc) .laudo-doc * {
+    visibility: visible;
+  }
+
+  body:has(.laudo-doc) .laudo-doc {
+    position: absolute;
+    top: 0;
+    left: 0;
+    max-width: none;
+    padding: 0;
+    border: 0;
+    box-shadow: none;
+  }
+
+  body:has(.laudo-doc) .laudo-doc__vazio {
+    display: none;
+  }
+
+  .laudo-doc section,
+  .laudo-doc__tabela tr,
+  .laudo-doc__assinatura {
+    break-inside: avoid;
+  }
+}

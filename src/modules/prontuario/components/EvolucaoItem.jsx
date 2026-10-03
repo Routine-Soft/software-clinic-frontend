@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { IconeMais } from '@/components/CrudCard/icones';
 import { formatDataBR } from '@/utils/date';
+import AcessoAtendimento from './AcessoAtendimento';
 import {
   CAMPOS_TEXTO,
   sinaisVitaisEmLista,
@@ -10,7 +11,7 @@ import {
 
 // Atendimento do histórico. Depois de finalizado o texto não muda mais: o autor corrige ou complementa
 // com um adendo, que fica registrado com data e autor abaixo do texto original.
-export default function EvolucaoItem({ prontuario, destaque = false, souAutor = false, onAdendo }) {
+export default function EvolucaoItem({ prontuario, destaque = false, souAutor = false, especialidades = [], onCompartilhar, onAdendo }) {
   const [escrevendo, setEscrevendo] = useState(false);
   const [texto, setTexto] = useState('');
   const [salvando, setSalvando] = useState(false);
@@ -61,6 +62,8 @@ export default function EvolucaoItem({ prontuario, destaque = false, souAutor = 
             </div>
           )}
         </header>
+
+        <AcessoAtendimento key={(prontuario.compartilhadoCom ?? []).map((e) => e?._id ?? e).join()} prontuario={prontuario} especialidades={especialidades} souAutor={souAutor} onSalvar={onCompartilhar} />
 
         <div className="pront-evolucao__conteudo">
           {semConteudo && <p className="pront-evolucao__vazio">Atendimento sem anotações registradas.</p>}

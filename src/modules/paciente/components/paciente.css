@@ -104,3 +104,52 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+/* ---------- Responsáveis (paciente menor de idade) ---------- */
+
+.responsaveis {
+  min-width: 0;
+}
+
+.responsaveis__abrir {
+  justify-self: start;
+}
+
+.responsavel {
+  display: grid;
+  gap: 10px;
+  padding: 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+}
+
+.responsavel__cab {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 32px;
+  font-size: 0.9rem;
+}
+
+.responsavel__campos {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px 12px;
+}
+
+.responsavel__nome {
+  grid-column: 1 / -1;
+}
+
+@media (max-width: 520px) {
+  .responsavel__campos {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.pessoa__resp {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}

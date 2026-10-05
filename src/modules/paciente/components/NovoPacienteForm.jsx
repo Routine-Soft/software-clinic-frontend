@@ -1,13 +1,17 @@
 import { useId, useState } from 'react';
 import { IconeMais } from '@/components/CrudCard/icones';
 import { normalizarEmail } from '@/utils/email';
+import CamposResponsaveis from './CamposResponsaveis';
+import { ehMenorDeIdade } from '../paciente.utils';
 
-const FORM_CRIAR_INICIAL = { nome: '', telefone: '', email: '', cpf: '', dataNascimento: '', convenioId: '', empresaId: '' };
+const FORM_CRIAR_INICIAL = { nome: '', telefone: '', email: '', cpf: '', dataNascimento: '', convenioId: '', empresaId: '', responsaveis: [] };
 
 export default function NovoPacienteForm({ convenios, empresas, onSubmit }) {
   const ids = useId();
   const [formCriar, setFormCriar] = useState(FORM_CRIAR_INICIAL);
   const [criando, setCriando] = useState(false);
+
+  const menor = ehMenorDeIdade(formCriar.dataNascimento);
 
   function handleChangeCriar(field, value) {
     setFormCriar({ ...formCriar, [field]: value });
@@ -42,26 +46,26 @@ export default function NovoPacienteForm({ convenios, empresas, onSubmit }) {
       </div>
 
       <div className="field">
-        <label className="field__label" htmlFor={`${ids}-telefone`}>Telefone</label>
+        <label className="field__label" htmlFor={`${ids}-telefone`}>Telefone{menor && ' (opcional)'}</label>
         <input
           id={`${ids}-telefone`}
           className="input"
           type="text"
           value={formCriar.telefone}
           onChange={(e) => handleChangeCriar('telefone', e.target.value)}
-          required
+          required={!menor}
         />
       </div>
 
       <div className="field">
-        <label className="field__label" htmlFor={`${ids}-email`}>Email</label>
+        <label className="field__label" htmlFor={`${ids}-email`}>Email{menor && ' (opcional)'}</label>
         <input
           id={`${ids}-email`}
           className="input"
           type="email"
           value={formCriar.email}
           onChange={(e) => handleChangeCriar('email', normalizarEmail(e.target.value))}
-          required
+          required={!menor}
         />
       </div>
 
@@ -87,6 +91,10 @@ export default function NovoPacienteForm({ convenios, empresas, onSubmit }) {
           onChange={(e) => handleChangeCriar('dataNascimento', e.target.value)}
           required
         />
+      </div>
+
+      <div className="field field--full">
+        <CamposResponsaveis responsaveis={formCriar.responsaveis} menor={menor} onChange={(lista) => handleChangeCriar('responsaveis', lista)} />
       </div>
 
       {convenios.length > 0 && (

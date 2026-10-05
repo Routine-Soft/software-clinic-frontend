@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react';
 import { usePacientes } from '../paciente.hooks';
 import { useConvenios } from '@/modules/convenio/convenio.hooks';
 import { useEmpresas } from '@/modules/empresa/empresa.hooks';
-import { filtrarPacientes, ordenarPacientes } from '../paciente.utils';
+import { filtrarPacientes, ordenarPacientes, contatoDoPaciente, rotuloDoResponsavel } from '../paciente.utils';
 import { formatDataBR, calcularIdade } from '@/utils/date';
 import { iniciais } from '@/utils/nome';
 import { IconeBusca, IconeLapis, IconeLixeira, IconeCheck, IconeX } from '@/components/CrudCard/icones';
@@ -126,6 +126,8 @@ export default function PacienteADM() {
               ) : (
                 pacientesFiltrados.map((paciente, index) => {
                   const idade = calcularIdade(paciente.dataNascimento);
+                  const contato = contatoDoPaciente(paciente);
+                  const responsaveis = paciente.responsaveis ?? [];
                   return (
                     <tr
                       key={paciente._id}
@@ -138,19 +140,22 @@ export default function PacienteADM() {
                           <div className="pessoa__dados">
                             <strong className="pessoa__nome">{paciente.nome}</strong>
                             <span className="pessoa__sub nowrap">CPF {paciente.cpf}</span>
+                            {responsaveis.length > 0 && (
+                              <span className="pessoa__resp">Resp.: {responsaveis.map(rotuloDoResponsavel).join(', ')}</span>
+                            )}
                           </div>
                         </div>
                       </td>
                       <td>
                         <div className="pessoa__dados pessoa__dados--contato">
-                          <span className="nowrap">{paciente.telefone}</span>
-                          <span className="pessoa__sub pessoa__sub--corta" title={paciente.email}>{paciente.email}</span>
+                          <span className="nowrap">{contato.telefone || '—'}</span>
+                          <span className="pessoa__sub pessoa__sub--corta" title={contato.email}>{contato.email}</span>
                         </div>
                       </td>
                       <td className="nowrap">
                         <div className="pessoa__dados">
                           <span>{formatDataBR(paciente.dataNascimento) ?? '—'}</span>
-                          {idade !== null && <span className="pessoa__sub">{idade} {idade === 1 ? 'ano' : 'anos'}</span>}
+                          {idade !== null && <span className="pessoa__sub">{idade} {idade === 1 ? 'ano' : 'anos'}{idade < 18 ? ' · menor' : ''}</span>}
                         </div>
                       </td>
                       <td>

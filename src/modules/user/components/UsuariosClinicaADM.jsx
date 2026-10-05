@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useUsuariosDaClinica } from '../user.hooks';
 import { useAuthContext } from '@/hooks/useAuthContext';
-import { ROTULO_FUNCAO } from '../user.constants';
+import { ROTULO_FUNCAO, podeAlterarUsuario } from '../user.constants';
 import EditarUsuarioModal from './EditarUsuarioModal';
 import NovoUsuarioModal from './NovoUsuarioModal';
 import { IconeMais } from '@/components/CrudCard/icones';
@@ -116,13 +116,17 @@ export default function UsuariosClinicaADM() {
                 <span className={`badge badge--${usuario.role}`}>Função: {ROTULO_FUNCAO[usuario.role] ?? usuario.role}</span>
               </div>
 
-              <div className="user-card__actions">
-                <button className="btn btn--ghost btn--sm" onClick={() => handleEdit(usuario)}>Editar</button>
-                <button className="btn btn--ghost btn--sm" onClick={() => iniciarRedefinicao(usuario._id)}>Redefinir senha</button>
-                {usuario._id !== usuarioLogado?._id && (
-                  <button className="btn btn--danger btn--sm" onClick={() => handleDelete(usuario._id)}>Excluir</button>
-                )}
-              </div>
+              {podeAlterarUsuario(usuarioLogado, usuario) ? (
+                <div className="user-card__actions">
+                  <button className="btn btn--ghost btn--sm" onClick={() => handleEdit(usuario)}>Editar</button>
+                  <button className="btn btn--ghost btn--sm" onClick={() => iniciarRedefinicao(usuario._id)}>Redefinir senha</button>
+                  {usuario._id !== usuarioLogado?._id && (
+                    <button className="btn btn--danger btn--sm" onClick={() => handleDelete(usuario._id)}>Excluir</button>
+                  )}
+                </div>
+              ) : (
+                <p className="user-card__meta">Só o administrador altera esta conta.</p>
+              )}
 
               {redefinindoId === usuario._id && (
                 <form className="user-card__reset" onSubmit={(e) => handleRedefinirSenha(e, usuario._id)}>

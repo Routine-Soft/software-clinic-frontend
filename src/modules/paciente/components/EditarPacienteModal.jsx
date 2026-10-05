@@ -2,6 +2,8 @@ import { useState } from 'react';
 import Modal from '@/components/Modal/Modal';
 import ModalForm from '@/components/Modal/ModalForm';
 import { normalizarEmail } from '@/utils/email';
+import CamposResponsaveis from './CamposResponsaveis';
+import { ehMenorDeIdade } from '../paciente.utils';
 
 export default function EditarPacienteModal({ paciente, convenios, empresas, erro, onSave, onClose }) {
   const [formEdicao, setFormEdicao] = useState({
@@ -12,7 +14,10 @@ export default function EditarPacienteModal({ paciente, convenios, empresas, err
     dataNascimento: paciente.dataNascimento ? paciente.dataNascimento.substring(0, 10) : '',
     convenioId: paciente.convenioId?._id ?? paciente.convenioId ?? '',
     empresaId: paciente.empresaId?._id ?? paciente.empresaId ?? '',
+    responsaveis: paciente.responsaveis ?? [],
   });
+
+  const menor = ehMenorDeIdade(formEdicao.dataNascimento);
 
   function handleChangeEdicao(field, value) {
     setFormEdicao({ ...formEdicao, [field]: value });
@@ -44,26 +49,26 @@ export default function EditarPacienteModal({ paciente, convenios, empresas, err
 
           <div className="modal-form__row">
             <div className="field">
-              <label className="field__label" htmlFor="editar-paciente-telefone">Telefone</label>
+              <label className="field__label" htmlFor="editar-paciente-telefone">Telefone{menor && ' (opcional)'}</label>
               <input
                 id="editar-paciente-telefone"
                 className="input"
                 type="text"
                 value={formEdicao.telefone}
                 onChange={(e) => handleChangeEdicao('telefone', e.target.value)}
-                required
+                required={!menor}
               />
             </div>
 
             <div className="field">
-              <label className="field__label" htmlFor="editar-paciente-email">Email</label>
+              <label className="field__label" htmlFor="editar-paciente-email">Email{menor && ' (opcional)'}</label>
               <input
                 id="editar-paciente-email"
                 className="input"
                 type="email"
                 value={formEdicao.email}
                 onChange={(e) => handleChangeEdicao('email', normalizarEmail(e.target.value))}
-                required
+                required={!menor}
               />
             </div>
           </div>
@@ -93,6 +98,8 @@ export default function EditarPacienteModal({ paciente, convenios, empresas, err
               />
             </div>
           </div>
+
+          <CamposResponsaveis responsaveis={formEdicao.responsaveis} menor={menor} onChange={(lista) => handleChangeEdicao('responsaveis', lista)} />
 
           {(convenios.length > 0 || empresas.length > 0) && (
             <div className="modal-form__row">

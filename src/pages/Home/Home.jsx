@@ -27,7 +27,7 @@ const ATALHOS = [
     { label: 'Avaliação neuropsicológica', descricao: 'Anamnese, testes e laudo', to: '/avaliacoes-neuropsicologicas', icone: 'neuro', roles: ['admin', 'profissional'] },
     { label: 'Repasses', descricao: 'O que pagar a cada profissional', to: '/repasses', icone: 'receita', roles: ['admin'] },
     { label: 'Meus repasses', descricao: 'Quanto você tem a receber', to: '/meus-repasses', icone: 'receita', roles: ['profissional'] },
-    { label: 'Usuários', descricao: 'Colaboradores e permissões da clínica', to: '/usuarios', icone: 'usuarios', roles: ['admin'] },
+    { label: 'Usuários', descricao: 'Colaboradores e permissões da clínica', to: '/usuarios', icone: 'usuarios', roles: ['admin', 'recepcao'] },
     { label: 'Painel Super Admin', descricao: 'Total de clínicas e quem está pagando', to: '/super-admin', icone: 'painel', roles: ['super_admin'] },
     { label: 'Clínicas', descricao: 'Clínicas cadastradas na plataforma', to: '/clinicas', icone: 'empresas', roles: ['super_admin'] },
     { label: 'Planos', descricao: 'Planos de assinatura da plataforma', to: '/planos', icone: 'planos', roles: ['super_admin'] },

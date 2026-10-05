@@ -10,6 +10,7 @@ import AtendimentoAtivo from './AtendimentoAtivo';
 import EvolucaoItem from './EvolucaoItem';
 import ResumoAgendamento from './ResumoAgendamento';
 import { EscolhaEspecialidades } from './AcessoAtendimento';
+import { contatoDoPaciente, rotuloDoResponsavel } from '@/modules/paciente/paciente.utils';
 import '../prontuario.css';
 
 const ABAS = [
@@ -96,10 +97,17 @@ export default function ProntuarioPaciente({ paciente, profissional, agendamento
           <p className="pront-head__meta">
             {[
               formatDataBR(paciente.dataNascimento) && `${formatDataBR(paciente.dataNascimento)}${idade !== null ? ` (${idade} ${idade === 1 ? 'ano' : 'anos'})` : ''}`,
-              paciente.telefone,
-              paciente.email,
+              contatoDoPaciente(paciente).telefone,
+              contatoDoPaciente(paciente).email,
             ].filter(Boolean).map((item) => <span key={item}>{item}</span>)}
           </p>
+          {paciente.responsaveis?.length > 0 && (
+            <p className="pront-head__meta">
+              {paciente.responsaveis.map((r) => (
+                <span key={r.nome}>Responsável: {[rotuloDoResponsavel(r), r.telefone].filter(Boolean).join(' · ')}</span>
+              ))}
+            </p>
+          )}
           <div className="pront-head__selos">
             <span className={`badge${paciente.convenioId?.nome ? ' badge--info' : ''}`}>{paciente.convenioId?.nome ?? 'Particular'}</span>
             {paciente.empresaId?.razaoSocial && <span className="badge badge--primary">{paciente.empresaId.razaoSocial}</span>}

@@ -2,11 +2,15 @@ import { useState } from 'react';
 import Modal from '@/components/Modal/Modal';
 import ModalForm from '@/components/Modal/ModalForm';
 import { normalizarEmail } from '@/utils/email';
+import CamposResponsaveis from './CamposResponsaveis';
+import { ehMenorDeIdade } from '../paciente.utils';
 
-const FORM_CRIAR_INICIAL = { nome: '', telefone: '', email: '', cpf: '', dataNascimento: '', convenioId: '', empresaId: '' };
+const FORM_CRIAR_INICIAL = { nome: '', telefone: '', email: '', cpf: '', dataNascimento: '', convenioId: '', empresaId: '', responsaveis: [] };
 
 export default function NovoPacienteModal({ convenios, empresas, erro, onSave, onClose }) {
   const [formCriar, setFormCriar] = useState(FORM_CRIAR_INICIAL);
+
+  const menor = ehMenorDeIdade(formCriar.dataNascimento);
 
   function handleChangeCriar(field, value) {
     setFormCriar({ ...formCriar, [field]: value });
@@ -38,26 +42,26 @@ export default function NovoPacienteModal({ convenios, empresas, erro, onSave, o
 
           <div className="modal-form__row">
             <div className="field">
-              <label className="field__label" htmlFor="novo-paciente-telefone">Telefone</label>
+              <label className="field__label" htmlFor="novo-paciente-telefone">Telefone{menor && ' (opcional)'}</label>
               <input
                 id="novo-paciente-telefone"
                 className="input"
                 type="text"
                 value={formCriar.telefone}
                 onChange={(e) => handleChangeCriar('telefone', e.target.value)}
-                required
+                required={!menor}
               />
             </div>
 
             <div className="field">
-              <label className="field__label" htmlFor="novo-paciente-email">Email</label>
+              <label className="field__label" htmlFor="novo-paciente-email">Email{menor && ' (opcional)'}</label>
               <input
                 id="novo-paciente-email"
                 className="input"
                 type="email"
                 value={formCriar.email}
                 onChange={(e) => handleChangeCriar('email', normalizarEmail(e.target.value))}
-                required
+                required={!menor}
               />
             </div>
           </div>
@@ -87,6 +91,8 @@ export default function NovoPacienteModal({ convenios, empresas, erro, onSave, o
               />
             </div>
           </div>
+
+          <CamposResponsaveis responsaveis={formCriar.responsaveis} menor={menor} onChange={(lista) => handleChangeCriar('responsaveis', lista)} />
 
           {(convenios.length > 0 || empresas.length > 0) && (
             <div className="modal-form__row">

@@ -16,7 +16,7 @@ const GRUPOS = [
         titulo: 'Principal',
         itens: [
             { label: 'Início', path: '/home', icone: 'inicio', roles: TODOS },
-            { label: 'Dashboard admin', path: '/dashboard-admin', icone: 'painel', roles: ['admin'] },
+            { label: 'Dashboard admin', path: '/dashboard-admin', icone: 'painel', roles: ['admin', 'recepcao'] },
             { label: 'Agenda', path: '/agenda', icone: 'agenda', roles: ['admin', 'profissional', 'recepcao'] },
         ],
     },
@@ -28,7 +28,7 @@ const GRUPOS = [
             { label: 'Avaliações NR-01', path: '/avaliacoes-nr01', icone: 'nr01', roles: ['admin', 'profissional'] },
             { label: 'Avaliação neuropsicológica', path: '/avaliacoes-neuropsicologicas', icone: 'neuro', roles: ['admin', 'profissional'] },
             { label: 'Repasses', path: '/repasses', icone: 'receita', roles: ['admin'] },
-            { label: 'Usuários', path: '/usuarios', icone: 'usuarios', roles: ['admin'] },
+            { label: 'Usuários', path: '/usuarios', icone: 'usuarios', roles: ['admin', 'recepcao'] },
             { label: 'Meus repasses', path: '/meus-repasses', icone: 'receita', roles: ['profissional'] },
         ],
     },

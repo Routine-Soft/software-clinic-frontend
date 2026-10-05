@@ -2,8 +2,9 @@ import { useState } from 'react';
 import Modal from '@/components/Modal/Modal';
 import ModalForm from '@/components/Modal/ModalForm';
 import { normalizarEmail } from '@/utils/email';
+import CampoAceitaWhatsapp from './CampoAceitaWhatsapp';
 
-const FORM_CRIAR_INICIAL = { nome: '', telefone: '', email: '', cpf: '', dataNascimento: '', convenioId: '', empresaId: '' };
+const FORM_CRIAR_INICIAL = { nome: '', telefone: '', email: '', cpf: '', dataNascimento: '', convenioId: '', empresaId: '', aceitaWhatsapp: false };
 
 export default function NovoPacienteModal({ convenios, empresas, erro, onSave, onClose }) {
   const [formCriar, setFormCriar] = useState(FORM_CRIAR_INICIAL);
@@ -125,6 +126,8 @@ export default function NovoPacienteModal({ convenios, empresas, erro, onSave, o
               )}
             </div>
           )}
+
+          <CampoAceitaWhatsapp valor={formCriar.aceitaWhatsapp} onChange={(valor) => handleChangeCriar('aceitaWhatsapp', valor)} />
         </ModalForm>
       )}
     </Modal>

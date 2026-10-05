@@ -52,3 +52,8 @@ export async function definirRevogacaoAdmin(id, revogado) {
   const response = await httpClient.patch(`/users/admins/${id}/acesso`, { revogado });
   return response;
 }
+
+export async function definirLembretesWhatsappAdmin(id, ativo) {
+  const response = await httpClient.patch(`/users/admins/${id}/whatsapp`, { ativo });
+  return response;
+}

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { formatDataBR } from '@/utils/date';
 import { textoComissaoCalculada } from '@/modules/servico/servico.utils';
+import { situacaoDoLembrete } from '@/modules/agenda/agenda.utils';
 import { IconeCheck, IconeImpressora, IconeLapis } from '@/components/CrudCard/icones';
 import '../prontuario.css';
 
@@ -21,6 +22,7 @@ export default function ResumoAgendamento({ agendamento, erro, onEditar, onCance
   const cancelado = agendamento.status === 'cancelado';
   const realizado = agendamento.status === 'realizado';
   const comissaoPaga = !!agendamento.comissao?.pagamentoId;
+  const lembrete = situacaoDoLembrete(agendamento);
   const [salvando, setSalvando] = useState(false);
   const [falhou, setFalhou] = useState(false);
 
@@ -52,6 +54,15 @@ export default function ResumoAgendamento({ agendamento, erro, onEditar, onCance
         <div><dt>Serviço</dt><dd>{agendamento.servicoId?.nome ?? '—'}</dd></div>
         <div><dt>Sala</dt><dd>{agendamento.salaId?.nome ?? '—'}</dd></div>
         <div><dt>Convênio</dt><dd>{agendamento.convenioId?.nome ?? 'Particular'}</dd></div>
+        {lembrete && (
+          <div>
+            <dt>Lembrete WhatsApp</dt>
+            <dd>
+              <span className={`badge badge--${lembrete.tom}`}>{lembrete.rotulo}</span>
+              {lembrete.detalhe && <span className="pront-agenda__detalhe">{lembrete.detalhe}</span>}
+            </dd>
+          </div>
+        )}
         {realizado && agendamento.comissao?.valor > 0 && (
           <div>
             <dt>Repasse ao profissional</dt>

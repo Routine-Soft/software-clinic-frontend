@@ -77,3 +77,4 @@ export const IconeChave = () => (
     <path d="m21 2-9.6 9.6M15.5 7.5l3 3L22 7l-3-3" />
   </Icone>
 );
+export const IconeMensagem = () => <Icone><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z" /></Icone>

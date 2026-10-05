@@ -141,3 +141,10 @@
   gap: 6px 8px;
   justify-content: end;
 }
+
+/* Recurso ligado para a clínica (ex.: lembretes pelo WhatsApp). */
+.clinica-acoes .icon-btn--ativo {
+  color: var(--success);
+  background: var(--success-soft);
+  border-color: color-mix(in srgb, var(--success) 35%, transparent);
+}

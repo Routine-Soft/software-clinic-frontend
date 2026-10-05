@@ -1,8 +1,9 @@
 import { useId, useState } from 'react';
 import { IconeMais } from '@/components/CrudCard/icones';
 import { normalizarEmail } from '@/utils/email';
+import CampoAceitaWhatsapp from './CampoAceitaWhatsapp';
 
-const FORM_CRIAR_INICIAL = { nome: '', telefone: '', email: '', cpf: '', dataNascimento: '', convenioId: '', empresaId: '' };
+const FORM_CRIAR_INICIAL = { nome: '', telefone: '', email: '', cpf: '', dataNascimento: '', convenioId: '', empresaId: '', aceitaWhatsapp: false };
 
 export default function NovoPacienteForm({ convenios, empresas, onSubmit }) {
   const ids = useId();
@@ -122,6 +123,8 @@ export default function NovoPacienteForm({ convenios, empresas, onSubmit }) {
           </select>
         </div>
       )}
+
+      <CampoAceitaWhatsapp valor={formCriar.aceitaWhatsapp} onChange={(valor) => handleChangeCriar('aceitaWhatsapp', valor)} />
 
       <button className={`btn btn--primary${criando ? ' btn--loading' : ''}`} type="submit" disabled={criando}>
         {!criando && <IconeMais />}

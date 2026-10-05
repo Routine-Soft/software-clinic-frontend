@@ -2,6 +2,7 @@ import { useState } from 'react';
 import Modal from '@/components/Modal/Modal';
 import ModalForm from '@/components/Modal/ModalForm';
 import { normalizarEmail } from '@/utils/email';
+import CampoAceitaWhatsapp from './CampoAceitaWhatsapp';
 
 export default function EditarPacienteModal({ paciente, convenios, empresas, erro, onSave, onClose }) {
   const [formEdicao, setFormEdicao] = useState({
@@ -12,6 +13,7 @@ export default function EditarPacienteModal({ paciente, convenios, empresas, err
     dataNascimento: paciente.dataNascimento ? paciente.dataNascimento.substring(0, 10) : '',
     convenioId: paciente.convenioId?._id ?? paciente.convenioId ?? '',
     empresaId: paciente.empresaId?._id ?? paciente.empresaId ?? '',
+    aceitaWhatsapp: !!paciente.aceitaWhatsapp,
   });
 
   function handleChangeEdicao(field, value) {
@@ -131,6 +133,8 @@ export default function EditarPacienteModal({ paciente, convenios, empresas, err
               )}
             </div>
           )}
+
+          <CampoAceitaWhatsapp valor={formEdicao.aceitaWhatsapp} onChange={(valor) => handleChangeEdicao('aceitaWhatsapp', valor)} />
         </ModalForm>
       )}
     </Modal>

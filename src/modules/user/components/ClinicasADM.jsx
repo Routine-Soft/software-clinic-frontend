@@ -16,6 +16,7 @@ import {
   IconeChave,
   IconeCadeado,
   IconeCadeadoAberto,
+  IconeMensagem,
 } from '@/components/CrudCard/icones';
 import NovoAdminModal from './NovoAdminModal';
 import EditarAdminModal from './EditarAdminModal';
@@ -36,7 +37,7 @@ const STATUS_INFO = {
 
 export default function ClinicasADM() {
   const [busca, setBusca] = useState('');
-  const { admins, loading, error, successMessage, addAdmin, editAdmin, removeAdmin, trocarPlano, estenderTeste, definirRevogacao, redefinirSenha } = useAdmins(busca);
+  const { admins, loading, error, successMessage, addAdmin, editAdmin, removeAdmin, trocarPlano, estenderTeste, definirRevogacao, redefinirSenha, definirLembretesWhatsapp } = useAdmins(busca);
 
   const [criando, setCriando] = useState(false);
   const [editando, setEditando] = useState(null);
@@ -180,6 +181,7 @@ export default function ClinicasADM() {
                           {status && (!revogado) && (
                             <span className={`badge${status.tom ? ` badge--${status.tom}` : ''}`}>{status.rotulo}</span>
                           )}
+                          {admin.lembretesWhatsapp && <span className="badge badge--success">WhatsApp</span>}
                         </span>
                         {assinatura?.acesso?.ate && (
                           <span className="clinica-situacao__ate">
@@ -214,6 +216,16 @@ export default function ClinicasADM() {
                           </button>
                           <button type="button" className="icon-btn" title="Trocar plano" aria-label={`Trocar plano de ${admin.nomeEmpresa}`} onClick={() => setTrocandoPlanoDe(admin)}>
                             <IconeTrocar />
+                          </button>
+                          <button
+                            type="button"
+                            className={`icon-btn${admin.lembretesWhatsapp ? ' icon-btn--ativo' : ''}`}
+                            aria-pressed={!!admin.lembretesWhatsapp}
+                            title={admin.lembretesWhatsapp ? 'Lembretes pelo WhatsApp ligados (clique para desligar)' : 'Ligar lembretes pelo WhatsApp'}
+                            aria-label={`Lembretes pelo WhatsApp de ${admin.nomeEmpresa}`}
+                            onClick={() => definirLembretesWhatsapp(admin._id, !admin.lembretesWhatsapp)}
+                          >
+                            <IconeMensagem />
                           </button>
                           <button type="button" className="icon-btn" title="Redefinir senha" aria-label={`Redefinir senha de ${admin.nomeEmpresa}`} onClick={() => setRedefinindoSenhaDe(admin)}>
                             <IconeChave />

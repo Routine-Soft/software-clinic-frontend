@@ -1,4 +1,4 @@
-import { NOMES_DIAS_CURTOS, idDoProfissional, paraISO, tituloDoAgendamento } from '../agenda.utils';
+import { NOMES_DIAS_CURTOS, idDoProfissional, paraISO, tituloDoAgendamento, confirmadoPeloWhatsapp } from '../agenda.utils';
 
 const MAXIMO_POR_DIA = 3;
 
@@ -46,7 +46,7 @@ export default function AgendaMes({ dataReferencia, dias, porDia, corDe, hoje, o
                       onClick={(e) => { e.stopPropagation(); onAbrir(agenda); }}
                     >
                       <span className="agenda-chip__hora">{agenda.horaInicio}</span>
-                      <span className="agenda-chip__nome">{agenda.pacienteId?.nome ?? 'Paciente'}</span>
+                      <span className="agenda-chip__nome">{confirmadoPeloWhatsapp(agenda) && <span className="agenda-confirmado" aria-label="Confirmado">✓ </span>}{agenda.pacienteId?.nome ?? 'Paciente'}</span>
                     </button>
                   </li>
                 ))}

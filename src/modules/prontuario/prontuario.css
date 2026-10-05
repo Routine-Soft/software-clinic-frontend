@@ -162,6 +162,14 @@
   overflow-wrap: anywhere;
 }
 
+.pront-agenda__detalhe {
+  display: block;
+  margin-top: 4px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
 .pront-agenda__acoes {
   display: flex;
   flex-wrap: wrap;

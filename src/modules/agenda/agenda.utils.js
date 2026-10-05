@@ -154,5 +154,22 @@ export function tituloDoAgendamento(agenda) {
     agenda.profissionalId?.nome,
     agenda.servicoId?.nome,
     agenda.status === 'cancelado' ? 'Cancelado' : null,
+    confirmadoPeloWhatsapp(agenda) ? 'Confirmado pelo WhatsApp' : null,
   ].filter(Boolean).join(' · ');
+}
+
+export function confirmadoPeloWhatsapp(agenda) {
+  return agenda.lembrete?.resposta === 'confirmado' && agenda.status !== 'cancelado';
+}
+
+// Situação do lembrete do WhatsApp para a recepção: a resposta do paciente vale mais que a entrega da mensagem.
+export function situacaoDoLembrete(agenda) {
+  const lembrete = agenda.lembrete;
+  if (!lembrete?.situacao) return null;
+  if (lembrete.resposta === 'confirmado') return { rotulo: 'Confirmado pelo paciente', tom: 'success' };
+  if (lembrete.resposta === 'desmarcado') return { rotulo: 'Desmarcado pelo paciente', tom: 'danger' };
+  if (lembrete.situacao === 'falhou') return { rotulo: 'Não enviado', tom: 'danger', detalhe: lembrete.erro };
+  if (lembrete.situacao === 'lido') return { rotulo: 'Lido, sem resposta', tom: 'info' };
+  if (lembrete.situacao === 'entregue') return { rotulo: 'Entregue, sem resposta', tom: 'info' };
+  return { rotulo: 'Enviado', tom: 'info' };
 }

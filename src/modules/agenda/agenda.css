@@ -637,3 +637,9 @@
     grid-template-columns: minmax(0, 1fr);
   }
 }
+
+/* Paciente confirmou pelo lembrete do WhatsApp. */
+.agenda-confirmado {
+  font-weight: 800;
+  color: var(--success);
+}

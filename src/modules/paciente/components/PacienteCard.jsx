@@ -125,7 +125,7 @@ export default function PacienteCard({ className = '' }) {
                   <span>{contatoDoPaciente(paciente).telefone}</span>
                   {paciente.convenioId?.nome
                     ? <span className="badge badge--info">{paciente.convenioId.nome}</span>
-                    : <span className="badge">Particular</span>}
+                    : <span className="badge">Sem convênio</span>}
                   {paciente.empresaId?.razaoSocial && <span className="badge badge--primary">{paciente.empresaId.razaoSocial}</span>}
                 </span>
                 <span className="crud-item__sub" title={contatoDoPaciente(paciente).email}>{contatoDoPaciente(paciente).email}</span>

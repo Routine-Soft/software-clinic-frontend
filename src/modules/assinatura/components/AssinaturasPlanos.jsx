@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useAuthContext } from '@/hooks/useAuthContext';
 import { usePlanos } from '@/modules/plano/plano.hooks';
 import { useAssinatura } from '../assinatura.hooks';
-import { formatarData, formatarPreco } from '../assinatura.utils';
+import { formatarData, formatarPreco, avisarAssinaturaAtualizada } from '../assinatura.utils';
 import PixModal from './PixModal';
 import './assinatura.css';
 import './assinaturas-planos.css';
@@ -38,6 +38,7 @@ function textoDoBotaoCartao(plano, assinatura) {
   const status = assinatura.status;
   const ehAtual = assinatura.planoId?._id === plano._id;
 
+  if (status === 'ativa' && assinatura.cobranca === 'pix') return ehAtual ? 'Passar para o cartão' : 'Indisponível';
   if (status === 'ativa') return ehAtual ? 'Plano atual' : 'Indisponível';
   if (ehAtual && status === 'pendente') return 'Refazer o pagamento';
   if (ehAtual && status === 'inadimplente') return 'Regularizar no cartão';
@@ -97,8 +98,9 @@ export default function AssinaturasPlanos() {
 
   const carregando = carregandoPlanos || carregandoAssinatura;
   const erro = erroPlanos || erroAssinatura;
-  // Só quem administra a clínica contrata (o backend também exige isso); os demais só consultam.
-  const podeContratar = user?.role === 'admin' || user?.role === 'super_admin';
+  // Admin e recepção (secretaria) pagam; só o admin desiste ou cancela. O backend exige o mesmo.
+  const podeContratar = ['admin', 'super_admin', 'recepcao'].includes(user?.role);
+  const podeCancelar = user?.role === 'admin' || user?.role === 'super_admin';
   const planosAtivos = ordenarPlanos(planos.filter((plano) => plano.ativo));
   const assinaturaAtiva = assinatura?.status === 'ativa';
   // Pix é pago período a período e não renova sozinho; o cartão renova todo mês no Mercado Pago.
@@ -138,7 +140,7 @@ export default function AssinaturasPlanos() {
       )}
 
       {!podeContratar && !carregando && (
-        <p className="alert alert--info" role="status">Só o administrador da clínica pode contratar ou trocar de plano.</p>
+        <p className="alert alert--info" role="status">Só o administrador e a recepção da clínica podem pagar ou trocar de plano.</p>
       )}
 
       {podeContratar && ativaNoCartao && (
@@ -149,8 +151,9 @@ export default function AssinaturasPlanos() {
 
       {podeContratar && ativaPorPix && (
         <p className="alert alert--info" role="status">
-          Seu período pago por Pix vai até <strong>{formatarData(assinatura.proximaCobranca)}</strong>. Você pode renovar o plano atual a qualquer momento;
-          para trocar de plano ou assinar no cartão, aguarde o fim do período.
+          Seu período pago por Pix vai até <strong>{formatarData(assinatura.proximaCobranca)}</strong>. Você pode renovar por Pix a qualquer momento
+          ou passar o plano atual para o cartão: a primeira cobrança no cartão só acontece em {formatarData(assinatura.proximaCobranca)}, quando o Pix acaba.
+          Para trocar de plano, aguarde o fim do período.
         </p>
       )}
 
@@ -183,7 +186,8 @@ export default function AssinaturasPlanos() {
             const gratuito = plano.tipo === 'gratis';
             const ehAtual = assinatura?.planoId?._id === plano._id;
             const selo = ehAtual ? SELO_DO_PLANO_ATUAL[assinatura.status] : null;
-            const cartaoDesabilitado = iniciandoCheckout || assinaturaAtiva;
+            // Quem paga por Pix pode passar o plano atual para o cartão (cobrança só depois do período pago).
+            const cartaoDesabilitado = iniciandoCheckout || (assinaturaAtiva && !(ativaPorPix && ehAtual));
             const pixDesabilitado = iniciandoCheckout || ativaNoCartao || aguardandoCartao || (ativaPorPix && !ehAtual);
             const renovando = ativaPorPix && ehAtual;
             const carregandoEste = iniciandoCheckout && planoEscolhido === plano._id;
@@ -239,7 +243,7 @@ export default function AssinaturasPlanos() {
                   </div>
                 )}
 
-                {podeContratar && ehAtual && assinatura.status === 'pendente' && (confirmandoDesistencia ? (
+                {podeCancelar && ehAtual && assinatura.status === 'pendente' && (confirmandoDesistencia ? (
                   <div className="assinatura-card__confirmar" role="alertdialog" aria-label="Confirmar desistência">
                     <p>Desistir da assinatura? O pagamento pendente é cancelado e você volta ao plano gratuito.</p>
                     <div className="assinatura-card__acoes assinatura-card__acoes--linha">
@@ -271,7 +275,7 @@ export default function AssinaturasPlanos() {
         <PixModal
           plano={pix.plano}
           renovacao={pix.renovacao}
-          onPago={atualizarAssinatura}
+          onPago={(atualizada) => { atualizarAssinatura(atualizada); avisarAssinaturaAtualizada(atualizada); }}
           onClose={() => setPix(null)}
         />
       )}

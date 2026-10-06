@@ -140,7 +140,7 @@ export default function ServicoADM({ className = '' }) {
                 </div>
 
                 <ul className="servico-precos">
-                  {[{ nome: 'Particular', regra: servico }, ...(servico.tabelaConvenios ?? []).map((linha) => ({ nome: nomeDoConvenio(linha.convenioId), regra: linha }))].map(({ nome, regra }, i) => (
+                  {[{ nome: 'Padrão', regra: servico }, ...(servico.tabelaConvenios ?? []).map((linha) => ({ nome: nomeDoConvenio(linha.convenioId), regra: linha }))].map(({ nome, regra }, i) => (
                     <li key={i}>
                       <strong>{nome}:</strong> <span>{formatarPreco(regra.preco)} ·</span> <span>{textoComissaoDaLinha(regra)}</span>
                     </li>

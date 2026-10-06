@@ -151,13 +151,36 @@
   border-color: var(--primary-ring);
 }
 
+.agenda-filtros__toggle--perigo[aria-pressed='true'] {
+  color: var(--danger);
+  background: var(--danger-soft);
+  border-color: color-mix(in srgb, var(--danger) 35%, transparent);
+}
+
 .agenda-legenda {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px 16px;
+  gap: 6px 14px;
+  align-items: center;
   padding: 0 20px 14px;
+}
+
+.agenda-legenda__lista {
+  display: contents;
   margin: 0;
+  padding: 0;
   list-style: none;
+}
+
+.agenda-legenda__titulo {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-subtle);
+}
+
+.agenda-legenda__nota {
+  text-decoration: line-through;
+  text-decoration-color: color-mix(in srgb, var(--text-subtle) 60%, transparent);
 }
 
 .agenda-legenda__item {

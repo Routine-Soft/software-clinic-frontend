@@ -18,7 +18,7 @@ const IconeUsuarios = () => (
   </Icone>
 );
 
-// Versão em cartão da tela de Usuários, para o Dashboard admin. A redefinição de senha fica na tela completa.
+// Versão em cartão da tela de Usuários, para o Painel Admin. A redefinição de senha fica na tela completa.
 export default function UsuariosClinicaCard({ className = '' }) {
   const { usuarios, loading, error, successMessage, addUsuario, editUsuario, removeUsuario } = useUsuariosDaClinica();
   const { user: usuarioLogado } = useAuthContext();

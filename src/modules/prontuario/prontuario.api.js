@@ -49,3 +49,9 @@ export async function getAcessoProntuario() {
   const response = await httpClient.get('/prontuarios/acesso');
   return response;
 }
+
+// Quantidade de atendimentos abertos na clínica, sem dado clínico (recepção e admin).
+export async function getTotalEmAtendimento() {
+  const response = await httpClient.get('/prontuarios/em-atendimento');
+  return response;
+}

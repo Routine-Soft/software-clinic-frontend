@@ -43,7 +43,7 @@ function CampoPreco({ id, valor, onChange, rotulo = 'Preço' }) {
   );
 }
 
-// Campos de criar e editar serviço: dados básicos, preço/repasse particular e a tabela por convênio.
+// Campos de criar e editar serviço: dados básicos, preço/repasse padrão e a tabela por convênio.
 export default function ServicoCampos({ form, setForm, convenios }) {
   const id = useId();
 
@@ -94,11 +94,11 @@ export default function ServicoCampos({ form, setForm, convenios }) {
         <h4 className="tabela-preco__titulo">Preços e repasses</h4>
         <p className="field__hint">
           {form.tipo === 'pacote' ? 'O repasse vale por sessão realizada. ' : ''}
-          Convênio que não estiver na lista usa o preço e o repasse do particular.
+          Convênio que não estiver na lista usa o preço e o repasse padrão.
         </p>
 
         <div className="tabela-preco__linha">
-          <span className="tabela-preco__nome">Particular</span>
+          <span className="tabela-preco__nome">Preço padrão</span>
           <div className="modal-form__row">
             <CampoPreco id={`${id}-preco`} valor={form.preco} onChange={(v) => set('preco', v)} />
             <CampoComissao
@@ -146,7 +146,7 @@ export default function ServicoCampos({ form, setForm, convenios }) {
         ))}
 
         {convenios.length === 0 ? (
-          <p className="modal-form__hint">Para ter preço e repasse por convênio, cadastre os convênios antes (card Convênios, passo 4 do Dashboard admin).</p>
+          <p className="modal-form__hint">Para ter preço e repasse por convênio, cadastre os convênios antes (card Convênios, passo 4 do Painel Admin).</p>
         ) : (
           <button type="button" className="btn btn--ghost btn--sm tabela-preco__adicionar" onClick={adicionarLinha} disabled={!podeAdicionar}>
             <IconeMais />

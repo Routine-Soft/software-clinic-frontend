@@ -9,6 +9,7 @@ import { useProfissionais } from '@/modules/profissional/profissional.hooks'
 import { useEmpresas } from '@/modules/empresa/empresa.hooks'
 import { useTodosProntuarios, useAcessoProntuario } from '@/modules/prontuario/prontuario.hooks'
 import { atendimentoEmAndamento } from '@/modules/prontuario/prontuario.utils'
+import { getTotalEmAtendimento } from '@/modules/prontuario/prontuario.api'
 import ProntuarioModal from '@/modules/prontuario/components/ProntuarioModal'
 import AssinaturaStatus from '@/modules/assinatura/components/AssinaturaStatus'
 import { Icone, IconeMais } from '@/components/CrudCard/icones'
@@ -86,10 +87,36 @@ function Kpi({ icone, rotulo, valor, detalhe, tom = 'primary', to, indice }) {
         : <div className="card home-kpi" data-tom={tom} style={{ '--i': indice }}>{conteudo}</div>
 }
 
-// Só para quem pode abrir prontuários (profissional com login vinculado); os demais não veem o contador.
-function KpiEmAtendimentoSeTiverAcesso({ indice }) {
-    const { profissional } = useAcessoProntuario()
-    return profissional ? <KpiEmAtendimento indice={indice} /> : null
+// Quem abre prontuários (profissional com login vinculado) vê os atendimentos que pode ler e vai até eles.
+// Recepção e admin sem vínculo veem só a quantidade aberta na clínica, sem nenhum dado clínico.
+function KpiEmAtendimentoDoUsuario({ indice, veTotalDaClinica }) {
+    const { carregando, profissional } = useAcessoProntuario()
+    if (carregando) return <Kpi icone="prontuario" rotulo="Em atendimento" valor={null} tom="success" indice={indice} />
+    if (profissional) return <KpiEmAtendimento indice={indice} />
+    return veTotalDaClinica ? <KpiEmAtendimentoDaClinica indice={indice} /> : null
+}
+
+function KpiEmAtendimentoDaClinica({ indice }) {
+    const [total, setTotal] = useState(null)
+
+    useEffect(() => {
+        let ignore = false
+        getTotalEmAtendimento()
+            .then((response) => { if (!ignore) setTotal(response.data.total) })
+            .catch(() => { if (!ignore) setTotal(0) })
+        return () => { ignore = true }
+    }, [])
+
+    return <Kpi icone="prontuario" rotulo="Em atendimento" valor={total} detalhe={total === 1 ? 'atendimento aberto agora' : 'atendimentos abertos agora'} tom="success" indice={indice} />
+}
+
+// Cancelamentos das consultas marcadas para este mês; o card abre a agenda só com os cancelados.
+function KpiCancelados({ agora, indice }) {
+    const inicio = paraISO(new Date(agora.getFullYear(), agora.getMonth(), 1))
+    const fim = paraISO(new Date(agora.getFullYear(), agora.getMonth() + 1, 0))
+    const { agendas, loading } = useAgendas({ dataInicio: inicio, dataFim: fim })
+    const total = agendas.filter((a) => a.status === 'cancelado').length
+    return <Kpi icone="cancelado" rotulo="Agendamentos cancelados" valor={loading ? null : total} detalhe="neste mês" tom="danger" to="/agenda?status=cancelado" indice={indice} />
 }
 
 function KpiEmAtendimento({ indice }) {
@@ -186,7 +213,7 @@ function Atalhos({ hasRole }) {
     )
 }
 
-function PainelDaClinica({ agora, clinico, admin, hasRole }) {
+function PainelDaClinica({ agora, clinico, admin, recepcao, hasRole }) {
     const hoje = paraISO(agora)
     const hhmm = `${String(agora.getHours()).padStart(2, '0')}:${String(agora.getMinutes()).padStart(2, '0')}`
     const { agendas, loading: carregandoAgenda } = useAgendas({ dataInicio: hoje, dataFim: hoje })
@@ -197,13 +224,12 @@ function PainelDaClinica({ agora, clinico, admin, hasRole }) {
     const [agendaDetalhes, setAgendaDetalhes] = useState(null)
 
     const ativas = agendas.filter((a) => a.status !== 'cancelado')
-    const totalKpis = clinico ? 6 : 5
     const restantes = ativas.filter((a) => a.horaFim > hhmm).length
     const realizados = ativas.filter((a) => a.status === 'realizado').length
 
     return (
         <>
-            <div className="home-kpis" style={{ '--por-linha': totalKpis <= 4 ? totalKpis : 3 }}>
+            <div className="home-kpis">
                 <Kpi
                     icone="agenda"
                     rotulo="Agendamentos hoje"
@@ -214,7 +240,8 @@ function PainelDaClinica({ agora, clinico, admin, hasRole }) {
                 />
                 <Kpi icone="espera" rotulo="Na lista de espera" valor={carregandoFila ? null : fila.length} detalhe="aguardando vaga" tom="warning" to="/lista-espera" indice={1} />
                 <Kpi icone="pacientes" rotulo="Pacientes" valor={carregandoPacientes ? null : pacientes.length} detalhe="cadastrados" tom="info" to="/pacientes" indice={2} />
-                {clinico && <KpiEmAtendimentoSeTiverAcesso indice={3} />}
+                <KpiEmAtendimentoDoUsuario indice={3} veTotalDaClinica={admin || recepcao} />
+                <KpiCancelados agora={agora} indice={4} />
                 <Kpi
                     icone="profissionais"
                     rotulo="Profissionais"
@@ -222,7 +249,7 @@ function PainelDaClinica({ agora, clinico, admin, hasRole }) {
                     detalhe={profissionais.length === 1 ? 'na equipe' : 'na equipe de atendimento'}
                     tom="success"
                     to={admin ? '/profissionais' : undefined}
-                    indice={clinico ? 4 : 3}
+                    indice={5}
                 />
                 <Kpi
                     icone="empresas"
@@ -231,7 +258,7 @@ function PainelDaClinica({ agora, clinico, admin, hasRole }) {
                     detalhe={empresas.length === 1 ? 'empresa cliente' : 'empresas clientes'}
                     tom="warning"
                     to={admin ? '/empresas' : undefined}
-                    indice={clinico ? 5 : 4}
+                    indice={6}
                 />
             </div>
 
@@ -262,7 +289,8 @@ export function Home() {
 
     const admin = hasRole('admin')
     const clinico = admin || hasRole('profissional')
-    const daClinica = clinico || hasRole('recepcao')
+    const recepcao = hasRole('recepcao')
+    const daClinica = clinico || recepcao
     const primeiroNome = user?.nomeCompleto?.split(' ')[0] ?? ''
 
     return (
@@ -282,7 +310,7 @@ export function Home() {
             </header>
 
             {daClinica ? (
-                <PainelDaClinica agora={agora} clinico={clinico} admin={admin} hasRole={hasRole} />
+                <PainelDaClinica agora={agora} clinico={clinico} admin={admin} recepcao={recepcao} hasRole={hasRole} />
             ) : (
                 <div className="home-grid home-grid--unico">
                     <Atalhos hasRole={hasRole} />

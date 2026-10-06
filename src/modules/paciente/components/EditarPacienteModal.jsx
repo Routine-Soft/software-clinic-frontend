@@ -112,7 +112,7 @@ export default function EditarPacienteModal({ paciente, convenios, empresas, err
                     value={formEdicao.convenioId}
                     onChange={(e) => handleChangeEdicao('convenioId', e.target.value)}
                   >
-                    <option value="">Particular</option>
+                    <option value="">Nenhum</option>
                     {convenios.map((convenio) => (
                       <option key={convenio._id} value={convenio._id}>{convenio.nome}</option>
                     ))}

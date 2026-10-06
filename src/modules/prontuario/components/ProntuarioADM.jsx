@@ -186,7 +186,7 @@ function ListaDeProntuarios() {
                       <td>
                         {paciente.convenioId?.nome
                           ? <span className="badge badge--info">{paciente.convenioId.nome}</span>
-                          : <span className="badge">Particular</span>}
+                          : <span className="badge">Sem convênio</span>}
                       </td>
                       <td>
                         <div className="table__actions">

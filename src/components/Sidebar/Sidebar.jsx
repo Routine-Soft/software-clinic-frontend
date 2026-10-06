@@ -10,13 +10,13 @@ import './Sidebar.css'
 
 const TODOS = ['super_admin', 'admin', 'profissional', 'recepcao']
 
-// Os cadastros (profissionais, serviços, salas...) ficam no Dashboard admin; o menu tem só o dia a dia.
+// Os cadastros (profissionais, serviços, salas...) ficam no Painel Admin; o menu tem só o dia a dia.
 const GRUPOS = [
     {
         titulo: 'Principal',
         itens: [
-            { label: 'Início', path: '/home', icone: 'inicio', roles: TODOS },
-            { label: 'Dashboard admin', path: '/dashboard-admin', icone: 'painel', roles: ['admin', 'recepcao'] },
+            { label: 'Página inicial', path: '/home', icone: 'inicio', roles: TODOS },
+            { label: 'Painel Admin', path: '/dashboard-admin', icone: 'painel', roles: ['admin', 'recepcao'] },
             { label: 'Agenda', path: '/agenda', icone: 'agenda', roles: ['admin', 'profissional', 'recepcao'] },
         ],
     },

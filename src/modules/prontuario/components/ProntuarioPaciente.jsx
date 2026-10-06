@@ -109,7 +109,7 @@ export default function ProntuarioPaciente({ paciente, profissional, agendamento
             </p>
           )}
           <div className="pront-head__selos">
-            <span className={`badge${paciente.convenioId?.nome ? ' badge--info' : ''}`}>{paciente.convenioId?.nome ?? 'Particular'}</span>
+            <span className={`badge${paciente.convenioId?.nome ? ' badge--info' : ''}`}>{paciente.convenioId?.nome ?? 'Sem convênio'}</span>
             {paciente.empresaId?.razaoSocial && <span className="badge badge--primary">{paciente.empresaId.razaoSocial}</span>}
             <span className="badge">Primeira consulta: {formatDataInstanteBR(primeiraConsulta) ?? 'nenhuma ainda'}</span>
           </div>
@@ -221,7 +221,7 @@ export default function ProntuarioPaciente({ paciente, profissional, agendamento
                     value={novoAtendimento.convenioId}
                     onChange={(e) => setNovoAtendimento({ ...novoAtendimento, convenioId: e.target.value })}
                   >
-                    <option value="">Particular</option>
+                    <option value="">Não informado</option>
                     {convenios.map((c) => (
                       <option key={c._id} value={c._id}>{c.nome}</option>
                     ))}

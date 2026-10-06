@@ -162,7 +162,7 @@ export default function PacienteADM() {
                         <div className="paciente-vinculos">
                           {paciente.convenioId?.nome
                             ? <span className="badge badge--info">{paciente.convenioId.nome}</span>
-                            : <span className="badge">Particular</span>}
+                            : <span className="badge">Sem convênio</span>}
                           {paciente.empresaId?.razaoSocial && (
                             <span className="badge badge--primary paciente-vinculos__empresa" title={paciente.empresaId.razaoSocial}>
                               {paciente.empresaId.razaoSocial}

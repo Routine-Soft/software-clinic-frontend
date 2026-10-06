@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import Sidebar from '@/components/Sidebar/Sidebar'
 import Marca from '@/components/Sidebar/Marca'
 import AssinaturaGuard from '@/modules/assinatura/components/AssinaturaGuard'
+import AvisoVencimento from '@/modules/assinatura/components/AvisoVencimento'
 import { useAuthContext } from '@/hooks/useAuthContext'
 import './MainLayout.css'
 
@@ -53,6 +54,7 @@ export function MainLayout({ children }) {
             {menuAberto && <div className="app-overlay" onClick={() => setMenuAberto(false)} aria-hidden="true" />}
 
             <main id="conteudo" className="app-main">
+                <AvisoVencimento />
                 <AssinaturaGuard>{children}</AssinaturaGuard>
             </main>
         </div>

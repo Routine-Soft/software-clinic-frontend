@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { useAgendas } from '../agenda.hooks';
 import { useProfissionais } from '@/modules/profissional/profissional.hooks';
 import { filtrarPacientes } from '@/modules/paciente/paciente.utils';
@@ -28,7 +29,8 @@ const VISOES = [
   ['mes', 'Mês'],
 ];
 
-function visaoInicial() {
+function visaoInicial(soCancelados) {
+  if (soCancelados) return 'mes';
   return window.matchMedia?.('(max-width: 640px)').matches ? 'dia' : 'mes';
 }
 
@@ -36,9 +38,12 @@ export default function AgendaCalendario() {
   const { user, hasRole } = useAuthContext();
   const podeVerProntuario = hasRole('admin') || hasRole('profissional') || hasRole('super_admin');
   const { profissionais } = useProfissionais();
+  // ?status=cancelado (vindo do card "Agendamentos cancelados" da página inicial) mostra só os cancelados.
+  const [parametros, setParametros] = useSearchParams();
+  const soCancelados = parametros.get('status') === 'cancelado';
 
   const [agora, setAgora] = useState(() => new Date());
-  const [visao, setVisao] = useState(visaoInicial);
+  const [visao, setVisao] = useState(() => visaoInicial(soCancelados));
   const [dataReferencia, setDataReferencia] = useState(() => new Date());
   const [profissionalId, setProfissionalId] = useState('');
   const [busca, setBusca] = useState('');
@@ -68,13 +73,14 @@ export default function AgendaCalendario() {
 
   const agendasFiltradas = useMemo(() => {
     let lista = agendas;
-    if (!mostrarCancelados) lista = lista.filter((a) => a.status !== 'cancelado');
+    if (soCancelados) lista = lista.filter((a) => a.status === 'cancelado');
+    else if (!mostrarCancelados) lista = lista.filter((a) => a.status !== 'cancelado');
     if (busca.trim()) {
       const ids = new Set(filtrarPacientes(lista.map((a) => a.pacienteId).filter(Boolean), busca).map((p) => p._id));
       lista = lista.filter((a) => ids.has(a.pacienteId?._id));
     }
     return lista;
-  }, [agendas, mostrarCancelados, busca]);
+  }, [agendas, mostrarCancelados, soCancelados, busca]);
 
   const porDia = useMemo(() => agruparPorDia(agendasFiltradas), [agendasFiltradas]);
 
@@ -88,6 +94,12 @@ export default function AgendaCalendario() {
   }, [agendas]);
 
   const totalNoPeriodo = agendasFiltradas.filter((a) => a.status !== 'cancelado').length;
+  const canceladosNoPeriodo = agendasFiltradas.filter((a) => a.status === 'cancelado').length;
+  const noPeriodo = visao === 'dia' ? 'no dia' : visao === 'semana' ? 'na semana' : 'no mês';
+
+  function alternarSoCancelados() {
+    setParametros(soCancelados ? {} : { status: 'cancelado' }, { replace: true });
+  }
 
   function irParaDia(dia) {
     setDataReferencia(dia);
@@ -136,11 +148,15 @@ export default function AgendaCalendario() {
           <p className="page-subtitle">Clique em um agendamento para abrir o prontuário do paciente</p>
         </div>
         <div className="page-header__acoes">
-          {!loading && (
-            <span className="badge badge--primary">
-              {totalNoPeriodo} {totalNoPeriodo === 1 ? 'agendamento' : 'agendamentos'} {visao === 'dia' ? 'no dia' : visao === 'semana' ? 'na semana' : 'no mês'}
+          {!loading && (soCancelados ? (
+            <span className="badge badge--danger">
+              {canceladosNoPeriodo} {canceladosNoPeriodo === 1 ? 'cancelado' : 'cancelados'} {noPeriodo}
             </span>
-          )}
+          ) : (
+            <span className="badge badge--primary">
+              {totalNoPeriodo} {totalNoPeriodo === 1 ? 'agendamento' : 'agendamentos'} {noPeriodo}
+            </span>
+          ))}
           <button type="button" className="btn btn--primary" onClick={() => novoAgendamento(paraISO(dataReferencia))}>
             <IconeMais />
             Novo agendamento
@@ -190,17 +206,26 @@ export default function AgendaCalendario() {
             <input className="input" type="search" value={busca} onChange={(e) => setBusca(e.target.value)} placeholder="Buscar paciente" aria-label="Buscar paciente" />
           </div>
 
-          <button type="button" className="agenda-filtros__toggle" aria-pressed={mostrarCancelados} onClick={() => setMostrarCancelados(!mostrarCancelados)}>
-            Cancelados
+          {!soCancelados && (
+            <button type="button" className="agenda-filtros__toggle" aria-pressed={mostrarCancelados} onClick={() => setMostrarCancelados(!mostrarCancelados)}>
+              Cancelados
+            </button>
+          )}
+          <button type="button" className="agenda-filtros__toggle agenda-filtros__toggle--perigo" aria-pressed={soCancelados} onClick={alternarSoCancelados}>
+            Só cancelados
           </button>
         </div>
 
         {legenda.length > 0 && (
-          <ul className="agenda-legenda" aria-label="Legenda de cores dos profissionais">
-            {legenda.map(([id, nome]) => (
-              <li key={id} className="agenda-legenda__item" data-cor={corDe(id)}>{nome}</li>
-            ))}
-          </ul>
+          <div className="agenda-legenda">
+            <span className="agenda-legenda__titulo">Cor de cada profissional:</span>
+            <ul className="agenda-legenda__lista" aria-label="Legenda de cores dos profissionais">
+              {legenda.map(([id, nome]) => (
+                <li key={id} className="agenda-legenda__item" data-cor={corDe(id)}>{nome}</li>
+              ))}
+            </ul>
+            <span className="agenda-legenda__titulo agenda-legenda__nota">Nome riscado = cancelado</span>
+          </div>
         )}
 
         {visao === 'mes' ? (
@@ -228,7 +253,11 @@ export default function AgendaCalendario() {
           />
         )}
 
-        {!loading && visao === 'dia' && totalNoPeriodo === 0 && agendasFiltradas.length === 0 && (
+        {!loading && soCancelados && agendasFiltradas.length === 0 && (
+          <p className="agenda-vazio">Nenhum agendamento cancelado {noPeriodo}.</p>
+        )}
+
+        {!loading && !soCancelados && visao === 'dia' && totalNoPeriodo === 0 && agendasFiltradas.length === 0 && (
           <p className="agenda-vazio">Nenhum agendamento neste dia. Clique no horário desejado para agendar.</p>
         )}
       </section>

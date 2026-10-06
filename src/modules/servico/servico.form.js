@@ -65,7 +65,7 @@ export function montarPayloadServico(form) {
 
 // O servidor recusaria estes casos; o formulário avisa antes de enviar.
 export function problemaDoFormulario(form) {
-  const linhas = [{ ...form, rotulo: 'do particular' }, ...form.tabelaConvenios.map((l) => ({ ...l, rotulo: 'de um convênio' }))];
+  const linhas = [{ ...form, rotulo: 'do preço padrão' }, ...form.tabelaConvenios.map((l) => ({ ...l, rotulo: 'de um convênio' }))];
   if (form.tabelaConvenios.some((l) => !l.convenioId)) return 'Escolha o convênio de cada linha da tabela.';
   for (const l of linhas) {
     if (l.comissaoTipo === 'percentual' && Number(l.comissao) > 100) return `O repasse ${l.rotulo} não pode passar de 100%.`;

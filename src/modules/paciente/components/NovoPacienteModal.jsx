@@ -105,7 +105,7 @@ export default function NovoPacienteModal({ convenios, empresas, erro, onSave, o
                     value={formCriar.convenioId}
                     onChange={(e) => handleChangeCriar('convenioId', e.target.value)}
                   >
-                    <option value="">Particular</option>
+                    <option value="">Nenhum</option>
                     {convenios.map((convenio) => (
                       <option key={convenio._id} value={convenio._id}>{convenio.nome}</option>
                     ))}

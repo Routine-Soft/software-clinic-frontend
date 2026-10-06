@@ -16,7 +16,7 @@ export default function AvisoPreRequisito({ acao, faltando, onde }) {
     <div className="alert alert--warning" role="alert">
       <strong>Antes de {acao}, cadastre {juntar(faltando)}.</strong>{' '}
       {onde ?? (hasRole('admin') || hasRole('recepcao')
-        ? <>Isso é feito no <Link to="/dashboard-admin">Dashboard admin</Link>.</>
+        ? <>Isso é feito no <Link to="/dashboard-admin">Painel Admin</Link>.</>
         : 'Peça ao administrador da clínica para fazer esse cadastro.')}
     </div>
   );

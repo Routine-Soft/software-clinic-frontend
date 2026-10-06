@@ -15,13 +15,14 @@ export default function ConvenioADM({ className }) {
     <CrudCard
       className={className}
       titulo="Convênios"
-      subtitulo="Planos de saúde aceitos pela clínica"
+      subtitulo="Particular e planos de saúde aceitos pela clínica"
       icone={<IconeConvenio />}
       singular="convênio"
       plural="convênios"
       labelNovo="Novo convênio"
-      placeholder="Ex: Unimed, Bradesco Saúde"
-      textoVazio="Nenhum convênio cadastrado ainda."
+      placeholder="Ex.: Particular, Unimed, Bradesco Saúde"
+      dica="Cadastre cada forma de atendimento da clínica, inclusive o Particular. Só o que estiver aqui aparece no agendamento."
+      textoVazio="Nenhum convênio cadastrado ainda. Comece pelo Particular."
       tituloEdicao="Editar convênio"
       itens={convenios}
       loading={loading}

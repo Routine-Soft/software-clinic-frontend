@@ -52,6 +52,7 @@
 .home-kpi[data-tom='success'] { --tom: var(--success); --tom-suave: var(--success-soft); }
 .home-kpi[data-tom='warning'] { --tom: var(--warning); --tom-suave: var(--warning-soft); }
 .home-kpi[data-tom='info'] { --tom: var(--info); --tom-suave: var(--info-soft); }
+.home-kpi[data-tom='danger'] { --tom: var(--danger); --tom-suave: var(--danger-soft); }
 
 a.home-kpi:hover {
   border-color: color-mix(in srgb, var(--tom) 45%, transparent);

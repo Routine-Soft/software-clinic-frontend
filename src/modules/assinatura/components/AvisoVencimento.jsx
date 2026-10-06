@@ -25,7 +25,7 @@ function foiFechadaHoje(chave) {
   }
 }
 
-// Barra fina no topo, para quem paga por Pix lembrar de renovar antes do acesso acabar.
+// Barra fina no topo, para quem paga por Pix lembrar de renovar (ou quem está no teste, de assinar) antes do acesso acabar.
 export default function AvisoVencimento() {
   const { user } = useAuthContext();
   const { pathname } = useLocation();
@@ -70,7 +70,7 @@ export default function AvisoVencimento() {
     <div className="aviso-vencimento" data-tom={aviso.tom} role={aviso.tom === 'danger' ? 'alert' : 'status'}>
       <span className="aviso-vencimento__texto">{aviso.texto}</span>
       {pathname !== '/assinaturas' && (
-        <Link to="/assinaturas" className="aviso-vencimento__pagar">Pagar</Link>
+        <Link to="/assinaturas" className="aviso-vencimento__pagar">{aviso.botao}</Link>
       )}
       <button type="button" className="aviso-vencimento__fechar" aria-label="Fechar aviso até amanhã" title="Fechar até amanhã" onClick={fechar}>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" aria-hidden="true">

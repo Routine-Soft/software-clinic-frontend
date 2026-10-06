@@ -6,7 +6,8 @@ import { avisoDeVencimento } from '../assinatura.utils';
 import './aviso-vencimento.css';
 
 // Quem paga a assinatura: o admin e a recepção (que faz o papel de secretaria). Profissional não vê.
-const PAPEIS_QUE_PAGAM = ['admin', 'recepcao'];
+// O super_admin também vê a da própria clínica (assim dá para conferir como a barra aparece).
+const PAPEIS_QUE_PAGAM = ['admin', 'recepcao', 'super_admin'];
 
 function hojeEmBrasilia() {
   return new Date().toLocaleDateString('en-CA', { timeZone: 'America/Sao_Paulo' });

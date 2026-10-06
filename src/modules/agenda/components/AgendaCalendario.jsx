@@ -14,6 +14,7 @@ import {
   indiceDeCor,
   intervaloDaVisao,
   navegar,
+  profissionalDoUsuario,
   paraISO,
   tituloDaVisao,
 } from '../agenda.utils';
@@ -45,7 +46,10 @@ export default function AgendaCalendario() {
   const [agora, setAgora] = useState(() => new Date());
   const [visao, setVisao] = useState(() => visaoInicial(soCancelados));
   const [dataReferencia, setDataReferencia] = useState(() => new Date());
-  const [profissionalId, setProfissionalId] = useState('');
+  // null = ainda não escolheu: o profissional abre na própria agenda; os demais, em todos os profissionais.
+  const [profissionalEscolhido, setProfissionalEscolhido] = useState(null);
+  const meuProfissional = user?.role === 'profissional' ? profissionalDoUsuario(profissionais, user) : null;
+  const profissionalId = profissionalEscolhido ?? meuProfissional?._id ?? '';
   const [busca, setBusca] = useState('');
   const [mostrarCancelados, setMostrarCancelados] = useState(true);
 
@@ -194,7 +198,7 @@ export default function AgendaCalendario() {
         </div>
 
         <div className="agenda-filtros">
-          <select className="input agenda-filtros__prof" value={profissionalId} onChange={(e) => setProfissionalId(e.target.value)} aria-label="Filtrar por profissional">
+          <select className="input agenda-filtros__prof" value={profissionalId} onChange={(e) => setProfissionalEscolhido(e.target.value)} aria-label="Filtrar por profissional">
             <option value="">Todos os profissionais</option>
             {profissionais.map((p) => (
               <option key={p._id} value={p._id}>{p.nome}</option>

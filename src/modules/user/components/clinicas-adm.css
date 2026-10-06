@@ -141,3 +141,112 @@
   gap: 6px 8px;
   justify-content: end;
 }
+
+/* Link do WhatsApp no contato da clínica. */
+.clinica-whats {
+  display: inline-flex;
+  gap: 5px;
+  align-items: center;
+  width: fit-content;
+  font-weight: 600;
+  color: var(--success);
+  text-decoration: none;
+}
+
+.clinica-whats:hover {
+  text-decoration: underline;
+}
+
+.clinica-whats svg {
+  width: 15px;
+  height: 15px;
+}
+
+/* Resumo de uso na linha da clínica. */
+.clinica-uso {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px 10px;
+  margin-top: 4px;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.clinica-uso strong {
+  color: var(--text);
+}
+
+.clinica-plano__pago {
+  font-size: 0.8rem;
+  font-weight: 650;
+  color: var(--success);
+}
+
+/* ---------- Detalhes da clínica ---------- */
+
+.clinica-detalhes {
+  display: grid;
+  gap: 18px;
+}
+
+.clinica-detalhes__sub {
+  margin: -6px 0 0;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.clinica-detalhes section {
+  display: grid;
+  gap: 10px;
+}
+
+.clinica-detalhes__titulo {
+  margin: 0;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-subtle);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.clinica-numeros {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 10px;
+}
+
+.clinica-numero {
+  --tom: var(--text);
+  display: grid;
+  gap: 2px;
+  padding: 12px 14px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+}
+
+.clinica-numero[data-tom='info'] { --tom: var(--info); }
+.clinica-numero[data-tom='success'] { --tom: var(--success); }
+.clinica-numero[data-tom='danger'] { --tom: var(--danger); }
+
+.clinica-numero strong {
+  font-size: 1.3rem;
+  font-weight: 750;
+  color: var(--tom);
+  overflow-wrap: anywhere;
+}
+
+.clinica-numero span {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.clinica-detalhes__vazio {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.clinica-pagamentos {
+  min-width: 420px;
+}

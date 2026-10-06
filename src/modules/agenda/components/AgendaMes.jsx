@@ -47,6 +47,7 @@ export default function AgendaMes({ dataReferencia, dias, porDia, corDe, hoje, o
                     >
                       <span className="agenda-chip__hora">{agenda.horaInicio}</span>
                       <span className="agenda-chip__nome">{agenda.pacienteId?.nome ?? 'Paciente'}</span>
+                      {agenda.profissionalId?.nome && <span className="agenda-chip__prof">{agenda.profissionalId.nome}</span>}
                     </button>
                   </li>
                 ))}

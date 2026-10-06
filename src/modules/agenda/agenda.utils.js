@@ -156,3 +156,15 @@ export function tituloDoAgendamento(agenda) {
     agenda.status === 'cancelado' ? 'Cancelado' : null,
   ].filter(Boolean).join(' · ');
 }
+
+// Agendamento do profissional ligado ao login (o profissional da agenda vem populado com usuarioId).
+export function ehDoUsuario(agenda, usuario) {
+  const id = String(usuario?._id ?? usuario?.id ?? '');
+  return !!id && String(agenda.profissionalId?.usuarioId ?? '') === id;
+}
+
+// Cadastro de profissional ligado ao login, se houver.
+export function profissionalDoUsuario(profissionais, usuario) {
+  const id = String(usuario?._id ?? usuario?.id ?? '');
+  return id ? profissionais.find((p) => String(p.usuarioId?._id ?? p.usuarioId ?? '') === id) ?? null : null;
+}

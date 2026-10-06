@@ -116,10 +116,11 @@ export default function AgendaGradeTempo({ dias, porDia, corDe, hoje, agora, det
                         onClick={() => onAbrir(agenda)}
                       >
                         <span className="agenda-ev__nome">{agenda.pacienteId?.nome ?? 'Paciente'}</span>
+                        {agenda.profissionalId?.nome && <span className="agenda-ev__prof">{agenda.profissionalId.nome}</span>}
                         <span className="agenda-ev__hora">{agenda.horaInicio} – {agenda.horaFim}</span>
                         {(detalhado || altura >= 70) && (
                           <span className="agenda-ev__extra">
-                            {[agenda.profissionalId?.nome, agenda.servicoId?.nome, detalhado ? agenda.salaId?.nome : null].filter(Boolean).join(' · ')}
+                            {[agenda.servicoId?.nome, detalhado ? agenda.salaId?.nome : null].filter(Boolean).join(' · ')}
                           </span>
                         )}
                       </button>

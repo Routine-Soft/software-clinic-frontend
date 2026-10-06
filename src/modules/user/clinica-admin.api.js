@@ -52,3 +52,8 @@ export async function definirRevogacaoAdmin(id, revogado) {
   const response = await httpClient.patch(`/users/admins/${id}/acesso`, { revogado });
   return response;
 }
+
+export async function getHistoricoPagamentosAdmin(id) {
+  const response = await httpClient.get(`/users/admins/${id}/pagamentos`);
+  return response;
+}

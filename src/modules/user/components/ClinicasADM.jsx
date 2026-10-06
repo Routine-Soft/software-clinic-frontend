@@ -16,11 +16,15 @@ import {
   IconeChave,
   IconeCadeado,
   IconeCadeadoAberto,
+  IconeTelefone,
+  IconeGrafico,
 } from '@/components/CrudCard/icones';
 import NovoAdminModal from './NovoAdminModal';
 import EditarAdminModal from './EditarAdminModal';
 import TrocarPlanoModal from './TrocarPlanoModal';
 import RedefinirSenhaAdminModal from './RedefinirSenhaAdminModal';
+import DetalhesClinicaModal from './DetalhesClinicaModal';
+import { linkWhatsapp, tempoDeCasa } from '../clinica-admin.utils';
 import './clinicas-adm.css';
 
 const COBRANCA_ROTULO = { recorrente: 'Cartão', pix: 'Pix', manual: 'Manual' };
@@ -42,6 +46,7 @@ export default function ClinicasADM() {
   const [editando, setEditando] = useState(null);
   const [trocandoPlanoDe, setTrocandoPlanoDe] = useState(null);
   const [redefinindoSenhaDe, setRedefinindoSenhaDe] = useState(null);
+  const [detalhesDe, setDetalhesDe] = useState(null);
   const [confirmando, setConfirmando] = useState(null); // { id, acao: 'excluir' | 'revogar' }
 
   const resumoContagem = useMemo(() => `${admins.length} ${admins.length === 1 ? 'clínica' : 'clínicas'}`, [admins.length]);
@@ -148,14 +153,40 @@ export default function ClinicasADM() {
                           <span className="clinica-pessoa__nome" title={admin.nomeCompleto}>{admin.nomeEmpresa}</span>
                           <span className="clinica-pessoa__sub" title={admin.nomeCompleto}>{admin.nomeCompleto}</span>
                           {admin.cnpj && <span className="clinica-pessoa__sub">{formatCnpj(admin.cnpj)}</span>}
-                          <span className="clinica-pessoa__sub">Cliente desde {formatarData(admin.createdAt)}</span>
+                          <span className="clinica-pessoa__sub" title={`Desde ${formatarData(admin.createdAt)}`}>
+                            Cliente {tempoDeCasa(admin.createdAt) === 'hoje' ? 'desde hoje' : `há ${tempoDeCasa(admin.createdAt)}`} ({formatarData(admin.createdAt)})
+                          </span>
+                          {admin.estatisticas && (
+                            <span className="clinica-uso">
+                              {[
+                                ['usuarios', 'usuário', 'usuários'],
+                                ['profissionais', 'profissional', 'profissionais'],
+                                ['pacientes', 'paciente', 'pacientes'],
+                                ['empresas', 'empresa', 'empresas'],
+                              ].map(([campo, singular, plural]) => (
+                                <span key={campo}><strong>{admin.estatisticas[campo]}</strong> {admin.estatisticas[campo] === 1 ? singular : plural}</span>
+                              ))}
+                              <span>
+                                Agenda: <strong>{admin.estatisticas.agendamentos.abertos}</strong> em aberto,{' '}
+                                <strong>{admin.estatisticas.agendamentos.realizados}</strong> {admin.estatisticas.agendamentos.realizados === 1 ? 'realizado' : 'realizados'},{' '}
+                                <strong>{admin.estatisticas.agendamentos.cancelados}</strong> {admin.estatisticas.agendamentos.cancelados === 1 ? 'cancelado' : 'cancelados'}
+                              </span>
+                            </span>
+                          )}
                         </div>
                       </div>
                     </td>
                     <td>
                       <div className="clinica-contato">
                         <span><EmailQuebravel email={admin.email} /></span>
-                        <span>{admin.telefone}</span>
+                        {linkWhatsapp(admin.telefone) ? (
+                          <a className="clinica-whats" href={linkWhatsapp(admin.telefone)} target="_blank" rel="noopener noreferrer" title="Abrir conversa no WhatsApp">
+                            <IconeTelefone />
+                            {admin.telefone}
+                          </a>
+                        ) : (
+                          <span>{admin.telefone}</span>
+                        )}
                       </div>
                     </td>
                     <td>
@@ -170,6 +201,9 @@ export default function ClinicasADM() {
                         </div>
                       ) : (
                         <span className="clinica-pessoa__sub">Sem assinatura</span>
+                      )}
+                      {admin.estatisticas && (
+                        <span className="clinica-plano__pago">Total pago: {formatarPreco(admin.estatisticas.totalPago)}</span>
                       )}
                     </td>
                     <td>
@@ -209,6 +243,9 @@ export default function ClinicasADM() {
                         </div>
                       ) : (
                         <div className="table__actions clinica-acoes">
+                          <button type="button" className="icon-btn" title="Detalhes e pagamentos" aria-label={`Detalhes e pagamentos de ${admin.nomeEmpresa}`} onClick={() => setDetalhesDe(admin)}>
+                            <IconeGrafico />
+                          </button>
                           <button type="button" className="icon-btn" title="Editar" aria-label={`Editar ${admin.nomeEmpresa}`} onClick={() => setEditando(admin)}>
                             <IconeLapis />
                           </button>
@@ -294,6 +331,10 @@ export default function ClinicasADM() {
           onSave={redefinirSenha}
           onClose={() => setRedefinindoSenhaDe(null)}
         />
+      )}
+
+      {detalhesDe && (
+        <DetalhesClinicaModal key={detalhesDe._id} admin={detalhesDe} onClose={() => setDetalhesDe(null)} />
       )}
 
       {trocandoPlanoDe && (

@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useAuthContext } from '@/hooks/useAuthContext'
 import { useAgendas } from '@/modules/agenda/agenda.hooks'
-import { paraISO, STATUS_AGENDA } from '@/modules/agenda/agenda.utils'
+import { paraISO, STATUS_AGENDA, ehDoUsuario } from '@/modules/agenda/agenda.utils'
 import { usePacientes } from '@/modules/paciente/paciente.hooks'
 import { useListaEspera } from '@/modules/lista-espera/lista-espera.hooks'
 import { useProfissionais } from '@/modules/profissional/profissional.hooks'
@@ -111,11 +111,11 @@ function KpiEmAtendimentoDaClinica({ indice }) {
 }
 
 // Cancelamentos das consultas marcadas para este mês; o card abre a agenda só com os cancelados.
-function KpiCancelados({ agora, indice }) {
+function KpiCancelados({ agora, indice, filtrar }) {
     const inicio = paraISO(new Date(agora.getFullYear(), agora.getMonth(), 1))
     const fim = paraISO(new Date(agora.getFullYear(), agora.getMonth() + 1, 0))
     const { agendas, loading } = useAgendas({ dataInicio: inicio, dataFim: fim })
-    const total = agendas.filter((a) => a.status === 'cancelado').length
+    const total = filtrar(agendas).filter((a) => a.status === 'cancelado').length
     return <Kpi icone="cancelado" rotulo="Agendamentos cancelados" valor={loading ? null : total} detalhe="neste mês" tom="danger" to="/agenda?status=cancelado" indice={indice} />
 }
 
@@ -213,10 +213,14 @@ function Atalhos({ hasRole }) {
     )
 }
 
-function PainelDaClinica({ agora, clinico, admin, recepcao, hasRole }) {
+function PainelDaClinica({ agora, clinico, admin, recepcao, hasRole, user }) {
     const hoje = paraISO(agora)
     const hhmm = `${String(agora.getHours()).padStart(2, '0')}:${String(agora.getMinutes()).padStart(2, '0')}`
-    const { agendas, loading: carregandoAgenda } = useAgendas({ dataInicio: hoje, dataFim: hoje })
+    // O profissional vê só a própria agenda; admin e recepção veem a da clínica toda.
+    const soOsMeus = user?.role === 'profissional'
+    const filtrar = (lista) => (soOsMeus ? lista.filter((a) => ehDoUsuario(a, user)) : lista)
+    const { agendas: agendasDaClinica, loading: carregandoAgenda } = useAgendas({ dataInicio: hoje, dataFim: hoje })
+    const agendas = filtrar(agendasDaClinica)
     const { itens: fila, loading: carregandoFila } = useListaEspera({ status: 'aguardando' })
     const { pacientes, loading: carregandoPacientes } = usePacientes()
     const { profissionais, loading: carregandoProfissionais } = useProfissionais()
@@ -241,7 +245,7 @@ function PainelDaClinica({ agora, clinico, admin, recepcao, hasRole }) {
                 <Kpi icone="espera" rotulo="Na lista de espera" valor={carregandoFila ? null : fila.length} detalhe="aguardando vaga" tom="warning" to="/lista-espera" indice={1} />
                 <Kpi icone="pacientes" rotulo="Pacientes" valor={carregandoPacientes ? null : pacientes.length} detalhe="cadastrados" tom="info" to="/pacientes" indice={2} />
                 <KpiEmAtendimentoDoUsuario indice={3} veTotalDaClinica={admin || recepcao} />
-                <KpiCancelados agora={agora} indice={4} />
+                <KpiCancelados agora={agora} indice={4} filtrar={filtrar} />
                 <Kpi
                     icone="profissionais"
                     rotulo="Profissionais"
@@ -310,7 +314,7 @@ export function Home() {
             </header>
 
             {daClinica ? (
-                <PainelDaClinica agora={agora} clinico={clinico} admin={admin} recepcao={recepcao} hasRole={hasRole} />
+                <PainelDaClinica agora={agora} clinico={clinico} admin={admin} recepcao={recepcao} hasRole={hasRole} user={user} />
             ) : (
                 <div className="home-grid home-grid--unico">
                     <Atalhos hasRole={hasRole} />

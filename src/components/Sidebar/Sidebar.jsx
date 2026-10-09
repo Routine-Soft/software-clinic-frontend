@@ -5,6 +5,7 @@ import { Icone, IconeX } from '@/components/CrudCard/icones'
 import { ROTULO_FUNCAO } from '@/modules/user/user.constants'
 import { iniciais } from '@/utils/nome'
 import Marca from './Marca'
+import BotaoInstalar from './BotaoInstalar'
 import { ICONES } from './menuIcones'
 import './Sidebar.css'
 
@@ -90,6 +91,8 @@ export function Sidebar({ aberto = false, onFechar }) {
             </nav>
 
             <div className="sidebar__rodape">
+                <BotaoInstalar />
+
                 <div className="sidebar__usuario">
                     <span className="sidebar__avatar" aria-hidden="true">{iniciais(user?.nomeCompleto)}</span>
                     <span className="sidebar__usuario-dados">

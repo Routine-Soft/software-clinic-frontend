@@ -74,6 +74,7 @@ export default function AgendaCalendario() {
 
   const idsProfissionais = useMemo(() => profissionais.map((p) => p._id).sort(), [profissionais]);
   const corDe = (id) => indiceDeCor(id, idsProfissionais);
+  const corDoAgendamento = (agenda) => corDe(idDoProfissional(agenda));
 
   const agendasFiltradas = useMemo(() => {
     let lista = agendas;
@@ -237,7 +238,7 @@ export default function AgendaCalendario() {
             dataReferencia={dataReferencia}
             dias={dias}
             porDia={porDia}
-            corDe={corDe}
+            corDe={corDoAgendamento}
             hoje={hoje}
             onAbrir={setAgendaDetalhes}
             onNovoNoDia={novoAgendamento}
@@ -247,7 +248,7 @@ export default function AgendaCalendario() {
           <AgendaGradeTempo
             dias={dias}
             porDia={porDia}
-            corDe={corDe}
+            corDe={corDoAgendamento}
             hoje={hoje}
             agora={agora}
             detalhado={visao === 'dia'}

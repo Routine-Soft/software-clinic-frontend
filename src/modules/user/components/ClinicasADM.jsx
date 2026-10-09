@@ -24,7 +24,8 @@ import EditarAdminModal from './EditarAdminModal';
 import TrocarPlanoModal from './TrocarPlanoModal';
 import RedefinirSenhaAdminModal from './RedefinirSenhaAdminModal';
 import DetalhesClinicaModal from './DetalhesClinicaModal';
-import { linkWhatsapp, tempoDeCasa } from '../clinica-admin.utils';
+import { tempoDeCasa } from '../clinica-admin.utils';
+import { linkWhatsapp } from '@/utils/whatsapp';
 import './clinicas-adm.css';
 
 const COBRANCA_ROTULO = { recorrente: 'Cartão', pix: 'Pix', manual: 'Manual' };

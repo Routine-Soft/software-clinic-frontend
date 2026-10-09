@@ -157,6 +157,17 @@ export function tituloDoAgendamento(agenda) {
   ].filter(Boolean).join(' · ');
 }
 
+// O que cada bloco do calendário mostra. As visões de mês/semana/dia recebem isso por prop, então servem
+// também para outras agendas (ex.: reuniões), cada uma com a sua função de descrever.
+export function descreverAgendamento(agenda, detalhado = false) {
+  return {
+    nome: `${agenda.pacienteId?.nome ?? 'Paciente'}${agenda.pacienteId?.teste ? ' (teste)' : ''}`,
+    sub: agenda.profissionalId?.nome ?? null,
+    extra: [agenda.servicoId?.nome, detalhado ? agenda.salaId?.nome : null].filter(Boolean).join(' · '),
+    titulo: tituloDoAgendamento(agenda),
+  };
+}
+
 // Agendamento do profissional ligado ao login (o profissional da agenda vem populado com usuarioId).
 export function ehDoUsuario(agenda, usuario) {
   const id = String(usuario?._id ?? usuario?.id ?? '');

@@ -1,8 +1,8 @@
-import { NOMES_DIAS_CURTOS, idDoProfissional, paraISO, tituloDoAgendamento } from '../agenda.utils';
+import { NOMES_DIAS_CURTOS, descreverAgendamento, paraISO } from '../agenda.utils';
 
 const MAXIMO_POR_DIA = 3;
 
-export default function AgendaMes({ dataReferencia, dias, porDia, corDe, hoje, onAbrir, onNovoNoDia, onIrParaDia }) {
+export default function AgendaMes({ dataReferencia, dias, porDia, corDe, descrever = descreverAgendamento, hoje, onAbrir, onNovoNoDia, onIrParaDia }) {
   return (
     <div className="agenda-mes">
       <div className="agenda-mes__semana" aria-hidden="true">
@@ -35,22 +35,25 @@ export default function AgendaMes({ dataReferencia, dias, porDia, corDe, hoje, o
               </button>
 
               <ul className="agenda-celula__lista">
-                {visiveis.map((agenda) => (
+                {visiveis.map((agenda) => {
+                  const { nome, sub, titulo } = descrever(agenda);
+                  return (
                   <li key={agenda._id}>
                     <button
                       type="button"
                       className="agenda-chip"
-                      data-cor={corDe(idDoProfissional(agenda))}
+                      data-cor={corDe(agenda)}
                       data-status={agenda.status}
-                      title={tituloDoAgendamento(agenda)}
+                      title={titulo}
                       onClick={(e) => { e.stopPropagation(); onAbrir(agenda); }}
                     >
                       <span className="agenda-chip__hora">{agenda.horaInicio}</span>
-                      <span className="agenda-chip__nome">{agenda.pacienteId?.nome ?? 'Paciente'}{agenda.pacienteId?.teste && ' (teste)'}</span>
-                      {agenda.profissionalId?.nome && <span className="agenda-chip__prof">{agenda.profissionalId.nome}</span>}
+                      <span className="agenda-chip__nome">{nome}</span>
+                      {sub && <span className="agenda-chip__prof">{sub}</span>}
                     </button>
                   </li>
-                ))}
+                  );
+                })}
               </ul>
 
               {restantes > 0 && (

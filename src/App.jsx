@@ -14,6 +14,7 @@ import AvaliacaoNeuroADM from './modules/avaliacao-neuropsicologica/components/A
 import AvaliacaoNeuroPage from './modules/avaliacao-neuropsicologica/components/AvaliacaoNeuroPage';
 import ServicoADM from './modules/servico/components/ServicoADM';
 import AgendaCalendario from './modules/agenda/components/AgendaCalendario';
+import ReunioesCalendario from './modules/reuniao/components/ReunioesCalendario';
 import ProntuarioADM from './modules/prontuario/components/ProntuarioADM';
 import ProntuarioPacientePage from './modules/prontuario/components/ProntuarioPacientePage';
 import ProntuarioModalPreview from './modules/prontuario/components/ProntuarioModalPreview';
@@ -208,6 +209,17 @@ function App() {
               <ProtectedRoute requiredRoles={['admin', 'profissional', 'recepcao', 'super_admin']}>
                 <MainLayout>
                   <AgendaCalendario />
+                </MainLayout>
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/reunioes"
+            element={
+              <ProtectedRoute requiredRoles={['admin', 'recepcao', 'super_admin']}>
+                <MainLayout>
+                  <ReunioesCalendario />
                 </MainLayout>
               </ProtectedRoute>
             }

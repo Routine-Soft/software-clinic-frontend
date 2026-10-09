@@ -19,6 +19,7 @@ const GRUPOS = [
             { label: 'Página inicial', path: '/home', icone: 'inicio', roles: TODOS },
             { label: 'Painel Admin', path: '/dashboard-admin', icone: 'painel', roles: ['admin', 'recepcao'] },
             { label: 'Agenda', path: '/agenda', icone: 'agenda', roles: ['admin', 'profissional', 'recepcao'] },
+            { label: 'Reuniões', path: '/reunioes', icone: 'reunioes', roles: ['admin', 'recepcao'] },
         ],
     },
     {

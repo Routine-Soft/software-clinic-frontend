@@ -2,9 +2,10 @@ import { useId, useState } from 'react';
 import { IconeMais } from '@/components/CrudCard/icones';
 import { normalizarEmail } from '@/utils/email';
 import CamposResponsaveis from './CamposResponsaveis';
+import CampoPacienteTeste from './CampoPacienteTeste';
 import { ehMenorDeIdade } from '../paciente.utils';
 
-const FORM_CRIAR_INICIAL = { nome: '', telefone: '', email: '', cpf: '', dataNascimento: '', convenioId: '', empresaId: '', responsaveis: [] };
+const FORM_CRIAR_INICIAL = { nome: '', telefone: '', email: '', cpf: '', dataNascimento: '', convenioId: '', empresaId: '', responsaveis: [], teste: false };
 
 export default function NovoPacienteForm({ convenios, empresas, onSubmit }) {
   const ids = useId();
@@ -130,6 +131,10 @@ export default function NovoPacienteForm({ convenios, empresas, onSubmit }) {
           </select>
         </div>
       )}
+
+      <div className="field field--full">
+        <CampoPacienteTeste marcado={formCriar.teste} onChange={(valor) => handleChangeCriar('teste', valor)} />
+      </div>
 
       <button className={`btn btn--primary${criando ? ' btn--loading' : ''}`} type="submit" disabled={criando}>
         {!criando && <IconeMais />}

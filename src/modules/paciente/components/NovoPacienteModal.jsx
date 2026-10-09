@@ -3,9 +3,10 @@ import Modal from '@/components/Modal/Modal';
 import ModalForm from '@/components/Modal/ModalForm';
 import { normalizarEmail } from '@/utils/email';
 import CamposResponsaveis from './CamposResponsaveis';
+import CampoPacienteTeste from './CampoPacienteTeste';
 import { ehMenorDeIdade } from '../paciente.utils';
 
-const FORM_CRIAR_INICIAL = { nome: '', telefone: '', email: '', cpf: '', dataNascimento: '', convenioId: '', empresaId: '', responsaveis: [] };
+const FORM_CRIAR_INICIAL = { nome: '', telefone: '', email: '', cpf: '', dataNascimento: '', convenioId: '', empresaId: '', responsaveis: [], teste: false };
 
 export default function NovoPacienteModal({ convenios, empresas, erro, onSave, onClose }) {
   const [formCriar, setFormCriar] = useState(FORM_CRIAR_INICIAL);
@@ -131,6 +132,8 @@ export default function NovoPacienteModal({ convenios, empresas, erro, onSave, o
               )}
             </div>
           )}
+
+          <CampoPacienteTeste marcado={formCriar.teste} onChange={(valor) => handleChangeCriar('teste', valor)} />
         </ModalForm>
       )}
     </Modal>

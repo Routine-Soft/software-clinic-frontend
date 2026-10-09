@@ -14,6 +14,7 @@ import ProntuarioModal from './ProntuarioModal';
 import SemAcessoProntuario from './SemAcessoProntuario';
 import '@/modules/paciente/components/paciente.css';
 import '../prontuario.css';
+import SeloTeste from '@/modules/paciente/components/SeloTeste';
 
 const COLUNAS = 5;
 
@@ -169,6 +170,7 @@ function ListaDeProntuarios() {
                             <span className="pessoa__sub nowrap">
                               {formatDataBR(paciente.dataNascimento) ?? '—'}
                               {idade !== null && ` · ${idade} ${idade === 1 ? 'ano' : 'anos'}`}
+                              {' '}<SeloTeste paciente={paciente} />
                             </span>
                           </div>
                         </div>

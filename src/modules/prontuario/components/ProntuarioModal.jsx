@@ -5,6 +5,7 @@ import ResumoAgendamento from './ResumoAgendamento';
 import SemAcessoProntuario from './SemAcessoProntuario';
 import { contatoDoPaciente } from '@/modules/paciente/paciente.utils';
 import { useAcessoProntuario } from '../prontuario.hooks';
+import SeloTeste from '@/modules/paciente/components/SeloTeste';
 
 // Prontuário em janela: usado pela Agenda (ao clicar num agendamento) e pela lista de prontuários.
 // O clique fora não fecha, porque o atendimento em andamento pode ter anotações ainda não salvas.
@@ -47,7 +48,7 @@ export default function ProntuarioModal({
           <div className="pront-head">
             <div className="pront-head__avatar" aria-hidden="true">{iniciais(paciente.nome)}</div>
             <div className="pront-head__dados">
-              <h3 className="pront-head__nome">{paciente.nome}</h3>
+              <h3 className="pront-head__nome">{paciente.nome} <SeloTeste paciente={paciente} /></h3>
               <p className="pront-head__meta">{contatoDoPaciente(paciente).telefone && <span>{contatoDoPaciente(paciente).telefone}</span>}</p>
             </div>
           </div>

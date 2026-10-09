@@ -12,6 +12,7 @@ import ResumoAgendamento from './ResumoAgendamento';
 import { EscolhaEspecialidades } from './AcessoAtendimento';
 import { contatoDoPaciente, rotuloDoResponsavel } from '@/modules/paciente/paciente.utils';
 import '../prontuario.css';
+import SeloTeste from '@/modules/paciente/components/SeloTeste';
 
 const ABAS = [
   ['atendimento', 'Atendimento'],
@@ -109,6 +110,7 @@ export default function ProntuarioPaciente({ paciente, profissional, agendamento
             </p>
           )}
           <div className="pront-head__selos">
+            <SeloTeste paciente={paciente} />
             <span className={`badge${paciente.convenioId?.nome ? ' badge--info' : ''}`}>{paciente.convenioId?.nome ?? 'Sem convênio'}</span>
             {paciente.empresaId?.razaoSocial && <span className="badge badge--primary">{paciente.empresaId.razaoSocial}</span>}
             <span className="badge">Primeira consulta: {formatDataInstanteBR(primeiraConsulta) ?? 'nenhuma ainda'}</span>

@@ -153,3 +153,22 @@
   font-size: 0.8rem;
   color: var(--text-muted);
 }
+
+.paciente-teste {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 12px;
+  align-items: center;
+}
+
+.paciente-teste .check:has(input:checked) {
+  color: var(--warning);
+  background: var(--warning-soft);
+  border-color: var(--warning);
+}
+
+.paciente-teste__dica {
+  flex: 1 1 220px;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}

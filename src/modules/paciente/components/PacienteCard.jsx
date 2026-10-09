@@ -8,6 +8,7 @@ import { Icone, IconeMais, IconeBusca, IconeLapis, IconeLixeira, IconeCheck, Ico
 import EditarPacienteModal from './EditarPacienteModal';
 import NovoPacienteModal from './NovoPacienteModal';
 import '@/components/CrudCard/CrudCard.css';
+import SeloTeste from './SeloTeste';
 
 const IconePacientes = () => (
   <Icone>
@@ -126,6 +127,7 @@ export default function PacienteCard({ className = '' }) {
                   {paciente.convenioId?.nome
                     ? <span className="badge badge--info">{paciente.convenioId.nome}</span>
                     : <span className="badge">Sem convênio</span>}
+                  <SeloTeste paciente={paciente} />
                   {paciente.empresaId?.razaoSocial && <span className="badge badge--primary">{paciente.empresaId.razaoSocial}</span>}
                 </span>
                 <span className="crud-item__sub" title={contatoDoPaciente(paciente).email}>{contatoDoPaciente(paciente).email}</span>
@@ -136,7 +138,7 @@ export default function PacienteCard({ className = '' }) {
 
               {confirmandoId === paciente._id ? (
                 <div className="crud-item__confirmar">
-                  <span>Excluir?</span>
+                  <span>{paciente.teste ? 'Excluir com tudo?' : 'Excluir?'}</span>
                   <button type="button" className="icon-btn icon-btn--danger" aria-label={`Confirmar exclusão de ${paciente.nome}`} onClick={() => handleDelete(paciente._id)}>
                     <IconeCheck />
                   </button>

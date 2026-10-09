@@ -10,6 +10,7 @@ import EditarPacienteModal from './EditarPacienteModal';
 import NovoPacienteModal from './NovoPacienteModal';
 import { IconeMais } from '@/components/CrudCard/icones';
 import './paciente.css';
+import SeloTeste from './SeloTeste';
 
 const COLUNAS = 5;
 
@@ -139,7 +140,7 @@ export default function PacienteADM() {
                           <div className="pessoa__avatar" aria-hidden="true">{iniciais(paciente.nome)}</div>
                           <div className="pessoa__dados">
                             <strong className="pessoa__nome">{paciente.nome}</strong>
-                            <span className="pessoa__sub nowrap">CPF {paciente.cpf}</span>
+                            <span className="pessoa__sub nowrap">CPF {paciente.cpf} <SeloTeste paciente={paciente} /></span>
                             {responsaveis.length > 0 && (
                               <span className="pessoa__resp">Resp.: {responsaveis.map(rotuloDoResponsavel).join(', ')}</span>
                             )}
@@ -173,7 +174,7 @@ export default function PacienteADM() {
                       <td>
                         {confirmandoId === paciente._id ? (
                           <div className="paciente-confirmar">
-                            <span>Excluir?</span>
+                            <span>{paciente.teste ? 'Excluir com tudo?' : 'Excluir?'}</span>
                             <button type="button" className="icon-btn icon-btn--danger" aria-label={`Confirmar exclusão de ${paciente.nome}`} onClick={() => handleDelete(paciente._id)}>
                               <IconeCheck />
                             </button>

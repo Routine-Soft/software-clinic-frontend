@@ -115,7 +115,7 @@ export default function AgendaGradeTempo({ dias, porDia, corDe, hoje, agora, det
                         }}
                         onClick={() => onAbrir(agenda)}
                       >
-                        <span className="agenda-ev__nome">{agenda.pacienteId?.nome ?? 'Paciente'}</span>
+                        <span className="agenda-ev__nome">{agenda.pacienteId?.nome ?? 'Paciente'}{agenda.pacienteId?.teste && ' (teste)'}</span>
                         {agenda.profissionalId?.nome && <span className="agenda-ev__prof">{agenda.profissionalId.nome}</span>}
                         <span className="agenda-ev__hora">{agenda.horaInicio} – {agenda.horaFim}</span>
                         {(detalhado || altura >= 70) && (

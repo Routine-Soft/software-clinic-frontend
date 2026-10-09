@@ -5,6 +5,7 @@ import { iniciais } from '@/utils/nome';
 import { IconeBusca, IconeX } from '@/components/CrudCard/icones';
 import '@/components/CrudCard/CrudCard.css';
 import './paciente-picker.css';
+import SeloTeste from './SeloTeste';
 
 // Escolhe um paciente por busca (nome, CPF, telefone) ou cadastra um novo na hora.
 // `onCriarPaciente` deve devolver o paciente criado (ou lançar erro).
@@ -45,6 +46,7 @@ export default function PacientePicker({ pacientes, convenios, empresas, valor, 
         <div className="picker__paciente">
           <span className="picker__paciente-avatar" aria-hidden="true">{iniciais(valor.nome)}</span>
           <span className="picker__paciente-nome">{valor.nome}</span>
+          <SeloTeste paciente={valor} />
           <span className="picker__paciente-cpf">{valor.cpf}</span>
           <button type="button" className="icon-btn" aria-label="Trocar paciente" onClick={() => onChange(null)}>
             <IconeX />
@@ -70,7 +72,7 @@ export default function PacientePicker({ pacientes, convenios, empresas, valor, 
               {sugestoes.map((p) => (
                 <li key={p._id}>
                   <button type="button" onClick={() => selecionar(p)}>
-                    <strong>{p.nome}</strong>
+                    <strong>{p.nome}{p.teste && ' (teste)'}</strong>
                     <span>{p.cpf}</span>
                   </button>
                 </li>

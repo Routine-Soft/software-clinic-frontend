@@ -3,6 +3,7 @@ import RegistroClinica from './modules/user/components/RegistroClinica';
 import UsuariosClinicaADM from './modules/user/components/UsuariosClinicaADM';
 import MinhaConta from './modules/user/components/MinhaConta';
 import Home from './pages/Home/Home';
+import Landing from './pages/Landing/Landing';
 import PacienteADM from './modules/paciente/components/PacienteADM';
 import ProfissionalADM from './modules/profissional/components/ProfissionalADM';
 import SalaADM from './modules/sala/components/SalaADM';
@@ -387,8 +388,8 @@ function App() {
           <Route path="/comissoes" element={<Navigate to="/repasses" replace />} />
           <Route path="/minhas-comissoes" element={<Navigate to="/meus-repasses" replace />} />
 
-          <Route path="/" element={<Navigate to="/login" replace />} />
-          <Route path="*" element={<Navigate to="/login" replace />} />
+          <Route path="/" element={<Landing />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </AuthProvider>
     </Router>

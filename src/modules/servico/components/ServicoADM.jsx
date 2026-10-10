@@ -177,6 +177,7 @@ export default function ServicoADM({ className = '' }) {
         <EditarServicoModal
           key={servicoEditando._id}
           servico={servicoEditando}
+          servicos={servicos}
           convenios={convenios}
           erro={error}
           onSave={handleSalvarEdicao}
@@ -187,6 +188,7 @@ export default function ServicoADM({ className = '' }) {
       {criandoServico && (
         <NovoServicoModal
           convenios={convenios}
+          servicos={servicos}
           erro={error}
           onSave={handleSalvarCriacao}
           onClose={() => setCriandoServico(false)}

@@ -75,14 +75,13 @@ export default function EditarPacienteModal({ paciente, convenios, empresas, err
 
           <div className="modal-form__row">
             <div className="field">
-              <label className="field__label" htmlFor="editar-paciente-cpf">CPF</label>
+              <label className="field__label" htmlFor="editar-paciente-cpf">CPF (opcional)</label>
               <input
                 id="editar-paciente-cpf"
                 className="input"
                 type="text"
                 value={formEdicao.cpf}
                 onChange={(e) => handleChangeEdicao('cpf', e.target.value)}
-                required
               />
             </div>
 

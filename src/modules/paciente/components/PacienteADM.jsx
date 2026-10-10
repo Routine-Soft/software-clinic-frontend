@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react';
 import { usePacientes } from '../paciente.hooks';
 import { useConvenios } from '@/modules/convenio/convenio.hooks';
 import { useEmpresas } from '@/modules/empresa/empresa.hooks';
-import { filtrarPacientes, ordenarPacientes, contatoDoPaciente, rotuloDoResponsavel } from '../paciente.utils';
+import { filtrarPacientes, ordenarPacientes, contatoDoPaciente, rotuloDoResponsavel, cpfDoPaciente } from '../paciente.utils';
 import { formatDataBR, calcularIdade } from '@/utils/date';
 import { iniciais } from '@/utils/nome';
 import { IconeBusca, IconeLapis, IconeLixeira, IconeCheck, IconeX } from '@/components/CrudCard/icones';
@@ -140,7 +140,7 @@ export default function PacienteADM() {
                           <div className="pessoa__avatar" aria-hidden="true">{iniciais(paciente.nome)}</div>
                           <div className="pessoa__dados">
                             <strong className="pessoa__nome">{paciente.nome}</strong>
-                            <span className="pessoa__sub nowrap">CPF {paciente.cpf} <SeloTeste paciente={paciente} /></span>
+                            <span className="pessoa__sub nowrap">{cpfDoPaciente(paciente)} <SeloTeste paciente={paciente} /></span>
                             {responsaveis.length > 0 && (
                               <span className="pessoa__resp">Resp.: {responsaveis.map(rotuloDoResponsavel).join(', ')}</span>
                             )}

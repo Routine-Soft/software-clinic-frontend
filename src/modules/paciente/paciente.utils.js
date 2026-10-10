@@ -23,7 +23,7 @@ export function filtrarPacientes(pacientes, termo) {
     return normalizar(paciente.nome).includes(busca) ||
       normalizar(paciente.email).includes(busca) ||
       responsaveis.some((r) => normalizar(r.nome).includes(busca)) ||
-      (buscaDigitos !== '' && [paciente.cpf, paciente.telefone, ...responsaveis.map((r) => r.telefone)].some((valor) => apenasDigitos(valor).includes(buscaDigitos)));
+      (buscaDigitos !== '' && [paciente.cpf, paciente.telefone, ...responsaveis.flatMap((r) => [r.telefone, r.cpf])].some((valor) => apenasDigitos(valor).includes(buscaDigitos)));
   });
 }
 
@@ -50,4 +50,11 @@ export function contatoDoPaciente(paciente) {
     telefone: paciente.telefone || responsaveis.find((r) => r.telefone)?.telefone || '',
     email: paciente.email || responsaveis.find((r) => r.email)?.email || '',
   };
+}
+
+// CPF para mostrar nas listas: o do paciente ou, se ele não tiver (criança), o do primeiro responsável que tiver.
+export function cpfDoPaciente(paciente) {
+  if (paciente.cpf) return `CPF ${paciente.cpf}`;
+  const doResponsavel = (paciente.responsaveis ?? []).find((r) => r.cpf)?.cpf;
+  return doResponsavel ? `CPF do responsável ${doResponsavel}` : 'Sem CPF';
 }

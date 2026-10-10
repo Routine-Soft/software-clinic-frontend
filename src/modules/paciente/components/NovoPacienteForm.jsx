@@ -71,14 +71,13 @@ export default function NovoPacienteForm({ convenios, empresas, onSubmit }) {
       </div>
 
       <div className="field">
-        <label className="field__label" htmlFor={`${ids}-cpf`}>CPF</label>
+        <label className="field__label" htmlFor={`${ids}-cpf`}>CPF (opcional)</label>
         <input
           id={`${ids}-cpf`}
           className="input"
           type="text"
           value={formCriar.cpf}
           onChange={(e) => handleChangeCriar('cpf', e.target.value)}
-          required
         />
       </div>
 

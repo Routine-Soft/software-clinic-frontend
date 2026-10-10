@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import NovoPacienteForm from './NovoPacienteForm';
-import { filtrarPacientes, ordenarPacientes } from '../paciente.utils';
+import { filtrarPacientes, ordenarPacientes, cpfDoPaciente } from '../paciente.utils';
 import { iniciais } from '@/utils/nome';
 import { IconeBusca, IconeX } from '@/components/CrudCard/icones';
 import '@/components/CrudCard/CrudCard.css';
@@ -47,7 +47,7 @@ export default function PacientePicker({ pacientes, convenios, empresas, valor, 
           <span className="picker__paciente-avatar" aria-hidden="true">{iniciais(valor.nome)}</span>
           <span className="picker__paciente-nome">{valor.nome}</span>
           <SeloTeste paciente={valor} />
-          <span className="picker__paciente-cpf">{valor.cpf}</span>
+          <span className="picker__paciente-cpf">{cpfDoPaciente(valor)}</span>
           <button type="button" className="icon-btn" aria-label="Trocar paciente" onClick={() => onChange(null)}>
             <IconeX />
           </button>
@@ -73,7 +73,7 @@ export default function PacientePicker({ pacientes, convenios, empresas, valor, 
                 <li key={p._id}>
                   <button type="button" onClick={() => selecionar(p)}>
                     <strong>{p.nome}{p.teste && ' (teste)'}</strong>
-                    <span>{p.cpf}</span>
+                    <span>{cpfDoPaciente(p)}</span>
                   </button>
                 </li>
               ))}

@@ -69,14 +69,13 @@ export default function NovoPacienteModal({ convenios, empresas, erro, onSave, o
 
           <div className="modal-form__row">
             <div className="field">
-              <label className="field__label" htmlFor="novo-paciente-cpf">CPF</label>
+              <label className="field__label" htmlFor="novo-paciente-cpf">CPF (opcional)</label>
               <input
                 id="novo-paciente-cpf"
                 className="input"
                 type="text"
                 value={formCriar.cpf}
                 onChange={(e) => handleChangeCriar('cpf', e.target.value)}
-                required
               />
             </div>
 

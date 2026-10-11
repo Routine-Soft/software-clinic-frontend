@@ -2,7 +2,7 @@ import { useState } from 'react';
 import Modal from '@/components/Modal/Modal';
 import ModalForm from '@/components/Modal/ModalForm';
 
-const FORM_CRIAR_INICIAL = { nome: '', tipo: 'gratis', preco: '', duracaoDiasTrial: '' };
+const FORM_CRIAR_INICIAL = { nome: '', tipo: 'gratis', preco: '', duracaoDiasTrial: '', individual: false };
 
 export default function NovoPlanoModal({ erro, onSave, onClose }) {
   const [formCriar, setFormCriar] = useState(FORM_CRIAR_INICIAL);
@@ -17,6 +17,7 @@ export default function NovoPlanoModal({ erro, onSave, onClose }) {
       tipo: formCriar.tipo,
       preco: Number(formCriar.preco) || 0,
       duracaoDiasTrial: formCriar.tipo === 'gratis' ? Number(formCriar.duracaoDiasTrial) || null : null,
+      individual: formCriar.tipo === 'pago' && formCriar.individual,
     };
   }
 
@@ -77,6 +78,17 @@ export default function NovoPlanoModal({ erro, onSave, onClose }) {
               />
             </div>
           </div>
+
+          {formCriar.tipo === 'pago' && (
+            <label className="check">
+              <input
+                type="checkbox"
+                checked={formCriar.individual}
+                onChange={(e) => handleChangeCriar('individual', e.target.checked)}
+              />
+              <span>Individual: só o dono da conta usa o sistema (um profissional, sem recepção)</span>
+            </label>
+          )}
         </ModalForm>
       )}
     </Modal>

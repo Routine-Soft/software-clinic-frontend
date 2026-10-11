@@ -8,6 +8,7 @@ export default function EditarPlanoModal({ plano, erro, onSave, onClose }) {
     tipo: plano.tipo,
     preco: plano.preco,
     duracaoDiasTrial: plano.duracaoDiasTrial ?? '',
+    individual: plano.individual === true,
   });
 
   function handleChangeEdicao(field, value) {
@@ -20,6 +21,7 @@ export default function EditarPlanoModal({ plano, erro, onSave, onClose }) {
       tipo: formEdicao.tipo,
       preco: Number(formEdicao.preco) || 0,
       duracaoDiasTrial: formEdicao.tipo === 'gratis' ? Number(formEdicao.duracaoDiasTrial) || null : null,
+      individual: formEdicao.tipo === 'pago' && formEdicao.individual,
     };
   }
 
@@ -80,6 +82,17 @@ export default function EditarPlanoModal({ plano, erro, onSave, onClose }) {
               />
             </div>
           </div>
+
+          {formEdicao.tipo === 'pago' && (
+            <label className="check">
+              <input
+                type="checkbox"
+                checked={formEdicao.individual}
+                onChange={(e) => handleChangeEdicao('individual', e.target.checked)}
+              />
+              <span>Individual: só o dono da conta usa o sistema (um profissional, sem recepção)</span>
+            </label>
+          )}
         </ModalForm>
       )}
     </Modal>

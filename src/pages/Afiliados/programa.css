@@ -50,6 +50,17 @@
   color: var(--text-muted);
 }
 
+.programa__simulador-plano {
+  display: grid;
+  gap: 4px;
+}
+
+.programa__simulador label small {
+  display: block;
+  font-size: 0.8rem;
+  color: var(--text-subtle);
+}
+
 .programa__simulador input[type='range'] {
   width: 100%;
   accent-color: var(--primary);

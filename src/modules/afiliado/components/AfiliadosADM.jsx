@@ -215,7 +215,7 @@ export default function AfiliadosADM() {
       </section>
 
       <p className="afiliado-termos">
-        Cada clínica que pagar a primeira mensalidade gera uma comissão, liberada no 8º dia (depois do prazo de desistência do cliente).
+        Cada clínica que pagar a primeira mensalidade gera uma comissão de 50% do valor do plano, liberada no 8º dia (depois do prazo de desistência do cliente).
         Mande o Pix e depois clique em &quot;Marcar como pago&quot;. Se o pagamento da clínica for devolvido antes disso, a comissão é cancelada sozinha.
         Excluir apaga as comissões do afiliado (inclusive as não pagas). Quem tem conta só de afiliado é apagado do banco;
         quem trabalha numa clínica que usa a Sonelia só sai do programa e continua com o acesso da clínica.

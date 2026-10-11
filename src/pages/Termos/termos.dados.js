@@ -25,6 +25,7 @@ export const TERMOS_CLINICA = {
     ['3. Teste grátis, planos e pagamento', [
       'A conta começa com um período de teste grátis, sem cartão de crédito. Depois dele, o acesso continua apenas com um plano pago, no Pix ou no cartão de crédito, pelo Mercado Pago.',
       'No cartão, a assinatura renova sozinha todo mês até ser cancelada. No Pix, cada pagamento libera um período de acesso e não há renovação automática.',
+      'O plano Individual é para quem atende sozinho: só o titular da conta usa o sistema, como o único profissional, sem recepção nem outros usuários. Para ter equipe, é preciso um plano com equipe, como o Pro.',
       'Os preços dos planos podem mudar. Uma mudança de preço não afeta o período já pago e será avisada com antecedência.',
     ]],
     ['4. Desistência e cancelamento', [
@@ -69,7 +70,7 @@ export const TERMOS_AFILIADO = {
       'Cada clínica gera uma única comissão, mesmo que continue pagando nos meses seguintes.',
     ]],
     ['3. Valor da comissão e prazo', [
-      'A comissão é de R$ 100,00 por clínica que pagar a primeira mensalidade.',
+      'A comissão é de 50% do valor da primeira mensalidade do plano assinado pela clínica indicada (por exemplo: R$ 50,00 no plano Individual, de R$ 100,00, e R$ 100,00 no plano Pro, de R$ 200,00). Descontos de indicação que a clínica tiver não diminuem a comissão.',
       'O cliente tem 7 dias, pelo Código de Defesa do Consumidor, para desistir e receber o dinheiro de volta. Por isso, a comissão fica em carência e só pode ser paga a partir do 8º dia depois do pagamento da clínica.',
       'Se o pagamento da clínica for devolvido ou contestado antes de a comissão ser paga, ela é cancelada. Ela volta a valer se a clínica pagar de novo.',
     ]],

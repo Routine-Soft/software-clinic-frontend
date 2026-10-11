@@ -11,7 +11,8 @@ import './afiliado.css';
 
 export default function PainelAfiliado() {
   const { painel, loading, error } = usePainelAfiliado();
-  const comissao = formatarReais(painel?.comissaoPorClinica ?? 100);
+  const percentual = painel?.comissaoPercentual ?? 50;
+  const porPlano = painel?.comissoesPorPlano ?? [];
   const carencia = painel?.diasDeCarencia ?? 7;
 
   const totais = [
@@ -25,7 +26,7 @@ export default function PainelAfiliado() {
       <header className="page-header">
         <div>
           <h2 className="page-title">Painel do afiliado</h2>
-          <p className="page-subtitle">{comissao} por clínica que assinar pelo seu link</p>
+          <p className="page-subtitle">{percentual}% da primeira mensalidade de cada clínica que assinar pelo seu link</p>
         </div>
       </header>
 
@@ -63,6 +64,10 @@ export default function PainelAfiliado() {
           <h3>Como você recebe</h3>
           <ol className="afiliado-regras">
             <li>A clínica cria a conta pelo seu link e paga a primeira mensalidade.</li>
+            <li>
+              Você ganha {percentual}% dessa mensalidade
+              {porPlano.length > 0 && `: ${porPlano.map((p) => `${formatarReais(p.comissao)} no plano ${p.plano}`).join(' e ')}`}.
+            </li>
             <li>A comissão fica {carencia} dias em carência, o prazo em que o cliente pode desistir e pedir o dinheiro de volta.</li>
             <li>A partir do {carencia + 1}º dia, ela fica liberada e é paga por Pix, uma vez por mês.</li>
           </ol>

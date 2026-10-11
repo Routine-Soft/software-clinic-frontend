@@ -71,6 +71,9 @@ function BeneficiosDoPlano({ plano }) {
       ]
     : [
         'Acesso completo ao sistema',
+        plano.individual
+          ? 'Para quem atende sozinho: só você usa o sistema, sem recepção'
+          : 'Profissionais, recepção e usuários sem limite',
         'No cartão, renova sozinho todo mês',
         'No Pix, cada pagamento vale 30 dias',
         'Cancele quando quiser, sem multa',

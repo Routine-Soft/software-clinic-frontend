@@ -194,17 +194,24 @@ export const SEGURANCA = [
   'Conexão criptografada (HTTPS) e login com senha ou Google',
 ];
 
+export const PLANO_INDIVIDUAL = [
+  'Todas as funcionalidades incluídas',
+  'Para quem atende sozinho: só você usa o sistema',
+  'Pacientes sem limite',
+  'Pague no Pix ou no cartão',
+];
+
 export const PLANO_PRO = [
   'Todas as funcionalidades incluídas',
-  'Profissionais, pacientes e usuários sem limite',
+  'Profissionais, recepção, pacientes e usuários sem limite',
   'Pague no Pix ou no cartão',
   'No cartão, renova sozinho e você cancela quando quiser',
 ];
 
 export const DUVIDAS = [
   ['Preciso instalar alguma coisa?', 'Não. A Sonelia funciona no navegador do computador, do tablet e do celular. Se quiser, dá para instalar como aplicativo, com ícone na área de trabalho ou na tela inicial.'],
-  ['Como funciona o teste grátis?', 'Você usa tudo liberado por 7 dias, sem cadastrar cartão. Depois, é só assinar o plano Pro no Pix ou no cartão para continuar.'],
-  ['Quantos profissionais posso cadastrar?', 'No plano Pro não há limite de profissionais, pacientes nem usuários.'],
+  ['Como funciona o teste grátis?', 'Você usa tudo liberado por 7 dias, sem cadastrar cartão. Depois, é só assinar o plano Individual ou o Pro, no Pix ou no cartão, para continuar.'],
+  ['Quantos profissionais posso cadastrar?', 'No plano Pro não há limite de profissionais, pacientes nem usuários. O plano Individual é para quem atende sozinho: só você usa o sistema, sem recepção nem outros profissionais.'],
   ['A recepção consegue ler o prontuário?', 'Não. A recepção vê a agenda e os dados de cadastro, mas o conteúdo clínico fica restrito aos profissionais autorizados.'],
   ['O sistema atende convênios?', 'Sim. Você cadastra os convênios e define, em cada serviço, o preço e o repasse do profissional para cada um deles.'],
   ['Posso cancelar quando quiser?', 'Sim. No cartão, você cancela a renovação a qualquer momento e o acesso continua até o fim do período pago. O Pix não renova sozinho.'],

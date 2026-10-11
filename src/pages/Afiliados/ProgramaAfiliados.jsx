@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import CabecalhoSite from '@/pages/Landing/CabecalhoSite';
 import CadastroAfiliado from '@/modules/afiliado/components/CadastroAfiliado';
 import { formatarReais } from '@/modules/indicacao/indicacao.utils';
-import { COMISSAO, PASSOS, PUBLICO, REGRAS, DUVIDAS } from './programa.dados';
+import { COMISSAO_PERCENTUAL, PLANOS, PASSOS, PUBLICO, REGRAS, DUVIDAS } from './programa.dados';
 import '@/pages/Landing/landing.css';
 import './programa.css';
 
@@ -21,7 +21,9 @@ function irParaCadastro() {
 
 // Página pública do programa de afiliados: explica as regras, simula o ganho e termina no cadastro.
 export default function ProgramaAfiliados() {
-  const [clinicas, setClinicas] = useState(10);
+  const [clinicas, setClinicas] = useState(() => Object.fromEntries(PLANOS.map((p, i) => [p.nome, i === 0 ? 10 : 5])));
+  const total = PLANOS.reduce((soma, p) => soma + clinicas[p.nome] * p.comissao, 0);
+  const exemplos = PLANOS.map((p) => `${formatarReais(p.comissao)} no plano ${p.nome}`).join(' e ');
 
   return (
     <div className="lp programa">
@@ -36,9 +38,9 @@ export default function ProgramaAfiliados() {
         <section className="lp-container programa__hero">
           <div className="programa__hero-texto">
             <span className="lp-selo">Programa de afiliados</span>
-            <h1>Ganhe <span className="lp-degrade">{formatarReais(COMISSAO)}</span> por cada clínica que você indicar</h1>
+            <h1>Ganhe <span className="lp-degrade">{COMISSAO_PERCENTUAL}%</span> da primeira mensalidade de cada clínica que você indicar</h1>
             <p className="lp-paragrafo">
-              Indique a Sonelia para clínicas e consultórios. Quando a clínica assina e paga a primeira mensalidade, você recebe {formatarReais(COMISSAO)} por Pix. Sem limite de indicações.
+              Indique a Sonelia para clínicas e consultórios. Quando a clínica assina e paga a primeira mensalidade, você recebe {COMISSAO_PERCENTUAL}% dela por Pix: {exemplos}. Sem limite de indicações.
             </p>
             <div className="programa__hero-acoes">
               <button type="button" className="btn btn--primary lp-btn-grande" onClick={irParaCadastro}>Quero ser afiliado</button>
@@ -48,9 +50,23 @@ export default function ProgramaAfiliados() {
 
           <div className="card programa__simulador">
             <span className="programa__simulador-titulo">Simule o seu ganho</span>
-            <label htmlFor="programa-clinicas">Clínicas indicadas que assinaram: <strong>{clinicas}</strong></label>
-            <input id="programa-clinicas" type="range" min="1" max="50" value={clinicas} onChange={(e) => setClinicas(Number(e.target.value))} />
-            <strong className="programa__simulador-valor">{formatarReais(clinicas * COMISSAO)}</strong>
+            {PLANOS.map((p) => (
+              <div key={p.nome} className="programa__simulador-plano">
+                <label htmlFor={`programa-clinicas-${p.nome}`}>
+                  Clínicas no plano {p.nome}: <strong>{clinicas[p.nome]}</strong>
+                  <small>{formatarReais(p.comissao)} cada</small>
+                </label>
+                <input
+                  id={`programa-clinicas-${p.nome}`}
+                  type="range"
+                  min="0"
+                  max="50"
+                  value={clinicas[p.nome]}
+                  onChange={(e) => setClinicas({ ...clinicas, [p.nome]: Number(e.target.value) })}
+                />
+              </div>
+            ))}
+            <strong className="programa__simulador-valor">{formatarReais(total)}</strong>
             <span className="programa__simulador-legenda">em comissões, pagas por Pix</span>
           </div>
         </section>

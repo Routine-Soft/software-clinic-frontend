@@ -9,7 +9,7 @@ import './indicacao.css';
 const PASSOS = [
   ['Envie o seu link', 'Mande para outras clínicas pelo WhatsApp, ou passe o seu código para digitarem no cadastro.'],
   ['A clínica testa e assina', 'Ela cria a conta pelo seu link, usa o teste grátis e paga a primeira mensalidade.'],
-  ['Você ganha o desconto', 'Os R$ 100 entram na sua próxima mensalidade. Os descontos se somam: com duas clínicas, a mensalidade sai de graça.'],
+  ['Você ganha o desconto', 'Os R$ 100 entram na sua próxima mensalidade. Os descontos se somam e podem cobrir a mensalidade inteira.'],
 ];
 
 function dataBR(data) {

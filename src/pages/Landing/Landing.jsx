@@ -10,6 +10,7 @@ import {
   FUNCIONALIDADES,
   PASSOS,
   PERFIS,
+  PLANO_INDIVIDUAL,
   PLANO_PRO,
   SECOES,
   SEGURANCA,
@@ -176,7 +177,7 @@ function Funcionalidades() {
         <header className="lp-secao__cab">
           <span className="lp-selo">Tudo incluído</span>
           <h2>Tudo o que a sua clínica precisa, sem pagar à parte</h2>
-          <p>Todas as funcionalidades fazem parte do mesmo plano.</p>
+          <p>Todas as funcionalidades estão em todos os planos.</p>
         </header>
 
         <ul className="lp-recursos">
@@ -313,7 +314,7 @@ function Precos({ logado }) {
       <div className="lp-container">
         <header className="lp-secao__cab">
           <span className="lp-selo">Preços</span>
-          <h2>Um plano só, com tudo incluído</h2>
+          <h2>Planos com tudo incluído</h2>
           <p>Teste à vontade antes de decidir.</p>
         </header>
 
@@ -329,7 +330,18 @@ function Precos({ logado }) {
             {!logado && <Link to="/registro" className="btn btn--ghost btn--block">Começar teste grátis</Link>}
           </article>
 
-          <article className="lp-plano lp-plano--pro lp-revelar" style={{ '--i': 1 }}>
+          <article className="lp-plano lp-revelar" style={{ '--i': 1 }}>
+            <h3>Individual</h3>
+            <p className="lp-plano__preco"><span className="lp-degrade">R$ 100</span><small>/mês</small></p>
+            <ul className="lp-lista-check">
+              {PLANO_INDIVIDUAL.map((item) => <li key={item}><IconeCheck /> {item}</li>)}
+            </ul>
+            <Link to={logado ? '/assinaturas' : '/registro'} className="btn btn--ghost btn--block">
+              {logado ? 'Ver minha assinatura' : 'Criar conta e assinar'}
+            </Link>
+          </article>
+
+          <article className="lp-plano lp-plano--pro lp-revelar" style={{ '--i': 2 }}>
             <span className="lp-plano__selo">Mais escolhido</span>
             <h3>Pro</h3>
             <p className="lp-plano__preco"><span className="lp-degrade">R$ 200</span><small>/mês</small></p>

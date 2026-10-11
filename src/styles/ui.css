@@ -358,7 +358,7 @@ select.input {
 }
 
 .btn--primary:hover:not(:disabled) {
-  box-shadow: 0 12px 28px -6px light-dark(rgba(15, 118, 110, 0.65), rgba(45, 212, 191, 0.5));
+  box-shadow: var(--shadow-primary-hover);
 }
 
 .btn--primary::after {
@@ -522,6 +522,11 @@ select.input {
 .badge--recepcao {
   --badge-fg: var(--violet);
   --badge-bg: var(--violet-soft);
+}
+
+.badge--afiliado {
+  --badge-fg: var(--warning);
+  --badge-bg: var(--warning-soft);
 }
 
 .badge--success {

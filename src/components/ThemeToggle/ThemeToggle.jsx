@@ -13,6 +13,11 @@ const OPTIONS = [
         ),
     },
     {
+        value: 'rosa',
+        label: 'Tema rosa',
+        icon: <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />,
+    },
+    {
         value: 'dark',
         label: 'Tema escuro',
         icon: <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />,
@@ -31,15 +36,13 @@ const OPTIONS = [
 
 export function ThemeToggle() {
     const { theme, setTheme } = useTheme()
-    const activeIndex = OPTIONS.findIndex((option) => option.value === theme)
-
     return (
-        <div className="theme-toggle" role="radiogroup" aria-label="Tema da interface" style={{ '--idx': activeIndex }}>
-            <span className="theme-toggle__thumb" aria-hidden="true" />
+        <div className="theme-toggle" role="radiogroup" aria-label="Tema da interface">
             {OPTIONS.map((option) => (
                 <button
                     key={option.value}
                     type="button"
+                    data-tema={option.value}
                     role="radio"
                     aria-checked={theme === option.value}
                     aria-label={option.label}

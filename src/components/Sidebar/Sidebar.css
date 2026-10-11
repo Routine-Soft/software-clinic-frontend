@@ -45,20 +45,20 @@
   place-items: center;
   width: 38px;
   height: 38px;
-  color: var(--on-primary);
-  background: var(--gradient-primary);
+  color: #fff;
+  background: var(--gradient-marca);
   border-radius: 12px;
-  box-shadow: var(--shadow-primary);
+  box-shadow: var(--shadow-marca);
   transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .marca:hover .marca__selo {
-  transform: rotate(90deg) scale(1.06);
+  transform: rotate(-8deg) scale(1.06);
 }
 
 .marca__selo svg {
-  width: 20px;
-  height: 20px;
+  width: 34px;
+  height: 34px;
 }
 
 .marca__textos {
@@ -68,9 +68,11 @@
 }
 
 .marca__textos strong {
-  font-size: 1.05rem;
-  font-weight: 750;
-  letter-spacing: -0.02em;
+  font-family: var(--font-marca);
+  font-size: 1.3rem;
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 1.1;
 }
 
 .marca__textos span {

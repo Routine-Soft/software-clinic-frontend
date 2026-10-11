@@ -202,7 +202,7 @@ export const PLANO_PRO = [
 ];
 
 export const DUVIDAS = [
-  ['Preciso instalar alguma coisa?', 'Não. O SoftwareClinic funciona no navegador do computador, do tablet e do celular. Se quiser, dá para instalar como aplicativo, com ícone na área de trabalho ou na tela inicial.'],
+  ['Preciso instalar alguma coisa?', 'Não. A Sonelia funciona no navegador do computador, do tablet e do celular. Se quiser, dá para instalar como aplicativo, com ícone na área de trabalho ou na tela inicial.'],
   ['Como funciona o teste grátis?', 'Você usa tudo liberado por 3 dias, sem cadastrar cartão. Depois, é só assinar o plano Pro no Pix ou no cartão para continuar.'],
   ['Quantos profissionais posso cadastrar?', 'No plano Pro não há limite de profissionais, pacientes nem usuários.'],
   ['A recepção consegue ler o prontuário?', 'Não. A recepção vê a agenda e os dados de cadastro, mas o conteúdo clínico fica restrito aos profissionais autorizados.'],

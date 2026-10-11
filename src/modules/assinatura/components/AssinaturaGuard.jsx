@@ -42,7 +42,8 @@ export default function AssinaturaGuard({ children }) {
   const jaVerificou = useRef(false);
   const bloqueado = useRef(false);
 
-  const ehSuperAdmin = user?.role === 'super_admin';
+  // Super admin e afiliado não dependem da assinatura de uma clínica.
+  const ehSuperAdmin = user?.role === 'super_admin' || user?.role === 'afiliado';
 
   // Confere no primeiro acesso e, enquanto estiver bloqueado, a cada navegação (o cliente pode ter acabado de pagar).
   useEffect(() => {

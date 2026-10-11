@@ -4,7 +4,9 @@ import { createUser } from '../user.api';
 import { useAuthContext } from '@/hooks/useAuthContext';
 import AuthLayout from './AuthLayout';
 import BotaoGoogle from './BotaoGoogle';
+import CampoAceiteTermos from './CampoAceiteTermos';
 import { normalizarEmail } from '@/utils/email';
+import { codigoIndicacaoGuardado, esquecerCodigoIndicacao, normalizarCodigo } from '@/modules/indicacao/indicacao.utils';
 
 export default function RegistroClinica() {
   const navigate = useNavigate();
@@ -20,6 +22,8 @@ export default function RegistroClinica() {
     telefone: '',
     nomeEmpresa: '',
     cnpj: '',
+    codigoIndicacao: codigoIndicacaoGuardado(),
+    aceitouTermos: false,
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -56,11 +60,13 @@ export default function RegistroClinica() {
 
     try {
       if (google) {
-        const { nomeCompleto, telefone, nomeEmpresa, cnpj } = form;
-        await entrarComGoogle(google.credential, { nomeCompleto, telefone, nomeEmpresa, cnpj });
+        const { nomeCompleto, telefone, nomeEmpresa, cnpj, codigoIndicacao, aceitouTermos } = form;
+        await entrarComGoogle(google.credential, { nomeCompleto, telefone, nomeEmpresa, cnpj, codigoIndicacao, aceitouTermos });
+        esquecerCodigoIndicacao();
         navigate('/home');
       } else {
         await createUser(form);
+        esquecerCodigoIndicacao();
         navigate('/login');
       }
     } catch (err) {
@@ -174,6 +180,22 @@ export default function RegistroClinica() {
             </div>
           </>
         )}
+
+        <div className="field field--full">
+          <label className="field__label" htmlFor="registro-indicacao">Código de indicação (opcional)</label>
+          <input
+            id="registro-indicacao"
+            className="input"
+            type="text"
+            value={form.codigoIndicacao}
+            onChange={(e) => handleChange('codigoIndicacao', normalizarCodigo(e.target.value))}
+            placeholder="Se outra clínica indicou a Sonelia para você"
+            maxLength={12}
+            autoComplete="off"
+          />
+        </div>
+
+        <CampoAceiteTermos marcado={form.aceitouTermos} onChange={(valor) => handleChange('aceitouTermos', valor)} rota="/termos" nome="Termos de uso" />
 
         <button className={`btn btn--primary${loading ? ' btn--loading' : ''}`} type="submit" disabled={loading}>
           {loading ? 'Criando...' : 'Criar conta'}

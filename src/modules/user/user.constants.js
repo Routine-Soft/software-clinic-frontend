@@ -3,6 +3,7 @@ export const ROTULO_FUNCAO = {
   admin: 'Administrador',
   profissional: 'Profissional',
   recepcao: 'Recepção',
+  afiliado: 'Afiliado',
 };
 
 // A recepção administra os usuários da clínica, menos as contas de administrador (o backend também barra).

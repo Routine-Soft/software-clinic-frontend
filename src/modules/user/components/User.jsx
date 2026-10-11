@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 import { useAuthContext } from "@/hooks/useAuthContext";
 import AuthLayout from "./AuthLayout";
 import BotaoGoogle from "./BotaoGoogle";
@@ -8,6 +8,8 @@ import { normalizarEmail } from "@/utils/email";
 export default function User() {
   const { isAuthenticated, loading, error, login, entrarComGoogle } = useAuthContext();
   const navigate = useNavigate();
+  // Quem veio de outra página (ex.: "Seja afiliado") volta para ela depois de entrar.
+  const voltarPara = useLocation().state?.voltarPara ?? '/home';
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -15,15 +17,15 @@ export default function User() {
 
   useEffect(() => {
     if (isAuthenticated) {
-      navigate('/home');
+      navigate(voltarPara);
     }
-  }, [isAuthenticated, navigate]);
+  }, [isAuthenticated, navigate, voltarPara]);
 
   async function handleSubmit(e) {
     e.preventDefault();
     try {
       await login(email, password);
-      navigate('/home');
+      navigate(voltarPara);
     } catch (err) {
       console.error('Erro ao fazer login:', err);
     }
@@ -36,7 +38,7 @@ export default function User() {
       if (resultado.novoCadastro) {
         navigate('/registro', { state: { google: { credential, nomeCompleto: resultado.nomeCompleto, email: resultado.email } } });
       } else {
-        navigate('/home');
+        navigate(voltarPara);
       }
     } catch (err) {
       console.error('Erro ao entrar com o Google:', err);
@@ -89,7 +91,7 @@ export default function User() {
             </p>
             <p>
               <strong>Outro e-mail:</strong> peça ao administrador da clínica para redefinir sua senha. Se você é o
-              administrador, fale com o suporte do SoftwareClinic.
+              administrador, fale com o suporte da Sonelia.
             </p>
           </div>
         )}

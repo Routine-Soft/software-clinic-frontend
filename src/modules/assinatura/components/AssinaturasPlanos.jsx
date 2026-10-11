@@ -4,6 +4,7 @@ import { usePlanos } from '@/modules/plano/plano.hooks';
 import { useAssinatura } from '../assinatura.hooks';
 import { formatarData, formatarPreco, avisarAssinaturaAtualizada } from '../assinatura.utils';
 import PixModal from './PixModal';
+import AvisoDescontoIndicacao from '@/modules/indicacao/components/AvisoDescontoIndicacao';
 import './assinatura.css';
 import './assinaturas-planos.css';
 
@@ -162,6 +163,8 @@ export default function AssinaturasPlanos() {
           Há um pagamento no cartão aguardando confirmação. Para pagar por Pix, conclua ou desista dele primeiro.
         </p>
       )}
+
+      {podeCancelar && <AvisoDescontoIndicacao />}
 
       {erroAcao && <p className="alert alert--error" role="alert">{erroAcao.message}</p>}
 

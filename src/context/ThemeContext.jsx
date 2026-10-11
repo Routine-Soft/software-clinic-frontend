@@ -1,7 +1,7 @@
 import { createContext, useState, useEffect } from 'react'
 
 const STORAGE_KEY = 'theme-preference'
-const VALID_THEMES = ['light', 'dark', 'system']
+const VALID_THEMES = ['light', 'rosa', 'dark', 'system']
 
 function readStoredTheme() {
     try {

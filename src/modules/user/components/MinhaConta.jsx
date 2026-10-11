@@ -6,6 +6,7 @@ import AssinaturaStatus from '@/modules/assinatura/components/AssinaturaStatus';
 import EditarMinhaContaModal from './EditarMinhaContaModal';
 import AlterarSenhaModal from './AlterarSenhaModal';
 import { iniciais } from '@/utils/nome';
+import { formatarDocumento } from '@/utils/documento';
 import httpClient from '@/services/httpClient';
 import './user.css';
 import './minha-conta.css';
@@ -18,6 +19,9 @@ export default function MinhaConta() {
   const [alterandoSenha, setAlterandoSenha] = useState(false);
 
   const ehAdmin = hasRole('admin') || hasRole('super_admin');
+  // Afiliado pode ser conta só de afiliado ou alguém da clínica que ativou o programa.
+  const ehAfiliado = !!perfil?.afiliadoDesde;
+  const soAfiliado = perfil?.role === 'afiliado';
   const algumModalAberto = editandoDados || alterandoSenha;
   // Conta criada pelo Google começa sem senha: a primeira é criada sem pedir a atual.
   const temSenha = perfil?.temSenha !== false;
@@ -76,10 +80,24 @@ export default function MinhaConta() {
                 <dt>Membro desde</dt>
                 <dd>{new Date(perfil.createdAt).toLocaleDateString('pt-BR')}</dd>
               </div>
-              <div>
-                <dt>Clínica</dt>
-                <dd>{perfil.nomeEmpresa || '—'}</dd>
-              </div>
+              {!soAfiliado && (
+                <div>
+                  <dt>Clínica</dt>
+                  <dd>{perfil.nomeEmpresa || '—'}</dd>
+                </div>
+              )}
+              {ehAfiliado && (
+                <>
+                  <div>
+                    <dt>CPF ou CNPJ</dt>
+                    <dd>{perfil.documento ? formatarDocumento(perfil.documento) : '—'}</dd>
+                  </div>
+                  <div>
+                    <dt>Chave Pix</dt>
+                    <dd>{perfil.chavePix || '—'}</dd>
+                  </div>
+                </>
+              )}
               {ehAdmin && (
                 <div>
                   <dt>CNPJ</dt>
@@ -106,6 +124,7 @@ export default function MinhaConta() {
         <EditarMinhaContaModal
           perfil={perfil}
           ehAdmin={ehAdmin}
+          ehAfiliado={ehAfiliado}
           erro={error}
           onSave={salvarPerfil}
           onClose={() => setEditandoDados(false)}

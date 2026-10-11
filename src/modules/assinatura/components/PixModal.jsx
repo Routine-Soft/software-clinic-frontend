@@ -69,6 +69,12 @@ export default function PixModal({ plano, renovacao = false, onPago, onClose }) 
     setGerando(true);
     try {
       const { data } = await gerarPix(plano._id, documento);
+      // O crédito de indicação cobriu a mensalidade inteira: já está pago, não há QR Code.
+      if (data.status === 'aprovado') {
+        setPagamento(data);
+        await consultar();
+        return;
+      }
       setPagamento(data);
       setEncerrado(false);
       setCopiado(false);
@@ -146,6 +152,9 @@ export default function PixModal({ plano, renovacao = false, onPago, onClose }) 
               <p className="pix__valor">
                 <strong>{formatarPreco(pagamento.valor)}</strong>
                 <span>{plano.nome} · 30 dias</span>
+                {pagamento.descontoIndicacao > 0 && (
+                  <span className="pix__desconto">Com {formatarPreco(pagamento.descontoIndicacao)} de desconto por indicação</span>
+                )}
               </p>
 
               {pagamento.qrCodeBase64 && (
@@ -203,7 +212,7 @@ export default function PixModal({ plano, renovacao = false, onPago, onClose }) 
           {etapa === 'pago' && (
             <div className="pix pix--pago" role="status">
               <div className="pix__sucesso" aria-hidden="true"><IconeCheck /></div>
-              <h4>Pagamento confirmado!</h4>
+              <h4>{pagamento?.valor === 0 ? 'Pago com o seu desconto de indicação!' : 'Pagamento confirmado!'}</h4>
               <p>
                 Seu acesso está liberado{acessoAte ? <> até <strong>{formatarData(acessoAte)}</strong></> : ''}. Lembre-se de renovar antes do vencimento.
               </p>

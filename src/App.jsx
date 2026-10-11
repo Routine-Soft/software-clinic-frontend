@@ -16,6 +16,12 @@ import AvaliacaoNeuroPage from './modules/avaliacao-neuropsicologica/components/
 import ServicoADM from './modules/servico/components/ServicoADM';
 import AgendaCalendario from './modules/agenda/components/AgendaCalendario';
 import ReunioesCalendario from './modules/reuniao/components/ReunioesCalendario';
+import IndiqueGanhe from './modules/indicacao/components/IndiqueGanhe';
+import ProgramaAfiliados from './pages/Afiliados/ProgramaAfiliados';
+import PainelAfiliado from './modules/afiliado/components/PainelAfiliado';
+import AfiliadosADM from './modules/afiliado/components/AfiliadosADM';
+import TermosPagina from './pages/Termos/TermosPagina';
+import { TERMOS_CLINICA, TERMOS_AFILIADO } from './pages/Termos/termos.dados';
 import ProntuarioADM from './modules/prontuario/components/ProntuarioADM';
 import ProntuarioPacientePage from './modules/prontuario/components/ProntuarioPacientePage';
 import ProntuarioModalPreview from './modules/prontuario/components/ProntuarioModalPreview';
@@ -46,6 +52,31 @@ function App() {
         <Routes>
           <Route path="/login" element={<User />} />
           <Route path="/registro" element={<RegistroClinica />} />
+          <Route path="/afiliados" element={<ProgramaAfiliados />} />
+          <Route path="/termos" element={<TermosPagina termos={TERMOS_CLINICA} />} />
+          <Route path="/termos-afiliado" element={<TermosPagina termos={TERMOS_AFILIADO} />} />
+
+          <Route
+            path="/afiliado"
+            element={
+              <ProtectedRoute requiredRoles={['afiliado', 'admin', 'profissional', 'recepcao', 'super_admin']}>
+                <MainLayout>
+                  <PainelAfiliado />
+                </MainLayout>
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/afiliados-adm"
+            element={
+              <ProtectedRoute requiredRoles={['super_admin']}>
+                <MainLayout>
+                  <AfiliadosADM />
+                </MainLayout>
+              </ProtectedRoute>
+            }
+          />
 
           <Route
             path="/dashboard-admin"
@@ -308,7 +339,7 @@ function App() {
           <Route
             path="/minha-conta"
             element={
-              <ProtectedRoute requiredRoles={['admin', 'profissional', 'recepcao', 'super_admin']}>
+              <ProtectedRoute requiredRoles={['admin', 'profissional', 'recepcao', 'super_admin', 'afiliado']}>
                 <MainLayout>
                   <MinhaConta />
                 </MainLayout>
@@ -355,6 +386,17 @@ function App() {
               <ProtectedRoute requiredRoles={['admin', 'super_admin']}>
                 <MainLayout>
                   <AssinaturaRetorno />
+                </MainLayout>
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/indique"
+            element={
+              <ProtectedRoute requiredRoles={['admin', 'super_admin']}>
+                <MainLayout>
+                  <IndiqueGanhe />
                 </MainLayout>
               </ProtectedRoute>
             }

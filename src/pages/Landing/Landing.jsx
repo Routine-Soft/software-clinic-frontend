@@ -1,7 +1,6 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { useAuthContext } from '@/hooks/useAuthContext';
-import ThemeToggle from '@/components/ThemeToggle/ThemeToggle';
 import { Icone, IconeCheck, IconeX } from '@/components/CrudCard/icones';
 import { ICONES } from '@/components/Sidebar/menuIcones';
 import {
@@ -16,28 +15,13 @@ import {
   SEGURANCA,
   VITRINE,
 } from './landing.dados';
+import CabecalhoSite from './CabecalhoSite';
+import LogoSite from './LogoSite';
+import { irPara } from './landing.navegacao';
 import './landing.css';
-
-// O HashRouter usa o "#" da URL para as rotas, então os links do menu rolam até a seção em vez de usar âncoras.
-function irPara(id) {
-  document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-}
 
 function IconeMenu({ nome }) {
   return <Icone>{ICONES[nome]}</Icone>;
-}
-
-function Logo() {
-  return (
-    <span className="lp-logo">
-      <span className="lp-logo__selo" aria-hidden="true">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round">
-          <path d="M12 5v14M5 12h14" />
-        </svg>
-      </span>
-      SoftwareClinic
-    </span>
-  );
 }
 
 // Moldura de navegador em volta das capturas de tela.
@@ -46,7 +30,7 @@ function Janela({ src, alt, carregar = 'lazy', className = '' }) {
     <figure className={`lp-janela ${className}`.trim()}>
       <div className="lp-janela__barra" aria-hidden="true">
         <span /><span /><span />
-        <i>softwareclinic</i>
+        <i>sonelia.com.br</i>
       </div>
       <img src={src} alt={alt} loading={carregar} width="1366" height="820" />
     </figure>
@@ -58,54 +42,6 @@ function Celular({ src, alt, className = '' }) {
     <figure className={`lp-celular ${className}`.trim()}>
       <img src={src} alt={alt} loading="lazy" width="390" height="844" />
     </figure>
-  );
-}
-
-function Cabecalho({ logado }) {
-  const [menuAberto, setMenuAberto] = useState(false);
-
-  function navegar(id) {
-    setMenuAberto(false);
-    irPara(id);
-  }
-
-  return (
-    <header className="lp-header">
-      <div className="lp-container lp-header__linha">
-        <button type="button" className="lp-header__marca" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} aria-label="Voltar ao topo">
-          <Logo />
-        </button>
-
-        <nav className={`lp-nav${menuAberto ? ' is-aberto' : ''}`} aria-label="Seções da página">
-          {SECOES.map(([id, rotulo]) => (
-            <button key={id} type="button" className="lp-nav__link" onClick={() => navegar(id)}>{rotulo}</button>
-          ))}
-          <div className="lp-nav__acoes">
-            {logado ? (
-              <Link to="/home" className="btn btn--primary">Acessar o painel</Link>
-            ) : (
-              <>
-                <Link to="/login" className="btn btn--ghost">Entrar</Link>
-                <Link to="/registro" className="btn btn--primary">Criar conta grátis</Link>
-              </>
-            )}
-          </div>
-        </nav>
-
-        <div className="lp-header__direita">
-          <ThemeToggle />
-          <button
-            type="button"
-            className="icon-btn lp-header__menu"
-            aria-label={menuAberto ? 'Fechar menu' : 'Abrir menu'}
-            aria-expanded={menuAberto}
-            onClick={() => setMenuAberto(!menuAberto)}
-          >
-            {menuAberto ? <IconeX /> : <Icone><path d="M4 6h16M4 12h16M4 18h16" /></Icone>}
-          </button>
-        </div>
-      </div>
-    </header>
   );
 }
 
@@ -138,7 +74,7 @@ function Hero({ logado }) {
         </div>
 
         <div className="lp-hero__visual">
-          <Janela src="/landing/inicio.jpg" alt="Página inicial do SoftwareClinic com os agendamentos do dia" carregar="eager" />
+          <Janela src="/landing/inicio.jpg" alt="Página inicial da Sonelia com os agendamentos do dia" carregar="eager" />
           <Celular src="/landing/celular-agenda.jpg" alt="Agenda do dia no celular" className="lp-hero__celular" />
           <div className="lp-flutuante lp-flutuante--1" aria-hidden="true">
             <span className="lp-flutuante__ponto" />
@@ -170,7 +106,7 @@ function Dores() {
         <header className="lp-secao__cab">
           <span className="lp-selo">O dia a dia sem dor de cabeça</span>
           <h2>Reconhece alguma dessas situações?</h2>
-          <p>Os problemas mais comuns de quem administra uma clínica, e como o SoftwareClinic resolve cada um.</p>
+          <p>Os problemas mais comuns de quem administra uma clínica, e como a Sonelia resolve cada um.</p>
         </header>
 
         <ul className="lp-dores">
@@ -226,7 +162,7 @@ function Vitrine() {
               {tela.itens.map((item) => <li key={item}><IconeCheck /> {item}</li>)}
             </ul>
           </div>
-          <Janela src={tela.imagem} alt={`Tela de ${tela.rotulo} do SoftwareClinic`} className="lp-vitrine__imagem" />
+          <Janela src={tela.imagem} alt={`Tela de ${tela.rotulo} da Sonelia`} className="lp-vitrine__imagem" />
         </div>
       </div>
     </section>
@@ -323,7 +259,7 @@ function EmQualquerLugar() {
           <span className="lp-selo">No computador e no celular</span>
           <h2>Leve a clínica no bolso</h2>
           <p className="lp-paragrafo">
-            O SoftwareClinic se adapta a qualquer tela. A recepção usa no computador, o profissional confere a agenda no
+            A Sonelia se adapta a qualquer tela. A recepção usa no computador, o profissional confere a agenda no
             celular e a gestão acompanha de onde estiver.
           </p>
           <ul className="lp-lista-check">
@@ -460,7 +396,7 @@ function Rodape({ logado }) {
     <footer className="lp-rodape">
       <div className="lp-container lp-rodape__grade">
         <div>
-          <Logo />
+          <LogoSite />
           <p>Sistema de gestão para clínicas: agenda, prontuário, pacientes, convênios e repasses em um só lugar.</p>
         </div>
         <nav aria-label="Produto">
@@ -479,10 +415,12 @@ function Rodape({ logado }) {
               <Link to="/registro">Criar conta grátis</Link>
             </>
           )}
+          <Link to="/afiliados">Seja afiliado</Link>
+          <Link to="/termos">Termos de uso</Link>
         </nav>
       </div>
       <div className="lp-container lp-rodape__base">
-        <span>© {new Date().getFullYear()} SoftwareClinic. Feito para clínicas brasileiras.</span>
+        <span>© {new Date().getFullYear()} Sonelia. Feito para clínicas brasileiras.</span>
       </div>
     </footer>
   );
@@ -490,6 +428,19 @@ function Rodape({ logado }) {
 
 export default function Landing() {
   const { isAuthenticated } = useAuthContext();
+  const secao = useLocation().state?.secao;
+
+  // Veio de outra página pelo menu (ex.: "Preços" na página de afiliados): rola até a seção pedida.
+  // Rola de novo um pouco depois: as imagens acima da seção ainda podem estar carregando e empurrar o conteúdo.
+  useEffect(() => {
+    if (!secao) return undefined;
+    const primeira = setTimeout(() => irPara(secao), 100);
+    const ajuste = setTimeout(() => irPara(secao), 900);
+    return () => {
+      clearTimeout(primeira);
+      clearTimeout(ajuste);
+    };
+  }, [secao]);
 
   return (
     <div className="lp">
@@ -497,7 +448,7 @@ export default function Landing() {
         <span className="lp-fundo__mancha lp-fundo__mancha--1" />
         <span className="lp-fundo__mancha lp-fundo__mancha--2" />
       </div>
-      <Cabecalho logado={isAuthenticated} />
+      <CabecalhoSite />
       <main>
         <Hero logado={isAuthenticated} />
         <Dores />

@@ -40,13 +40,22 @@ const GRUPOS = [
             { label: 'Painel Super Admin', path: '/super-admin', icone: 'painel', roles: ['super_admin'] },
             { label: 'Clínicas', path: '/clinicas', icone: 'empresas', roles: ['super_admin'] },
             { label: 'Planos', path: '/planos', icone: 'planos', roles: ['super_admin'] },
+            { label: 'Afiliados', path: '/afiliados-adm', icone: 'indicacao', roles: ['super_admin'] },
+        ],
+    },
+    {
+        titulo: 'Afiliado',
+        itens: [
+            // soAfiliado: aparece para quem ativou o programa, seja qual for o papel (recepção, profissional...).
+            { label: 'Painel do afiliado', path: '/afiliado', icone: 'receita', roles: [], soAfiliado: true },
         ],
     },
     {
         titulo: 'Conta',
         itens: [
             { label: 'Assinaturas', path: '/assinaturas', icone: 'assinatura', roles: ['super_admin', 'admin', 'recepcao'] },
-            { label: 'Minha conta', path: '/minha-conta', icone: 'usuarios', roles: TODOS },
+            { label: 'Indique e ganhe', path: '/indique', icone: 'indicacao', roles: ['admin'] },
+            { label: 'Minha conta', path: '/minha-conta', icone: 'usuarios', roles: [...TODOS, 'afiliado'] },
         ],
     },
 ]
@@ -59,7 +68,7 @@ export function Sidebar({ aberto = false, onFechar }) {
     }
 
     const grupos = GRUPOS
-        .map((grupo) => ({ ...grupo, itens: grupo.itens.filter((item) => item.roles.some((role) => hasRole(role))) }))
+        .map((grupo) => ({ ...grupo, itens: grupo.itens.filter((item) => (item.soAfiliado ? !!user?.afiliadoDesde : item.roles.some((role) => hasRole(role)))) }))
         .filter((grupo) => grupo.itens.length > 0)
 
     return (

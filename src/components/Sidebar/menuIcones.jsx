@@ -16,6 +16,7 @@ export const ICONES = {
     especialidades: (<><circle cx="12" cy="8" r="6" /><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11" /></>),
     convenios: (<><circle cx="12" cy="12" r="9" /><path d="M8 12h8M12 8v8" /></>),
     usuarios: (<><circle cx="12" cy="8" r="4" /><path d="M4 21a8 8 0 0 1 16 0" /></>),
+    indicacao: (<><rect width="18" height="5" x="3" y="8" rx="1" /><path d="M12 8v13M19 13v6a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-6M7.5 8a2.5 2.5 0 0 1 0-5C9.5 3 12 8 12 8s2.5-5 4.5-5a2.5 2.5 0 0 1 0 5" /></>),
     assinatura: (<><rect width="20" height="14" x="2" y="5" rx="2" /><path d="M2 10h20M6 15h4" /></>),
     planos: (<><path d="m12 2 10 5-10 5L2 7z" /><path d="m2 17 10 5 10-5M2 12l10 5 10-5" /></>),
     receita: (<><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" /></>),

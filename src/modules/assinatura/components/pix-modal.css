@@ -190,3 +190,11 @@
     animation: none;
   }
 }
+
+.pix__valor .pix__desconto {
+  flex-basis: 100%;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--success);
+  text-align: center;
+}

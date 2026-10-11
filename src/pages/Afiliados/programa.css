@@ -1,0 +1,201 @@
+/* Página pública "Seja afiliado" (usa a base da landing: .lp, .lp-container, .lp-secao...). */
+
+/* ---------- Topo ---------- */
+
+.programa__hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  gap: 40px;
+  align-items: center;
+  padding-block: 56px 72px;
+}
+
+.programa__hero-texto {
+  display: grid;
+  gap: 18px;
+  justify-items: start;
+  animation: fadeInUp 0.6s var(--ease) backwards;
+}
+
+.programa__hero h1 {
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  font-weight: 800;
+  line-height: 1.1;
+}
+
+.programa__hero-acoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.programa__simulador {
+  display: grid;
+  gap: 10px;
+  padding: 28px;
+  text-align: center;
+  box-shadow: var(--shadow-lg);
+  animation: popIn 0.7s var(--ease) 0.15s backwards;
+}
+
+.programa__simulador-titulo {
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--primary);
+  text-transform: uppercase;
+}
+
+.programa__simulador label {
+  color: var(--text-muted);
+}
+
+.programa__simulador input[type='range'] {
+  width: 100%;
+  accent-color: var(--primary);
+}
+
+.programa__simulador-valor {
+  font-size: clamp(2.2rem, 6vw, 3rem);
+  font-weight: 800;
+  color: var(--primary);
+  font-variant-numeric: tabular-nums;
+}
+
+.programa__simulador-legenda {
+  font-size: 0.9rem;
+  color: var(--text-subtle);
+}
+
+/* ---------- Como funciona ---------- */
+
+.programa__passos {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 18px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.programa__passos li {
+  display: grid;
+  gap: 8px;
+  align-content: start;
+  padding: 22px;
+}
+
+.programa__passos h3 {
+  font-size: 1.05rem;
+}
+
+.programa__passos p {
+  font-size: 0.92rem;
+  line-height: 1.55;
+  color: var(--text-muted);
+}
+
+.programa__numero {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  font-weight: 800;
+  color: var(--on-primary);
+  background: var(--gradient-primary);
+  border-radius: 50%;
+  box-shadow: var(--shadow-primary);
+}
+
+/* ---------- Quem pode / regras ---------- */
+
+.programa__duas {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
+  gap: 36px;
+  align-items: start;
+}
+
+.programa__duas > div:first-child {
+  display: grid;
+  gap: 16px;
+}
+
+.programa__h2 {
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 800;
+}
+
+.programa__publico {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.programa__publico li {
+  padding: 0.45rem 0.9rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--primary);
+  background: var(--primary-soft);
+  border-radius: 999px;
+}
+
+.programa__regras {
+  display: grid;
+  gap: 16px;
+  padding: 26px;
+}
+
+/* ---------- Dúvidas ---------- */
+
+.programa__duvidas {
+  display: grid;
+  gap: 10px;
+}
+
+.programa__duvidas details {
+  padding: 16px 20px;
+}
+
+.programa__duvidas summary {
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.programa__duvidas p {
+  margin-top: 10px;
+  line-height: 1.6;
+  color: var(--text-muted);
+}
+
+.programa__rodape {
+  padding: 28px 0;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+.programa__rodape a {
+  color: var(--primary);
+}
+
+@media (max-width: 960px) {
+  .programa__hero,
+  .programa__duas {
+    grid-template-columns: 1fr;
+  }
+
+  .programa__passos {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 560px) {
+  .programa__passos {
+    grid-template-columns: 1fr;
+  }
+}

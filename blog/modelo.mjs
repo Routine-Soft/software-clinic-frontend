@@ -169,7 +169,7 @@ ${cabecalho(simbolo)}
         ${artigo.duvidas?.length ? `<h2 id="duvidas">Perguntas frequentes</h2>
         <div class="b-duvidas">${artigo.duvidas.map(([q, r]) => `<details><summary>${esc(q)}</summary><p>${esc(r)}</p></details>`).join('')}</div>` : ''}
 
-        ${convite('Pronto para ter menos faltas e uma agenda organizada?')}
+        ${convite(artigo.ctaFinal ?? 'Pronto para organizar a sua clínica?')}
 
         ${artigo.fontes?.length ? `<section class="b-fontes"><h2 id="fontes">Fontes</h2><ol>${artigo.fontes.map(([t, u]) => `<li><a href="${u}" rel="noopener" target="_blank">${esc(t)}</a></li>`).join('')}</ol></section>` : ''}
 

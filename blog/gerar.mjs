@@ -28,7 +28,7 @@ for (const arquivo of arquivos) {
 }
 artigos.sort((a, b) => b.publicadoEm.localeCompare(a.publicadoEm));
 
-fs.rmSync(SAIDA, { recursive: true, force: true });
+fs.rmSync(SAIDA, { recursive: true, force: true, maxRetries: 5, retryDelay: 100 });
 fs.mkdirSync(path.join(SAIDA, 'fontes'), { recursive: true });
 fs.cpSync(path.join(RAIZ, 'imagens'), path.join(SAIDA, 'imagens'), { recursive: true });
 fs.copyFileSync(path.join(RAIZ, 'blog.css'), path.join(SAIDA, 'blog.css'));
@@ -39,7 +39,10 @@ fs.copyFileSync(
 
 for (const artigo of artigos) {
   fs.mkdirSync(path.join(SAIDA, artigo.slug), { recursive: true });
-  const outros = artigos.filter((a) => a.slug !== artigo.slug);
+  // "Leia também": primeiro os do mesmo assunto, depois os mais recentes.
+  const outros = artigos
+    .filter((a) => a.slug !== artigo.slug)
+    .sort((a, b) => Number(b.categoria === artigo.categoria) - Number(a.categoria === artigo.categoria));
   fs.writeFileSync(path.join(SAIDA, artigo.slug, 'index.html'), paginaArtigo(artigo, { simbolo, outros }));
 }
 fs.writeFileSync(path.join(SAIDA, 'index.html'), paginaIndice(artigos, { simbolo }));

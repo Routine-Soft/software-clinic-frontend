@@ -12,6 +12,7 @@ export default {
   publicadoEm: '2026-10-11',
   atualizadoEm: '2026-10-11',
   autor: 'Equipe Sonelia',
+  ctaFinal: 'Pronto para ter menos faltas e uma agenda organizada?',
   imagem: 'como-reduzir-faltas-de-pacientes.jpg',
   imagemAlt: 'Agenda semanal de uma clínica com consultas coloridas por profissional',
   resumo: [

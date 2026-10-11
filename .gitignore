@@ -27,3 +27,4 @@ dist-ssr
 public/blog/
 public/sitemap.xml
 public/robots.txt
+public/.blog-*

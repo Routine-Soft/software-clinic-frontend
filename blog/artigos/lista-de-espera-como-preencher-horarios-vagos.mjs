@@ -2,7 +2,7 @@ export default {
   slug: 'lista-de-espera-como-preencher-horarios-vagos',
   titulo: 'Lista de espera: como preencher os horários vagos da clínica',
   tituloSeo: 'Lista de espera na clínica: como preencher horários vagos',
-  descricao: 'Horário desmarcado não precisa ficar vazio. Veja como montar a lista de espera, quais dados anotar, como priorizar e uma mensagem pronta para chamar o paciente.',
+  descricao: 'Horário desmarcado não precisa ficar vazio. Veja como montar a lista de espera, o que anotar, como priorizar e uma mensagem pronta para chamar o paciente.',
   palavraChave: 'lista de espera clínica',
   categoria: 'Gestão da agenda',
   publicadoEm: '2026-10-11',

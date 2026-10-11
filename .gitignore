@@ -22,3 +22,8 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Blog gerado por blog/gerar.mjs (a fonte fica em blog/)
+public/blog/
+public/sitemap.xml
+public/robots.txt

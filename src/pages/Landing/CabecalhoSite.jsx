@@ -10,6 +10,7 @@ import './landing.css';
 
 // Cabeçalho fixo do site público, igual na landing e nas outras páginas (ex.: "Seja afiliado").
 // Fora da landing, as seções levam de volta a ela e rolam até o ponto escolhido.
+// "Dúvidas" fica só no rodapé, para o menu caber numa linha em notebooks.
 export default function CabecalhoSite() {
   const { isAuthenticated } = useAuthContext();
   const { pathname } = useLocation();
@@ -36,9 +37,10 @@ export default function CabecalhoSite() {
         </button>
 
         <nav className={`lp-nav${menuAberto ? ' is-aberto' : ''}`} aria-label="Menu do site">
-          {SECOES.map(([id, rotulo]) => (
+          {SECOES.filter(([id]) => id !== 'duvidas').map(([id, rotulo]) => (
             <button key={id} type="button" className="lp-nav__link" onClick={() => navegar(id)}>{rotulo}</button>
           ))}
+          <a href="/blog/" className="lp-nav__link">Blog</a>
           <Link
             to="/afiliados"
             className="lp-nav__link lp-nav__link--afiliado"

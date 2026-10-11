@@ -67,7 +67,7 @@ function Hero({ logado }) {
             <button type="button" className="btn btn--ghost lp-btn-grande" onClick={() => irPara('vitrine')}>Ver o sistema por dentro</button>
           </div>
           <ul className="lp-hero__garantias">
-            <li><IconeCheck /> 3 dias grátis</li>
+            <li><IconeCheck /> 7 dias grátis</li>
             <li><IconeCheck /> Sem cartão de crédito</li>
             <li><IconeCheck /> Computador e celular</li>
           </ul>
@@ -320,7 +320,7 @@ function Precos({ logado }) {
         <div className="lp-planos">
           <article className="lp-plano lp-revelar">
             <h3>Teste grátis</h3>
-            <p className="lp-plano__preco">R$ 0<small> por 3 dias</small></p>
+            <p className="lp-plano__preco">R$ 0<small> por 7 dias</small></p>
             <ul className="lp-lista-check">
               <li><IconeCheck /> Todas as funcionalidades liberadas</li>
               <li><IconeCheck /> Sem cadastrar cartão de crédito</li>
@@ -374,7 +374,7 @@ function ChamadaFinal({ logado }) {
       <div className="lp-container">
         <div className="lp-chamada lp-revelar">
           <h2>Pronto para organizar a sua clínica?</h2>
-          <p>Crie a conta agora e use tudo liberado por 3 dias, sem cartão.</p>
+          <p>Crie a conta agora e use tudo liberado por 7 dias, sem cartão.</p>
           <div className="lp-hero__acoes lp-hero__acoes--centro">
             {logado ? (
               <Link to="/home" className="btn lp-btn-claro lp-btn-grande">Acessar o painel</Link>
@@ -415,6 +415,7 @@ function Rodape({ logado }) {
               <Link to="/registro">Criar conta grátis</Link>
             </>
           )}
+          <a href="/blog/">Blog</a>
           <Link to="/afiliados">Seja afiliado</Link>
           <Link to="/termos">Termos de uso</Link>
         </nav>

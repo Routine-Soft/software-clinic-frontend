@@ -181,9 +181,12 @@
   transition: color 0.2s var(--ease), background-color 0.2s var(--ease);
 }
 
+a.lp-nav__link {
+  text-decoration: none;
+}
+
 .lp-nav__link--afiliado {
   color: var(--primary);
-  text-decoration: none;
 }
 
 .lp-nav__link[aria-current='page'] {
@@ -215,8 +218,8 @@
   display: none;
 }
 
-/* Telas de notebook (1241–1440 px): links mais juntos para caber tudo numa linha. */
-@media (min-width: 1241px) and (max-width: 1440px) {
+/* Telas de notebook (1181–1600 px): links mais juntos para caber tudo numa linha. */
+@media (min-width: 1181px) and (max-width: 1600px) {
   .lp-nav {
     gap: 0;
   }
@@ -231,7 +234,7 @@
   }
 }
 
-@media (max-width: 1240px) {
+@media (max-width: 1180px) {
   .lp-header__direita {
     margin-left: auto;
   }

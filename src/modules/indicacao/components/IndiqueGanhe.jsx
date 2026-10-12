@@ -9,7 +9,7 @@ import './indicacao.css';
 const PASSOS = [
   ['Envie o seu link', 'Mande para outras clínicas pelo WhatsApp, ou passe o seu código para digitarem no cadastro.'],
   ['A clínica testa e assina', 'Ela cria a conta pelo seu link, usa o teste grátis e paga a primeira mensalidade.'],
-  ['Você ganha o desconto', 'Os R$ 100 entram na sua próxima mensalidade. Os descontos se somam e podem cobrir a mensalidade inteira.'],
+  ['Você ganha o desconto', 'Metade do que ela pagou na primeira mensalidade entra como desconto na sua próxima. Os descontos se somam e podem cobrir a mensalidade inteira.'],
 ];
 
 function dataBR(data) {
@@ -18,14 +18,15 @@ function dataBR(data) {
 
 export default function IndiqueGanhe() {
   const { resumo, loading, error } = useIndicacoes();
-  const valor = formatarReais(resumo?.valorPorIndicacao ?? 100);
+  const percentual = resumo?.percentualPorIndicacao ?? 50;
+  const porPlano = resumo?.valoresPorPlano ?? [];
 
   return (
     <div className="page">
       <header className="page-header">
         <div>
           <h2 className="page-title">Indique e ganhe</h2>
-          <p className="page-subtitle">{valor} de desconto na sua mensalidade para cada clínica que assinar pelo seu link</p>
+          <p className="page-subtitle">{percentual}% da primeira mensalidade de cada clínica que assinar pelo seu link vira desconto na sua</p>
         </div>
       </header>
 
@@ -35,7 +36,7 @@ export default function IndiqueGanhe() {
         <CartaoConvite
           codigo={resumo?.codigo}
           carregando={loading}
-          titulo={`Ganhe ${valor} por indicação`}
+          titulo={`Ganhe ${percentual}% por indicação`}
           texto="Conhece outra clínica que ainda se organiza no papel ou na planilha? Mande o seu link."
           mensagem={mensagemConviteClinica}
         />
@@ -48,6 +49,11 @@ export default function IndiqueGanhe() {
             <p className="indicacao-saldo__valor">{formatarReais(resumo?.descontoGuardado)}</p>
           )}
           <p className="indicacao-saldo__legenda">guardado para as próximas mensalidades</p>
+          {porPlano.length > 0 && (
+            <p className="indicacao-saldo__regra">
+              Cada clínica que assinar vale {porPlano.map((p) => `${formatarReais(p.valor)} no plano ${p.plano}`).join(' ou ')}.
+            </p>
+          )}
           <p className="indicacao-saldo__regra">
             Os descontos se somam e entram na próxima mensalidade. Se passarem do valor dela, a mensalidade sai de graça e o resto fica para os meses seguintes.
             No Pix, o valor já vem menor. No cartão, a mensalidade é cobrada normalmente e o desconto volta para o mesmo cartão logo em seguida.
@@ -96,7 +102,9 @@ export default function IndiqueGanhe() {
                       {indicacao.usadaEm && ` · desconto usado em ${dataBR(indicacao.usadaEm)}`}
                     </span>
                   </div>
-                  <span className={`badge badge--${status.tom}`}>{status.rotulo}</span>
+                  <span className={`badge badge--${status.tom}`}>
+                    {status.rotulo}{indicacao.status !== 'aguardando' && ` · ${formatarReais(indicacao.valor)}`}
+                  </span>
                 </li>
               );
             })}

@@ -39,7 +39,7 @@ export const REGRAS = [
 export const DUVIDAS = [
   ['Preciso ter CNPJ?', 'Não. Você pode se cadastrar com CPF. Os impostos sobre o que você recebe são de sua responsabilidade.'],
   ['Já trabalho numa clínica que usa a Sonelia. Posso ser afiliada?', 'Pode, e com o mesmo e-mail: entre na sua conta e ative o programa. Você continua usando o sistema da clínica normalmente e ganha um painel de afiliado.'],
-  ['Sou dona de clínica. Qual a diferença para o "Indique e ganhe"?', `No "Indique e ganhe", cada clínica indicada vira R$ 100 de desconto na sua mensalidade. Como afiliada, você recebe ${COMISSAO_PERCENTUAL}% da primeira mensalidade em dinheiro. São dois links diferentes: você escolhe qual mandar.`],
+  ['Sou dona de clínica. Qual a diferença para o "Indique e ganhe"?', `No "Indique e ganhe", ${COMISSAO_PERCENTUAL}% da primeira mensalidade da clínica indicada vira desconto na sua mensalidade. Como afiliada, você recebe os mesmos ${COMISSAO_PERCENTUAL}% em dinheiro, por Pix. São dois links diferentes: você escolhe qual mandar.`],
   ['Quanto eu ganho por clínica?', `${COMISSAO_PERCENTUAL}% do valor da primeira mensalidade do plano que a clínica assinar: ${EXEMPLOS}. A comissão é paga uma vez por clínica.`],
   ['E se a clínica não usar o meu link?', 'Ela pode digitar o seu código no campo "Código de indicação" ao criar a conta. Sem o link ou o código, a indicação não conta.'],
   ['Como acompanho o que tenho a receber?', 'No Painel do afiliado: as clínicas que você trouxe, o que está em carência, o que já está liberado e o que já recebeu.'],

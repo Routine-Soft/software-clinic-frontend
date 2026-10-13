@@ -1277,7 +1277,19 @@ a.lp-nav__link {
     padding: 24px;
   }
 
+  /* No celular, o seletor de tema fica entre a marca e o menu, em tamanho compacto. */
   .lp-header__direita .theme-toggle {
-    display: none;
+    gap: 3px;
+    padding: 3px;
+  }
+
+  .lp-header__direita .theme-toggle__btn {
+    width: 26px;
+    height: 26px;
+  }
+
+  .lp-header__direita .theme-toggle__btn svg {
+    width: 13px;
+    height: 13px;
   }
 }

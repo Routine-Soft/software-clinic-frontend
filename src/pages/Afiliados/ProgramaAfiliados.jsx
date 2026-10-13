@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import CabecalhoSite from '@/pages/Landing/CabecalhoSite';
+import BotaoWhatsapp from '@/pages/Landing/BotaoWhatsapp';
+import { LINK_WHATSAPP, WHATSAPP_EXIBICAO } from '@/utils/contato';
 import CadastroAfiliado from '@/modules/afiliado/components/CadastroAfiliado';
 import { formatarReais } from '@/modules/indicacao/indicacao.utils';
 import { COMISSAO_PERCENTUAL, PLANOS, PASSOS, PUBLICO, REGRAS, DUVIDAS } from './programa.dados';
@@ -135,9 +137,10 @@ export default function ProgramaAfiliados() {
 
       <footer className="lp-rodape programa__rodape">
         <div className="lp-container">
-          <span>© {new Date().getFullYear()} Sonelia · <Link to="/">Página inicial</Link> · <a href="#/termos-afiliado" target="_blank" rel="noreferrer">Termos do afiliado</a></span>
+          <span>© {new Date().getFullYear()} Sonelia · <Link to="/">Página inicial</Link> · <a href="#/termos-afiliado" target="_blank" rel="noreferrer">Termos do afiliado</a> · Contato: <a href={LINK_WHATSAPP} target="_blank" rel="noopener noreferrer">WhatsApp {WHATSAPP_EXIBICAO}</a></span>
         </div>
       </footer>
+      <BotaoWhatsapp />
     </div>
   );
 }

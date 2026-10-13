@@ -1,6 +1,8 @@
 /* ---------- Base da landing ---------- */
 
 .lp {
+  /* Verde oficial do WhatsApp (botão flutuante e rodapé), igual em todos os temas. */
+  --whatsapp: #25d366;
   position: relative;
   min-height: 100vh;
   overflow-x: clip;
@@ -1123,7 +1125,7 @@ a.lp-nav__link {
 
 .lp-rodape__grade {
   display: grid;
-  grid-template-columns: minmax(0, 2fr) repeat(2, minmax(0, 1fr));
+  grid-template-columns: minmax(0, 2fr) repeat(3, minmax(0, 1fr));
   gap: 32px;
 }
 
@@ -1179,6 +1181,63 @@ a.lp-nav__link {
   border-top: 1px solid var(--border);
 }
 
+/* ---------- WhatsApp (botão flutuante e rodapé) ---------- */
+
+.lp-rodape nav a.lp-rodape__whats {
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+  white-space: nowrap;
+}
+
+.lp-rodape__whats svg {
+  width: 18px;
+  height: 18px;
+  color: var(--whatsapp);
+}
+
+.lp-whats {
+  position: fixed;
+  right: max(18px, env(safe-area-inset-right));
+  bottom: max(18px, env(safe-area-inset-bottom));
+  z-index: 60;
+  display: grid;
+  place-items: center;
+  width: 58px;
+  height: 58px;
+  color: #fff;
+  background: var(--whatsapp);
+  border-radius: 999px;
+  box-shadow: 0 10px 28px rgba(37, 211, 102, 0.4), var(--shadow-md);
+  transition: transform 0.25s var(--ease), box-shadow 0.25s var(--ease);
+  animation: popIn 0.5s var(--ease) 0.8s backwards;
+}
+
+.lp-whats::before {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  content: '';
+  background: var(--whatsapp);
+  border-radius: inherit;
+  animation: pulseRing 2.4s var(--ease) 1.5s infinite;
+}
+
+.lp-whats:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 14px 34px rgba(37, 211, 102, 0.5), var(--shadow-lg);
+}
+
+.lp-whats:focus-visible {
+  outline: 3px solid var(--primary-ring);
+  outline-offset: 3px;
+}
+
+.lp-whats svg {
+  width: 32px;
+  height: 32px;
+}
+
 /* ---------- Revelar ao rolar (só onde o navegador suporta; sem JS) ---------- */
 
 @supports (animation-timeline: view()) {
@@ -1224,7 +1283,7 @@ a.lp-nav__link {
   }
 
   .lp-rodape__grade {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
   .lp-rodape__grade > div:first-child {
@@ -1235,6 +1294,19 @@ a.lp-nav__link {
 @media (max-width: 560px) {
   .lp-container {
     padding-inline: 16px;
+  }
+
+  .lp-rodape__grade {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .lp-rodape__contato {
+    grid-column: 1 / -1;
+  }
+
+  /* Espaço para o botão flutuante do WhatsApp não cobrir a última linha. */
+  .lp-rodape {
+    padding-bottom: 92px;
   }
 
   .lp-secao {

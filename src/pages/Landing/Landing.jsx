@@ -16,6 +16,8 @@ import {
   SEGURANCA,
   VITRINE,
 } from './landing.dados';
+import BotaoWhatsapp, { IconeWhatsapp } from './BotaoWhatsapp';
+import { LINK_WHATSAPP, WHATSAPP_EXIBICAO } from '@/utils/contato';
 import CabecalhoSite from './CabecalhoSite';
 import LogoSite from './LogoSite';
 import { irPara } from './landing.navegacao';
@@ -431,6 +433,12 @@ function Rodape({ logado }) {
           <Link to="/afiliados">Seja afiliado</Link>
           <Link to="/termos">Termos de uso</Link>
         </nav>
+        <nav className="lp-rodape__contato" aria-label="Contato">
+          <h3>Contato</h3>
+          <a className="lp-rodape__whats" href={LINK_WHATSAPP} target="_blank" rel="noopener noreferrer">
+            <IconeWhatsapp /> {WHATSAPP_EXIBICAO}
+          </a>
+        </nav>
       </div>
       <div className="lp-container lp-rodape__base">
         <span>© {new Date().getFullYear()} Sonelia. Feito para clínicas brasileiras.</span>
@@ -476,6 +484,7 @@ export default function Landing() {
         <ChamadaFinal logado={isAuthenticated} />
       </main>
       <Rodape logado={isAuthenticated} />
+      <BotaoWhatsapp />
     </div>
   );
 }

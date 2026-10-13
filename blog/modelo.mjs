@@ -1,4 +1,5 @@
 import { SITE, NOME, DESCRICAO_BLOG } from './config.mjs';
+import { LINK_WHATSAPP, WHATSAPP_EXIBICAO, CAMINHO_ICONE_WHATSAPP } from '../src/utils/contato.js';
 
 export const esc = (t = '') => String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
@@ -34,6 +35,8 @@ function cabecalho(simbolo) {
 </header>`;
 }
 
+const ICONE_WHATSAPP = `<svg viewBox="0 0 32 32" aria-hidden="true"><path fill="currentColor" d="${CAMINHO_ICONE_WHATSAPP}"/></svg>`;
+
 function rodape(simbolo) {
   return `
 <footer class="b-rodape">
@@ -41,10 +44,12 @@ function rodape(simbolo) {
     <a class="b-marca" href="/"><span class="b-marca__selo">${simbolo}</span>${NOME}</a>
     <nav aria-label="Links do rodapé">
       <a href="/">Início</a><a href="/blog/">Blog</a><a href="/#/afiliados">Seja afiliado</a><a href="/#/termos">Termos de uso</a>
+      <a class="b-rodape__whats" href="${LINK_WHATSAPP}" target="_blank" rel="noopener noreferrer">${ICONE_WHATSAPP} Contato: ${WHATSAPP_EXIBICAO}</a>
     </nav>
     <span>© ${new Date().getFullYear()} ${NOME}. Sistema de gestão para clínicas.</span>
   </div>
-</footer>`;
+</footer>
+<a class="b-whats" href="${LINK_WHATSAPP}" target="_blank" rel="noopener noreferrer" aria-label="Falar com a ${NOME} no WhatsApp" title="Falar no WhatsApp">${ICONE_WHATSAPP}</a>`;
 }
 
 function head({ titulo, descricao, url, imagem, tipo = 'website', extra = '' }) {

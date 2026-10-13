@@ -367,3 +367,30 @@ img { max-width: 100%; height: auto; }
   .b-nav .b-btn--ghost { display: none; }
   .b-texto { font-size: 1.02rem; }
 }
+
+/* ---------- WhatsApp (botão flutuante e rodapé) ---------- */
+
+.b-rodape nav a.b-rodape__whats { display: inline-flex; gap: 6px; align-items: center; white-space: nowrap; }
+.b-rodape__whats svg { width: 16px; height: 16px; color: #25d366; }
+
+.b-whats {
+  position: fixed;
+  right: max(18px, env(safe-area-inset-right));
+  bottom: max(18px, env(safe-area-inset-bottom));
+  z-index: 60;
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  color: #fff;
+  background: #25d366;
+  border-radius: 999px;
+  box-shadow: 0 10px 28px rgba(37, 211, 102, 0.4);
+  transition: transform 0.25s ease;
+}
+.b-whats:hover { transform: translateY(-3px) scale(1.05); }
+.b-whats:focus-visible { outline: 3px solid #25d366; outline-offset: 3px; }
+.b-whats svg { width: 30px; height: 30px; }
+@media (max-width: 640px) {
+  .b-rodape { padding-bottom: 92px; }
+}

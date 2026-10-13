@@ -471,3 +471,7 @@
   margin: 1px 0 0;
   accent-color: var(--primary);
 }
+
+.auth-erro-campo {
+  color: var(--danger);
+}

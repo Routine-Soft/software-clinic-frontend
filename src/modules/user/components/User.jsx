@@ -13,7 +13,6 @@ export default function User() {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [ajudaSenha, setAjudaSenha] = useState(false);
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -77,24 +76,8 @@ export default function User() {
             placeholder="••••••••"
             required
           />
-          <button type="button" className="link auth-esqueci" aria-expanded={ajudaSenha} onClick={() => setAjudaSenha(!ajudaSenha)}>
-            Esqueceu a senha?
-          </button>
+          <Link className="link auth-esqueci" to="/esqueci-senha">Esqueceu a senha?</Link>
         </div>
-
-        {ajudaSenha && (
-          <div className="auth-ajuda" role="note">
-            <p>
-              <strong>E-mail do Google</strong> (Gmail ou e-mail da empresa no Google): clique em &quot;Continuar com o
-              Google&quot;, logo abaixo. Depois, em <strong>Minha conta → Alterar senha</strong>, crie uma senha nova sem
-              precisar da antiga.
-            </p>
-            <p>
-              <strong>Outro e-mail:</strong> peça ao administrador da clínica para redefinir sua senha. Se você é o
-              administrador, fale com o suporte da Sonelia.
-            </p>
-          </div>
-        )}
 
         <button className={`btn btn--primary${loading ? ' btn--loading' : ''}`} type="submit" disabled={loading}>
           {loading ? 'Entrando...' : 'Entrar'}

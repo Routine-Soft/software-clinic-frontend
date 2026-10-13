@@ -84,3 +84,13 @@ export async function updatePassword(id, passwordData) {
   const response = await httpClient.post(`/users/${id}/password`, passwordData);
   return response;
 }
+// "Esqueci a senha" (rotas públicas): pede o link por e-mail e cria a senha nova com o código do link.
+export async function pedirLinkDeSenha(email) {
+  const response = await httpClient.post('/users/senha/esqueci', { email });
+  return response;
+}
+
+export async function redefinirSenhaPeloLink(codigo, novaSenha) {
+  const response = await httpClient.post('/users/senha/redefinir', { codigo, novaSenha });
+  return response;
+}

@@ -15,6 +15,10 @@ export function minutosDeLeitura(html) {
 }
 
 // Aplica o tema salvo pelo sistema (claro, rosa, escuro ou automático) antes de pintar a página.
+// Vercel Web Analytics (sem cookies): conta as visitas de cada artigo. O script só existe no site publicado.
+const SCRIPT_ANALYTICS = `<script>window.va=window.va||function(){(window.vaq=window.vaq||[]).push(arguments)}</script>
+<script defer src="/_vercel/insights/script.js"></script>`;
+
 const SCRIPT_TEMA = `<script>try{var t=localStorage.getItem('theme-preference');if(t)document.documentElement.dataset.theme=t}catch(e){}</script>`;
 
 const SIMBOLO = '<svg viewBox="0 0 512 512" aria-hidden="true"><path fill="currentColor" d="__SO__"/></svg>';
@@ -79,6 +83,7 @@ function head({ titulo, descricao, url, imagem, tipo = 'website', extra = '' }) 
 <link rel="preload" href="/blog/fontes/dm-serif.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/blog/blog.css">
 ${SCRIPT_TEMA}
+${SCRIPT_ANALYTICS}
 ${extra}
 </head>`;
 }

@@ -4,6 +4,7 @@ import { usePlanos } from '@/modules/plano/plano.hooks';
 import { useAssinatura } from '../assinatura.hooks';
 import { formatarData, formatarPreco, avisarAssinaturaAtualizada } from '../assinatura.utils';
 import PixModal from './PixModal';
+import { recursosExclusivos } from '@/modules/plano/plano.utils';
 import AvisoDescontoIndicacao from '@/modules/indicacao/components/AvisoDescontoIndicacao';
 import './assinatura.css';
 import './assinaturas-planos.css';
@@ -62,33 +63,29 @@ function IconeCheck() {
   );
 }
 
-function BeneficiosDoPlano({ plano }) {
-  const itens = plano.tipo === 'gratis'
-    ? [
-        `Acesso completo por ${plano.duracaoDiasTrial ?? 3} dias`,
-        'Sem cartão de crédito',
-        'Depois do teste, é preciso assinar um plano pago',
-      ]
-    : [
-        'Acesso completo ao sistema',
-        plano.individual
-          ? 'Para quem atende sozinho: só você usa o sistema, sem recepção'
-          : 'Profissionais, recepção e usuários sem limite',
-        'No cartão, renova sozinho todo mês',
-        'No Pix, cada pagamento vale 30 dias',
-        'Cancele quando quiser, sem multa',
-        'Pagamento seguro pelo Mercado Pago',
-      ];
+// O que o plano inclui vem do cadastro de Planos (o que só ele tem fica em destaque), mais como o pagamento funciona.
+function BeneficiosDoPlano({ plano, planos }) {
+  const exclusivos = recursosExclusivos(plano, planos);
+  const recursos = plano.recursos?.length
+    ? plano.recursos
+    : ['Acesso completo ao sistema', plano.individual ? 'Para quem atende sozinho: só você usa o sistema' : 'Profissionais, recepção e usuários sem limite'];
+  const itens = [
+    ...recursos.map((texto) => ({ texto, destaque: exclusivos.has(texto) })),
+    ...['No cartão, renova sozinho todo mês', 'No Pix, cada pagamento vale 30 dias', 'Cancele quando quiser, sem multa'].map((texto) => ({ texto, pagamento: true })),
+  ];
 
   return (
-    <ul className="plano-opcao__lista">
-      {itens.map((item) => (
-        <li key={item}>
-          <IconeCheck />
-          {item}
-        </li>
-      ))}
-    </ul>
+    <>
+      {plano.descricao && <p className="plano-opcao__descricao">{plano.descricao}</p>}
+      <ul className="plano-opcao__lista">
+        {itens.map((item) => (
+          <li key={item.texto} className={item.destaque ? 'plano-opcao__exclusivo' : item.pagamento ? 'plano-opcao__pagamento' : undefined}>
+            <IconeCheck />
+            {item.texto}
+          </li>
+        ))}
+      </ul>
+    </>
   );
 }
 
@@ -105,7 +102,9 @@ export default function AssinaturasPlanos() {
   // Admin e recepção (secretaria) pagam; só o admin desiste ou cancela. O backend exige o mesmo.
   const podeContratar = ['admin', 'super_admin', 'recepcao'].includes(user?.role);
   const podeCancelar = user?.role === 'admin' || user?.role === 'super_admin';
-  const planosAtivos = ordenarPlanos(planos.filter((plano) => plano.ativo));
+  // O plano gratuito é só o teste de 7 dias do cadastro: não aparece para escolher, só os pagos.
+  const planosAtivos = ordenarPlanos(planos.filter((plano) => plano.ativo && plano.tipo !== 'gratis'));
+  const emTeste = assinatura?.status === 'trial';
   const assinaturaAtiva = assinatura?.status === 'ativa';
   // Pix é pago período a período e não renova sozinho; o cartão renova todo mês no Mercado Pago.
   const ativaPorPix = assinaturaAtiva && assinatura.cobranca === 'pix';
@@ -167,6 +166,13 @@ export default function AssinaturasPlanos() {
         </p>
       )}
 
+      {podeContratar && emTeste && (
+        <p className="alert alert--info" role="status">
+          Você está no teste grátis, com tudo liberado e sem cartão{assinatura.dataFimTrial && ` até ${formatarData(assinatura.dataFimTrial)}`}.
+          Para continuar depois, escolha um dos planos e pague no cartão ou no Pix.
+        </p>
+      )}
+
       {podeCancelar && <AvisoDescontoIndicacao />}
 
       {erroAcao && <p className="alert alert--error" role="alert">{erroAcao.message}</p>}
@@ -225,7 +231,7 @@ export default function AssinaturasPlanos() {
                   )}
                 </p>
 
-                <BeneficiosDoPlano plano={plano} />
+                <BeneficiosDoPlano plano={plano} planos={planosAtivos} />
 
                 {!gratuito && podeContratar && (
                   <div className="plano-opcao__acoes">
@@ -251,7 +257,7 @@ export default function AssinaturasPlanos() {
 
                 {podeCancelar && ehAtual && assinatura.status === 'pendente' && (confirmandoDesistencia ? (
                   <div className="assinatura-card__confirmar" role="alertdialog" aria-label="Confirmar desistência">
-                    <p>Desistir da assinatura? O pagamento pendente é cancelado e você volta ao plano gratuito.</p>
+                    <p>Desistir da assinatura? O pagamento pendente é cancelado e você volta ao teste grátis.</p>
                     <div className="assinatura-card__acoes assinatura-card__acoes--linha">
                       <button type="button" className="btn btn--ghost btn--sm" onClick={() => setConfirmandoDesistencia(false)} disabled={cancelando}>
                         Continuar aguardando
@@ -268,7 +274,7 @@ export default function AssinaturasPlanos() {
                   </div>
                 ) : (
                   <button type="button" className="assinatura-card__cancelar" onClick={() => setConfirmandoDesistencia(true)}>
-                    Desistir e voltar ao gratuito
+                    Desistir e voltar ao teste grátis
                   </button>
                 ))}
               </article>

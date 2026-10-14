@@ -24,3 +24,8 @@ export async function deletePlano(id) {
   const response = await httpClient.delete(`/planos/${id}`);
   return response;
 }
+// Sem login: os planos à venda, para a landing.
+export async function getPlanosPublicos() {
+  const response = await httpClient.get('/planos/publicos');
+  return response;
+}

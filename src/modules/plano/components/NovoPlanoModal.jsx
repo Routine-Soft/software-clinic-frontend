@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import Modal from '@/components/Modal/Modal';
 import ModalForm from '@/components/Modal/ModalForm';
+import { recursosDoTexto } from '../plano.utils';
 
-const FORM_CRIAR_INICIAL = { nome: '', tipo: 'gratis', preco: '', duracaoDiasTrial: '', individual: false };
+const FORM_CRIAR_INICIAL = { nome: '', tipo: 'gratis', preco: '', duracaoDiasTrial: '', individual: false, descricao: '', recursos: '' };
 
 export default function NovoPlanoModal({ erro, onSave, onClose }) {
   const [formCriar, setFormCriar] = useState(FORM_CRIAR_INICIAL);
@@ -18,6 +19,8 @@ export default function NovoPlanoModal({ erro, onSave, onClose }) {
       preco: Number(formCriar.preco) || 0,
       duracaoDiasTrial: formCriar.tipo === 'gratis' ? Number(formCriar.duracaoDiasTrial) || null : null,
       individual: formCriar.tipo === 'pago' && formCriar.individual,
+      descricao: formCriar.descricao.trim(),
+      recursos: recursosDoTexto(formCriar.recursos),
     };
   }
 
@@ -41,7 +44,7 @@ export default function NovoPlanoModal({ erro, onSave, onClose }) {
             <div className="field">
               <label className="field__label" htmlFor="novo-plano-tipo">Tipo</label>
               <select id="novo-plano-tipo" className="input" value={formCriar.tipo} onChange={(e) => handleChangeCriar('tipo', e.target.value)}>
-                <option value="gratis">Gratuito</option>
+                <option value="gratis">Teste grátis (cadastro)</option>
                 <option value="pago">Pago</option>
               </select>
             </div>
@@ -78,6 +81,35 @@ export default function NovoPlanoModal({ erro, onSave, onClose }) {
               />
             </div>
           </div>
+
+          {formCriar.tipo === 'pago' && (
+            <>
+              <div className="field">
+                <label className="field__label" htmlFor="novo-plano-descricao">Descrição (aparece na landing)</label>
+                <input
+                  id="novo-plano-descricao"
+                  className="input"
+                  type="text"
+                  maxLength={120}
+                  placeholder="Ex.: O plano para quem trabalha sozinho"
+                  value={formCriar.descricao}
+                  onChange={(e) => handleChangeCriar('descricao', e.target.value)}
+                />
+              </div>
+              <div className="field">
+                <label className="field__label" htmlFor="novo-plano-recursos">O que o plano inclui (um por linha)</label>
+                <textarea
+                  id="novo-plano-recursos"
+                  className="input textarea"
+                  rows={7}
+                  placeholder={'Agenda\nProntuário eletrônico\nConvênios'}
+                  value={formCriar.recursos}
+                  onChange={(e) => handleChangeCriar('recursos', e.target.value)}
+                />
+                <p className="field__hint">O que um plano tem e o outro não aparece em destaque na landing.</p>
+              </div>
+            </>
+          )}
 
           {formCriar.tipo === 'pago' && (
             <label className="check">

@@ -119,7 +119,7 @@ export default function AssinaturaStatus({ className = '' }) {
   const status = STATUS[assinatura.status] ?? { rotulo: assinatura.status, badge: 'muted', pulsa: false, mensagem: '' };
   const podeAssinar = STATUS_QUE_PODEM_ASSINAR.includes(assinatura.status);
   const aguardandoPagamento = assinatura.status === 'pendente';
-  // Em "pendente" não há nada pago: cancelar aqui é desistir do checkout e voltar ao plano gratuito.
+  // Em "pendente" não há nada pago: cancelar aqui é desistir do checkout e voltar ao teste grátis.
   const desistindo = aguardandoPagamento;
   // Pago por Pix: cada pagamento vale 30 dias e não renova sozinho, então não há cobrança recorrente para cancelar.
   const porPix = assinatura.cobranca === 'pix';
@@ -229,7 +229,7 @@ export default function AssinaturaStatus({ className = '' }) {
         <div className="assinatura-card__confirmar" role="alertdialog" aria-label={desistindo ? 'Confirmar desistência' : 'Confirmar cancelamento'}>
           {desistindo ? (
             <p>
-              Desistir da assinatura? O pagamento pendente é cancelado e você volta ao plano gratuito
+              Desistir da assinatura? O pagamento pendente é cancelado e você volta ao teste grátis
               {testeVigente
                 ? `, com o teste até ${formatarData(assinatura.dataFimTrial)}.`
                 : '. O período de teste já terminou, então será preciso assinar um plano para continuar usando o sistema.'}
@@ -254,7 +254,7 @@ export default function AssinaturaStatus({ className = '' }) {
         </div>
       ) : (
         <button type="button" className="assinatura-card__cancelar" onClick={() => setConfirmandoCancelamento(true)}>
-          {desistindo ? 'Desistir e voltar ao gratuito' : 'Cancelar assinatura'}
+          {desistindo ? 'Desistir e voltar ao teste grátis' : 'Cancelar assinatura'}
         </button>
       ))}
 

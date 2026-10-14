@@ -5,7 +5,7 @@ import { normalizarEmail } from '@/utils/email';
 
 const FORM_INICIAL = { nomeCompleto: '', email: '', nomeEmpresa: '', cnpj: '', telefone: '', password: '' };
 
-// Cadastro de uma nova clínica pelo super_admin: cria o usuário admin dela, já com o período de teste do plano gratuito.
+// Cadastro de uma nova clínica pelo super_admin: cria o usuário admin dela, já com o teste grátis.
 export default function NovoAdminModal({ erro, onSave, onClose }) {
   const [form, setForm] = useState(FORM_INICIAL);
 
@@ -100,7 +100,7 @@ export default function NovoAdminModal({ erro, onSave, onClose }) {
               required
             />
           </div>
-          <p className="modal-form__hint">A clínica entra com este e-mail e senha e começa no plano gratuito, em período de teste.</p>
+          <p className="modal-form__hint">A clínica entra com este e-mail e senha e começa no teste grátis de 7 dias, sem cartão.</p>
         </ModalForm>
       )}
     </Modal>

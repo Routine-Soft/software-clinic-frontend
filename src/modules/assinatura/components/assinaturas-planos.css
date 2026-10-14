@@ -155,3 +155,19 @@
     transform: none;
   }
 }
+
+.plano-opcao__descricao {
+  margin: -4px 0 0;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.plano-opcao__exclusivo {
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.plano-opcao__pagamento {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}

@@ -1,3 +1,5 @@
+import { usePlanosPublicos } from '@/modules/plano/plano.hooks';
+import { recursosExclusivos } from '@/modules/plano/plano.utils';
 import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuthContext } from '@/hooks/useAuthContext';
@@ -10,8 +12,7 @@ import {
   FUNCIONALIDADES,
   PASSOS,
   PERFIS,
-  PLANO_INDIVIDUAL,
-  PLANO_PRO,
+  PLANOS_PADRAO,
   SECOES,
   SEGURANCA,
   VITRINE,
@@ -179,7 +180,7 @@ function Funcionalidades() {
         <header className="lp-secao__cab">
           <span className="lp-selo">Tudo incluído</span>
           <h2>Tudo o que a sua clínica precisa, sem pagar à parte</h2>
-          <p>Todas as funcionalidades estão em todos os planos.</p>
+          <p>Os recursos de cada plano estão na seção de preços.</p>
         </header>
 
         <ul className="lp-recursos">
@@ -310,51 +311,65 @@ function Seguranca() {
   );
 }
 
+function formatarPrecoPlano(preco) {
+  return `R$ ${Number(preco).toLocaleString('pt-BR', { minimumFractionDigits: Number.isInteger(preco) ? 0 : 2 })}`;
+}
+
+// Os planos vêm do cadastro de Planos do super admin. O que um plano tem e o outro não aparece em destaque.
 function Precos({ logado }) {
+  const { planos, carregando, falhou } = usePlanosPublicos();
+  const lista = falhou || (planos && !planos.length) ? PLANOS_PADRAO : planos ?? [];
+  const maisCaro = lista.length > 1 ? lista[lista.length - 1]._id : null;
+
   return (
     <section className="lp-secao lp-secao--destaque" id="precos">
       <div className="lp-container">
         <header className="lp-secao__cab">
           <span className="lp-selo">Preços</span>
-          <h2>Planos com tudo incluído</h2>
-          <p>Teste à vontade antes de decidir.</p>
+          <h2>Escolha o plano da sua clínica</h2>
+          <p>Teste qualquer um por 7 dias, com tudo liberado e sem cadastrar cartão.</p>
         </header>
 
         <div className="lp-planos">
-          <article className="lp-plano lp-revelar">
-            <h3>Teste grátis</h3>
-            <p className="lp-plano__preco">R$ 0<small> por 7 dias</small></p>
-            <ul className="lp-lista-check">
-              <li><IconeCheck /> Todas as funcionalidades liberadas</li>
-              <li><IconeCheck /> Sem cadastrar cartão de crédito</li>
-              <li><IconeCheck /> Seus dados continuam ao assinar</li>
-            </ul>
-            {!logado && <Link to="/registro" className="btn btn--ghost btn--block">Começar teste grátis</Link>}
-          </article>
-
-          <article className="lp-plano lp-revelar" style={{ '--i': 1 }}>
-            <h3>Individual</h3>
-            <p className="lp-plano__preco"><span className="lp-degrade">R$ 100</span><small>/mês</small></p>
-            <ul className="lp-lista-check">
-              {PLANO_INDIVIDUAL.map((item) => <li key={item}><IconeCheck /> {item}</li>)}
-            </ul>
-            <Link to={logado ? '/assinaturas' : '/registro'} className="btn btn--ghost btn--block">
-              {logado ? 'Ver minha assinatura' : 'Criar conta e assinar'}
-            </Link>
-          </article>
-
-          <article className="lp-plano lp-plano--pro lp-revelar" style={{ '--i': 2 }}>
-            <span className="lp-plano__selo">Mais escolhido</span>
-            <h3>Pro</h3>
-            <p className="lp-plano__preco"><span className="lp-degrade">R$ 200</span><small>/mês</small></p>
-            <ul className="lp-lista-check">
-              {PLANO_PRO.map((item) => <li key={item}><IconeCheck /> {item}</li>)}
-            </ul>
-            <Link to={logado ? '/assinaturas' : '/registro'} className="btn btn--primary btn--block">
-              {logado ? 'Ver minha assinatura' : 'Criar conta e assinar'}
-            </Link>
-          </article>
+          {carregando
+            ? [0, 1].map((i) => (
+                <article key={i} className="lp-plano" aria-busy="true">
+                  <div className="skeleton skeleton--line" style={{ width: '40%', height: 26 }} />
+                  <div className="skeleton skeleton--line" style={{ width: '60%', height: 48 }} />
+                  <div className="skeleton skeleton--line" style={{ height: 160 }} />
+                </article>
+              ))
+            : lista.map((plano, i) => {
+                const exclusivos = recursosExclusivos(plano, lista);
+                const destaque = plano._id === maisCaro;
+                return (
+                  <article key={plano._id} className={`lp-plano lp-revelar${destaque ? ' lp-plano--pro' : ''}`} style={{ '--i': i }}>
+                    {destaque && <span className="lp-plano__selo">Mais completo</span>}
+                    <div className="lp-plano__cab">
+                      <h3>{plano.nome}</h3>
+                      {plano.descricao && <p className="lp-plano__descricao">{plano.descricao}</p>}
+                    </div>
+                    <p className="lp-plano__preco"><span className="lp-degrade">{formatarPrecoPlano(plano.preco)}</span><small>/mês</small></p>
+                    <p className="lp-plano__teste">7 dias grátis para testar, sem cartão</p>
+                    <ul className="lp-lista-check">
+                      {(plano.recursos ?? []).map((item) => (
+                        <li key={item} className={exclusivos.has(item) ? 'lp-lista-check__exclusivo' : undefined}>
+                          <IconeCheck />
+                          <span>
+                            {item}
+                            {exclusivos.has(item) && <span className="lp-plano__so">Só no {plano.nome}</span>}
+                          </span>
+                        </li>
+                      ))}
+                    </ul>
+                    <Link to={logado ? '/assinaturas' : '/registro'} className={`btn ${destaque ? 'btn--primary' : 'btn--ghost'} btn--block`}>
+                      {logado ? 'Ver minha assinatura' : 'Testar 7 dias grátis'}
+                    </Link>
+                  </article>
+                );
+              })}
         </div>
+        <p className="lp-planos__nota">Pague no Pix ou no cartão. No cartão, renova sozinho todo mês e você cancela quando quiser, sem multa.</p>
       </div>
     </section>
   );

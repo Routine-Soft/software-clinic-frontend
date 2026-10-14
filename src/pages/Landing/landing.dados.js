@@ -194,18 +194,17 @@ export const SEGURANCA = [
   'Conexão criptografada (HTTPS) e login com senha ou Google',
 ];
 
-export const PLANO_INDIVIDUAL = [
-  'Todas as funcionalidades incluídas',
-  'Para quem atende sozinho: só você usa o sistema',
-  'Pacientes sem limite',
-  'Pague no Pix ou no cartão',
-];
-
-export const PLANO_PRO = [
-  'Todas as funcionalidades incluídas',
-  'Profissionais, recepção, pacientes e usuários sem limite',
-  'Pague no Pix ou no cartão',
-  'No cartão, renova sozinho e você cancela quando quiser',
+// Só se a API não responder: os planos vêm do cadastro de Planos (super admin), em /planos/publicos.
+const RECURSOS_BASE = ['Agenda', 'Prontuário eletrônico', 'Pacientes (cadastro sem limite)', 'Lista de espera', 'Convênios'];
+export const PLANOS_PADRAO = [
+  { _id: 'individual', nome: 'Individual', preco: 100, descricao: 'O plano para quem trabalha sozinho', recursos: RECURSOS_BASE },
+  {
+    _id: 'pro',
+    nome: 'Pro',
+    preco: 200,
+    descricao: 'O plano para clínicas que trabalham em equipe',
+    recursos: [...RECURSOS_BASE, 'Lembrete de consulta pelo WhatsApp', 'Repasse financeiro para os colaboradores', 'Cadastro de profissionais sem limite'],
+  },
 ];
 
 export const DUVIDAS = [

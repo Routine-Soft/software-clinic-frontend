@@ -203,7 +203,7 @@ export const PLANOS_PADRAO = [
     nome: 'Pro',
     preco: 200,
     descricao: 'O plano para clínicas que trabalham em equipe',
-    recursos: [...RECURSOS_BASE, 'Lembrete de consulta pelo WhatsApp', 'Repasse financeiro para os colaboradores', 'Cadastro de profissionais sem limite'],
+    recursos: [...RECURSOS_BASE, 'Lembrete de consulta pelo WhatsApp (em breve)', 'Repasse financeiro para os colaboradores', 'Cadastro de profissionais sem limite'],
   },
 ];
 

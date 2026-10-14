@@ -3,7 +3,7 @@ import Modal from '@/components/Modal/Modal';
 import ModalForm from '@/components/Modal/ModalForm';
 import CampoUsuarioVinculado from './CampoUsuarioVinculado';
 
-const FORM_CRIAR_INICIAL = { nome: '', tipoRegistro: '', numeroRegistro: '', especialidadeIds: [], usuarioId: '' };
+const FORM_CRIAR_INICIAL = { nome: '', tipoRegistro: '', numeroRegistro: '', especialidadeIds: [], usuarioId: '', exibirNaTv: true };
 
 export default function NovoProfissionalModal({ especialidades, usuariosVinculaveis, loadingUsuarios, erro, onSave, onClose }) {
   const [formCriar, setFormCriar] = useState(FORM_CRIAR_INICIAL);
@@ -103,6 +103,15 @@ export default function NovoProfissionalModal({ especialidades, usuariosVinculav
               <p className="modal-form__hint">Nenhuma especialidade cadastrada ainda. Cadastre uma antes de criar um profissional.</p>
             )}
           </div>
+
+          <label className="check">
+            <input
+              type="checkbox"
+              checked={formCriar.exibirNaTv}
+              onChange={(e) => handleChangeCriar('exibirNaTv', e.target.checked)}
+            />
+            Mostrar o nome do profissional na TV da sala de espera
+          </label>
         </ModalForm>
       )}
     </Modal>

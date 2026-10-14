@@ -3,6 +3,7 @@ import Modal from '@/components/Modal/Modal';
 import ModalForm from '@/components/Modal/ModalForm';
 import { normalizarEmail } from '@/utils/email';
 import CamposResponsaveis from './CamposResponsaveis';
+import CampoNomeNaTv from './CampoNomeNaTv';
 import { ehMenorDeIdade } from '../paciente.utils';
 
 export default function EditarPacienteModal({ paciente, convenios, empresas, erro, onSave, onClose }) {
@@ -15,6 +16,7 @@ export default function EditarPacienteModal({ paciente, convenios, empresas, err
     convenioId: paciente.convenioId?._id ?? paciente.convenioId ?? '',
     empresaId: paciente.empresaId?._id ?? paciente.empresaId ?? '',
     responsaveis: paciente.responsaveis ?? [],
+    nomeNaTv: paciente.nomeNaTv ?? 'abreviado',
   });
 
   const menor = ehMenorDeIdade(formEdicao.dataNascimento);
@@ -137,6 +139,8 @@ export default function EditarPacienteModal({ paciente, convenios, empresas, err
               )}
             </div>
           )}
+
+          <CampoNomeNaTv nome={formEdicao.nome} valor={formEdicao.nomeNaTv} onChange={(valor) => handleChangeEdicao('nomeNaTv', valor)} />
         </ModalForm>
       )}
     </Modal>

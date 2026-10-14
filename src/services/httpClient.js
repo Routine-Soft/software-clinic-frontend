@@ -61,8 +61,10 @@ async function makeRequest(url, options = {}) {
     headers['Content-Type'] = 'application/json'
   }
 
+  // Quem manda o próprio Authorization (ex.: a TV da sala de espera, com a chave dela) não usa a sessão do usuário.
+  const usaSessao = !headers['Authorization']
   const accessToken = tokenManager.getAccessToken()
-  if (accessToken) {
+  if (accessToken && usaSessao) {
     headers['Authorization'] = `Bearer ${accessToken}`
   }
 
@@ -72,7 +74,7 @@ async function makeRequest(url, options = {}) {
       headers,
     })
 
-    if (response.status === 401) {
+    if (response.status === 401 && usaSessao) {
       const refreshToken = tokenManager.getRefreshToken()
       if (refreshToken) {
         try {
@@ -131,12 +133,14 @@ async function makeRequest(url, options = {}) {
 }
 
 export const httpClient = {
-  get: (url) => makeRequest(url, { method: 'GET' }),
+  // `opcoes.headers` permite mandar outro Authorization (ex.: a chave da TV da sala de espera).
+  get: (url, opcoes = {}) => makeRequest(url, { method: 'GET', headers: opcoes.headers }),
 
-  post: (url, body) =>
+  post: (url, body, opcoes = {}) =>
     makeRequest(url, {
       method: 'POST',
       body: JSON.stringify(body),
+      headers: opcoes.headers,
     }),
 
   patch: (url, body) =>

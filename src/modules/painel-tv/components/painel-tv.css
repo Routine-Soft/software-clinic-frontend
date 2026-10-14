@@ -1,0 +1,379 @@
+/* ---------- Painel da TV (#/tv) ----------
+   Feito para ser lido de longe: letras grandes, tema escuro (cansa menos a vista) e tamanhos que acompanham
+   a tela (vw/vh), de 720p a 4K. */
+
+.tv {
+  color-scheme: dark;
+  position: relative;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding: 3vh 3vw;
+  overflow: hidden;
+  color: var(--text);
+  background:
+    radial-gradient(60vw 60vh at 0% 0%, var(--primary-soft), transparent 70%),
+    radial-gradient(50vw 50vh at 100% 100%, var(--blob-2, var(--primary-soft)), transparent 70%),
+    var(--bg);
+}
+
+.tv-topo {
+  display: flex;
+  gap: 2vw;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 2vh;
+  border-bottom: 1px solid var(--border);
+}
+
+.tv-topo__clinica {
+  display: flex;
+  gap: 1.2vw;
+  align-items: center;
+  font-size: clamp(1.2rem, 2.2vw, 3rem);
+  font-weight: 700;
+}
+
+.tv-topo__marca,
+.tv-codigo__marca {
+  display: grid;
+  place-items: center;
+  width: clamp(40px, 3.6vw, 80px);
+  aspect-ratio: 1;
+  color: #fff;
+  background: var(--gradient-marca);
+  border-radius: 22%;
+}
+
+.tv-topo__marca svg,
+.tv-codigo__marca svg {
+  width: 62%;
+  height: 62%;
+}
+
+.tv-relogio {
+  display: grid;
+  justify-items: end;
+}
+
+.tv-relogio strong {
+  font-size: clamp(1.6rem, 3vw, 4rem);
+  font-variant-numeric: tabular-nums;
+  line-height: 1.1;
+}
+
+.tv-relogio span {
+  font-size: clamp(0.9rem, 1.2vw, 1.6rem);
+  color: var(--text-muted);
+}
+
+.tv-conteudo {
+  display: grid;
+  grid-template-columns: minmax(0, 2.2fr) minmax(0, 1fr);
+  gap: 3vw;
+  align-items: stretch;
+  padding-top: 4vh;
+}
+
+.tv-atual {
+  display: grid;
+  gap: 3vh;
+  align-content: center;
+  padding: 5vh 4vw;
+  text-align: center;
+  background: var(--surface);
+  border: 2px solid var(--primary);
+  border-radius: clamp(18px, 2vw, 40px);
+  box-shadow: 0 0 6vw var(--primary-ring);
+  animation: tvChamada 1.4s var(--ease) backwards;
+}
+
+.tv-atual__rotulo {
+  font-size: clamp(1rem, 1.8vw, 2.4rem);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--primary);
+  text-transform: uppercase;
+}
+
+.tv-atual__nome {
+  font-size: clamp(2.6rem, 7vw, 10rem);
+  font-weight: 800;
+  line-height: 1.05;
+  overflow-wrap: anywhere;
+}
+
+.tv-atual__destino {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1vh 2vw;
+  justify-content: center;
+  align-items: center;
+}
+
+.tv-atual__sala {
+  padding: 1vh 2.4vw;
+  font-size: clamp(1.6rem, 3.6vw, 5rem);
+  font-weight: 800;
+  color: var(--on-primary);
+  background: var(--gradient-primary);
+  border-radius: 999px;
+}
+
+.tv-atual__profissional {
+  font-size: clamp(1.2rem, 2.4vw, 3.2rem);
+  color: var(--text-muted);
+}
+
+@keyframes tvChamada {
+  0% {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+  25% {
+    opacity: 1;
+    transform: scale(1.03);
+  }
+}
+
+.tv-anteriores {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  gap: 2vh;
+  padding: 3vh 2vw;
+  background: var(--glass-bg);
+  border: 1px solid var(--border);
+  border-radius: clamp(18px, 2vw, 40px);
+}
+
+.tv-anteriores h2 {
+  font-size: clamp(1rem, 1.7vw, 2.2rem);
+  color: var(--text-muted);
+}
+
+.tv-anteriores ul {
+  display: grid;
+  gap: 1.6vh;
+  align-content: start;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.tv-anteriores li {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.4vh 1vw;
+  padding-bottom: 1.6vh;
+  border-bottom: 1px solid var(--border);
+  animation: fadeInUp 0.6s var(--ease) backwards;
+}
+
+.tv-anteriores li strong {
+  font-size: clamp(1.1rem, 2vw, 2.8rem);
+  overflow-wrap: anywhere;
+}
+
+.tv-anteriores li span {
+  grid-column: 1;
+  font-size: clamp(0.9rem, 1.4vw, 2rem);
+  color: var(--primary);
+}
+
+.tv-anteriores li time {
+  grid-row: 1 / span 2;
+  grid-column: 2;
+  align-self: center;
+  font-size: clamp(0.9rem, 1.4vw, 2rem);
+  color: var(--text-subtle);
+  font-variant-numeric: tabular-nums;
+}
+
+.tv-anteriores__vazio {
+  font-size: clamp(0.9rem, 1.4vw, 2rem);
+  color: var(--text-subtle);
+}
+
+.tv-vazio {
+  display: grid;
+  gap: 2vh;
+  place-content: center;
+  text-align: center;
+}
+
+.tv-vazio h1 {
+  font-size: clamp(2.4rem, 5vw, 7rem);
+}
+
+.tv-vazio p {
+  font-size: clamp(1.1rem, 2.2vw, 3rem);
+  color: var(--text-muted);
+}
+
+/* Tela do código */
+.tv-codigo {
+  display: grid;
+  gap: 3vh;
+  place-content: center;
+  justify-items: center;
+  grid-row: 1 / -1;
+  text-align: center;
+}
+
+.tv-codigo__marca {
+  width: clamp(56px, 6vw, 120px);
+}
+
+.tv-codigo h1 {
+  font-size: clamp(2rem, 4vw, 6rem);
+}
+
+.tv-codigo p {
+  max-width: 60vw;
+  font-size: clamp(1.1rem, 2vw, 2.8rem);
+  color: var(--text-muted);
+}
+
+.tv-codigo__numero {
+  padding: 2vh 4vw;
+  font-size: clamp(3rem, 10vw, 14rem);
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  font-variant-numeric: tabular-nums;
+  background: var(--surface);
+  border: 2px solid var(--primary);
+  border-radius: clamp(18px, 2vw, 40px);
+}
+
+.tv-codigo__dica {
+  font-size: clamp(0.9rem, 1.4vw, 2rem) !important;
+  color: var(--text-subtle) !important;
+}
+
+.tv-aviso {
+  position: absolute;
+  bottom: 2vh;
+  left: 50%;
+  padding: 1vh 2vw;
+  font-size: clamp(0.9rem, 1.4vw, 2rem);
+  color: var(--warning);
+  background: var(--surface);
+  border-radius: 999px;
+  transform: translateX(-50%);
+}
+
+.tv-iniciar {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  display: grid;
+  gap: 3vh;
+  place-content: center;
+  justify-items: center;
+  padding: 4vw;
+  text-align: center;
+  background: color-mix(in srgb, var(--bg) 82%, transparent);
+  backdrop-filter: blur(8px);
+}
+
+.tv-iniciar__botao {
+  padding: 2.4vh 4vw;
+  font-size: clamp(1.4rem, 2.6vw, 3.6rem);
+}
+
+.tv-iniciar__botao:focus-visible {
+  outline: 4px solid var(--primary);
+  outline-offset: 6px;
+}
+
+.tv-iniciar p {
+  max-width: 60vw;
+  font-size: clamp(1rem, 1.8vw, 2.4rem);
+  color: var(--text-muted);
+}
+
+/* TV em pé ou tela estreita: a lista vai para baixo. */
+@media (max-aspect-ratio: 1/1) {
+  .tv-conteudo {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ---------- Modal "TVs da sala de espera" ---------- */
+
+.tvs-modal {
+  display: grid;
+  gap: 16px;
+}
+
+.tvs-modal__passos {
+  display: grid;
+  gap: 6px;
+  padding: 12px 14px 12px 32px;
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  background: var(--surface-2);
+  border-radius: var(--radius-md);
+}
+
+.tvs-modal__endereco {
+  overflow-wrap: anywhere;
+  color: var(--primary);
+}
+
+.tvs-modal__form {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: end;
+}
+
+.tvs-modal__codigo {
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  font-variant-numeric: tabular-nums;
+}
+
+.tvs-modal__titulo {
+  font-size: 0.95rem;
+}
+
+.tvs-modal__vazio {
+  color: var(--text-subtle);
+}
+
+.tvs-modal__lista {
+  display: grid;
+  gap: 8px;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.tvs-modal__lista li {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+}
+
+.tvs-modal__lista li div:first-child {
+  display: grid;
+}
+
+.tvs-modal__lista li span {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+@media (max-width: 560px) {
+  .tvs-modal__form {
+    grid-template-columns: 1fr;
+  }
+}

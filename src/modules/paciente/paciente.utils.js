@@ -58,3 +58,22 @@ export function cpfDoPaciente(paciente) {
   const doResponsavel = (paciente.responsaveis ?? []).find((r) => r.cpf)?.cpf;
   return doResponsavel ? `CPF do responsável ${doResponsavel}` : 'Sem CPF';
 }
+
+// Como o nome aparece na TV da sala de espera (igual a nomeParaTv do backend, em chamada.utils.js).
+export const OPCOES_NOME_NA_TV = [
+  ['abreviado', 'Primeiro nome e inicial'],
+  ['completo', 'Nome completo'],
+  ['primeiro', 'Só o primeiro nome'],
+  ['oculto', 'Não mostrar o nome (só a sala)'],
+];
+
+const PARTICULAS = new Set(['da', 'das', 'de', 'do', 'dos', 'e']);
+
+export function nomeParaTv(nome, modo = 'abreviado') {
+  const partes = String(nome ?? '').trim().split(/\s+/).filter(Boolean);
+  if (!partes.length || modo === 'oculto') return null;
+  if (modo === 'completo') return partes.join(' ');
+  if (modo === 'primeiro' || partes.length === 1) return partes[0];
+  const sobrenome = [...partes.slice(1)].reverse().find((p) => !PARTICULAS.has(p.toLowerCase()));
+  return sobrenome ? `${partes[0]} ${sobrenome[0].toUpperCase()}.` : partes[0];
+}

@@ -1,0 +1,96 @@
+.espera-grade {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr));
+  gap: 16px;
+  align-items: start;
+}
+
+.espera-coluna {
+  display: grid;
+  gap: 12px;
+  padding: 18px;
+  animation: fadeInUp 0.4s var(--ease) calc(var(--i, 0) * 60ms) backwards;
+}
+
+.espera-coluna[data-situacao='aguardando'] {
+  border-color: var(--warning);
+}
+
+.espera-coluna__topo {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.espera-coluna__topo h3 {
+  font-size: 1rem;
+}
+
+.espera-coluna__vazio {
+  font-size: 0.9rem;
+  color: var(--text-subtle);
+}
+
+.espera-lista {
+  display: grid;
+  gap: 8px;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.espera-paciente {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  transition: transform 0.2s var(--ease), box-shadow 0.2s var(--ease);
+}
+
+.espera-paciente:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+
+.espera-paciente__info {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+  flex: 1 1 180px;
+}
+
+.espera-paciente__info strong {
+  overflow-wrap: anywhere;
+}
+
+.espera-paciente__info span {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.espera-paciente__tempo {
+  color: var(--text-subtle) !important;
+}
+
+.espera-coluna[data-situacao='aguardando'] .espera-paciente__tempo {
+  font-weight: 600;
+  color: var(--warning) !important;
+}
+
+.espera-paciente__acoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+
+.espera-paciente__acoes .btn svg {
+  width: 16px;
+  height: 16px;
+}

@@ -44,6 +44,8 @@ import MainLayout from '@/layouts/MainLayout'
 import { AuthProvider } from '@/context/AuthContext'
 import EsqueciSenha from '@/modules/user/components/EsqueciSenha'
 import RedefinirSenha from '@/modules/user/components/RedefinirSenha'
+import SalaDeEspera from '@/modules/sala-espera/components/SalaDeEspera'
+import PainelTv from '@/modules/painel-tv/components/PainelTv'
 import ProtectedRoute from '@/components/ProtectedRoute'
 import { HashRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
 
@@ -55,6 +57,8 @@ function App() {
           <Route path="/login" element={<User />} />
           <Route path="/registro" element={<RegistroClinica />} />
           <Route path="/esqueci-senha" element={<EsqueciSenha />} />
+          {/* Painel da TV da sala de espera: sem login, a TV se conecta por código. */}
+          <Route path="/tv" element={<PainelTv />} />
           <Route path="/redefinir-senha/:codigo" element={<RedefinirSenha />} />
           <Route path="/afiliados" element={<ProgramaAfiliados />} />
           <Route path="/termos" element={<TermosPagina termos={TERMOS_CLINICA} />} />
@@ -99,6 +103,17 @@ function App() {
               <ProtectedRoute>
                 <MainLayout>
                   <Home />
+                </MainLayout>
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/sala-de-espera"
+            element={
+              <ProtectedRoute requiredRoles={['admin', 'profissional', 'recepcao', 'super_admin']}>
+                <MainLayout>
+                  <SalaDeEspera />
                 </MainLayout>
               </ProtectedRoute>
             }

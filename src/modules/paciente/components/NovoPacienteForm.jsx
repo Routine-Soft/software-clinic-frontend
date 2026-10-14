@@ -3,9 +3,10 @@ import { IconeMais } from '@/components/CrudCard/icones';
 import { normalizarEmail } from '@/utils/email';
 import CamposResponsaveis from './CamposResponsaveis';
 import CampoPacienteTeste from './CampoPacienteTeste';
+import CampoNomeNaTv from './CampoNomeNaTv';
 import { ehMenorDeIdade } from '../paciente.utils';
 
-const FORM_CRIAR_INICIAL = { nome: '', telefone: '', email: '', cpf: '', dataNascimento: '', convenioId: '', empresaId: '', responsaveis: [], teste: false };
+const FORM_CRIAR_INICIAL = { nome: '', telefone: '', email: '', cpf: '', dataNascimento: '', convenioId: '', empresaId: '', responsaveis: [], teste: false, nomeNaTv: 'abreviado' };
 
 export default function NovoPacienteForm({ convenios, empresas, onSubmit }) {
   const ids = useId();
@@ -130,6 +131,8 @@ export default function NovoPacienteForm({ convenios, empresas, onSubmit }) {
           </select>
         </div>
       )}
+
+      <CampoNomeNaTv nome={formCriar.nome} valor={formCriar.nomeNaTv} onChange={(valor) => handleChangeCriar('nomeNaTv', valor)} />
 
       <div className="field field--full">
         <CampoPacienteTeste marcado={formCriar.teste} onChange={(valor) => handleChangeCriar('teste', valor)} />

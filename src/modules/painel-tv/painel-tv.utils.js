@@ -44,9 +44,10 @@ export function tocarAviso() {
   setTimeout(() => audio.close(), 1600);
 }
 
-// O que a voz da TV fala: "Maria S., Sala 2".
+// O que a voz da TV fala: o nome completo ("Maria da Silva, Sala 2"), mesmo quando a tela mostra abreviado.
 export function textoParaFalar(chamada) {
-  const quem = chamada.paciente ? chamada.paciente.replace(/\.$/, '') : 'Próximo paciente';
+  const nome = chamada.nomeFalado ?? chamada.paciente;
+  const quem = nome ? nome.replace(/\.$/, '') : 'Próximo paciente';
   return chamada.sala ? `${quem}, ${chamada.sala}` : quem;
 }
 

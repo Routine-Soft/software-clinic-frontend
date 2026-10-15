@@ -6,7 +6,7 @@ import CampoPacienteTeste from './CampoPacienteTeste';
 import CampoNomeNaTv from './CampoNomeNaTv';
 import { ehMenorDeIdade } from '../paciente.utils';
 
-const FORM_CRIAR_INICIAL = { nome: '', telefone: '', email: '', cpf: '', dataNascimento: '', convenioId: '', empresaId: '', responsaveis: [], teste: false, nomeNaTv: 'abreviado' };
+const FORM_CRIAR_INICIAL = { nome: '', telefone: '', email: '', cpf: '', dataNascimento: '', convenioId: '', empresaId: '', responsaveis: [], teste: false, nomeNaTv: 'completo' };
 
 export default function NovoPacienteForm({ convenios, empresas, onSubmit }) {
   const ids = useId();

@@ -61,11 +61,14 @@ export function cpfDoPaciente(paciente) {
 
 // Como o nome aparece na TV da sala de espera (igual a nomeParaTv do backend, em chamada.utils.js).
 export const OPCOES_NOME_NA_TV = [
-  ['abreviado', 'Primeiro nome e inicial'],
-  ['completo', 'Nome completo'],
-  ['primeiro', 'Só o primeiro nome'],
+  ['completo', 'Mostrar o nome completo'],
   ['oculto', 'Não mostrar o nome (só a sala)'],
 ];
+
+// "abreviado" e "primeiro" eram opções de uma versão anterior: hoje a TV mostra o nome completo.
+export function opcaoNomeNaTv(valor) {
+  return valor === 'oculto' ? 'oculto' : 'completo';
+}
 
 const PARTICULAS = new Set(['da', 'das', 'de', 'do', 'dos', 'e']);
 

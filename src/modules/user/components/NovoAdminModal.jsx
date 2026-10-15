@@ -2,6 +2,7 @@ import { useState } from 'react';
 import Modal from '@/components/Modal/Modal';
 import ModalForm from '@/components/Modal/ModalForm';
 import { normalizarEmail } from '@/utils/email';
+import CampoSenha from '@/components/CampoSenha/CampoSenha';
 
 const FORM_INICIAL = { nomeCompleto: '', email: '', nomeEmpresa: '', cnpj: '', telefone: '', password: '' };
 
@@ -89,10 +90,9 @@ export default function NovoAdminModal({ erro, onSave, onClose }) {
 
           <div className="field">
             <label className="field__label" htmlFor="novo-admin-senha">Senha</label>
-            <input
+            <CampoSenha
               id="novo-admin-senha"
               className="input"
-              type="password"
               autoComplete="new-password"
               value={form.password}
               onChange={(e) => handleChange('password', e.target.value)}

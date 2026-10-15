@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import AuthLayout from './AuthLayout';
 import { useRecuperarSenha } from '../user.hooks';
+import CampoSenha from '@/components/CampoSenha/CampoSenha';
 
 // Aberta pelo link do e-mail "Redefinir a sua senha" (#/redefinir-senha/<código>).
 export default function RedefinirSenha() {
@@ -38,10 +39,9 @@ export default function RedefinirSenha() {
 
           <div className="field">
             <label className="field__label" htmlFor="nova-senha">Senha nova</label>
-            <input
+            <CampoSenha
               id="nova-senha"
               className="input"
-              type="password"
               value={senha}
               onChange={(e) => setSenha(e.target.value)}
               minLength={6}
@@ -52,10 +52,9 @@ export default function RedefinirSenha() {
 
           <div className="field">
             <label className="field__label" htmlFor="nova-senha-confirmacao">Repita a senha nova</label>
-            <input
+            <CampoSenha
               id="nova-senha-confirmacao"
               className="input"
-              type="password"
               value={confirmacao}
               onChange={(e) => setConfirmacao(e.target.value)}
               minLength={6}

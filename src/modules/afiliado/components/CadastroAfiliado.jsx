@@ -6,6 +6,7 @@ import { normalizarEmail } from '@/utils/email';
 import { criarAfiliado, ativarAfiliado } from '../afiliado.api';
 import '@/modules/user/components/user.css';
 import './afiliado.css';
+import CampoSenha from '@/components/CampoSenha/CampoSenha';
 
 // Três situações: visitante (cria a conta de afiliado), já usa a Sonelia (ativa na própria conta,
 // com o mesmo e-mail) ou já é afiliado (vai para o painel).
@@ -98,7 +99,7 @@ export default function CadastroAfiliado() {
         {!isAuthenticated && (
           <div className="field field--full">
             <label className="field__label" htmlFor="afiliado-senha">Senha</label>
-            <input id="afiliado-senha" className="input" type="password" minLength={6} value={form.password} onChange={(e) => handleChange('password', e.target.value)} required />
+            <CampoSenha id="afiliado-senha" className="input" minLength={6} value={form.password} onChange={(e) => handleChange('password', e.target.value)} required />
           </div>
         )}
 

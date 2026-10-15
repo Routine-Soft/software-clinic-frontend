@@ -7,6 +7,7 @@ import NovoUsuarioModal from './NovoUsuarioModal';
 import { IconeMais } from '@/components/CrudCard/icones';
 import { iniciais } from '@/utils/nome';
 import './user.css';
+import CampoSenha from '@/components/CampoSenha/CampoSenha';
 
 export default function UsuariosClinicaADM() {
   const { usuarios, loading, error, successMessage, addUsuario, editUsuario, removeUsuario, resetSenhaUsuario } = useUsuariosDaClinica();
@@ -132,10 +133,9 @@ export default function UsuariosClinicaADM() {
                 <form className="user-card__reset" onSubmit={(e) => handleRedefinirSenha(e, usuario._id)}>
                   <div className="field">
                     <label className="field__label" htmlFor={`nova-senha-${usuario._id}`}>Nova senha</label>
-                    <input
+                    <CampoSenha
                       id={`nova-senha-${usuario._id}`}
                       className="input"
-                      type="password"
                       value={novaSenha}
                       onChange={(e) => setNovaSenha(e.target.value)}
                       required

@@ -4,6 +4,7 @@ import { useAuthContext } from "@/hooks/useAuthContext";
 import AuthLayout from "./AuthLayout";
 import BotaoGoogle from "./BotaoGoogle";
 import { normalizarEmail } from "@/utils/email";
+import CampoSenha from '@/components/CampoSenha/CampoSenha';
 
 export default function User() {
   const { isAuthenticated, loading, error, login, entrarComGoogle } = useAuthContext();
@@ -67,10 +68,9 @@ export default function User() {
 
         <div className="field">
           <label className="field__label" htmlFor="login-password">Senha</label>
-          <input
+          <CampoSenha
             id="login-password"
             className="input"
-            type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             placeholder="••••••••"

@@ -7,6 +7,7 @@ import BotaoGoogle from './BotaoGoogle';
 import CampoAceiteTermos from './CampoAceiteTermos';
 import { normalizarEmail } from '@/utils/email';
 import { codigoIndicacaoGuardado, esquecerCodigoIndicacao, normalizarCodigo } from '@/modules/indicacao/indicacao.utils';
+import CampoSenha from '@/components/CampoSenha/CampoSenha';
 
 export default function RegistroClinica() {
   const navigate = useNavigate();
@@ -169,10 +170,9 @@ export default function RegistroClinica() {
 
             <div className="field field--full">
               <label className="field__label" htmlFor="registro-senha">Senha</label>
-              <input
+              <CampoSenha
                 id="registro-senha"
                 className="input"
-                type="password"
                 value={form.password}
                 onChange={(e) => handleChange('password', e.target.value)}
                 required

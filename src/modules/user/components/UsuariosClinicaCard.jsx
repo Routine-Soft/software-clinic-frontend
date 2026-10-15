@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useUsuariosDaClinica } from '../user.hooks';
 import { useAuthContext } from '@/hooks/useAuthContext';
-import { ROTULO_FUNCAO } from '../user.constants';
+import { ROTULO_FUNCAO, podeAlterarUsuario } from '../user.constants';
 import EditarUsuarioModal from './EditarUsuarioModal';
 import NovoUsuarioModal from './NovoUsuarioModal';
 import { Icone, IconeMais, IconeLapis, IconeLixeira, IconeCheck, IconeX } from '@/components/CrudCard/icones';
@@ -18,7 +18,7 @@ const IconeUsuarios = () => (
   </Icone>
 );
 
-// Versão em cartão da tela de Usuários, para o Dashboard admin. A redefinição de senha fica na tela completa.
+// Versão em cartão da tela de Usuários, para o Painel Admin. A redefinição de senha fica na tela completa.
 export default function UsuariosClinicaCard({ className = '' }) {
   const { usuarios, loading, error, successMessage, addUsuario, editUsuario, removeUsuario } = useUsuariosDaClinica();
   const { user: usuarioLogado } = useAuthContext();
@@ -108,7 +108,7 @@ export default function UsuariosClinicaCard({ className = '' }) {
                       <IconeX />
                     </button>
                   </div>
-                ) : (
+                ) : podeAlterarUsuario(usuarioLogado, usuario) && (
                   <div className="crud-item__acoes">
                     <button type="button" className="icon-btn" aria-label={`Editar ${usuario.nomeCompleto}`} title="Editar" onClick={() => { setConfirmandoId(null); setEditando(usuario); }}>
                       <IconeLapis />

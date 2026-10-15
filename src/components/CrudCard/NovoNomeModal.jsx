@@ -2,7 +2,7 @@ import { useId, useState } from 'react'
 import Modal from '@/components/Modal/Modal'
 import ModalForm from '@/components/Modal/ModalForm'
 
-export default function NovoNomeModal({ titulo, label, placeholder, erro, onSave, onClose }) {
+export default function NovoNomeModal({ titulo, label, placeholder, dica, erro, onSave, onClose }) {
     const [formCriar, setFormCriar] = useState({ nome: '' })
     const inputId = useId()
 
@@ -21,6 +21,7 @@ export default function NovoNomeModal({ titulo, label, placeholder, erro, onSave
                             placeholder={placeholder}
                             required
                         />
+                        {dica && <p className="modal-form__hint">{dica}</p>}
                     </div>
                 </ModalForm>
             )}

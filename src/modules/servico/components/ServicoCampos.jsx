@@ -1,7 +1,7 @@
 import { useId } from 'react';
 import { IconeMais, IconeLixeira } from '@/components/CrudCard/icones';
 import { dicaComissao } from '../servico.utils';
-import { linhaConvenioVazia, MODULOS_SERVICO } from '../servico.form';
+import { linhaConvenioVazia, MODULOS_SERVICO, servicoComMesmoNome, sugestaoDeNome } from '../servico.form';
 import '../servico.css';
 
 function CampoComissao({ id, tipo, valor, preco, onTipo, onValor }) {
@@ -43,8 +43,8 @@ function CampoPreco({ id, valor, onChange, rotulo = 'Preço' }) {
   );
 }
 
-// Campos de criar e editar serviço: dados básicos, preço/repasse particular e a tabela por convênio.
-export default function ServicoCampos({ form, setForm, convenios }) {
+// Campos de criar e editar serviço: dados básicos, preço/repasse padrão e a tabela por convênio.
+export default function ServicoCampos({ form, setForm, convenios, servicos = [], servicoId = null }) {
   const id = useId();
 
   const set = (campo, valor) => setForm((atual) => ({ ...atual, [campo]: valor }));
@@ -58,11 +58,37 @@ export default function ServicoCampos({ form, setForm, convenios }) {
   const usados = new Set(form.tabelaConvenios.map((l) => l.convenioId).filter(Boolean));
   const podeAdicionar = convenios.length > form.tabelaConvenios.length;
 
+  // Nome repetido: avisa enquanto digita e oferece um nome diferente pronto para usar.
+  const repetido = servicoComMesmoNome(form.nome, servicos, servicoId);
+  const sugestao = repetido ? sugestaoDeNome(form, servicos, servicoId) : '';
+  const tipoDoOutro = repetido?.tipo === 'pacote' ? 'pacote' : 'consulta';
+  const paraEste = form.tipo === 'pacote' ? 'Para o pacote' : 'Para a consulta';
+
   return (
     <>
       <div className="field">
         <label className="field__label" htmlFor={`${id}-nome`}>Nome</label>
-        <input id={`${id}-nome`} className="input" type="text" value={form.nome} onChange={(e) => set('nome', e.target.value)} placeholder="Ex: Consulta de rotina, Pacote de fisioterapia" required />
+        <input
+          id={`${id}-nome`}
+          className="input"
+          type="text"
+          value={form.nome}
+          onChange={(e) => set('nome', e.target.value)}
+          placeholder="Ex: Consulta de rotina, Pacote de fisioterapia"
+          aria-invalid={!!repetido}
+          aria-describedby={repetido ? `${id}-nome-repetido` : undefined}
+          required
+        />
+        {repetido && (
+          <div id={`${id}-nome-repetido`} className="servico-nome-repetido" role="alert">
+            <p>
+              Você já tem o serviço <strong>“{repetido.nome}”</strong> ({tipoDoOutro}). {paraEste}, use outro nome.
+            </p>
+            <button type="button" className="btn btn--ghost btn--sm" onClick={() => set('nome', sugestao)}>
+              Usar “{sugestao}”
+            </button>
+          </div>
+        )}
       </div>
 
       <div className="modal-form__row">
@@ -94,11 +120,11 @@ export default function ServicoCampos({ form, setForm, convenios }) {
         <h4 className="tabela-preco__titulo">Preços e repasses</h4>
         <p className="field__hint">
           {form.tipo === 'pacote' ? 'O repasse vale por sessão realizada. ' : ''}
-          Convênio que não estiver na lista usa o preço e o repasse do particular.
+          Convênio que não estiver na lista usa o preço e o repasse padrão.
         </p>
 
         <div className="tabela-preco__linha">
-          <span className="tabela-preco__nome">Particular</span>
+          <span className="tabela-preco__nome">Preço padrão</span>
           <div className="modal-form__row">
             <CampoPreco id={`${id}-preco`} valor={form.preco} onChange={(v) => set('preco', v)} />
             <CampoComissao
@@ -146,7 +172,7 @@ export default function ServicoCampos({ form, setForm, convenios }) {
         ))}
 
         {convenios.length === 0 ? (
-          <p className="modal-form__hint">Para ter preço e repasse por convênio, cadastre os convênios antes (card Convênios, passo 4 do Dashboard admin).</p>
+          <p className="modal-form__hint">Para ter preço e repasse por convênio, cadastre os convênios antes (card Convênios, passo 4 do Painel Admin).</p>
         ) : (
           <button type="button" className="btn btn--ghost btn--sm tabela-preco__adicionar" onClick={adicionarLinha} disabled={!podeAdicionar}>
             <IconeMais />

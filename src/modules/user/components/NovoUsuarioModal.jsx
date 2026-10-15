@@ -2,6 +2,7 @@ import { useState } from 'react';
 import Modal from '@/components/Modal/Modal';
 import ModalForm from '@/components/Modal/ModalForm';
 import { normalizarEmail } from '@/utils/email';
+import CampoSenha from '@/components/CampoSenha/CampoSenha';
 
 const FORM_CRIAR_INICIAL = { nomeCompleto: '', email: '', telefone: '', password: '', role: 'recepcao' };
 
@@ -81,10 +82,9 @@ export default function NovoUsuarioModal({ erro, onSave, onClose }) {
 
           <div className="field">
             <label className="field__label" htmlFor="novo-usuario-senha">Senha</label>
-            <input
+            <CampoSenha
               id="novo-usuario-senha"
               className="input"
-              type="password"
               autoComplete="new-password"
               value={formCriar.password}
               onChange={(e) => handleChangeCriar('password', e.target.value)}

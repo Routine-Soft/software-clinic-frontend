@@ -1,29 +1,31 @@
 import { useState, useEffect } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 import { useAuthContext } from "@/hooks/useAuthContext";
 import AuthLayout from "./AuthLayout";
 import BotaoGoogle from "./BotaoGoogle";
 import { normalizarEmail } from "@/utils/email";
+import CampoSenha from '@/components/CampoSenha/CampoSenha';
 
 export default function User() {
   const { isAuthenticated, loading, error, login, entrarComGoogle } = useAuthContext();
   const navigate = useNavigate();
+  // Quem veio de outra página (ex.: "Seja afiliado") volta para ela depois de entrar.
+  const voltarPara = useLocation().state?.voltarPara ?? '/home';
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [ajudaSenha, setAjudaSenha] = useState(false);
 
   useEffect(() => {
     if (isAuthenticated) {
-      navigate('/home');
+      navigate(voltarPara);
     }
-  }, [isAuthenticated, navigate]);
+  }, [isAuthenticated, navigate, voltarPara]);
 
   async function handleSubmit(e) {
     e.preventDefault();
     try {
       await login(email, password);
-      navigate('/home');
+      navigate(voltarPara);
     } catch (err) {
       console.error('Erro ao fazer login:', err);
     }
@@ -36,7 +38,7 @@ export default function User() {
       if (resultado.novoCadastro) {
         navigate('/registro', { state: { google: { credential, nomeCompleto: resultado.nomeCompleto, email: resultado.email } } });
       } else {
-        navigate('/home');
+        navigate(voltarPara);
       }
     } catch (err) {
       console.error('Erro ao entrar com o Google:', err);
@@ -66,33 +68,16 @@ export default function User() {
 
         <div className="field">
           <label className="field__label" htmlFor="login-password">Senha</label>
-          <input
+          <CampoSenha
             id="login-password"
             className="input"
-            type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             placeholder="••••••••"
             required
           />
-          <button type="button" className="link auth-esqueci" aria-expanded={ajudaSenha} onClick={() => setAjudaSenha(!ajudaSenha)}>
-            Esqueceu a senha?
-          </button>
+          <Link className="link auth-esqueci" to="/esqueci-senha">Esqueceu a senha?</Link>
         </div>
-
-        {ajudaSenha && (
-          <div className="auth-ajuda" role="note">
-            <p>
-              <strong>E-mail do Google</strong> (Gmail ou e-mail da empresa no Google): clique em &quot;Continuar com o
-              Google&quot;, logo abaixo. Depois, em <strong>Minha conta → Alterar senha</strong>, crie uma senha nova sem
-              precisar da antiga.
-            </p>
-            <p>
-              <strong>Outro e-mail:</strong> peça ao administrador da clínica para redefinir sua senha. Se você é o
-              administrador, fale com o suporte do SoftwareClinic.
-            </p>
-          </div>
-        )}
 
         <button className={`btn btn--primary${loading ? ' btn--loading' : ''}`} type="submit" disabled={loading}>
           {loading ? 'Entrando...' : 'Entrar'}

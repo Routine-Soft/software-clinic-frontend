@@ -1,11 +1,10 @@
 import { useEffect, useMemo, useRef } from 'react';
 import {
   NOMES_DIAS_CURTOS,
+  descreverAgendamento,
   horarioDosMinutos,
-  idDoProfissional,
   paraISO,
   posicionarEventos,
-  tituloDoAgendamento,
   confirmadoPeloWhatsapp,
 } from '../agenda.utils';
 
@@ -14,7 +13,7 @@ const INICIO_PADRAO = 7;
 const FIM_PADRAO = 20;
 const ALTURA_MINIMA_DETALHES = 52;
 
-export default function AgendaGradeTempo({ dias, porDia, corDe, hoje, agora, detalhado, onAbrir, onNovoEm, onIrParaDia }) {
+export default function AgendaGradeTempo({ dias, porDia, corDe, descrever = descreverAgendamento, hoje, agora, detalhado, onAbrir, onNovoEm, onIrParaDia }) {
   const rolagemRef = useRef(null);
 
   const posicionados = useMemo(
@@ -99,15 +98,16 @@ export default function AgendaGradeTempo({ dias, porDia, corDe, hoje, agora, det
                 >
                   {posicionados.get(iso).map(({ agenda, inicio, fim, coluna, colunas }) => {
                     const altura = ((fim - inicio) / 60) * HORA_PX;
+                    const { nome, sub, extra, titulo } = descrever(agenda, detalhado);
                     return (
                       <button
                         key={agenda._id}
                         type="button"
                         className="agenda-ev"
-                        data-cor={corDe(idDoProfissional(agenda))}
+                        data-cor={corDe(agenda)}
                         data-status={agenda.status}
                         data-alto={altura >= ALTURA_MINIMA_DETALHES ? '' : undefined}
-                        title={tituloDoAgendamento(agenda)}
+                        title={titulo}
                         style={{
                           top: ((inicio - horaInicial * 60) / 60) * HORA_PX,
                           height: altura - 2,
@@ -116,13 +116,10 @@ export default function AgendaGradeTempo({ dias, porDia, corDe, hoje, agora, det
                         }}
                         onClick={() => onAbrir(agenda)}
                       >
-                        <span className="agenda-ev__nome">{confirmadoPeloWhatsapp(agenda) && <span className="agenda-confirmado" aria-label="Confirmado">✓ </span>}{agenda.pacienteId?.nome ?? 'Paciente'}</span>
+                        <span className="agenda-ev__nome">{confirmadoPeloWhatsapp(agenda) && <span className="agenda-confirmado" aria-label="Confirmado">✓ </span>}{nome}</span>
+                        {sub && <span className="agenda-ev__prof">{sub}</span>}
                         <span className="agenda-ev__hora">{agenda.horaInicio} – {agenda.horaFim}</span>
-                        {(detalhado || altura >= 70) && (
-                          <span className="agenda-ev__extra">
-                            {[agenda.profissionalId?.nome, agenda.servicoId?.nome, detalhado ? agenda.salaId?.nome : null].filter(Boolean).join(' · ')}
-                          </span>
-                        )}
+                        {(detalhado || altura >= 70) && extra && <span className="agenda-ev__extra">{extra}</span>}
                       </button>
                     );
                   })}

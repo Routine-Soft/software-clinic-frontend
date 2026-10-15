@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Modal from '@/components/Modal/Modal';
 import ModalForm from '@/components/Modal/ModalForm';
+import CampoSenha from '@/components/CampoSenha/CampoSenha';
 
 const FORM_SENHA_INICIAL = { senhaAtual: '', novaSenha: '', confirmarSenha: '' };
 
@@ -36,10 +37,9 @@ export default function AlterarSenhaModal({ temSenha = true, pedirSenhaAtual = t
           {pedirSenhaAtual && (
             <div className="field">
               <label className="field__label" htmlFor="senha-atual">Senha atual</label>
-              <input
+              <CampoSenha
                 id="senha-atual"
                 className="input"
-                type="password"
                 autoComplete="current-password"
                 value={formSenha.senhaAtual}
                 onChange={(e) => handleChangeSenha('senhaAtual', e.target.value)}
@@ -51,10 +51,9 @@ export default function AlterarSenhaModal({ temSenha = true, pedirSenhaAtual = t
           <div className="modal-form__row">
             <div className="field">
               <label className="field__label" htmlFor="senha-nova">Nova senha</label>
-              <input
+              <CampoSenha
                 id="senha-nova"
                 className="input"
-                type="password"
                 autoComplete="new-password"
                 minLength={6}
                 value={formSenha.novaSenha}
@@ -65,10 +64,9 @@ export default function AlterarSenhaModal({ temSenha = true, pedirSenhaAtual = t
 
             <div className="field">
               <label className="field__label" htmlFor="senha-confirmar">Confirmar nova senha</label>
-              <input
+              <CampoSenha
                 id="senha-confirmar"
                 className="input"
-                type="password"
                 autoComplete="new-password"
                 value={formSenha.confirmarSenha}
                 onChange={(e) => handleChangeSenha('confirmarSenha', e.target.value)}

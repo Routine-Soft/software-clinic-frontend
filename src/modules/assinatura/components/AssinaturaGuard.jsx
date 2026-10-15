@@ -7,7 +7,7 @@ import './assinatura.css';
 // Telas que continuam abertas mesmo com o acesso bloqueado, para o cliente conseguir regularizar.
 const ROTAS_LIVRES = ['/assinatura', '/assinaturas', '/minha-conta'];
 
-function AcessoBloqueado({ motivo, ehAdmin }) {
+function AcessoBloqueado({ motivo, podePagar }) {
   return (
     <div className="page page--narrow">
       <section className="card assinatura-retorno" data-situacao="bloqueado" role="alert">
@@ -20,12 +20,12 @@ function AcessoBloqueado({ motivo, ehAdmin }) {
 
         <h2 className="assinatura-retorno__titulo">Acesso bloqueado</h2>
         <p className="assinatura-retorno__texto">{motivo}</p>
-        {!ehAdmin && (
+        {!podePagar && (
           <p className="assinatura-retorno__texto">Fale com o administrador da clínica para regularizar a assinatura.</p>
         )}
 
         <div className="assinatura-retorno__acoes">
-          {ehAdmin && <Link to="/assinaturas" className="btn btn--primary">Regularizar assinatura</Link>}
+          {podePagar && <Link to="/assinaturas" className="btn btn--primary">Regularizar assinatura</Link>}
           <Link to="/minha-conta" className="btn btn--ghost">Minha conta</Link>
         </div>
       </section>
@@ -42,7 +42,8 @@ export default function AssinaturaGuard({ children }) {
   const jaVerificou = useRef(false);
   const bloqueado = useRef(false);
 
-  const ehSuperAdmin = user?.role === 'super_admin';
+  // Super admin e afiliado não dependem da assinatura de uma clínica.
+  const ehSuperAdmin = user?.role === 'super_admin' || user?.role === 'afiliado';
 
   // Confere no primeiro acesso e, enquanto estiver bloqueado, a cada navegação (o cliente pode ter acabado de pagar).
   useEffect(() => {
@@ -77,7 +78,7 @@ export default function AssinaturaGuard({ children }) {
   const rotaLivre = ROTAS_LIVRES.some((rota) => pathname === rota || pathname.startsWith(`${rota}/`));
 
   if (motivoDoBloqueio && !ehSuperAdmin && !rotaLivre) {
-    return <AcessoBloqueado motivo={motivoDoBloqueio} ehAdmin={user?.role === 'admin'} />;
+    return <AcessoBloqueado motivo={motivoDoBloqueio} podePagar={['admin', 'recepcao'].includes(user?.role)} />;
   }
 
   return children;

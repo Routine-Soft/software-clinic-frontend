@@ -3,6 +3,7 @@ import RegistroClinica from './modules/user/components/RegistroClinica';
 import UsuariosClinicaADM from './modules/user/components/UsuariosClinicaADM';
 import MinhaConta from './modules/user/components/MinhaConta';
 import Home from './pages/Home/Home';
+import Landing from './pages/Landing/Landing';
 import PacienteADM from './modules/paciente/components/PacienteADM';
 import ProfissionalADM from './modules/profissional/components/ProfissionalADM';
 import SalaADM from './modules/sala/components/SalaADM';
@@ -14,6 +15,13 @@ import AvaliacaoNeuroADM from './modules/avaliacao-neuropsicologica/components/A
 import AvaliacaoNeuroPage from './modules/avaliacao-neuropsicologica/components/AvaliacaoNeuroPage';
 import ServicoADM from './modules/servico/components/ServicoADM';
 import AgendaCalendario from './modules/agenda/components/AgendaCalendario';
+import ReunioesCalendario from './modules/reuniao/components/ReunioesCalendario';
+import IndiqueGanhe from './modules/indicacao/components/IndiqueGanhe';
+import ProgramaAfiliados from './pages/Afiliados/ProgramaAfiliados';
+import PainelAfiliado from './modules/afiliado/components/PainelAfiliado';
+import AfiliadosADM from './modules/afiliado/components/AfiliadosADM';
+import TermosPagina from './pages/Termos/TermosPagina';
+import { TERMOS_CLINICA, TERMOS_AFILIADO, PRIVACIDADE, EXCLUSAO_DE_DADOS } from './pages/Termos/termos.dados';
 import ProntuarioADM from './modules/prontuario/components/ProntuarioADM';
 import ProntuarioPacientePage from './modules/prontuario/components/ProntuarioPacientePage';
 import ProntuarioModalPreview from './modules/prontuario/components/ProntuarioModalPreview';
@@ -34,6 +42,10 @@ import MinhasComissoes from './modules/comissao/components/MinhasComissoes';
 
 import MainLayout from '@/layouts/MainLayout'
 import { AuthProvider } from '@/context/AuthContext'
+import EsqueciSenha from '@/modules/user/components/EsqueciSenha'
+import RedefinirSenha from '@/modules/user/components/RedefinirSenha'
+import SalaDeEspera from '@/modules/sala-espera/components/SalaDeEspera'
+import PainelTv from '@/modules/painel-tv/components/PainelTv'
 import ProtectedRoute from '@/components/ProtectedRoute'
 import { HashRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
 
@@ -44,11 +56,42 @@ function App() {
         <Routes>
           <Route path="/login" element={<User />} />
           <Route path="/registro" element={<RegistroClinica />} />
+          <Route path="/esqueci-senha" element={<EsqueciSenha />} />
+          {/* Painel da TV da sala de espera: sem login, a TV se conecta por código. */}
+          <Route path="/tv" element={<PainelTv />} />
+          <Route path="/redefinir-senha/:codigo" element={<RedefinirSenha />} />
+          <Route path="/afiliados" element={<ProgramaAfiliados />} />
+          <Route path="/termos" element={<TermosPagina termos={TERMOS_CLINICA} />} />
+          <Route path="/termos-afiliado" element={<TermosPagina termos={TERMOS_AFILIADO} />} />
+          <Route path="/privacidade" element={<TermosPagina termos={PRIVACIDADE} />} />
+          <Route path="/exclusao-de-dados" element={<TermosPagina termos={EXCLUSAO_DE_DADOS} />} />
+
+          <Route
+            path="/afiliado"
+            element={
+              <ProtectedRoute requiredRoles={['afiliado', 'admin', 'profissional', 'recepcao', 'super_admin']}>
+                <MainLayout>
+                  <PainelAfiliado />
+                </MainLayout>
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/afiliados-adm"
+            element={
+              <ProtectedRoute requiredRoles={['super_admin']}>
+                <MainLayout>
+                  <AfiliadosADM />
+                </MainLayout>
+              </ProtectedRoute>
+            }
+          />
 
           <Route
             path="/dashboard-admin"
             element={
-              <ProtectedRoute requiredRoles={['super_admin', 'admin']}>
+              <ProtectedRoute requiredRoles={['super_admin', 'admin', 'recepcao']}>
                 <MainLayout>
                   <DashboardAdmin />
                 </MainLayout>
@@ -62,6 +105,17 @@ function App() {
               <ProtectedRoute>
                 <MainLayout>
                   <Home />
+                </MainLayout>
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/sala-de-espera"
+            element={
+              <ProtectedRoute requiredRoles={['admin', 'profissional', 'recepcao', 'super_admin']}>
+                <MainLayout>
+                  <SalaDeEspera />
                 </MainLayout>
               </ProtectedRoute>
             }
@@ -214,6 +268,17 @@ function App() {
           />
 
           <Route
+            path="/reunioes"
+            element={
+              <ProtectedRoute requiredRoles={['admin', 'recepcao', 'super_admin']}>
+                <MainLayout>
+                  <ReunioesCalendario />
+                </MainLayout>
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
             path="/prontuario"
             element={
               <ProtectedRoute requiredRoles={['admin', 'profissional', 'super_admin']}>
@@ -284,7 +349,7 @@ function App() {
           <Route
             path="/usuarios"
             element={
-              <ProtectedRoute requiredRoles={['admin', 'super_admin']}>
+              <ProtectedRoute requiredRoles={['admin', 'super_admin', 'recepcao']}>
                 <MainLayout>
                   <UsuariosClinicaADM />
                 </MainLayout>
@@ -295,7 +360,7 @@ function App() {
           <Route
             path="/minha-conta"
             element={
-              <ProtectedRoute requiredRoles={['admin', 'profissional', 'recepcao', 'super_admin']}>
+              <ProtectedRoute requiredRoles={['admin', 'profissional', 'recepcao', 'super_admin', 'afiliado']}>
                 <MainLayout>
                   <MinhaConta />
                 </MainLayout>
@@ -348,6 +413,17 @@ function App() {
           />
 
           <Route
+            path="/indique"
+            element={
+              <ProtectedRoute requiredRoles={['admin', 'super_admin']}>
+                <MainLayout>
+                  <IndiqueGanhe />
+                </MainLayout>
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
             path="/assinaturas"
             element={
               <ProtectedRoute requiredRoles={['super_admin', 'admin', 'recepcao']}>
@@ -375,8 +451,8 @@ function App() {
           <Route path="/comissoes" element={<Navigate to="/repasses" replace />} />
           <Route path="/minhas-comissoes" element={<Navigate to="/meus-repasses" replace />} />
 
-          <Route path="/" element={<Navigate to="/login" replace />} />
-          <Route path="*" element={<Navigate to="/login" replace />} />
+          <Route path="/" element={<Landing />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </AuthProvider>
     </Router>

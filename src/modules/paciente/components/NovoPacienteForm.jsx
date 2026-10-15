@@ -1,14 +1,20 @@
 import { useId, useState } from 'react';
 import { IconeMais } from '@/components/CrudCard/icones';
 import { normalizarEmail } from '@/utils/email';
+import CamposResponsaveis from './CamposResponsaveis';
+import CampoPacienteTeste from './CampoPacienteTeste';
+import CampoNomeNaTv from './CampoNomeNaTv';
+import { ehMenorDeIdade } from '../paciente.utils';
 import CampoAceitaWhatsapp from './CampoAceitaWhatsapp';
 
-const FORM_CRIAR_INICIAL = { nome: '', telefone: '', email: '', cpf: '', dataNascimento: '', convenioId: '', empresaId: '', aceitaWhatsapp: false };
+const FORM_CRIAR_INICIAL = { nome: '', telefone: '', email: '', cpf: '', dataNascimento: '', convenioId: '', empresaId: '', responsaveis: [], teste: false, nomeNaTv: 'completo', aceitaWhatsapp: false };
 
 export default function NovoPacienteForm({ convenios, empresas, onSubmit }) {
   const ids = useId();
   const [formCriar, setFormCriar] = useState(FORM_CRIAR_INICIAL);
   const [criando, setCriando] = useState(false);
+
+  const menor = ehMenorDeIdade(formCriar.dataNascimento);
 
   function handleChangeCriar(field, value) {
     setFormCriar({ ...formCriar, [field]: value });
@@ -43,38 +49,37 @@ export default function NovoPacienteForm({ convenios, empresas, onSubmit }) {
       </div>
 
       <div className="field">
-        <label className="field__label" htmlFor={`${ids}-telefone`}>Telefone</label>
+        <label className="field__label" htmlFor={`${ids}-telefone`}>Telefone{menor && ' (opcional)'}</label>
         <input
           id={`${ids}-telefone`}
           className="input"
           type="text"
           value={formCriar.telefone}
           onChange={(e) => handleChangeCriar('telefone', e.target.value)}
-          required
+          required={!menor}
         />
       </div>
 
       <div className="field">
-        <label className="field__label" htmlFor={`${ids}-email`}>Email</label>
+        <label className="field__label" htmlFor={`${ids}-email`}>Email{menor && ' (opcional)'}</label>
         <input
           id={`${ids}-email`}
           className="input"
           type="email"
           value={formCriar.email}
           onChange={(e) => handleChangeCriar('email', normalizarEmail(e.target.value))}
-          required
+          required={!menor}
         />
       </div>
 
       <div className="field">
-        <label className="field__label" htmlFor={`${ids}-cpf`}>CPF</label>
+        <label className="field__label" htmlFor={`${ids}-cpf`}>CPF (opcional)</label>
         <input
           id={`${ids}-cpf`}
           className="input"
           type="text"
           value={formCriar.cpf}
           onChange={(e) => handleChangeCriar('cpf', e.target.value)}
-          required
         />
       </div>
 
@@ -90,6 +95,10 @@ export default function NovoPacienteForm({ convenios, empresas, onSubmit }) {
         />
       </div>
 
+      <div className="field field--full">
+        <CamposResponsaveis responsaveis={formCriar.responsaveis} menor={menor} onChange={(lista) => handleChangeCriar('responsaveis', lista)} />
+      </div>
+
       {convenios.length > 0 && (
         <div className="field">
           <label className="field__label" htmlFor={`${ids}-convenio`}>Convênio (opcional)</label>
@@ -99,7 +108,7 @@ export default function NovoPacienteForm({ convenios, empresas, onSubmit }) {
             value={formCriar.convenioId}
             onChange={(e) => handleChangeCriar('convenioId', e.target.value)}
           >
-            <option value="">Particular</option>
+            <option value="">Nenhum</option>
             {convenios.map((convenio) => (
               <option key={convenio._id} value={convenio._id}>{convenio.nome}</option>
             ))}
@@ -125,6 +134,12 @@ export default function NovoPacienteForm({ convenios, empresas, onSubmit }) {
       )}
 
       <CampoAceitaWhatsapp valor={formCriar.aceitaWhatsapp} onChange={(valor) => handleChangeCriar('aceitaWhatsapp', valor)} />
+
+      <CampoNomeNaTv nome={formCriar.nome} valor={formCriar.nomeNaTv} onChange={(valor) => handleChangeCriar('nomeNaTv', valor)} />
+
+      <div className="field field--full">
+        <CampoPacienteTeste marcado={formCriar.teste} onChange={(valor) => handleChangeCriar('teste', valor)} />
+      </div>
 
       <button className={`btn btn--primary${criando ? ' btn--loading' : ''}`} type="submit" disabled={criando}>
         {!criando && <IconeMais />}

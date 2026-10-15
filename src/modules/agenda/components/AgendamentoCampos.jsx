@@ -19,7 +19,7 @@ export default function AgendamentoCampos({ form, setForm, profissionais, especi
     setForm((atual) => ({ ...atual, financeiro: { ...atual.financeiro, [campo]: valor } }));
   }
 
-  // O valor vem da tabela do serviço para o convênio escolhido (ou do particular); dá para ajustar à mão depois.
+  // O valor vem da tabela do serviço para o convênio escolhido (ou do preço padrão); dá para ajustar à mão depois.
   function handleServico(servicoId) {
     setForm((atual) => comPrecoDaTabela({ ...atual, servicoId }, servicos));
   }
@@ -120,8 +120,8 @@ export default function AgendamentoCampos({ form, setForm, profissionais, especi
 
       <div className="field">
         <label className="field__label" htmlFor={`${id}-convenio`}>Convênio</label>
-        <select id={`${id}-convenio`} className="input" value={form.convenioId} onChange={(e) => handleConvenio(e.target.value)}>
-          <option value="">Particular</option>
+        <select id={`${id}-convenio`} className="input" value={form.convenioId} onChange={(e) => handleConvenio(e.target.value)} required>
+          <option value="" disabled>{convenios.length ? 'Selecione' : 'Nenhum convênio cadastrado'}</option>
           {convenios.map((c) => (
             <option key={c._id} value={c._id}>{c.nome}</option>
           ))}

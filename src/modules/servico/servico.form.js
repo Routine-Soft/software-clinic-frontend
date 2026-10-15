@@ -65,11 +65,34 @@ export function montarPayloadServico(form) {
 
 // O servidor recusaria estes casos; o formulário avisa antes de enviar.
 export function problemaDoFormulario(form) {
-  const linhas = [{ ...form, rotulo: 'do particular' }, ...form.tabelaConvenios.map((l) => ({ ...l, rotulo: 'de um convênio' }))];
+  const linhas = [{ ...form, rotulo: 'do preço padrão' }, ...form.tabelaConvenios.map((l) => ({ ...l, rotulo: 'de um convênio' }))];
   if (form.tabelaConvenios.some((l) => !l.convenioId)) return 'Escolha o convênio de cada linha da tabela.';
   for (const l of linhas) {
     if (l.comissaoTipo === 'percentual' && Number(l.comissao) > 100) return `O repasse ${l.rotulo} não pode passar de 100%.`;
     if (l.comissaoTipo === 'valor' && Number(l.comissao) > Number(l.preco)) return `O repasse ${l.rotulo} não pode ser maior que o preço.`;
   }
   return null;
+}
+
+const normalizarNome = (nome = '') => nome.normalize('NFD').replace(/[̀-ͯ]/g, '').trim().toLowerCase();
+
+// Serviço já cadastrado com o mesmo nome (sem diferenciar acento e maiúscula), fora o que está sendo editado.
+// O nome é único na clínica: consulta e pacote do mesmo serviço precisam de nomes diferentes.
+export function servicoComMesmoNome(nome, servicos = [], idAtual = null) {
+  const alvo = normalizarNome(nome);
+  if (!alvo) return null;
+  return servicos.find((s) => s._id !== idAtual && normalizarNome(s.nome) === alvo) ?? null;
+}
+
+// Nome sugerido para não repetir: "Psicologia – pacote 10 sessões" ou "Psicologia – consulta avulsa".
+export function sugestaoDeNome(form, servicos = [], idAtual = null) {
+  // Usa a grafia do serviço já cadastrado ("Psicologia"), mesmo que a pessoa tenha digitado "psicologia".
+  const base = servicoComMesmoNome(form.nome, servicos, idAtual)?.nome.trim() ?? form.nome.trim();
+  const sessoes = Number(form.qtdDias);
+  const complemento = form.tipo === 'pacote'
+    ? (sessoes > 0 ? `pacote ${sessoes} ${sessoes === 1 ? 'sessão' : 'sessões'}` : 'pacote')
+    : 'consulta avulsa';
+  let sugestao = `${base} – ${complemento}`;
+  for (let n = 2; servicoComMesmoNome(sugestao, servicos, idAtual); n += 1) sugestao = `${base} – ${complemento} ${n}`;
+  return sugestao;
 }

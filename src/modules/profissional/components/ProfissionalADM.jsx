@@ -83,7 +83,7 @@ export default function ProfissionalADM({ className = '' }) {
 
       {!carregandoEspecialidades && especialidades.length === 0 && (
         <div className="alerts crud-card__alertas">
-          <AvisoPreRequisito acao="adicionar profissionais" faltando={['uma especialidade']} onde="Use o card Especialidades, passo 1 do Dashboard admin." />
+          <AvisoPreRequisito acao="adicionar profissionais" faltando={['uma especialidade']} onde="Use o card Especialidades, passo 1 do Painel Admin." />
         </div>
       )}
 

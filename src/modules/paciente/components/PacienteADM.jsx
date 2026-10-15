@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react';
 import { usePacientes } from '../paciente.hooks';
 import { useConvenios } from '@/modules/convenio/convenio.hooks';
 import { useEmpresas } from '@/modules/empresa/empresa.hooks';
-import { filtrarPacientes, ordenarPacientes } from '../paciente.utils';
+import { filtrarPacientes, ordenarPacientes, contatoDoPaciente, rotuloDoResponsavel, cpfDoPaciente } from '../paciente.utils';
 import { formatDataBR, calcularIdade } from '@/utils/date';
 import { iniciais } from '@/utils/nome';
 import { IconeBusca, IconeLapis, IconeLixeira, IconeCheck, IconeX } from '@/components/CrudCard/icones';
@@ -10,6 +10,7 @@ import EditarPacienteModal from './EditarPacienteModal';
 import NovoPacienteModal from './NovoPacienteModal';
 import { IconeMais } from '@/components/CrudCard/icones';
 import './paciente.css';
+import SeloTeste from './SeloTeste';
 
 const COLUNAS = 5;
 
@@ -126,6 +127,8 @@ export default function PacienteADM() {
               ) : (
                 pacientesFiltrados.map((paciente, index) => {
                   const idade = calcularIdade(paciente.dataNascimento);
+                  const contato = contatoDoPaciente(paciente);
+                  const responsaveis = paciente.responsaveis ?? [];
                   return (
                     <tr
                       key={paciente._id}
@@ -137,27 +140,30 @@ export default function PacienteADM() {
                           <div className="pessoa__avatar" aria-hidden="true">{iniciais(paciente.nome)}</div>
                           <div className="pessoa__dados">
                             <strong className="pessoa__nome">{paciente.nome}</strong>
-                            <span className="pessoa__sub nowrap">CPF {paciente.cpf}</span>
+                            <span className="pessoa__sub nowrap">{cpfDoPaciente(paciente)} <SeloTeste paciente={paciente} /></span>
+                            {responsaveis.length > 0 && (
+                              <span className="pessoa__resp">Resp.: {responsaveis.map(rotuloDoResponsavel).join(', ')}</span>
+                            )}
                           </div>
                         </div>
                       </td>
                       <td>
                         <div className="pessoa__dados pessoa__dados--contato">
-                          <span className="nowrap">{paciente.telefone}</span>
-                          <span className="pessoa__sub pessoa__sub--corta" title={paciente.email}>{paciente.email}</span>
+                          <span className="nowrap">{contato.telefone || '—'}</span>
+                          <span className="pessoa__sub pessoa__sub--corta" title={contato.email}>{contato.email}</span>
                         </div>
                       </td>
                       <td className="nowrap">
                         <div className="pessoa__dados">
                           <span>{formatDataBR(paciente.dataNascimento) ?? '—'}</span>
-                          {idade !== null && <span className="pessoa__sub">{idade} {idade === 1 ? 'ano' : 'anos'}</span>}
+                          {idade !== null && <span className="pessoa__sub">{idade} {idade === 1 ? 'ano' : 'anos'}{idade < 18 ? ' · menor' : ''}</span>}
                         </div>
                       </td>
                       <td>
                         <div className="paciente-vinculos">
                           {paciente.convenioId?.nome
                             ? <span className="badge badge--info">{paciente.convenioId.nome}</span>
-                            : <span className="badge">Particular</span>}
+                            : <span className="badge">Sem convênio</span>}
                           {paciente.empresaId?.razaoSocial && (
                             <span className="badge badge--primary paciente-vinculos__empresa" title={paciente.empresaId.razaoSocial}>
                               {paciente.empresaId.razaoSocial}
@@ -168,7 +174,7 @@ export default function PacienteADM() {
                       <td>
                         {confirmandoId === paciente._id ? (
                           <div className="paciente-confirmar">
-                            <span>Excluir?</span>
+                            <span>{paciente.teste ? 'Excluir com tudo?' : 'Excluir?'}</span>
                             <button type="button" className="icon-btn icon-btn--danger" aria-label={`Confirmar exclusão de ${paciente.nome}`} onClick={() => handleDelete(paciente._id)}>
                               <IconeCheck />
                             </button>

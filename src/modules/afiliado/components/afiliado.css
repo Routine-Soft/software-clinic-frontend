@@ -1,0 +1,151 @@
+/* ---------- Cadastro (página "Seja afiliado") ---------- */
+
+.afiliado-cadastro {
+  display: grid;
+  gap: 16px;
+  padding: clamp(20px, 4vw, 32px);
+}
+
+.afiliado-cadastro__ja-tem {
+  margin: 0;
+  padding: 12px 14px;
+  font-size: 0.92rem;
+  color: var(--text-muted);
+  background: var(--primary-soft);
+  border-radius: var(--radius-md);
+}
+
+.afiliado-cadastro--pronto {
+  justify-items: center;
+  text-align: center;
+}
+
+/* ---------- Painel ---------- */
+
+.afiliado-totais {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+  margin-bottom: 18px;
+}
+
+.afiliado-total {
+  position: relative;
+  display: grid;
+  gap: 4px;
+  padding: 20px 22px;
+  overflow: hidden;
+}
+
+.afiliado-total::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto;
+  height: 4px;
+  background: var(--tom, var(--primary));
+}
+
+.afiliado-total[data-tom='success'] { --tom: var(--success); }
+.afiliado-total[data-tom='info'] { --tom: var(--info); }
+.afiliado-total[data-tom='primary'] { --tom: var(--primary); }
+
+.afiliado-total__titulo {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+
+.afiliado-total__valor {
+  font-size: 1.9rem;
+  font-weight: 800;
+  color: var(--tom);
+  font-variant-numeric: tabular-nums;
+}
+
+.afiliado-total__legenda {
+  font-size: 0.82rem;
+  color: var(--text-subtle);
+}
+
+.afiliado-regras {
+  display: grid;
+  gap: 8px;
+  margin: 12px 0 0;
+  padding-left: 20px;
+  color: var(--text-muted);
+}
+
+.afiliado-termos {
+  margin: 18px 0 0;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+/* ---------- Tela do super_admin ---------- */
+
+.afiliado-pix {
+  display: grid;
+  gap: 2px;
+  justify-items: start;
+}
+
+.afiliado-pix__chave {
+  max-width: 220px;
+  padding: 3px 8px;
+  overflow-wrap: anywhere;
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--primary);
+  text-align: left;
+  cursor: pointer;
+  background: var(--primary-soft);
+  border: 0;
+  border-radius: var(--radius-sm);
+}
+
+.afiliado-comissoes {
+  display: grid;
+  gap: 2px;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.afiliado-comissoes__pagar {
+  font-weight: 700;
+  color: var(--success);
+}
+
+.afiliado-acoes {
+  display: grid;
+  gap: 8px;
+  justify-items: start;
+}
+
+.afiliado-detalhe td {
+  background: var(--surface-2);
+}
+
+.afiliado-detalhe__lista {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.88rem;
+}
+
+.afiliado-detalhe__lista li {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 12px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+@media (max-width: 860px) {
+  .afiliado-totais {
+    grid-template-columns: 1fr;
+  }
+}

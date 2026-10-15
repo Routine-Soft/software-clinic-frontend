@@ -13,7 +13,7 @@ export function useDadosAgendamento() {
   const { especialidades } = useEspecialidades();
   const { salas, loading: carregandoSalas } = useSalas();
   const { servicos, loading: carregandoServicos } = useServicos();
-  const { convenios } = useConvenios();
+  const { convenios, loading: carregandoConvenios } = useConvenios();
   const { empresas } = useEmpresas();
   const { pacientes, refreshPacientes } = usePacientes();
 
@@ -23,12 +23,14 @@ export function useDadosAgendamento() {
     return response.data;
   }
 
-  // O agendamento exige profissional, serviço e sala (o paciente dá para criar na hora, no próprio formulário).
-  const carregando = carregandoProfissionais || carregandoSalas || carregandoServicos;
+  // O agendamento exige profissional, serviço, sala e convênio (o paciente dá para criar na hora, no próprio formulário).
+  // O particular também é um convênio cadastrado pela clínica: não existe um "Particular" embutido.
+  const carregando = carregandoProfissionais || carregandoSalas || carregandoServicos || carregandoConvenios;
   const faltando = carregando ? [] : [
     profissionais.length === 0 && 'um profissional',
     servicos.length === 0 && 'um serviço',
     salas.length === 0 && 'uma sala',
+    convenios.length === 0 && 'um convênio (ex.: Particular, Unimed)',
   ].filter(Boolean);
 
   return { profissionais, especialidades, salas, servicos, convenios, empresas, pacientes, criarPaciente, faltando };

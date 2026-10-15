@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Modal from '@/components/Modal/Modal';
 import ModalForm from '@/components/Modal/ModalForm';
+import CampoSenha from '@/components/CampoSenha/CampoSenha';
 
 // O super admin define uma senha nova para o administrador que esqueceu a dele e não entra pelo Google.
 export default function RedefinirSenhaAdminModal({ admin, erro, onSave, onClose }) {
@@ -27,10 +28,9 @@ export default function RedefinirSenhaAdminModal({ admin, erro, onSave, onClose 
           <div className="modal-form__row">
             <div className="field">
               <label className="field__label" htmlFor="admin-nova-senha">Nova senha</label>
-              <input
+              <CampoSenha
                 id="admin-nova-senha"
                 className="input"
-                type="password"
                 autoComplete="new-password"
                 minLength={6}
                 value={novaSenha}
@@ -41,10 +41,9 @@ export default function RedefinirSenhaAdminModal({ admin, erro, onSave, onClose 
 
             <div className="field">
               <label className="field__label" htmlFor="admin-confirmar-senha">Confirmar nova senha</label>
-              <input
+              <CampoSenha
                 id="admin-confirmar-senha"
                 className="input"
-                type="password"
                 autoComplete="new-password"
                 value={confirmar}
                 onChange={(e) => setConfirmar(e.target.value)}

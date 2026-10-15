@@ -1,0 +1,224 @@
+.indicacao-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+  gap: 18px;
+  margin-bottom: 18px;
+}
+
+.indicacao-convite,
+.indicacao-saldo,
+.indicacao-passos,
+.indicacao-lista {
+  padding: 24px;
+  animation: fadeInUp 0.5s var(--ease) backwards;
+}
+
+.indicacao-grid h3,
+.indicacao-passos h3,
+.indicacao-lista h3 {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+/* ---------- Convite (link) ---------- */
+
+.indicacao-convite {
+  display: grid;
+  gap: 12px;
+  align-content: start;
+  background:
+    radial-gradient(circle at 100% 0%, var(--primary-soft), transparent 55%),
+    var(--surface);
+}
+
+.indicacao-convite p {
+  margin: 0;
+  color: var(--text-muted);
+}
+
+.indicacao-convite__icone {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  color: var(--on-primary);
+  background: var(--gradient-primary);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-primary);
+  animation: popIn 0.6s var(--ease) backwards;
+}
+
+.indicacao-convite__icone svg {
+  width: 24px;
+  height: 24px;
+}
+
+.indicacao-link {
+  display: flex;
+  gap: 8px;
+}
+
+.indicacao-link .input {
+  flex: 1;
+  min-width: 0;
+  font-size: 0.9rem;
+}
+
+.indicacao-link .btn {
+  flex: none;
+}
+
+.indicacao-convite__acoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 16px;
+  align-items: center;
+}
+
+.indicacao-whatsapp {
+  color: #15803d;
+}
+
+.indicacao-whatsapp svg {
+  width: 18px;
+  height: 18px;
+}
+
+.indicacao-codigo strong {
+  padding: 2px 8px;
+  font-family: ui-monospace, 'SFMono-Regular', Menlo, monospace;
+  letter-spacing: 0.08em;
+  color: var(--primary);
+  background: var(--primary-soft);
+  border-radius: var(--radius-sm);
+}
+
+/* ---------- Saldo ---------- */
+
+.indicacao-saldo {
+  display: grid;
+  gap: 4px;
+  align-content: start;
+}
+
+.indicacao-saldo__valor {
+  margin: 8px 0 0;
+  font-size: 2.4rem;
+  font-weight: 800;
+  line-height: 1.1;
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.indicacao-saldo__legenda {
+  margin: 0;
+  color: var(--text-muted);
+}
+
+.indicacao-saldo__regra {
+  margin: 12px 0 0;
+  padding-top: 12px;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  border-top: 1px dashed var(--border);
+}
+
+/* ---------- Como funciona ---------- */
+
+.indicacao-passos {
+  margin-bottom: 18px;
+}
+
+.indicacao-passos ol {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  margin: 14px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.indicacao-passos li {
+  display: flex;
+  gap: 12px;
+}
+
+.indicacao-passos li p {
+  margin: 4px 0 0;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.indicacao-passos__numero {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  font-weight: 800;
+  color: var(--primary);
+  background: var(--primary-soft);
+  border-radius: 50%;
+}
+
+/* ---------- Lista ---------- */
+
+.indicacao-lista__topo {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.indicacao-item {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+}
+
+.indicacao-item > div {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.indicacao-item span:not(.badge) {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.indicacao-item .badge {
+  flex: none;
+}
+
+@media (max-width: 860px) {
+  .indicacao-grid,
+  .indicacao-passos ol {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .indicacao-convite,
+  .indicacao-saldo,
+  .indicacao-passos,
+  .indicacao-lista {
+    padding: 18px;
+  }
+
+  .indicacao-link,
+  .indicacao-item {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .indicacao-item .badge {
+    align-self: flex-start;
+  }
+}

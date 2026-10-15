@@ -14,6 +14,8 @@ import {
   updateUser,
   deleteUser,
   updatePassword,
+  pedirLinkDeSenha,
+  redefinirSenhaPeloLink,
 } from "./user.api";
 
 export function useUsuariosDaClinica() {
@@ -263,5 +265,36 @@ export function useMinhaConta() {
     successMessage,
     salvarPerfil,
     alterarSenha,
+  };
+}
+
+// Telas "Esqueci a senha" e "Criar senha nova": uma ação por vez, com a mensagem do backend.
+export function useRecuperarSenha() {
+  const [enviando, setEnviando] = useState(false);
+  const [erro, setErro] = useState(null);
+  const [sucesso, setSucesso] = useState(null);
+
+  async function executar(acao) {
+    setEnviando(true);
+    setErro(null);
+    setSucesso(null);
+    try {
+      const resposta = await acao();
+      setSucesso(resposta?.message ?? 'Pronto.');
+      return true;
+    } catch (error) {
+      setErro(error);
+      return false;
+    } finally {
+      setEnviando(false);
+    }
+  }
+
+  return {
+    enviando,
+    erro,
+    sucesso,
+    pedirLink: (email) => executar(() => pedirLinkDeSenha(email)),
+    redefinir: (codigo, novaSenha) => executar(() => redefinirSenhaPeloLink(codigo, novaSenha)),
   };
 }

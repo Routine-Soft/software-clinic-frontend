@@ -2,12 +2,17 @@ import { useState } from 'react';
 import Modal from '@/components/Modal/Modal';
 import ModalForm from '@/components/Modal/ModalForm';
 import { normalizarEmail } from '@/utils/email';
+import CamposResponsaveis from './CamposResponsaveis';
+import CampoPacienteTeste from './CampoPacienteTeste';
+import { ehMenorDeIdade } from '../paciente.utils';
 import CampoAceitaWhatsapp from './CampoAceitaWhatsapp';
 
-const FORM_CRIAR_INICIAL = { nome: '', telefone: '', email: '', cpf: '', dataNascimento: '', convenioId: '', empresaId: '', aceitaWhatsapp: false };
+const FORM_CRIAR_INICIAL = { nome: '', telefone: '', email: '', cpf: '', dataNascimento: '', convenioId: '', empresaId: '', responsaveis: [], teste: false, aceitaWhatsapp: false };
 
 export default function NovoPacienteModal({ convenios, empresas, erro, onSave, onClose }) {
   const [formCriar, setFormCriar] = useState(FORM_CRIAR_INICIAL);
+
+  const menor = ehMenorDeIdade(formCriar.dataNascimento);
 
   function handleChangeCriar(field, value) {
     setFormCriar({ ...formCriar, [field]: value });
@@ -39,40 +44,39 @@ export default function NovoPacienteModal({ convenios, empresas, erro, onSave, o
 
           <div className="modal-form__row">
             <div className="field">
-              <label className="field__label" htmlFor="novo-paciente-telefone">Telefone</label>
+              <label className="field__label" htmlFor="novo-paciente-telefone">Telefone{menor && ' (opcional)'}</label>
               <input
                 id="novo-paciente-telefone"
                 className="input"
                 type="text"
                 value={formCriar.telefone}
                 onChange={(e) => handleChangeCriar('telefone', e.target.value)}
-                required
+                required={!menor}
               />
             </div>
 
             <div className="field">
-              <label className="field__label" htmlFor="novo-paciente-email">Email</label>
+              <label className="field__label" htmlFor="novo-paciente-email">Email{menor && ' (opcional)'}</label>
               <input
                 id="novo-paciente-email"
                 className="input"
                 type="email"
                 value={formCriar.email}
                 onChange={(e) => handleChangeCriar('email', normalizarEmail(e.target.value))}
-                required
+                required={!menor}
               />
             </div>
           </div>
 
           <div className="modal-form__row">
             <div className="field">
-              <label className="field__label" htmlFor="novo-paciente-cpf">CPF</label>
+              <label className="field__label" htmlFor="novo-paciente-cpf">CPF (opcional)</label>
               <input
                 id="novo-paciente-cpf"
                 className="input"
                 type="text"
                 value={formCriar.cpf}
                 onChange={(e) => handleChangeCriar('cpf', e.target.value)}
-                required
               />
             </div>
 
@@ -89,6 +93,8 @@ export default function NovoPacienteModal({ convenios, empresas, erro, onSave, o
             </div>
           </div>
 
+          <CamposResponsaveis responsaveis={formCriar.responsaveis} menor={menor} onChange={(lista) => handleChangeCriar('responsaveis', lista)} />
+
           {(convenios.length > 0 || empresas.length > 0) && (
             <div className="modal-form__row">
               {convenios.length > 0 && (
@@ -100,7 +106,7 @@ export default function NovoPacienteModal({ convenios, empresas, erro, onSave, o
                     value={formCriar.convenioId}
                     onChange={(e) => handleChangeCriar('convenioId', e.target.value)}
                   >
-                    <option value="">Particular</option>
+                    <option value="">Nenhum</option>
                     {convenios.map((convenio) => (
                       <option key={convenio._id} value={convenio._id}>{convenio.nome}</option>
                     ))}
@@ -128,6 +134,8 @@ export default function NovoPacienteModal({ convenios, empresas, erro, onSave, o
           )}
 
           <CampoAceitaWhatsapp valor={formCriar.aceitaWhatsapp} onChange={(valor) => handleChangeCriar('aceitaWhatsapp', valor)} />
+
+          <CampoPacienteTeste marcado={formCriar.teste} onChange={(valor) => handleChangeCriar('teste', valor)} />
         </ModalForm>
       )}
     </Modal>

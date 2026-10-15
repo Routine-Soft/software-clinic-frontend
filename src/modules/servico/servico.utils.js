@@ -6,7 +6,7 @@ function formatarPercentual(valor) {
   return `${Number(valor || 0).toLocaleString('pt-BR', { maximumFractionDigits: 2 })}%`;
 }
 
-// Regra (preço + repasse) do serviço para um convênio; sem convênio, ou convênio fora da tabela, vale a particular.
+// Regra (preço + repasse) do serviço para um convênio; sem convênio, ou convênio fora da tabela, vale a padrão.
 export function regraDoServico(servico, convenioId) {
   const linha = convenioId ? (servico?.tabelaConvenios ?? []).find((l) => String(l.convenioId) === String(convenioId)) : null;
   const origem = linha ?? servico ?? {};

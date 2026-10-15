@@ -82,7 +82,7 @@ export function montarPayload(form, paciente) {
   };
 }
 
-// Preenche o valor pelo serviço + convênio do formulário (tabela do serviço, ou preço particular).
+// Preenche o valor pelo serviço + convênio do formulário (tabela do serviço, ou o preço padrão dele).
 export function comPrecoDaTabela(form, servicos) {
   const servico = servicos.find((s) => s._id === form.servicoId);
   if (!servico) return form;

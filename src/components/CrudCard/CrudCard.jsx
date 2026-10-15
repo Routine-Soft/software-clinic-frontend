@@ -12,6 +12,7 @@ export default function CrudCard({
     plural,
     labelNovo,
     placeholder,
+    dica,
     textoVazio,
     tituloEdicao,
     itens,
@@ -136,6 +137,7 @@ export default function CrudCard({
                     titulo={labelNovo}
                     label="Nome"
                     placeholder={placeholder}
+                    dica={dica}
                     erro={error}
                     onSave={handleSalvarCriacao}
                     onClose={() => setCriando(false)}

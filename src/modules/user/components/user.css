@@ -117,18 +117,28 @@
   width: 58px;
   height: 58px;
   margin: 0 auto 18px;
-  color: var(--on-primary);
-  background: var(--gradient-primary);
+  color: #fff;
+  background: var(--gradient-marca);
   border-radius: 18px;
-  box-shadow: var(--shadow-primary);
+  box-shadow: var(--shadow-marca);
+  transition: scale 0.3s var(--ease);
   animation:
     popIn 0.7s var(--ease) 0.1s backwards,
     floatSm 5s ease-in-out 0.8s infinite;
 }
 
+.auth-logo:hover {
+  scale: 1.07;
+}
+
+.auth-logo:focus-visible {
+  outline: 3px solid var(--primary-ring);
+  outline-offset: 4px;
+}
+
 .auth-logo svg {
-  width: 30px;
-  height: 30px;
+  width: 52px;
+  height: 52px;
 }
 
 .auth-logo::after {
@@ -431,4 +441,37 @@
 
 .auth-ajuda strong {
   color: var(--text);
+}
+
+/* ---------- Aceite dos termos (cadastros) ---------- */
+
+.aceite-termos {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  padding: 12px 14px;
+  font-size: 0.92rem;
+  line-height: 1.4;
+  color: var(--text-muted);
+  cursor: pointer;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  transition: border-color 0.25s var(--ease);
+}
+
+.aceite-termos:has(input:checked) {
+  border-color: var(--primary);
+}
+
+.aceite-termos input {
+  flex: none;
+  width: 18px;
+  height: 18px;
+  margin: 1px 0 0;
+  accent-color: var(--primary);
+}
+
+.auth-erro-campo {
+  color: var(--danger);
 }

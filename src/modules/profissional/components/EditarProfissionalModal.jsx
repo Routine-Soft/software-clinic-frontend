@@ -10,6 +10,7 @@ export default function EditarProfissionalModal({ profissional, especialidades, 
     numeroRegistro: profissional.numeroRegistro,
     especialidadeIds: (profissional.especialidadeIds ?? []).map((e) => e._id ?? e),
     usuarioId: profissional.usuarioId?._id ?? profissional.usuarioId ?? '',
+    exibirNaTv: profissional.exibirNaTv !== false,
   });
 
   function handleChangeEdicao(field, value) {
@@ -109,6 +110,15 @@ export default function EditarProfissionalModal({ profissional, especialidades, 
               <p className="modal-form__hint">Nenhuma especialidade cadastrada ainda.</p>
             )}
           </div>
+
+          <label className="check">
+            <input
+              type="checkbox"
+              checked={formEdicao.exibirNaTv}
+              onChange={(e) => handleChangeEdicao('exibirNaTv', e.target.checked)}
+            />
+            Mostrar o nome do profissional na TV da sala de espera
+          </label>
         </ModalForm>
       )}
     </Modal>

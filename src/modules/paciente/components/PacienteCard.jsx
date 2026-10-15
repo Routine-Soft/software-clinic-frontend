@@ -2,12 +2,13 @@ import { useMemo, useState } from 'react';
 import { usePacientes } from '../paciente.hooks';
 import { useConvenios } from '@/modules/convenio/convenio.hooks';
 import { useEmpresas } from '@/modules/empresa/empresa.hooks';
-import { filtrarPacientes, ordenarPacientes } from '../paciente.utils';
+import { filtrarPacientes, ordenarPacientes, contatoDoPaciente, rotuloDoResponsavel } from '../paciente.utils';
 import { iniciais } from '@/utils/nome';
 import { Icone, IconeMais, IconeBusca, IconeLapis, IconeLixeira, IconeCheck, IconeX } from '@/components/CrudCard/icones';
 import EditarPacienteModal from './EditarPacienteModal';
 import NovoPacienteModal from './NovoPacienteModal';
 import '@/components/CrudCard/CrudCard.css';
+import SeloTeste from './SeloTeste';
 
 const IconePacientes = () => (
   <Icone>
@@ -122,18 +123,22 @@ export default function PacienteCard({ className = '' }) {
               <div className="crud-item__info">
                 <span className="crud-item__nome" title={paciente.nome}>{paciente.nome}</span>
                 <span className="crud-item__meta">
-                  <span>{paciente.telefone}</span>
+                  <span>{contatoDoPaciente(paciente).telefone}</span>
                   {paciente.convenioId?.nome
                     ? <span className="badge badge--info">{paciente.convenioId.nome}</span>
-                    : <span className="badge">Particular</span>}
+                    : <span className="badge">Sem convênio</span>}
+                  <SeloTeste paciente={paciente} />
                   {paciente.empresaId?.razaoSocial && <span className="badge badge--primary">{paciente.empresaId.razaoSocial}</span>}
                 </span>
-                <span className="crud-item__sub" title={paciente.email}>{paciente.email}</span>
+                <span className="crud-item__sub" title={contatoDoPaciente(paciente).email}>{contatoDoPaciente(paciente).email}</span>
+                {paciente.responsaveis?.length > 0 && (
+                  <span className="crud-item__sub">Resp.: {paciente.responsaveis.map(rotuloDoResponsavel).join(', ')}</span>
+                )}
               </div>
 
               {confirmandoId === paciente._id ? (
                 <div className="crud-item__confirmar">
-                  <span>Excluir?</span>
+                  <span>{paciente.teste ? 'Excluir com tudo?' : 'Excluir?'}</span>
                   <button type="button" className="icon-btn icon-btn--danger" aria-label={`Confirmar exclusão de ${paciente.nome}`} onClick={() => handleDelete(paciente._id)}>
                     <IconeCheck />
                   </button>

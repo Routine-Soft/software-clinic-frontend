@@ -159,3 +159,28 @@
   border-color: var(--primary);
   box-shadow: 0 0 0 1px var(--primary-ring);
 }
+
+.servico-nome-repetido {
+  display: grid;
+  gap: 10px;
+  justify-items: start;
+  margin-top: 8px;
+  padding: 12px 14px;
+  font-size: 0.9rem;
+  line-height: 1.45;
+  color: var(--warning);
+  background: var(--warning-soft);
+  border: 1px solid var(--warning);
+  border-radius: var(--radius-md);
+  animation: slideDown 0.25s var(--ease);
+}
+
+.servico-nome-repetido p {
+  margin: 0;
+}
+
+.servico-nome-repetido .btn {
+  max-width: 100%;
+  white-space: normal;
+  text-align: left;
+}

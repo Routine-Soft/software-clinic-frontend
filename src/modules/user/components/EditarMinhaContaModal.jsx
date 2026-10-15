@@ -2,14 +2,17 @@ import { useState } from 'react';
 import Modal from '@/components/Modal/Modal';
 import ModalForm from '@/components/Modal/ModalForm';
 import { normalizarEmail } from '@/utils/email';
+import { formatarDocumento } from '@/utils/documento';
 
-export default function EditarMinhaContaModal({ perfil, ehAdmin, erro, onSave, onClose }) {
+export default function EditarMinhaContaModal({ perfil, ehAdmin, ehAfiliado, erro, onSave, onClose }) {
   const [formEdicao, setFormEdicao] = useState({
     nomeCompleto: perfil.nomeCompleto,
     email: perfil.email,
     telefone: perfil.telefone,
     nomeEmpresa: perfil.nomeEmpresa ?? '',
     cnpj: perfil.cnpj ?? '',
+    documento: perfil.documento ? formatarDocumento(perfil.documento) : '',
+    chavePix: perfil.chavePix ?? '',
   });
 
   function handleChangeEdicao(field, value) {
@@ -25,6 +28,10 @@ export default function EditarMinhaContaModal({ perfil, ehAdmin, erro, onSave, o
     if (ehAdmin) {
       dados.nomeEmpresa = formEdicao.nomeEmpresa;
       dados.cnpj = formEdicao.cnpj;
+    }
+    if (ehAfiliado) {
+      dados.documento = formEdicao.documento;
+      dados.chavePix = formEdicao.chavePix;
     }
     return dados;
   }
@@ -70,6 +77,39 @@ export default function EditarMinhaContaModal({ perfil, ehAdmin, erro, onSave, o
               />
             </div>
           </div>
+
+          {ehAfiliado && (
+            <fieldset className="modal-form__section">
+              <legend>Para receber as comissões</legend>
+
+              <div className="modal-form__row">
+                <div className="field">
+                  <label className="field__label" htmlFor="minha-conta-documento">CPF ou CNPJ</label>
+                  <input
+                    id="minha-conta-documento"
+                    className="input"
+                    type="text"
+                    inputMode="numeric"
+                    value={formEdicao.documento}
+                    onChange={(e) => handleChangeEdicao('documento', e.target.value)}
+                    required
+                  />
+                </div>
+
+                <div className="field">
+                  <label className="field__label" htmlFor="minha-conta-pix">Chave Pix</label>
+                  <input
+                    id="minha-conta-pix"
+                    className="input"
+                    type="text"
+                    value={formEdicao.chavePix}
+                    onChange={(e) => handleChangeEdicao('chavePix', e.target.value)}
+                    required
+                  />
+                </div>
+              </div>
+            </fieldset>
+          )}
 
           {ehAdmin && (
             <fieldset className="modal-form__section">

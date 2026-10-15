@@ -23,6 +23,10 @@
   --primary-ring: light-dark(rgba(20, 184, 166, 0.3), rgba(45, 212, 191, 0.32));
   --on-primary: light-dark(#ffffff, #042f2e);
   --gradient-primary: linear-gradient(135deg, light-dark(#0f766e, #2dd4bf), light-dark(#0e7490, #22d3ee));
+  /* Marca Sonelia: selo azul-marinho (igual nos dois temas). */
+  --gradient-marca: linear-gradient(135deg, #0b1f3a, #1e3a8a);
+  --shadow-marca: 0 8px 20px -6px light-dark(rgba(11, 31, 58, 0.55), rgba(0, 0, 0, 0.6)), inset 0 0 0 1px light-dark(transparent, rgba(255, 255, 255, 0.14));
+  --font-marca: 'DM Serif Display', Georgia, serif;
   --gradient-text: linear-gradient(135deg, light-dark(#0f172a, #f1f5f9) 20%, light-dark(#0f766e, #5eead4));
 
   --success: light-dark(#15803d, #4ade80);
@@ -48,6 +52,7 @@
   --shadow-md: 0 6px 18px -4px light-dark(rgba(15, 23, 42, 0.1), rgba(0, 0, 0, 0.45));
   --shadow-lg: 0 24px 48px -12px light-dark(rgba(15, 23, 42, 0.18), rgba(0, 0, 0, 0.6));
   --shadow-primary: 0 8px 22px -6px light-dark(rgba(15, 118, 110, 0.55), rgba(45, 212, 191, 0.35));
+  --shadow-primary-hover: 0 12px 28px -6px light-dark(rgba(15, 118, 110, 0.65), rgba(45, 212, 191, 0.5));
   --shadow-glow: 0 0 0 1px var(--primary-ring), 0 14px 34px -10px var(--primary-ring);
 
   --radius-sm: 8px;
@@ -67,6 +72,42 @@
 
 :root[data-theme='system'] {
   color-scheme: light dark;
+}
+
+/* Tema rosa: claro, em rosé suave (não pink forte). Só troca os tons; estados (sucesso, erro...) seguem iguais. */
+:root[data-theme='rosa'] {
+  color-scheme: light;
+
+  --bg: #fdf7f9;
+  --surface: #ffffff;
+  --surface-2: #fbeff3;
+  --text: #4a2c3a;
+  --text-muted: #8a6475;
+  --text-subtle: #b293a2;
+  --border: #f3dee7;
+  --border-strong: #e7c6d4;
+
+  --primary: #b84d77;
+  --primary-hover: #a8476f;
+  --primary-soft: rgba(200, 96, 138, 0.12);
+  --primary-ring: rgba(214, 120, 158, 0.32);
+  --on-primary: #ffffff;
+  --gradient-primary: linear-gradient(135deg, #c7608a, #a8476f);
+  --gradient-text: linear-gradient(135deg, #4a2c3a 20%, #c7608a);
+
+  --glass-bg: rgba(255, 250, 252, 0.72);
+  --glass-border: rgba(255, 255, 255, 0.75);
+
+  --blob-1: rgba(244, 172, 199, 0.42);
+  --blob-2: rgba(252, 203, 186, 0.36);
+  --blob-3: rgba(221, 190, 238, 0.32);
+  --dot: rgba(184, 77, 119, 0.18);
+
+  --shadow-sm: 0 1px 2px rgba(74, 44, 58, 0.06);
+  --shadow-md: 0 6px 18px -4px rgba(74, 44, 58, 0.1);
+  --shadow-lg: 0 24px 48px -12px rgba(74, 44, 58, 0.16);
+  --shadow-primary: 0 8px 22px -6px rgba(184, 77, 119, 0.45);
+  --shadow-primary-hover: 0 12px 28px -6px rgba(184, 77, 119, 0.55);
 }
 
 *,

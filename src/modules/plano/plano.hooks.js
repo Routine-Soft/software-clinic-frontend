@@ -4,6 +4,7 @@ import {
   createPlano,
   updatePlano,
   deletePlano,
+  getPlanosPublicos,
 } from "./plano.api";
 
 export function usePlanos() {
@@ -85,4 +86,19 @@ export function usePlanos() {
     removePlano,
     refreshPlanos,
   };
+}
+// Landing (sem login). Se a API não responder, a landing mostra os planos padrão dela.
+export function usePlanosPublicos() {
+  const [planos, setPlanos] = useState(null);
+  const [falhou, setFalhou] = useState(false);
+
+  useEffect(() => {
+    let ignore = false;
+    getPlanosPublicos()
+      .then((r) => { if (!ignore) setPlanos(r.data); })
+      .catch(() => { if (!ignore) setFalhou(true); });
+    return () => { ignore = true; };
+  }, []);
+
+  return { planos, carregando: planos === null && !falhou, falhou };
 }

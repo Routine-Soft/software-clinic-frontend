@@ -5,19 +5,22 @@ import { Icone, IconeX } from '@/components/CrudCard/icones'
 import { ROTULO_FUNCAO } from '@/modules/user/user.constants'
 import { iniciais } from '@/utils/nome'
 import Marca from './Marca'
+import BotaoInstalar from './BotaoInstalar'
 import { ICONES } from './menuIcones'
 import './Sidebar.css'
 
 const TODOS = ['super_admin', 'admin', 'profissional', 'recepcao']
 
-// Os cadastros (profissionais, serviços, salas...) ficam no Dashboard admin; o menu tem só o dia a dia.
+// Os cadastros (profissionais, serviços, salas...) ficam no Painel Admin; o menu tem só o dia a dia.
 const GRUPOS = [
     {
         titulo: 'Principal',
         itens: [
-            { label: 'Início', path: '/home', icone: 'inicio', roles: TODOS },
-            { label: 'Dashboard admin', path: '/dashboard-admin', icone: 'painel', roles: ['admin'] },
+            { label: 'Página inicial', path: '/home', icone: 'inicio', roles: TODOS },
+            { label: 'Painel Admin', path: '/dashboard-admin', icone: 'painel', roles: ['admin', 'recepcao'] },
             { label: 'Agenda', path: '/agenda', icone: 'agenda', roles: ['admin', 'profissional', 'recepcao'] },
+            { label: 'Sala de espera', path: '/sala-de-espera', icone: 'tv', roles: ['admin', 'profissional', 'recepcao'] },
+            { label: 'Reuniões', path: '/reunioes', icone: 'reunioes', roles: ['admin', 'recepcao'] },
         ],
     },
     {
@@ -28,7 +31,7 @@ const GRUPOS = [
             { label: 'Avaliações NR-01', path: '/avaliacoes-nr01', icone: 'nr01', roles: ['admin', 'profissional'] },
             { label: 'Avaliação neuropsicológica', path: '/avaliacoes-neuropsicologicas', icone: 'neuro', roles: ['admin', 'profissional'] },
             { label: 'Repasses', path: '/repasses', icone: 'receita', roles: ['admin'] },
-            { label: 'Usuários', path: '/usuarios', icone: 'usuarios', roles: ['admin'] },
+            { label: 'Usuários', path: '/usuarios', icone: 'usuarios', roles: ['admin', 'recepcao'] },
             { label: 'Meus repasses', path: '/meus-repasses', icone: 'receita', roles: ['profissional'] },
         ],
     },
@@ -38,13 +41,22 @@ const GRUPOS = [
             { label: 'Painel Super Admin', path: '/super-admin', icone: 'painel', roles: ['super_admin'] },
             { label: 'Clínicas', path: '/clinicas', icone: 'empresas', roles: ['super_admin'] },
             { label: 'Planos', path: '/planos', icone: 'planos', roles: ['super_admin'] },
+            { label: 'Afiliados', path: '/afiliados-adm', icone: 'indicacao', roles: ['super_admin'] },
+        ],
+    },
+    {
+        titulo: 'Afiliado',
+        itens: [
+            // soAfiliado: aparece para quem ativou o programa, seja qual for o papel (recepção, profissional...).
+            { label: 'Painel do afiliado', path: '/afiliado', icone: 'receita', roles: [], soAfiliado: true },
         ],
     },
     {
         titulo: 'Conta',
         itens: [
             { label: 'Assinaturas', path: '/assinaturas', icone: 'assinatura', roles: ['super_admin', 'admin', 'recepcao'] },
-            { label: 'Minha conta', path: '/minha-conta', icone: 'usuarios', roles: TODOS },
+            { label: 'Indique e ganhe', path: '/indique', icone: 'indicacao', roles: ['admin'] },
+            { label: 'Minha conta', path: '/minha-conta', icone: 'usuarios', roles: [...TODOS, 'afiliado'] },
         ],
     },
 ]
@@ -57,7 +69,7 @@ export function Sidebar({ aberto = false, onFechar }) {
     }
 
     const grupos = GRUPOS
-        .map((grupo) => ({ ...grupo, itens: grupo.itens.filter((item) => item.roles.some((role) => hasRole(role))) }))
+        .map((grupo) => ({ ...grupo, itens: grupo.itens.filter((item) => (item.soAfiliado ? !!user?.afiliadoDesde : item.roles.some((role) => hasRole(role)))) }))
         .filter((grupo) => grupo.itens.length > 0)
 
     return (
@@ -90,6 +102,8 @@ export function Sidebar({ aberto = false, onFechar }) {
             </nav>
 
             <div className="sidebar__rodape">
+                <BotaoInstalar />
+
                 <div className="sidebar__usuario">
                     <span className="sidebar__avatar" aria-hidden="true">{iniciais(user?.nomeCompleto)}</span>
                     <span className="sidebar__usuario-dados">

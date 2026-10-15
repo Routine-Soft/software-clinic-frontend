@@ -101,8 +101,9 @@ export default function PlanoADM() {
                     <div className="dim">
                       <strong>{plano.nome}</strong>{' '}
                       <span className={`badge ${plano.tipo === 'pago' ? 'badge--primary' : 'badge--info'}`}>
-                        {plano.tipo === 'pago' ? 'Pago' : 'Gratuito'}
+                        {plano.tipo === 'pago' ? 'Pago' : 'Teste grátis do cadastro'}
                       </span>
+                      {plano.individual && <span className="badge badge--info">Individual</span>}
                     </div>
                   </td>
                   <td className="table__num">

@@ -151,13 +151,36 @@
   border-color: var(--primary-ring);
 }
 
+.agenda-filtros__toggle--perigo[aria-pressed='true'] {
+  color: var(--danger);
+  background: var(--danger-soft);
+  border-color: color-mix(in srgb, var(--danger) 35%, transparent);
+}
+
 .agenda-legenda {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px 16px;
+  gap: 6px 14px;
+  align-items: center;
   padding: 0 20px 14px;
+}
+
+.agenda-legenda__lista {
+  display: contents;
   margin: 0;
+  padding: 0;
   list-style: none;
+}
+
+.agenda-legenda__titulo {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-subtle);
+}
+
+.agenda-legenda__nota {
+  text-decoration: line-through;
+  text-decoration-color: color-mix(in srgb, var(--text-subtle) 60%, transparent);
 }
 
 .agenda-legenda__item {
@@ -281,8 +304,9 @@
 }
 
 .agenda-chip {
-  display: flex;
-  gap: 6px;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 0 6px;
   align-items: baseline;
   width: 100%;
   min-width: 0;
@@ -319,6 +343,17 @@
   min-width: 0;
   overflow: hidden;
   font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Quem atende, embaixo do nome do paciente. */
+.agenda-chip__prof {
+  grid-column: 2;
+  min-width: 0;
+  overflow: hidden;
+  font-size: 0.68rem;
+  color: var(--text-muted);
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -516,6 +551,7 @@
   white-space: nowrap;
 }
 
+.agenda-ev__prof,
 .agenda-ev__hora,
 .agenda-ev__extra {
   max-width: 100%;
@@ -527,6 +563,10 @@
 
 .agenda-ev__hora {
   font-variant-numeric: tabular-nums;
+}
+
+.agenda-ev__prof {
+  font-weight: 600;
 }
 
 .agenda-agora {
@@ -611,7 +651,8 @@
   }
 
   .agenda-chip__hora,
-  .agenda-chip__nome {
+  .agenda-chip__nome,
+  .agenda-chip__prof {
     display: none;
   }
 

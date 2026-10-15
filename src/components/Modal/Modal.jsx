@@ -1,6 +1,7 @@
 import { useEffect, useId, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import './Modal.css'
+import { tr } from '@/i18n';
 
 const FOCAVEIS = 'a[href], button:not(:disabled), input:not(:disabled), select:not(:disabled), textarea:not(:disabled), [tabindex]:not([tabindex="-1"])'
 
@@ -62,7 +63,7 @@ export function Modal({ title, onClose, wide = false, className = '', persistent
             <div ref={painelRef} className={`modal${wide ? ' modal--wide' : ''}${className ? ` ${className}` : ''}`} role="dialog" aria-modal="true" aria-labelledby={titleId}>
                 <header className="modal__header">
                     <h3 className="modal__title" id={titleId}>{title}</h3>
-                    <button type="button" className="modal__close" aria-label="Fechar" onClick={() => setClosing(true)}>
+                    <button type="button" className="modal__close" aria-label={tr('Fechar')} onClick={() => setClosing(true)}>
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                             <path d="M18 6 6 18M6 6l12 12" />
                         </svg>

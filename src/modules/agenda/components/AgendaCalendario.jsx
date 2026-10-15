@@ -23,11 +23,12 @@ import AgendaGradeTempo from './AgendaGradeTempo';
 import NovoAgendamentoModal from './NovoAgendamentoModal';
 import EditarAgendamentoModal from './EditarAgendamentoModal';
 import '../agenda.css';
+import { tr } from '@/i18n';
 
 const VISOES = [
-  ['dia', 'Dia'],
-  ['semana', 'Semana'],
-  ['mes', 'Mês'],
+  ['dia', tr('Dia')],
+  ['semana', tr('Semana')],
+  ['mes', tr('Mês')],
 ];
 
 function visaoInicial(soCancelados) {
@@ -93,14 +94,14 @@ export default function AgendaCalendario() {
     const mapa = new Map();
     for (const agenda of agendas) {
       const id = idDoProfissional(agenda);
-      if (id && !mapa.has(id)) mapa.set(id, agenda.profissionalId?.nome ?? 'Profissional');
+      if (id && !mapa.has(id)) mapa.set(id, agenda.profissionalId?.nome ?? tr('Profissional'));
     }
     return [...mapa.entries()].sort((a, b) => a[1].localeCompare(b[1], 'pt-BR'));
   }, [agendas]);
 
   const totalNoPeriodo = agendasFiltradas.filter((a) => a.status !== 'cancelado').length;
   const canceladosNoPeriodo = agendasFiltradas.filter((a) => a.status === 'cancelado').length;
-  const noPeriodo = visao === 'dia' ? 'no dia' : visao === 'semana' ? 'na semana' : 'no mês';
+  const noPeriodo = visao === 'dia' ? tr('no dia') : visao === 'semana' ? tr('na semana') : tr('no mês');
 
   function alternarSoCancelados() {
     setParametros(soCancelados ? {} : { status: 'cancelado' }, { replace: true });
@@ -149,22 +150,22 @@ export default function AgendaCalendario() {
     <div className="page agenda-page">
       <header className="page-header">
         <div>
-          <h2 className="page-title">Agenda</h2>
-          <p className="page-subtitle">Clique em um agendamento para abrir o prontuário do paciente</p>
+          <h2 className="page-title">{tr('Agenda')}</h2>
+          <p className="page-subtitle">{tr('Clique em um agendamento para abrir o prontuário do paciente')}</p>
         </div>
         <div className="page-header__acoes">
           {!loading && (soCancelados ? (
             <span className="badge badge--danger">
-              {canceladosNoPeriodo} {canceladosNoPeriodo === 1 ? 'cancelado' : 'cancelados'} {noPeriodo}
+              {canceladosNoPeriodo} {canceladosNoPeriodo === 1 ? tr('cancelado') : tr('cancelados')} {noPeriodo}
             </span>
           ) : (
             <span className="badge badge--primary">
-              {totalNoPeriodo} {totalNoPeriodo === 1 ? 'agendamento' : 'agendamentos'} {noPeriodo}
+              {totalNoPeriodo} {totalNoPeriodo === 1 ? tr('agendamento') : tr('agendamentos')} {noPeriodo}
             </span>
           ))}
           <button type="button" className="btn btn--primary" onClick={() => novoAgendamento(paraISO(dataReferencia))}>
             <IconeMais />
-            Novo agendamento
+            {tr('Novo agendamento')}
           </button>
         </div>
       </header>
@@ -179,17 +180,17 @@ export default function AgendaCalendario() {
       <section className="card agenda-cal" aria-busy={loading}>
         <div className="agenda-toolbar">
           <div className="agenda-toolbar__nav">
-            <button type="button" className="btn btn--ghost btn--sm" onClick={() => setDataReferencia(new Date())}>Hoje</button>
-            <button type="button" className="icon-btn" aria-label="Período anterior" onClick={() => setDataReferencia(navegar(visao, dataReferencia, -1))}>
+            <button type="button" className="btn btn--ghost btn--sm" onClick={() => setDataReferencia(new Date())}>{tr('Hoje')}</button>
+            <button type="button" className="icon-btn" aria-label={tr('Período anterior')} onClick={() => setDataReferencia(navegar(visao, dataReferencia, -1))}>
               <IconeSetaEsq />
             </button>
-            <button type="button" className="icon-btn" aria-label="Próximo período" onClick={() => setDataReferencia(navegar(visao, dataReferencia, 1))}>
+            <button type="button" className="icon-btn" aria-label={tr('Próximo período')} onClick={() => setDataReferencia(navegar(visao, dataReferencia, 1))}>
               <IconeSetaDir />
             </button>
             <h3 className="agenda-toolbar__titulo" aria-live="polite">{tituloDaVisao(visao, dataReferencia)}</h3>
           </div>
 
-          <div className="agenda-visoes" role="group" aria-label="Modo de visualização">
+          <div className="agenda-visoes" role="group" aria-label={tr('Modo de visualização')}>
             {VISOES.map(([chave, rotulo]) => (
               <button key={chave} type="button" className="agenda-visao" aria-pressed={visao === chave} onClick={() => setVisao(chave)}>
                 {rotulo}
@@ -199,8 +200,8 @@ export default function AgendaCalendario() {
         </div>
 
         <div className="agenda-filtros">
-          <select className="input agenda-filtros__prof" value={profissionalId} onChange={(e) => setProfissionalEscolhido(e.target.value)} aria-label="Filtrar por profissional">
-            <option value="">Todos os profissionais</option>
+          <select className="input agenda-filtros__prof" value={profissionalId} onChange={(e) => setProfissionalEscolhido(e.target.value)} aria-label={tr('Filtrar por profissional')}>
+            <option value="">{tr('Todos os profissionais')}</option>
             {profissionais.map((p) => (
               <option key={p._id} value={p._id}>{p.nome}</option>
             ))}
@@ -208,28 +209,28 @@ export default function AgendaCalendario() {
 
           <div className="search">
             <IconeBusca />
-            <input className="input" type="search" value={busca} onChange={(e) => setBusca(e.target.value)} placeholder="Buscar paciente" aria-label="Buscar paciente" />
+            <input className="input" type="search" value={busca} onChange={(e) => setBusca(e.target.value)} placeholder={tr('Buscar paciente')} aria-label={tr('Buscar paciente')} />
           </div>
 
           {!soCancelados && (
             <button type="button" className="agenda-filtros__toggle" aria-pressed={mostrarCancelados} onClick={() => setMostrarCancelados(!mostrarCancelados)}>
-              Cancelados
+              {tr('Cancelados')}
             </button>
           )}
           <button type="button" className="agenda-filtros__toggle agenda-filtros__toggle--perigo" aria-pressed={soCancelados} onClick={alternarSoCancelados}>
-            Só cancelados
+            {tr('Só cancelados')}
           </button>
         </div>
 
         {legenda.length > 0 && (
           <div className="agenda-legenda">
-            <span className="agenda-legenda__titulo">Cor de cada profissional:</span>
-            <ul className="agenda-legenda__lista" aria-label="Legenda de cores dos profissionais">
+            <span className="agenda-legenda__titulo">{tr('Cor de cada profissional:')}</span>
+            <ul className="agenda-legenda__lista" aria-label={tr('Legenda de cores dos profissionais')}>
               {legenda.map(([id, nome]) => (
                 <li key={id} className="agenda-legenda__item" data-cor={corDe(id)}>{nome}</li>
               ))}
             </ul>
-            <span className="agenda-legenda__titulo agenda-legenda__nota">Nome riscado = cancelado</span>
+            <span className="agenda-legenda__titulo agenda-legenda__nota">{tr('Nome riscado = cancelado')}</span>
           </div>
         )}
 
@@ -259,11 +260,11 @@ export default function AgendaCalendario() {
         )}
 
         {!loading && soCancelados && agendasFiltradas.length === 0 && (
-          <p className="agenda-vazio">Nenhum agendamento cancelado {noPeriodo}.</p>
+          <p className="agenda-vazio">{tr('Nenhum agendamento cancelado {noPeriodo}.', { noPeriodo })}</p>
         )}
 
         {!loading && !soCancelados && visao === 'dia' && totalNoPeriodo === 0 && agendasFiltradas.length === 0 && (
-          <p className="agenda-vazio">Nenhum agendamento neste dia. Clique no horário desejado para agendar.</p>
+          <p className="agenda-vazio">{tr('Nenhum agendamento neste dia. Clique no horário desejado para agendar.')}</p>
         )}
       </section>
 

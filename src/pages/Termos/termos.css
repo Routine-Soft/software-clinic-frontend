@@ -82,3 +82,10 @@
   margin: 0 0 10px;
   color: var(--text);
 }
+
+.termos__toggles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: flex-end;
+}

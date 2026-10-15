@@ -6,6 +6,7 @@ import CamposResponsaveis from './CamposResponsaveis';
 import CampoPacienteTeste from './CampoPacienteTeste';
 import { ehMenorDeIdade } from '../paciente.utils';
 import CampoAceitaWhatsapp from './CampoAceitaWhatsapp';
+import { tr } from '@/i18n';
 
 const FORM_CRIAR_INICIAL = { nome: '', telefone: '', email: '', cpf: '', dataNascimento: '', convenioId: '', empresaId: '', responsaveis: [], teste: false, aceitaWhatsapp: false };
 
@@ -27,11 +28,11 @@ export default function NovoPacienteModal({ convenios, empresas, erro, onSave, o
   }
 
   return (
-    <Modal title="Novo paciente" onClose={onClose}>
+    <Modal title={tr('Novo paciente')} onClose={onClose}>
       {(fechar) => (
-        <ModalForm erro={erro} fechar={fechar} submitLabel="Cadastrar paciente" loadingLabel="Cadastrando..." onSubmit={() => onSave(montarPayload())}>
+        <ModalForm erro={erro} fechar={fechar} submitLabel={tr('Cadastrar paciente')} loadingLabel={tr('Cadastrando...')} onSubmit={() => onSave(montarPayload())}>
           <div className="field">
-            <label className="field__label" htmlFor="novo-paciente-nome">Nome</label>
+            <label className="field__label" htmlFor="novo-paciente-nome">{tr('Nome')}</label>
             <input
               id="novo-paciente-nome"
               className="input"
@@ -44,7 +45,7 @@ export default function NovoPacienteModal({ convenios, empresas, erro, onSave, o
 
           <div className="modal-form__row">
             <div className="field">
-              <label className="field__label" htmlFor="novo-paciente-telefone">Telefone{menor && ' (opcional)'}</label>
+              <label className="field__label" htmlFor="novo-paciente-telefone">{tr('Telefone{p0}', { p0: menor && tr(' (opcional)') })}</label>
               <input
                 id="novo-paciente-telefone"
                 className="input"
@@ -56,7 +57,7 @@ export default function NovoPacienteModal({ convenios, empresas, erro, onSave, o
             </div>
 
             <div className="field">
-              <label className="field__label" htmlFor="novo-paciente-email">Email{menor && ' (opcional)'}</label>
+              <label className="field__label" htmlFor="novo-paciente-email">{tr('Email{p0}', { p0: menor && tr(' (opcional)') })}</label>
               <input
                 id="novo-paciente-email"
                 className="input"
@@ -70,7 +71,7 @@ export default function NovoPacienteModal({ convenios, empresas, erro, onSave, o
 
           <div className="modal-form__row">
             <div className="field">
-              <label className="field__label" htmlFor="novo-paciente-cpf">CPF (opcional)</label>
+              <label className="field__label" htmlFor="novo-paciente-cpf">{tr('CPF (opcional)')}</label>
               <input
                 id="novo-paciente-cpf"
                 className="input"
@@ -81,7 +82,7 @@ export default function NovoPacienteModal({ convenios, empresas, erro, onSave, o
             </div>
 
             <div className="field">
-              <label className="field__label" htmlFor="novo-paciente-nascimento">Data de Nascimento</label>
+              <label className="field__label" htmlFor="novo-paciente-nascimento">{tr('Data de Nascimento')}</label>
               <input
                 id="novo-paciente-nascimento"
                 className="input"
@@ -99,14 +100,14 @@ export default function NovoPacienteModal({ convenios, empresas, erro, onSave, o
             <div className="modal-form__row">
               {convenios.length > 0 && (
                 <div className="field">
-                  <label className="field__label" htmlFor="novo-paciente-convenio">Convênio</label>
+                  <label className="field__label" htmlFor="novo-paciente-convenio">{tr('Convênio')}</label>
                   <select
                     id="novo-paciente-convenio"
                     className="input"
                     value={formCriar.convenioId}
                     onChange={(e) => handleChangeCriar('convenioId', e.target.value)}
                   >
-                    <option value="">Nenhum</option>
+                    <option value="">{tr('Nenhum')}</option>
                     {convenios.map((convenio) => (
                       <option key={convenio._id} value={convenio._id}>{convenio.nome}</option>
                     ))}
@@ -116,14 +117,14 @@ export default function NovoPacienteModal({ convenios, empresas, erro, onSave, o
 
               {empresas.length > 0 && (
                 <div className="field">
-                  <label className="field__label" htmlFor="novo-paciente-empresa">Empresa (funcionário)</label>
+                  <label className="field__label" htmlFor="novo-paciente-empresa">{tr('Empresa (funcionário)')}</label>
                   <select
                     id="novo-paciente-empresa"
                     className="input"
                     value={formCriar.empresaId}
                     onChange={(e) => handleChangeCriar('empresaId', e.target.value)}
                   >
-                    <option value="">Nenhuma</option>
+                    <option value="">{tr('Nenhuma')}</option>
                     {empresas.map((empresa) => (
                       <option key={empresa._id} value={empresa._id}>{empresa.razaoSocial}</option>
                     ))}

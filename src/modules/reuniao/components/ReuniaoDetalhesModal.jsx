@@ -4,6 +4,7 @@ import { formatDataBR } from '@/utils/date';
 import { linkWhatsapp } from '@/utils/whatsapp';
 import { IconeCheck, IconeLapis, IconeLixeira, IconeTelefone, IconeX } from '@/components/CrudCard/icones';
 import { STATUS_REUNIAO } from '../reuniao.utils';
+import { tr } from '@/i18n';
 
 export default function ReuniaoDetalhesModal({ reuniao, erro, onEditar, onMudarStatus, onExcluir, onClose }) {
   const [rotulo, classe] = STATUS_REUNIAO[reuniao.status] ?? [reuniao.status, ''];
@@ -21,7 +22,7 @@ export default function ReuniaoDetalhesModal({ reuniao, erro, onEditar, onMudarS
   }
 
   return (
-    <Modal title="Reunião" onClose={onClose}>
+    <Modal title={tr('Reunião')} onClose={onClose}>
       <div className="reuniao-detalhes">
         <div className="reuniao-detalhes__cab">
           <div>
@@ -35,7 +36,7 @@ export default function ReuniaoDetalhesModal({ reuniao, erro, onEditar, onMudarS
           <p className="reuniao-detalhes__linha">
             <IconeTelefone />
             {whatsapp ? (
-              <a href={whatsapp} target="_blank" rel="noopener noreferrer" title="Abrir conversa no WhatsApp">{reuniao.telefone}</a>
+              <a href={whatsapp} target="_blank" rel="noopener noreferrer" title={tr('Abrir conversa no WhatsApp')}>{reuniao.telefone}</a>
             ) : reuniao.telefone}
           </p>
         )}
@@ -48,38 +49,38 @@ export default function ReuniaoDetalhesModal({ reuniao, erro, onEditar, onMudarS
           {reuniao.status === 'aguardando' && (
             <button type="button" className="btn btn--primary btn--sm" disabled={salvando} onClick={() => executar(() => onMudarStatus(reuniao, 'realizado'))}>
               <IconeCheck />
-              {salvando ? 'Salvando...' : 'Marcar como realizada'}
+              {salvando ? tr('Salvando...') : tr('Marcar como realizada')}
             </button>
           )}
           {reuniao.status !== 'aguardando' && (
             <button type="button" className="btn btn--ghost btn--sm" disabled={salvando} onClick={() => executar(() => onMudarStatus(reuniao, 'aguardando'))}>
-              {salvando ? 'Salvando...' : 'Reabrir reunião'}
+              {salvando ? tr('Salvando...') : tr('Reabrir reunião')}
             </button>
           )}
           {reuniao.status !== 'cancelado' && (
             <button type="button" className="btn btn--ghost btn--sm" onClick={() => onEditar(reuniao)}>
               <IconeLapis />
-              Editar
+              {tr('Editar')}
             </button>
           )}
           {reuniao.status === 'aguardando' && (
             <button type="button" className="btn btn--danger btn--sm" disabled={salvando} onClick={() => executar(() => onMudarStatus(reuniao, 'cancelado'))}>
-              Cancelar reunião
+              {tr('Cancelar reunião')}
             </button>
           )}
 
           {confirmandoExclusao ? (
             <span className="reuniao-detalhes__confirmar">
-              Excluir de vez?
-              <button type="button" className="icon-btn icon-btn--danger" aria-label="Confirmar exclusão" disabled={salvando} onClick={() => executar(() => onExcluir(reuniao))}>
+              {tr('Excluir de vez?')}
+              <button type="button" className="icon-btn icon-btn--danger" aria-label={tr('Confirmar exclusão')} disabled={salvando} onClick={() => executar(() => onExcluir(reuniao))}>
                 <IconeCheck />
               </button>
-              <button type="button" className="icon-btn" aria-label="Não excluir" onClick={() => setConfirmandoExclusao(false)}>
+              <button type="button" className="icon-btn" aria-label={tr('Não excluir')} onClick={() => setConfirmandoExclusao(false)}>
                 <IconeX />
               </button>
             </span>
           ) : (
-            <button type="button" className="icon-btn icon-btn--danger reuniao-detalhes__excluir" aria-label="Excluir reunião" title="Excluir" onClick={() => setConfirmandoExclusao(true)}>
+            <button type="button" className="icon-btn icon-btn--danger reuniao-detalhes__excluir" aria-label={tr('Excluir reunião')} title={tr('Excluir')} onClick={() => setConfirmandoExclusao(true)}>
               <IconeLixeira />
             </button>
           )}

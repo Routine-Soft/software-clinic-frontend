@@ -3,6 +3,7 @@ import Modal from '@/components/Modal/Modal';
 import ModalForm from '@/components/Modal/ModalForm';
 import { normalizarEmail } from '@/utils/email';
 import { formatarDocumento } from '@/utils/documento';
+import { tr } from '@/i18n';
 
 export default function EditarMinhaContaModal({ perfil, ehAdmin, ehAfiliado, erro, onSave, onClose }) {
   const [formEdicao, setFormEdicao] = useState({
@@ -37,11 +38,11 @@ export default function EditarMinhaContaModal({ perfil, ehAdmin, ehAfiliado, err
   }
 
   return (
-    <Modal title="Editar meus dados" onClose={onClose}>
+    <Modal title={tr('Editar meus dados')} onClose={onClose}>
       {(fechar) => (
         <ModalForm erro={erro} fechar={fechar} onSubmit={() => onSave(montarPayload())}>
           <div className="field">
-            <label className="field__label" htmlFor="minha-conta-nome">Nome completo</label>
+            <label className="field__label" htmlFor="minha-conta-nome">{tr('Nome completo')}</label>
             <input
               id="minha-conta-nome"
               className="input"
@@ -54,7 +55,7 @@ export default function EditarMinhaContaModal({ perfil, ehAdmin, ehAfiliado, err
 
           <div className="modal-form__row">
             <div className="field">
-              <label className="field__label" htmlFor="minha-conta-email">E-mail</label>
+              <label className="field__label" htmlFor="minha-conta-email">{tr('E-mail')}</label>
               <input
                 id="minha-conta-email"
                 className="input"
@@ -66,7 +67,7 @@ export default function EditarMinhaContaModal({ perfil, ehAdmin, ehAfiliado, err
             </div>
 
             <div className="field">
-              <label className="field__label" htmlFor="minha-conta-telefone">Telefone</label>
+              <label className="field__label" htmlFor="minha-conta-telefone">{tr('Telefone')}</label>
               <input
                 id="minha-conta-telefone"
                 className="input"
@@ -80,11 +81,11 @@ export default function EditarMinhaContaModal({ perfil, ehAdmin, ehAfiliado, err
 
           {ehAfiliado && (
             <fieldset className="modal-form__section">
-              <legend>Para receber as comissões</legend>
+              <legend>{tr('Para receber as comissões')}</legend>
 
               <div className="modal-form__row">
                 <div className="field">
-                  <label className="field__label" htmlFor="minha-conta-documento">CPF ou CNPJ</label>
+                  <label className="field__label" htmlFor="minha-conta-documento">{tr('CPF ou CNPJ')}</label>
                   <input
                     id="minha-conta-documento"
                     className="input"
@@ -97,7 +98,7 @@ export default function EditarMinhaContaModal({ perfil, ehAdmin, ehAfiliado, err
                 </div>
 
                 <div className="field">
-                  <label className="field__label" htmlFor="minha-conta-pix">Chave Pix</label>
+                  <label className="field__label" htmlFor="minha-conta-pix">{tr('Chave Pix')}</label>
                   <input
                     id="minha-conta-pix"
                     className="input"
@@ -113,11 +114,11 @@ export default function EditarMinhaContaModal({ perfil, ehAdmin, ehAfiliado, err
 
           {ehAdmin && (
             <fieldset className="modal-form__section">
-              <legend>Dados da clínica</legend>
+              <legend>{tr('Dados da clínica')}</legend>
 
               <div className="modal-form__row">
                 <div className="field">
-                  <label className="field__label" htmlFor="minha-conta-clinica">Nome da clínica</label>
+                  <label className="field__label" htmlFor="minha-conta-clinica">{tr('Nome da clínica')}</label>
                   <input
                     id="minha-conta-clinica"
                     className="input"
@@ -129,7 +130,7 @@ export default function EditarMinhaContaModal({ perfil, ehAdmin, ehAfiliado, err
                 </div>
 
                 <div className="field">
-                  <label className="field__label" htmlFor="minha-conta-cnpj">CNPJ (opcional)</label>
+                  <label className="field__label" htmlFor="minha-conta-cnpj">{tr('CNPJ (opcional)')}</label>
                   <input
                     id="minha-conta-cnpj"
                     className="input"

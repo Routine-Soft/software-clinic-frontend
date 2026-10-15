@@ -6,6 +6,7 @@ import { useConvenios } from '@/modules/convenio/convenio.hooks';
 import { useEmpresas } from '@/modules/empresa/empresa.hooks';
 import { usePacientes } from '@/modules/paciente/paciente.hooks';
 import { createPaciente } from '@/modules/paciente/paciente.api';
+import { tr } from '@/i18n';
 
 // Tudo o que os formulários de agendamento precisam para preencher seus campos.
 export function useDadosAgendamento() {
@@ -27,10 +28,10 @@ export function useDadosAgendamento() {
   // O particular também é um convênio cadastrado pela clínica: não existe um "Particular" embutido.
   const carregando = carregandoProfissionais || carregandoSalas || carregandoServicos || carregandoConvenios;
   const faltando = carregando ? [] : [
-    profissionais.length === 0 && 'um profissional',
-    servicos.length === 0 && 'um serviço',
-    salas.length === 0 && 'uma sala',
-    convenios.length === 0 && 'um convênio (ex.: Particular, Unimed)',
+    profissionais.length === 0 && tr('um profissional'),
+    servicos.length === 0 && tr('um serviço'),
+    salas.length === 0 && tr('uma sala'),
+    convenios.length === 0 && tr('um convênio (ex.: Particular, Unimed)'),
   ].filter(Boolean);
 
   return { profissionais, especialidades, salas, servicos, convenios, empresas, pacientes, criarPaciente, faltando };

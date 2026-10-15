@@ -1,6 +1,7 @@
 import { useSyncExternalStore } from 'react'
 import { assinarInstalacao, podeInstalar, instalarApp } from '@/utils/instalarApp'
 import { Icone } from '@/components/CrudCard/icones'
+import { tr } from '@/i18n';
 
 // Só aparece quando o navegador permite instalar (Chrome, Edge ou Android, com o app ainda não instalado).
 export function BotaoInstalar() {
@@ -13,7 +14,7 @@ export function BotaoInstalar() {
                 <path d="M12 3v12M7 10l5 5 5-5" />
                 <rect x="3" y="17" width="18" height="4" rx="1" />
             </Icone>
-            Instalar aplicativo
+            {tr('Instalar aplicativo')}
         </button>
     )
 }

@@ -77,6 +77,10 @@
   top: 16px;
   right: 16px;
   z-index: 2;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: flex-end;
   animation: fadeIn 0.8s var(--ease) 0.4s backwards;
 }
 

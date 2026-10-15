@@ -13,11 +13,12 @@ import { EscolhaEspecialidades } from './AcessoAtendimento';
 import { contatoDoPaciente, rotuloDoResponsavel } from '@/modules/paciente/paciente.utils';
 import '../prontuario.css';
 import SeloTeste from '@/modules/paciente/components/SeloTeste';
+import { tr } from '@/i18n';
 
 const ABAS = [
-  ['atendimento', 'Atendimento'],
-  ['historico', 'Histórico'],
-  ['perfil', 'Perfil clínico'],
+  ['atendimento', tr('Atendimento')],
+  ['historico', tr('Histórico')],
+  ['perfil', tr('Perfil clínico')],
 ];
 
 // `profissional` é o cadastro de profissional do login (quem abre a ficha já passou pela checagem de acesso).
@@ -78,9 +79,9 @@ export default function ProntuarioPaciente({ paciente, profissional, agendamento
     try {
       await salvarPerfil(perfilForm);
       setPerfilEditado(null);
-      setAvisoPerfil({ tipo: 'success', texto: 'Perfil clínico salvo.' });
+      setAvisoPerfil({ tipo: 'success', texto: tr('Perfil clínico salvo.') });
     } catch (err) {
-      setAvisoPerfil({ tipo: 'error', texto: err.message || 'Não foi possível salvar o perfil clínico.' });
+      setAvisoPerfil({ tipo: 'error', texto: err.message || tr('Não foi possível salvar o perfil clínico.') });
     } finally {
       setSalvandoPerfil(false);
     }
@@ -97,7 +98,7 @@ export default function ProntuarioPaciente({ paciente, profissional, agendamento
           <h3 className="pront-head__nome">{paciente.nome}</h3>
           <p className="pront-head__meta">
             {[
-              formatDataBR(paciente.dataNascimento) && `${formatDataBR(paciente.dataNascimento)}${idade !== null ? ` (${idade} ${idade === 1 ? 'ano' : 'anos'})` : ''}`,
+              formatDataBR(paciente.dataNascimento) && `${formatDataBR(paciente.dataNascimento)}${idade !== null ? ` (${idade} ${idade === 1 ? tr('ano') : tr('anos')})` : ''}`,
               contatoDoPaciente(paciente).telefone,
               contatoDoPaciente(paciente).email,
             ].filter(Boolean).map((item) => <span key={item}>{item}</span>)}
@@ -105,21 +106,21 @@ export default function ProntuarioPaciente({ paciente, profissional, agendamento
           {paciente.responsaveis?.length > 0 && (
             <p className="pront-head__meta">
               {paciente.responsaveis.map((r) => (
-                <span key={r.nome}>Responsável: {[rotuloDoResponsavel(r), r.telefone].filter(Boolean).join(' · ')}</span>
+                <span key={r.nome}>{tr('Responsável: {p0}', { p0: [rotuloDoResponsavel(r), r.telefone].filter(Boolean).join(' · ') })}</span>
               ))}
             </p>
           )}
           <div className="pront-head__selos">
             <SeloTeste paciente={paciente} />
-            <span className={`badge${paciente.convenioId?.nome ? ' badge--info' : ''}`}>{paciente.convenioId?.nome ?? 'Sem convênio'}</span>
+            <span className={`badge${paciente.convenioId?.nome ? ' badge--info' : ''}`}>{paciente.convenioId?.nome ?? tr('Sem convênio')}</span>
             {paciente.empresaId?.razaoSocial && <span className="badge badge--primary">{paciente.empresaId.razaoSocial}</span>}
-            <span className="badge">Primeira consulta: {formatDataInstanteBR(primeiraConsulta) ?? 'nenhuma ainda'}</span>
+            <span className="badge">{tr('Primeira consulta: {p0}', { p0: formatDataInstanteBR(primeiraConsulta) ?? tr('nenhuma ainda') })}</span>
           </div>
         </div>
 
         <button type="button" className="btn btn--ghost btn--sm pront-head__imprimir pront-no-print" onClick={() => window.print()}>
           <IconeImpressora />
-          Imprimir
+          {tr('Imprimir')}
         </button>
       </header>
 
@@ -137,7 +138,7 @@ export default function ProntuarioPaciente({ paciente, profissional, agendamento
       {perfilSalvo?.alergias && (
         <div className="pront-alergia" role="note">
           <IconeAlerta />
-          <p><strong>Alergias:</strong> {perfilSalvo.alergias}</p>
+          <p><strong>{tr('Alergias:')}</strong> {perfilSalvo.alergias}</p>
         </div>
       )}
 
@@ -146,13 +147,13 @@ export default function ProntuarioPaciente({ paciente, profissional, agendamento
           {camposResumo.map(([campo, rotulo]) => (
             <div key={campo} className={perfilSalvo[campo] ? undefined : 'is-vazio'}>
               <dt>{rotulo}</dt>
-              <dd>{perfilSalvo[campo] || 'Nenhum registrado'}</dd>
+              <dd>{perfilSalvo[campo] || tr('Nenhum registrado')}</dd>
             </div>
           ))}
         </dl>
       )}
 
-      <div className="pront-abas pront-no-print" role="tablist" aria-label="Seções do prontuário">
+      <div className="pront-abas pront-no-print" role="tablist" aria-label={tr('Seções do prontuário')}>
         {ABAS.map(([chave, rotulo]) => (
           <button
             key={chave}
@@ -167,7 +168,7 @@ export default function ProntuarioPaciente({ paciente, profissional, agendamento
           >
             {rotulo}
             {contagens[chave] > 0 && <span className="pront-aba__contagem">{contagens[chave]}</span>}
-            {chave === 'atendimento' && atendimentoAtivo && <span className="pront-aba__ponto" aria-label="Em andamento" />}
+            {chave === 'atendimento' && atendimentoAtivo && <span className="pront-aba__ponto" aria-label={tr('Em andamento')} />}
           </button>
         ))}
       </div>
@@ -182,7 +183,7 @@ export default function ProntuarioPaciente({ paciente, profissional, agendamento
       <section className="pront-painel" id="pront-painel" role="tabpanel" aria-labelledby={`pront-aba-${aba}`}>
         {!loading && aba === 'historico' && (
           <p className="pront-parcial" role="note">
-            Aparecem aqui os seus atendimentos e os que outros profissionais liberaram para a sua especialidade.
+            {tr('Aparecem aqui os seus atendimentos e os que outros profissionais liberaram para a sua especialidade.')}
           </p>
         )}
 
@@ -201,29 +202,29 @@ export default function ProntuarioPaciente({ paciente, profissional, agendamento
           ) : (
             <div className="pront-novo">
               <div className="pront-novo__intro">
-                <h4>Iniciar novo atendimento</h4>
+                <h4>{tr('Iniciar novo atendimento')}</h4>
                 <p>
                   {agendamento
-                    ? 'O atendimento ficará vinculado a este agendamento.'
-                    : 'O atendimento fica registrado em seu nome, e só você poderá alterá-lo até finalizar.'}
+                    ? tr('O atendimento ficará vinculado a este agendamento.')
+                    : tr('O atendimento fica registrado em seu nome, e só você poderá alterá-lo até finalizar.')}
                 </p>
               </div>
 
               <div className="pront-grid">
                 <div className="pront-profissional-fixo">
-                  <span className="field__label">Profissional</span>
+                  <span className="field__label">{tr('Profissional')}</span>
                   <strong>{profissional.nome}</strong>
                 </div>
 
                 <div className="field">
-                  <label className="field__label" htmlFor="pront-novo-convenio">Convênio</label>
+                  <label className="field__label" htmlFor="pront-novo-convenio">{tr('Convênio')}</label>
                   <select
                     id="pront-novo-convenio"
                     className="input"
                     value={novoAtendimento.convenioId}
                     onChange={(e) => setNovoAtendimento({ ...novoAtendimento, convenioId: e.target.value })}
                   >
-                    <option value="">Não informado</option>
+                    <option value="">{tr('Não informado')}</option>
                     {convenios.map((c) => (
                       <option key={c._id} value={c._id}>{c.nome}</option>
                     ))}
@@ -232,7 +233,7 @@ export default function ProntuarioPaciente({ paciente, profissional, agendamento
               </div>
 
               <div className="pront-acesso pront-acesso--editando">
-                <span className="field__label" id="pront-novo-acesso-rotulo">Quem mais pode ler este atendimento</span>
+                <span className="field__label" id="pront-novo-acesso-rotulo">{tr('Quem mais pode ler este atendimento')}</span>
                 <EscolhaEspecialidades
                   id="pront-novo-acesso"
                   especialidades={especialidades}
@@ -240,7 +241,7 @@ export default function ProntuarioPaciente({ paciente, profissional, agendamento
                   onChange={(ids) => setNovoAtendimento({ ...novoAtendimento, compartilhadoCom: ids })}
                 />
                 <p className="field__hint">
-                  Nada marcado: só você lê. Marcando uma especialidade, qualquer profissional dela na clínica poderá ler. Dá para mudar depois.
+                  {tr('Nada marcado: só você lê. Marcando uma especialidade, qualquer profissional dela na clínica poderá ler. Dá para mudar depois.')}
                 </p>
               </div>
 
@@ -252,7 +253,7 @@ export default function ProntuarioPaciente({ paciente, profissional, agendamento
                   onClick={async () => { setIniciando(true); await handleIniciar(); setIniciando(false); }}
                 >
                   <IconeMais />
-                  {iniciando ? 'Iniciando...' : 'Iniciar atendimento'}
+                  {iniciando ? tr('Iniciando...') : tr('Iniciar atendimento')}
                 </button>
               </div>
             </div>
@@ -263,7 +264,7 @@ export default function ProntuarioPaciente({ paciente, profissional, agendamento
           loading ? (
             <div className="skeleton skeleton--bloco" />
           ) : historico.length === 0 ? (
-            <p className="pront-vazio">Nenhum atendimento registrado ainda.</p>
+            <p className="pront-vazio">{tr('Nenhum atendimento registrado ainda.')}</p>
           ) : (
             <ol className="pront-timeline">
               {historico.map((prontuario) => (
@@ -283,13 +284,13 @@ export default function ProntuarioPaciente({ paciente, profissional, agendamento
 
         {aba === 'perfil' && !loading && !perfilSalvo && (
           <p className="pront-vazio">
-            O perfil clínico aparece para quem atende o paciente. Inicie um atendimento para consultá-lo e atualizá-lo.
+            {tr('O perfil clínico aparece para quem atende o paciente. Inicie um atendimento para consultá-lo e atualizá-lo.')}
           </p>
         )}
 
         {aba === 'perfil' && perfilSalvo && (
           <form className="pront-perfil" onSubmit={handleSalvarPerfil}>
-            <p className="pront-perfil__intro">Esses dados valem para todos os atendimentos deste paciente, não apenas para o atual.</p>
+            <p className="pront-perfil__intro">{tr('Esses dados valem para todos os atendimentos deste paciente, não apenas para o atual.')}</p>
 
             <div className="pront-grid">
               {CAMPOS_PERFIL_CLINICO.map(([campo, rotulo, linhas]) => (
@@ -312,7 +313,7 @@ export default function ProntuarioPaciente({ paciente, profissional, agendamento
 
             <div className="pront-rodape pront-no-print">
               <button type="submit" className={`btn btn--primary${salvandoPerfil ? ' btn--loading' : ''}`} disabled={salvandoPerfil || !perfilAlterado}>
-                {salvandoPerfil ? 'Salvando...' : 'Salvar perfil clínico'}
+                {salvandoPerfil ? tr('Salvando...') : tr('Salvar perfil clínico')}
               </button>
             </div>
           </form>

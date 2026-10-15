@@ -4,6 +4,7 @@ import { useAuthContext } from '@/hooks/useAuthContext';
 import { getAssinaturaAtual } from '../assinatura.api';
 import { avisoDeVencimento } from '../assinatura.utils';
 import './aviso-vencimento.css';
+import { tr } from '@/i18n';
 
 // Quem paga a assinatura: o admin e a recepção (que faz o papel de secretaria). Profissional não vê.
 // O super_admin também vê a da própria clínica (assim dá para conferir como a barra aparece).
@@ -73,7 +74,7 @@ export default function AvisoVencimento() {
       {pathname !== '/assinaturas' && (
         <Link to="/assinaturas" className="aviso-vencimento__pagar">{aviso.botao}</Link>
       )}
-      <button type="button" className="aviso-vencimento__fechar" aria-label="Fechar aviso até amanhã" title="Fechar até amanhã" onClick={fechar}>
+      <button type="button" className="aviso-vencimento__fechar" aria-label={tr('Fechar aviso até amanhã')} title={tr('Fechar até amanhã')} onClick={fechar}>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" aria-hidden="true">
           <path d="M18 6 6 18M6 6l12 12" />
         </svg>

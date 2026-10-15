@@ -9,6 +9,7 @@ import { Icone, IconeMais, IconeLapis, IconeLixeira, IconeCheck, IconeX } from '
 import { iniciais } from '@/utils/nome';
 import EmailQuebravel from '@/components/EmailQuebravel';
 import '@/components/CrudCard/CrudCard.css';
+import { tr } from '@/i18n';
 
 const IconeUsuarios = () => (
   <Icone>
@@ -40,18 +41,18 @@ export default function UsuariosClinicaCard({ className = '' }) {
         <div className="crud-card__icon"><IconeUsuarios /></div>
 
         <div className="crud-card__titulos">
-          <h3 className="crud-card__titulo">Usuários</h3>
-          <p className="crud-card__subtitulo">Quem acessa o sistema e com qual função</p>
+          <h3 className="crud-card__titulo">{tr('Usuários')}</h3>
+          <p className="crud-card__subtitulo">{tr('Quem acessa o sistema e com qual função')}</p>
         </div>
 
         {!loading && (
           <span className="badge badge--primary">
-            {usuarios.length} {usuarios.length === 1 ? 'usuário' : 'usuários'}
+            {usuarios.length} {usuarios.length === 1 ? tr('usuário') : tr('usuários')}
           </span>
         )}
-        <button type="button" className="btn btn--primary btn--sm crud-card__novo-btn" onClick={() => setCriando(true)} aria-label="Adicionar usuário">
+        <button type="button" className="btn btn--primary btn--sm crud-card__novo-btn" onClick={() => setCriando(true)} aria-label={tr('Adicionar usuário')}>
           <IconeMais />
-          <span className="crud-card__rotulo">Adicionar</span>
+          <span className="crud-card__rotulo">{tr('Adicionar')}</span>
         </button>
       </header>
 
@@ -63,7 +64,7 @@ export default function UsuariosClinicaCard({ className = '' }) {
       )}
 
       {loading ? (
-        <ul className="crud-lista" aria-busy="true" aria-label="Carregando usuários">
+        <ul className="crud-lista" aria-busy="true" aria-label={tr('Carregando usuários')}>
           {[0, 1, 2].map((i) => (
             <li key={i} className="crud-item crud-item--skeleton" style={{ '--i': i }}>
               <div className="skeleton crud-item__icone-skeleton" />
@@ -74,7 +75,7 @@ export default function UsuariosClinicaCard({ className = '' }) {
       ) : usuarios.length === 0 ? (
         <div className="crud-vazio">
           <IconeUsuarios />
-          <p>Nenhum usuário cadastrado ainda.</p>
+          <p>{tr('Nenhum usuário cadastrado ainda.')}</p>
         </div>
       ) : (
         <ul className="crud-lista">
@@ -94,27 +95,27 @@ export default function UsuariosClinicaCard({ className = '' }) {
                   {usuario.telefone && <span className="crud-item__sub crud-item__sub--inteiro">{usuario.telefone}</span>}
                   <span className="crud-item__meta">
                     <span className={`badge badge--${usuario.role}`}>{ROTULO_FUNCAO[usuario.role] ?? usuario.role}</span>
-                    {ehVoce && <span className="badge badge--primary">Você</span>}
+                    {ehVoce && <span className="badge badge--primary">{tr('Você')}</span>}
                   </span>
                 </div>
 
                 {confirmandoId === usuario._id ? (
                   <div className="crud-item__confirmar">
-                    <span>Excluir?</span>
-                    <button type="button" className="icon-btn icon-btn--danger" aria-label={`Confirmar exclusão de ${usuario.nomeCompleto}`} onClick={() => handleDelete(usuario._id)}>
+                    <span>{tr('Excluir?')}</span>
+                    <button type="button" className="icon-btn icon-btn--danger" aria-label={tr('Confirmar exclusão de {nomeCompleto}', { nomeCompleto: usuario.nomeCompleto })} onClick={() => handleDelete(usuario._id)}>
                       <IconeCheck />
                     </button>
-                    <button type="button" className="icon-btn" aria-label="Cancelar exclusão" onClick={() => setConfirmandoId(null)}>
+                    <button type="button" className="icon-btn" aria-label={tr('Cancelar exclusão')} onClick={() => setConfirmandoId(null)}>
                       <IconeX />
                     </button>
                   </div>
                 ) : podeAlterarUsuario(usuarioLogado, usuario) && (
                   <div className="crud-item__acoes">
-                    <button type="button" className="icon-btn" aria-label={`Editar ${usuario.nomeCompleto}`} title="Editar" onClick={() => { setConfirmandoId(null); setEditando(usuario); }}>
+                    <button type="button" className="icon-btn" aria-label={`Editar ${usuario.nomeCompleto}`} title={tr('Editar')} onClick={() => { setConfirmandoId(null); setEditando(usuario); }}>
                       <IconeLapis />
                     </button>
                     {!ehVoce && (
-                      <button type="button" className="icon-btn icon-btn--danger" aria-label={`Excluir ${usuario.nomeCompleto}`} title="Excluir" onClick={() => setConfirmandoId(usuario._id)}>
+                      <button type="button" className="icon-btn icon-btn--danger" aria-label={`Excluir ${usuario.nomeCompleto}`} title={tr('Excluir')} onClick={() => setConfirmandoId(usuario._id)}>
                         <IconeLixeira />
                       </button>
                     )}
@@ -127,7 +128,7 @@ export default function UsuariosClinicaCard({ className = '' }) {
       )}
 
       <p className="crud-card__dica">
-        Para redefinir a senha de alguém, abra a tela <Link to="/usuarios">Usuários</Link>.
+        {tr('Para redefinir a senha de alguém, abra a tela')} <Link to="/usuarios">{tr('Usuários')}</Link>.
       </p>
 
       {editando && (

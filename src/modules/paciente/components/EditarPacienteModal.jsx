@@ -6,6 +6,7 @@ import CamposResponsaveis from './CamposResponsaveis';
 import CampoNomeNaTv from './CampoNomeNaTv';
 import { ehMenorDeIdade, opcaoNomeNaTv } from '../paciente.utils';
 import CampoAceitaWhatsapp from './CampoAceitaWhatsapp';
+import { tr } from '@/i18n';
 
 export default function EditarPacienteModal({ paciente, convenios, empresas, erro, onSave, onClose }) {
   const [formEdicao, setFormEdicao] = useState({
@@ -36,11 +37,11 @@ export default function EditarPacienteModal({ paciente, convenios, empresas, err
   }
 
   return (
-    <Modal title="Editar paciente" onClose={onClose}>
+    <Modal title={tr('Editar paciente')} onClose={onClose}>
       {(fechar) => (
         <ModalForm erro={erro} fechar={fechar} onSubmit={() => onSave(paciente._id, montarPayload())}>
           <div className="field">
-            <label className="field__label" htmlFor="editar-paciente-nome">Nome</label>
+            <label className="field__label" htmlFor="editar-paciente-nome">{tr('Nome')}</label>
             <input
               id="editar-paciente-nome"
               className="input"
@@ -53,7 +54,7 @@ export default function EditarPacienteModal({ paciente, convenios, empresas, err
 
           <div className="modal-form__row">
             <div className="field">
-              <label className="field__label" htmlFor="editar-paciente-telefone">Telefone{menor && ' (opcional)'}</label>
+              <label className="field__label" htmlFor="editar-paciente-telefone">{tr('Telefone{p0}', { p0: menor && tr(' (opcional)') })}</label>
               <input
                 id="editar-paciente-telefone"
                 className="input"
@@ -65,7 +66,7 @@ export default function EditarPacienteModal({ paciente, convenios, empresas, err
             </div>
 
             <div className="field">
-              <label className="field__label" htmlFor="editar-paciente-email">Email{menor && ' (opcional)'}</label>
+              <label className="field__label" htmlFor="editar-paciente-email">{tr('Email{p0}', { p0: menor && tr(' (opcional)') })}</label>
               <input
                 id="editar-paciente-email"
                 className="input"
@@ -79,7 +80,7 @@ export default function EditarPacienteModal({ paciente, convenios, empresas, err
 
           <div className="modal-form__row">
             <div className="field">
-              <label className="field__label" htmlFor="editar-paciente-cpf">CPF (opcional)</label>
+              <label className="field__label" htmlFor="editar-paciente-cpf">{tr('CPF (opcional)')}</label>
               <input
                 id="editar-paciente-cpf"
                 className="input"
@@ -90,7 +91,7 @@ export default function EditarPacienteModal({ paciente, convenios, empresas, err
             </div>
 
             <div className="field">
-              <label className="field__label" htmlFor="editar-paciente-nascimento">Data de Nascimento</label>
+              <label className="field__label" htmlFor="editar-paciente-nascimento">{tr('Data de Nascimento')}</label>
               <input
                 id="editar-paciente-nascimento"
                 className="input"
@@ -108,14 +109,14 @@ export default function EditarPacienteModal({ paciente, convenios, empresas, err
             <div className="modal-form__row">
               {convenios.length > 0 && (
                 <div className="field">
-                  <label className="field__label" htmlFor="editar-paciente-convenio">Convênio</label>
+                  <label className="field__label" htmlFor="editar-paciente-convenio">{tr('Convênio')}</label>
                   <select
                     id="editar-paciente-convenio"
                     className="input"
                     value={formEdicao.convenioId}
                     onChange={(e) => handleChangeEdicao('convenioId', e.target.value)}
                   >
-                    <option value="">Nenhum</option>
+                    <option value="">{tr('Nenhum')}</option>
                     {convenios.map((convenio) => (
                       <option key={convenio._id} value={convenio._id}>{convenio.nome}</option>
                     ))}
@@ -125,14 +126,14 @@ export default function EditarPacienteModal({ paciente, convenios, empresas, err
 
               {empresas.length > 0 && (
                 <div className="field">
-                  <label className="field__label" htmlFor="editar-paciente-empresa">Empresa (funcionário)</label>
+                  <label className="field__label" htmlFor="editar-paciente-empresa">{tr('Empresa (funcionário)')}</label>
                   <select
                     id="editar-paciente-empresa"
                     className="input"
                     value={formEdicao.empresaId}
                     onChange={(e) => handleChangeEdicao('empresaId', e.target.value)}
                   >
-                    <option value="">Nenhuma</option>
+                    <option value="">{tr('Nenhuma')}</option>
                     {empresas.map((empresa) => (
                       <option key={empresa._id} value={empresa._id}>{empresa.razaoSocial}</option>
                     ))}

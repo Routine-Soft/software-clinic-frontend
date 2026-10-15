@@ -1,4 +1,5 @@
 import SimboloMarca from '@/components/Marca/SimboloMarca'
+import { tr } from '@/i18n';
 
 // Marca da Sonelia (símbolo sobre gradiente teal) + nome da clínica logada.
 export function Marca({ empresa }) {
@@ -8,7 +9,7 @@ export function Marca({ empresa }) {
                 <SimboloMarca />
             </span>
             <span className="marca__textos">
-                <strong>Sonelia</strong>
+                <strong>{tr('Sonelia')}</strong>
                 {empresa && <span title={empresa}>{empresa}</span>}
             </span>
         </div>

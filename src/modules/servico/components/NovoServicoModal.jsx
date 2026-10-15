@@ -3,6 +3,7 @@ import Modal from '@/components/Modal/Modal';
 import ModalForm from '@/components/Modal/ModalForm';
 import ServicoCampos from './ServicoCampos';
 import { formularioDoServico, montarPayloadServico, problemaDoFormulario, servicoComMesmoNome, MODELOS_SERVICO } from '../servico.form';
+import { tr } from '@/i18n';
 
 // `modeloInicial` abre já preenchido (ex.: vindo do aviso da tela de avaliação).
 export default function NovoServicoModal({ convenios, servicos = [], erro, onSave, onClose, modeloInicial = null }) {
@@ -19,18 +20,18 @@ export default function NovoServicoModal({ convenios, servicos = [], erro, onSav
   const nomeRepetido = !!servicoComMesmoNome(form.nome, servicos);
 
   return (
-    <Modal title="Novo serviço" wide onClose={onClose}>
+    <Modal title={tr('Novo serviço')} wide onClose={onClose}>
       {(fechar) => (
         <ModalForm
           erro={erro}
           fechar={fechar}
-          submitLabel="Cadastrar serviço"
-          loadingLabel="Cadastrando..."
+          submitLabel={tr('Cadastrar serviço')}
+          loadingLabel={tr('Cadastrando...')}
           submitDisabled={!!problema || nomeRepetido}
           onSubmit={() => onSave(montarPayloadServico(form))}
         >
           <div className="servico-modelos">
-            <span className="field__label">Começar de um modelo</span>
+            <span className="field__label">{tr('Começar de um modelo')}</span>
             <div className="servico-modelos__lista">
               {MODELOS_SERVICO.map((m) => (
                 <button key={m.chave} type="button" className="btn btn--ghost btn--sm" aria-pressed={modelo === m.chave} onClick={() => usarModelo(m.chave)}>
@@ -38,7 +39,7 @@ export default function NovoServicoModal({ convenios, servicos = [], erro, onSav
                 </button>
               ))}
             </div>
-            {dicaModelo && <p className="field__hint">{dicaModelo} Só falta o preço.</p>}
+            {dicaModelo && <p className="field__hint">{tr('{dicaModelo} Só falta o preço.', { dicaModelo })}</p>}
           </div>
 
           <ServicoCampos form={form} setForm={setForm} convenios={convenios} servicos={servicos} />

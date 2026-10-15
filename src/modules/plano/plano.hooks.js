@@ -6,6 +6,7 @@ import {
   deletePlano,
   getPlanosPublicos,
 } from "./plano.api";
+import { adivinharPais } from "@/i18n/paises";
 
 export function usePlanos() {
   const [planos, setPlanos] = useState([]);
@@ -94,7 +95,7 @@ export function usePlanosPublicos() {
 
   useEffect(() => {
     let ignore = false;
-    getPlanosPublicos()
+    getPlanosPublicos(adivinharPais())
       .then((r) => { if (!ignore) setPlanos(r.data); })
       .catch(() => { if (!ignore) setFalhou(true); });
     return () => { ignore = true; };

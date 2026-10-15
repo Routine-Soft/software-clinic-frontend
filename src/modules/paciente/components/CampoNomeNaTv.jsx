@@ -1,5 +1,6 @@
 import { useId } from 'react';
 import { OPCOES_NOME_NA_TV, nomeParaTv } from '../paciente.utils';
+import { tr } from '@/i18n';
 
 // Escolha de como o paciente aparece na TV da sala de espera, com a prévia do que vai aparecer.
 export default function CampoNomeNaTv({ nome, valor, onChange }) {
@@ -8,14 +9,14 @@ export default function CampoNomeNaTv({ nome, valor, onChange }) {
 
   return (
     <div className="field">
-      <label className="field__label" htmlFor={id}>Nome na TV da sala de espera</label>
+      <label className="field__label" htmlFor={id}>{tr('Nome na TV da sala de espera')}</label>
       <select id={id} className="input" value={valor} onChange={(e) => onChange(e.target.value)}>
         {OPCOES_NOME_NA_TV.map(([opcao, rotulo]) => (
           <option key={opcao} value={opcao}>{rotulo}</option>
         ))}
       </select>
       <p className="field__hint">
-        {valor === 'oculto' ? 'A TV mostra só a sala, sem o nome.' : `Na TV: ${previa ?? 'o nome do paciente'}`}
+        {valor === 'oculto' ? tr('A TV mostra só a sala, sem o nome.') : tr('Na TV: {p0}', { p0: previa ?? tr('o nome do paciente') })}
       </p>
     </div>
   );

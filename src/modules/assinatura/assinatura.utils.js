@@ -1,10 +1,13 @@
+import { localeAtual, tr } from '@/i18n';
+
 // Vencimentos de assinatura são instantes no tempo (não datas puras): a data exibida segue o fuso do navegador.
 export function formatarData(instante) {
-  return new Date(instante).toLocaleDateString('pt-BR');
+  return new Date(instante).toLocaleDateString(localeAtual());
 }
 
-export function formatarPreco(preco) {
-  return preco.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+// Planos do Brasil em reais; os de fora do Brasil (Stripe) em dólar.
+export function formatarPreco(preco, moeda = 'BRL') {
+  return Number(preco ?? 0).toLocaleString(localeAtual(), { style: 'currency', currency: moeda === 'USD' ? 'USD' : 'BRL' });
 }
 
 export function somenteDigitos(valor) {
@@ -45,7 +48,7 @@ function diaEmBrasilia(instante) {
 }
 
 function diaEMes(instante) {
-  return new Date(instante).toLocaleDateString('pt-BR', { timeZone: 'America/Sao_Paulo', day: '2-digit', month: '2-digit' });
+  return new Date(instante).toLocaleDateString(localeAtual(), { timeZone: 'America/Sao_Paulo', day: '2-digit', month: '2-digit' });
 }
 
 // Barra de vencimento, a partir de 7 dias antes, para quem precisa agir: quem paga por Pix (o cartão renova
@@ -62,13 +65,13 @@ export function avisoDeVencimento(assinatura, agora = new Date()) {
 
   const data = diaEMes(vencimento);
   const [oQue, verbo, acao, botao] = porPix
-    ? ['Seu plano', 'vence', 'Pague', 'Pagar']
-    : ['Seu teste grátis', 'termina', 'Assine um plano', 'Assinar'];
+    ? [tr('Seu plano'), tr('vence'), tr('Pague'), tr('Pagar')]
+    : [tr('Seu teste grátis'), tr('termina'), tr('Assine um plano'), tr('Assinar')];
   const tom = dias <= 0 ? 'danger' : dias <= 3 ? 'warning' : 'info';
 
-  if (dias <= 0) return { tom, dias, botao, texto: `${oQue} ${verbo} hoje. ${acao} para não perder o acesso.` };
-  if (dias === 1) return { tom, dias, botao, texto: `${oQue} ${verbo} amanhã (${data}).` };
-  return { tom, dias, botao, texto: `${oQue} ${verbo} em ${dias} dias (${data}).` };
+  if (dias <= 0) return { tom, dias, botao, texto: tr('{oQue} {verbo} hoje. {acao} para não perder o acesso.', { oQue, verbo, acao }) };
+  if (dias === 1) return { tom, dias, botao, texto: tr('{oQue} {verbo} amanhã ({data}).', { oQue, verbo, data }) };
+  return { tom, dias, botao, texto: tr('{oQue} {verbo} em {dias} dias ({data}).', { oQue, verbo, dias, data }) };
 }
 
 // Avisa as outras partes da tela (como a barra de vencimento) que a assinatura mudou, ex.: Pix acabou de ser pago.

@@ -10,6 +10,7 @@ import { IconeBusca, IconeCheck, IconeX, IconeCadeado, IconeCadeadoAberto, Icone
 import { ROTULO_FUNCAO } from '@/modules/user/user.constants';
 import '@/modules/user/components/clinicas-adm.css';
 import './afiliado.css';
+import { tr } from '@/i18n';
 
 export default function AfiliadosADM() {
   const { afiliados, loading, error, successMessage, registrarPagamento, definirAtivo, excluir } = useAfiliadosAdm();
@@ -47,12 +48,12 @@ export default function AfiliadosADM() {
     <div className="page">
       <header className="page-header">
         <div>
-          <h2 className="page-title">Afiliados</h2>
-          <p className="page-subtitle">Quem divulga a Sonelia e as comissões de cada um</p>
+          <h2 className="page-title">{tr('Afiliados')}</h2>
+          <p className="page-subtitle">{tr('Quem divulga a Sonelia e as comissões de cada um')}</p>
         </div>
         <div className="page-header__acoes">
           {!loading && <span className="badge badge--primary">{afiliados.length === 1 ? '1 afiliado' : `${afiliados.length} afiliados`}</span>}
-          {!loading && totalAPagar > 0 && <span className="badge badge--success">{formatarReais(totalAPagar)} a pagar</span>}
+          {!loading && totalAPagar > 0 && <span className="badge badge--success">{tr('{p0} a pagar', { p0: formatarReais(totalAPagar) })}</span>}
         </div>
       </header>
 
@@ -67,18 +68,18 @@ export default function AfiliadosADM() {
         <div className="clinicas-toolbar">
           <div className="search">
             <IconeBusca />
-            <input className="input" type="search" value={busca} onChange={(e) => setBusca(e.target.value)} placeholder="Nome, e-mail ou código" aria-label="Buscar afiliado" />
+            <input className="input" type="search" value={busca} onChange={(e) => setBusca(e.target.value)} placeholder={tr('Nome, e-mail ou código')} aria-label={tr('Buscar afiliado')} />
           </div>
         </div>
 
         <table className="table">
           <thead>
             <tr>
-              <th>Afiliado</th>
-              <th>Contato</th>
-              <th>Receber em</th>
-              <th>Comissões</th>
-              <th>Ações</th>
+              <th>{tr('Afiliado')}</th>
+              <th>{tr('Contato')}</th>
+              <th>{tr('Receber em')}</th>
+              <th>{tr('Comissões')}</th>
+              <th>{tr('Ações')}</th>
             </tr>
           </thead>
           <tbody>
@@ -93,7 +94,7 @@ export default function AfiliadosADM() {
             ) : filtrados.length === 0 ? (
               <tr>
                 <td className="table__empty" colSpan={5}>
-                  {busca ? 'Nenhum afiliado encontrado para essa busca.' : 'Nenhum afiliado ainda. Divulgue a página "Seja afiliado" (sonelia.com.br/#/afiliados).'}
+                  {busca ? tr('Nenhum afiliado encontrado para essa busca.') : tr('Nenhum afiliado ainda. Divulgue a página "Seja afiliado" (sonelia.com.br/#/afiliados).')}
                 </td>
               </tr>
             ) : (
@@ -109,10 +110,10 @@ export default function AfiliadosADM() {
                           <div className="clinica-pessoa__dados">
                             <span className="clinica-pessoa__nome">{afiliado.nomeCompleto}</span>
                             <span className="clinica-pessoa__sub">
-                              {afiliado.role === 'afiliado' ? 'Só afiliado' : `${ROTULO_FUNCAO[afiliado.role] ?? afiliado.role} · ${afiliado.nomeEmpresa}`}
+                              {afiliado.role === 'afiliado' ? tr('Só afiliado') : `${ROTULO_FUNCAO[afiliado.role] ?? afiliado.role} · ${afiliado.nomeEmpresa}`}
                             </span>
-                            <span className="clinica-pessoa__sub">Código <strong>{afiliado.codigoAfiliado}</strong> · desde {dataBR(afiliado.afiliadoDesde)}</span>
-                            {!ativo && <span className="badge badge--danger">Desativado</span>}
+                            <span className="clinica-pessoa__sub">{tr('Código')} <strong>{afiliado.codigoAfiliado}</strong> {tr('· desde {p0}', { p0: dataBR(afiliado.afiliadoDesde) })}</span>
+                            {!ativo && <span className="badge badge--danger">{tr('Desativado')}</span>}
                           </div>
                         </div>
                       </td>
@@ -120,7 +121,7 @@ export default function AfiliadosADM() {
                         <div className="clinica-contato">
                           <span><EmailQuebravel email={afiliado.email} /></span>
                           {linkWhatsapp(afiliado.telefone) ? (
-                            <a className="clinica-whats" href={linkWhatsapp(afiliado.telefone)} target="_blank" rel="noopener noreferrer" title="Abrir conversa no WhatsApp">
+                            <a className="clinica-whats" href={linkWhatsapp(afiliado.telefone)} target="_blank" rel="noopener noreferrer" title={tr('Abrir conversa no WhatsApp')}>
                               <IconeTelefone />
                               {afiliado.telefone}
                             </a>
@@ -129,55 +130,55 @@ export default function AfiliadosADM() {
                       </td>
                       <td>
                         <div className="afiliado-pix">
-                          <button type="button" className="afiliado-pix__chave" title="Copiar chave Pix" onClick={() => copiarPix(afiliado)}>
-                            {pixCopiado === afiliado._id ? 'Copiado!' : afiliado.chavePix}
+                          <button type="button" className="afiliado-pix__chave" title={tr('Copiar chave Pix')} onClick={() => copiarPix(afiliado)}>
+                            {pixCopiado === afiliado._id ? tr('Copiado!') : afiliado.chavePix}
                           </button>
                           <span className="clinica-pessoa__sub">{afiliado.documento?.length === 14 ? 'CNPJ' : 'CPF'} {formatarDocumento(afiliado.documento ?? '')}</span>
                         </div>
                       </td>
                       <td>
                         <div className="afiliado-comissoes">
-                          <span>{afiliado.indicacoes.length} {afiliado.indicacoes.length === 1 ? 'clínica' : 'clínicas'}{totais.aguardando > 0 && ` (${totais.aguardando} sem pagar)`}</span>
-                          <span className="afiliado-comissoes__pagar">A pagar: {formatarReais(totais.aPagar)}</span>
-                          {totais.emCarencia > 0 && <span>Em carência: {formatarReais(totais.emCarencia)}</span>}
-                          <span>Pago: {formatarReais(totais.recebido)}</span>
+                          <span>{afiliado.indicacoes.length} {afiliado.indicacoes.length === 1 ? tr('clínica') : tr('clínicas')}{totais.aguardando > 0 && tr(' ({aguardando} sem pagar)', { aguardando: totais.aguardando })}</span>
+                          <span className="afiliado-comissoes__pagar">{tr('A pagar: {p0}', { p0: formatarReais(totais.aPagar) })}</span>
+                          {totais.emCarencia > 0 && <span>{tr('Em carência: {p0}', { p0: formatarReais(totais.emCarencia) })}</span>}
+                          <span>{tr('Pago: {p0}', { p0: formatarReais(totais.recebido) })}</span>
                         </div>
                       </td>
                       <td>
                         {confirmando?.id === afiliado._id ? (
                           <div className="clinica-confirmar">
                             <span>
-                              {confirmando.acao === 'pagar' && `Já mandou ${formatarReais(totais.aPagar)}?`}
-                              {confirmando.acao === 'desativar' && 'Desativar?'}
-                              {confirmando.acao === 'excluir' && (afiliado.role === 'afiliado' ? 'Excluir do banco?' : 'Tirar do programa?')}
+                              {confirmando.acao === 'pagar' && tr('Já mandou {p0}?', { p0: formatarReais(totais.aPagar) })}
+                              {confirmando.acao === 'desativar' && tr('Desativar?')}
+                              {confirmando.acao === 'excluir' && (afiliado.role === 'afiliado' ? tr('Excluir do banco?') : tr('Tirar do programa?'))}
                             </span>
-                            <button type="button" className="icon-btn icon-btn--danger" aria-label="Confirmar" onClick={() => confirmar(afiliado)}><IconeCheck /></button>
-                            <button type="button" className="icon-btn" aria-label="Cancelar" onClick={() => setConfirmando(null)}><IconeX /></button>
+                            <button type="button" className="icon-btn icon-btn--danger" aria-label={tr('Confirmar')} onClick={() => confirmar(afiliado)}><IconeCheck /></button>
+                            <button type="button" className="icon-btn" aria-label={tr('Cancelar')} onClick={() => setConfirmando(null)}><IconeX /></button>
                           </div>
                         ) : (
                           <div className="afiliado-acoes">
                             {totais.aPagar > 0 && (
                               <button type="button" className="btn btn--primary btn--sm" onClick={() => setConfirmando({ id: afiliado._id, acao: 'pagar' })}>
-                                Marcar {formatarReais(totais.aPagar)} como pago
+                                {tr('Marcar {p0} como pago', { p0: formatarReais(totais.aPagar) })}
                               </button>
                             )}
                             <div className="table__actions">
-                              <button type="button" className="icon-btn" title="Ver comissões" aria-label={`Ver comissões de ${afiliado.nomeCompleto}`} aria-expanded={aberto === afiliado._id} onClick={() => setAberto(aberto === afiliado._id ? null : afiliado._id)}>
+                              <button type="button" className="icon-btn" title={tr('Ver comissões')} aria-label={tr('Ver comissões de {nomeCompleto}', { nomeCompleto: afiliado.nomeCompleto })} aria-expanded={aberto === afiliado._id} onClick={() => setAberto(aberto === afiliado._id ? null : afiliado._id)}>
                                 <IconeGrafico />
                               </button>
                               {ativo ? (
-                                <button type="button" className="icon-btn" title="Desativar (o código deixa de valer)" aria-label={`Desativar ${afiliado.nomeCompleto}`} onClick={() => setConfirmando({ id: afiliado._id, acao: 'desativar' })}>
+                                <button type="button" className="icon-btn" title={tr('Desativar (o código deixa de valer)')} aria-label={`Desativar ${afiliado.nomeCompleto}`} onClick={() => setConfirmando({ id: afiliado._id, acao: 'desativar' })}>
                                   <IconeCadeado />
                                 </button>
                               ) : (
-                                <button type="button" className="icon-btn" title="Reativar" aria-label={`Reativar ${afiliado.nomeCompleto}`} onClick={() => definirAtivo(afiliado._id, true)}>
+                                <button type="button" className="icon-btn" title={tr('Reativar')} aria-label={`Reativar ${afiliado.nomeCompleto}`} onClick={() => definirAtivo(afiliado._id, true)}>
                                   <IconeCadeadoAberto />
                                 </button>
                               )}
                               <button
                                 type="button"
                                 className="icon-btn icon-btn--danger"
-                                title={afiliado.role === 'afiliado' ? 'Excluir do banco de dados' : 'Tirar do programa (a conta na clínica continua)'}
+                                title={afiliado.role === 'afiliado' ? tr('Excluir do banco de dados') : tr('Tirar do programa (a conta na clínica continua)')}
                                 aria-label={`Excluir ${afiliado.nomeCompleto}`}
                                 onClick={() => setConfirmando({ id: afiliado._id, acao: 'excluir' })}
                               >
@@ -192,7 +193,7 @@ export default function AfiliadosADM() {
                       <tr className="afiliado-detalhe">
                         <td colSpan={5}>
                           {afiliado.indicacoes.length === 0 ? (
-                            <p className="clinica-pessoa__sub">Nenhuma clínica cadastrada pelo link deste afiliado ainda.</p>
+                            <p className="clinica-pessoa__sub">{tr('Nenhuma clínica cadastrada pelo link deste afiliado ainda.')}</p>
                           ) : (
                             <ul className="afiliado-detalhe__lista">
                               {afiliado.indicacoes.map((c) => (
@@ -215,10 +216,7 @@ export default function AfiliadosADM() {
       </section>
 
       <p className="afiliado-termos">
-        Cada clínica que pagar a primeira mensalidade gera uma comissão de 50% do valor do plano, liberada no 8º dia (depois do prazo de desistência do cliente).
-        Mande o Pix e depois clique em &quot;Marcar como pago&quot;. Se o pagamento da clínica for devolvido antes disso, a comissão é cancelada sozinha.
-        Excluir apaga as comissões do afiliado (inclusive as não pagas). Quem tem conta só de afiliado é apagado do banco;
-        quem trabalha numa clínica que usa a Sonelia só sai do programa e continua com o acesso da clínica.
+        {tr('Cada clínica que pagar a primeira mensalidade gera uma comissão de 50% do valor do plano, liberada no 8º dia (depois do prazo de desistência do cliente). Mande o Pix e depois clique em "Marcar como pago". Se o pagamento da clínica for devolvido antes disso, a comissão é cancelada sozinha. Excluir apaga as comissões do afiliado (inclusive as não pagas). Quem tem conta só de afiliado é apagado do banco; quem trabalha numa clínica que usa a Sonelia só sai do programa e continua com o acesso da clínica.')}
       </p>
     </div>
   );

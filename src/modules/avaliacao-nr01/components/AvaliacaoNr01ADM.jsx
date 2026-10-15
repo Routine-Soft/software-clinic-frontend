@@ -11,6 +11,7 @@ import NovaEmpresaModal from '@/modules/empresa/components/NovaEmpresaModal';
 import { IconeMais, IconeBusca, IconeLapis, IconeLixeira, IconeCheck, IconeX, IconeChevron } from '@/components/CrudCard/icones';
 import { RISCOS, riscoDe, ordenarAvaliacoes, contarPorRisco, filtrarAvaliacoes } from '../avaliacao-nr01.utils';
 import '../avaliacao-nr01.css';
+import { tr } from '@/i18n';
 
 function hojeISO() {
   const hoje = new Date();
@@ -21,13 +22,13 @@ function hojeISO() {
 }
 
 const PERGUNTAS_PADRAO = [
-  'Sobrecarga de trabalho / metas excessivas',
-  'Jornada de trabalho excessiva ou inadequada',
-  'Assédio moral ou sexual',
-  'Conflitos interpessoais na equipe',
-  'Falta de autonomia nas atividades',
-  'Insegurança no emprego',
-  'Comunicação deficiente entre lideranças e equipe',
+  tr('Sobrecarga de trabalho / metas excessivas'),
+  tr('Jornada de trabalho excessiva ou inadequada'),
+  tr('Assédio moral ou sexual'),
+  tr('Conflitos interpessoais na equipe'),
+  tr('Falta de autonomia nas atividades'),
+  tr('Insegurança no emprego'),
+  tr('Comunicação deficiente entre lideranças e equipe'),
 ];
 
 function respostasPadrao() {
@@ -37,15 +38,15 @@ function respostasPadrao() {
 const COLUNAS = 5;
 
 const FILTROS_RISCO = [
-  ['todas', 'Todas'],
-  ['alto', 'Alto'],
-  ['medio', 'Médio'],
-  ['baixo', 'Baixo'],
-  ['nenhum', 'Sem classificação'],
+  ['todas', tr('Todas')],
+  ['alto', tr('Alto')],
+  ['medio', tr('Médio')],
+  ['baixo', tr('Baixo')],
+  ['nenhum', tr('Sem classificação')],
 ];
 
 function BadgeRisco({ risco }) {
-  const [rotulo, classe] = RISCOS[risco] ?? ['Sem classificação', ''];
+  const [rotulo, classe] = RISCOS[risco] ?? [tr('Sem classificação'), ''];
   return <span className={`badge ${classe}`}>{rotulo}</span>;
 }
 
@@ -102,25 +103,25 @@ export default function AvaliacaoNr01ADM() {
     <div className="page">
       <header className="page-header">
         <div>
-          <h2 className="page-title">Avaliações NR-01</h2>
-          <p className="page-subtitle">Inventário de riscos psicossociais exigido pela NR-01 para as empresas-cliente</p>
+          <h2 className="page-title">{tr('Avaliações NR-01')}</h2>
+          <p className="page-subtitle">{tr('Inventário de riscos psicossociais exigido pela NR-01 para as empresas-cliente')}</p>
         </div>
         <div className="page-header__acoes">
           {!loading && contagem.alto > 0 && (
-            <span className="badge badge--danger">{contagem.alto} de risco alto</span>
+            <span className="badge badge--danger">{tr('{alto} de risco alto', { alto: contagem.alto })}</span>
           )}
           {!loading && (
             <span className="badge badge--primary">
-              {avaliacoes.length} {avaliacoes.length === 1 ? 'avaliação' : 'avaliações'}
+              {avaliacoes.length} {avaliacoes.length === 1 ? tr('avaliação') : tr('avaliações')}
             </span>
           )}
           <button type="button" className="btn btn--ghost" onClick={() => { setOrigemAviso('empresa'); setCriandoEmpresa(true); }}>
             <IconeMais />
-            Cadastrar empresa
+            {tr('Cadastrar empresa')}
           </button>
           <button type="button" className="btn btn--primary" onClick={() => { setOrigemAviso('avaliacao'); setCriandoAvaliacao(true); }}>
             <IconeMais />
-            Nova avaliação
+            {tr('Nova avaliação')}
           </button>
         </div>
       </header>
@@ -141,8 +142,8 @@ export default function AvaliacaoNr01ADM() {
               type="search"
               value={busca}
               onChange={(e) => setBusca(e.target.value)}
-              placeholder="Buscar por empresa, funcionário ou profissional"
-              aria-label="Buscar avaliação"
+              placeholder={tr('Buscar por empresa, funcionário ou profissional')}
+              aria-label={tr('Buscar avaliação')}
             />
           </div>
 
@@ -151,9 +152,9 @@ export default function AvaliacaoNr01ADM() {
               className="input nr01-toolbar__empresa"
               value={empresaFiltro}
               onChange={(e) => setEmpresaFiltro(e.target.value)}
-              aria-label="Filtrar por empresa"
+              aria-label={tr('Filtrar por empresa')}
             >
-              <option value="">Todas as empresas</option>
+              <option value="">{tr('Todas as empresas')}</option>
               {empresas.map((empresa) => (
                 <option key={empresa._id} value={empresa._id}>{empresa.razaoSocial}</option>
               ))}
@@ -161,7 +162,7 @@ export default function AvaliacaoNr01ADM() {
           )}
         </div>
 
-        <div className="nr01-filtros" role="group" aria-label="Filtrar por classificação de risco">
+        <div className="nr01-filtros" role="group" aria-label={tr('Filtrar por classificação de risco')}>
           {FILTROS_RISCO.map(([chave, rotulo]) => (
             <button
               key={chave}
@@ -181,11 +182,11 @@ export default function AvaliacaoNr01ADM() {
           <table className="table nr01-table" aria-busy={loading}>
             <thead>
               <tr>
-                <th>Empresa</th>
-                <th>Profissional</th>
-                <th>Data</th>
-                <th>Risco</th>
-                <th>Ações</th>
+                <th>{tr('Empresa')}</th>
+                <th>{tr('Profissional')}</th>
+                <th>{tr('Data')}</th>
+                <th>{tr('Risco')}</th>
+                <th>{tr('Ações')}</th>
               </tr>
             </thead>
             <tbody>
@@ -203,8 +204,8 @@ export default function AvaliacaoNr01ADM() {
                 <tr>
                   <td className="table__empty" colSpan={COLUNAS}>
                     {avaliacoes.length === 0
-                      ? 'Nenhuma avaliação cadastrada ainda.'
-                      : filtrando ? 'Nenhuma avaliação encontrada para esse filtro.' : 'Nenhuma avaliação.'}
+                      ? tr('Nenhuma avaliação cadastrada ainda.')
+                      : filtrando ? tr('Nenhuma avaliação encontrada para esse filtro.') : tr('Nenhuma avaliação.')}
                   </td>
                 </tr>
               ) : (
@@ -225,7 +226,7 @@ export default function AvaliacaoNr01ADM() {
                               type="button"
                               className="nr01-expandir"
                               aria-expanded={expandido}
-                              aria-label={`${expandido ? 'Recolher' : 'Ver'} detalhes da avaliação de ${avaliacao.empresaId?.razaoSocial ?? 'empresa'}`}
+                              aria-label={tr('{p0} detalhes da avaliação de {p1}', { p0: expandido ? tr('Recolher') : tr('Ver'), p1: avaliacao.empresaId?.razaoSocial ?? 'empresa' })}
                               onClick={() => setExpandidoId(expandido ? null : avaliacao._id)}
                             >
                               <IconeChevron />
@@ -233,7 +234,7 @@ export default function AvaliacaoNr01ADM() {
                             <div className="nr01-empresa__dados">
                               <strong className="nr01-empresa__nome">{avaliacao.empresaId?.razaoSocial ?? '—'}</strong>
                               <span className="nr01-empresa__sub">
-                                {avaliacao.pacienteId?.nome ? `Funcionário: ${avaliacao.pacienteId.nome}` : 'Avaliação geral da empresa'}
+                                {avaliacao.pacienteId?.nome ? tr('Funcionário: {nome}', { nome: avaliacao.pacienteId.nome }) : tr('Avaliação geral da empresa')}
                               </span>
                             </div>
                           </div>
@@ -244,20 +245,20 @@ export default function AvaliacaoNr01ADM() {
                         <td>
                           {confirmandoId === avaliacao._id ? (
                             <div className="nr01-confirmar">
-                              <span>Excluir?</span>
-                              <button type="button" className="icon-btn icon-btn--danger" aria-label="Confirmar exclusão da avaliação" onClick={() => handleDelete(avaliacao._id)}>
+                              <span>{tr('Excluir?')}</span>
+                              <button type="button" className="icon-btn icon-btn--danger" aria-label={tr('Confirmar exclusão da avaliação')} onClick={() => handleDelete(avaliacao._id)}>
                                 <IconeCheck />
                               </button>
-                              <button type="button" className="icon-btn" aria-label="Cancelar exclusão" onClick={() => setConfirmandoId(null)}>
+                              <button type="button" className="icon-btn" aria-label={tr('Cancelar exclusão')} onClick={() => setConfirmandoId(null)}>
                                 <IconeX />
                               </button>
                             </div>
                           ) : (
                             <div className="table__actions">
-                              <button type="button" className="icon-btn" aria-label="Editar avaliação" title="Editar" onClick={() => handleEdit(avaliacao)}>
+                              <button type="button" className="icon-btn" aria-label={tr('Editar avaliação')} title={tr('Editar')} onClick={() => handleEdit(avaliacao)}>
                                 <IconeLapis />
                               </button>
-                              <button type="button" className="icon-btn icon-btn--danger" aria-label="Excluir avaliação" title="Excluir" onClick={() => setConfirmandoId(avaliacao._id)}>
+                              <button type="button" className="icon-btn icon-btn--danger" aria-label={tr('Excluir avaliação')} title={tr('Excluir')} onClick={() => setConfirmandoId(avaliacao._id)}>
                                 <IconeLixeira />
                               </button>
                             </div>
@@ -269,16 +270,16 @@ export default function AvaliacaoNr01ADM() {
                         <tr className="nr01-detalhe">
                           <td colSpan={COLUNAS}>
                             <div className="nr01-detalhe__conteudo">
-                            {!temDetalhes && <p className="nr01-detalhe__vazio">Nenhum fator de risco ou recomendação registrados.</p>}
+                            {!temDetalhes && <p className="nr01-detalhe__vazio">{tr('Nenhum fator de risco ou recomendação registrados.')}</p>}
 
                             {avaliacao.respostas?.length > 0 && (
                               <div className="nr01-detalhe__bloco">
-                                <h4>Fatores de risco avaliados</h4>
+                                <h4>{tr('Fatores de risco avaliados')}</h4>
                                 <ul className="nr01-fatores">
                                   {avaliacao.respostas.map((item, i) => (
                                     <li key={i}>
                                       <span>{item.pergunta}</span>
-                                      <strong className={item.resposta ? undefined : 'is-vazio'}>{item.resposta || 'Sem observação'}</strong>
+                                      <strong className={item.resposta ? undefined : 'is-vazio'}>{item.resposta || tr('Sem observação')}</strong>
                                     </li>
                                   ))}
                                 </ul>
@@ -287,7 +288,7 @@ export default function AvaliacaoNr01ADM() {
 
                             {avaliacao.recomendacoes && (
                               <div className="nr01-detalhe__bloco">
-                                <h4>Recomendações / plano de ação</h4>
+                                <h4>{tr('Recomendações / plano de ação')}</h4>
                                 <p>{avaliacao.recomendacoes}</p>
                               </div>
                             )}

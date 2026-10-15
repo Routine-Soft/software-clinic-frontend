@@ -10,6 +10,8 @@ import { formatarDocumento } from '@/utils/documento';
 import httpClient from '@/services/httpClient';
 import './user.css';
 import './minha-conta.css';
+import { idiomaAtual, localeAtual, tr } from '@/i18n';
+import { nomeDoPais } from '@/i18n/paises';
 
 export default function MinhaConta() {
   const { perfil, loading, error, successMessage, salvarPerfil, alterarSenha } = useMinhaConta();
@@ -32,9 +34,9 @@ export default function MinhaConta() {
     <div className="page">
       <header className="page-header">
         <div>
-          <h2 className="page-title">Minha conta</h2>
+          <h2 className="page-title">{tr('Minha conta')}</h2>
           <p className="page-subtitle">
-            {ehAdmin ? 'Gerencie seus dados, sua senha e a assinatura da clínica' : 'Gerencie seus dados e sua senha'}
+            {ehAdmin ? tr('Gerencie seus dados, sua senha e a assinatura da clínica') : tr('Gerencie seus dados e sua senha')}
           </p>
         </div>
       </header>
@@ -48,7 +50,7 @@ export default function MinhaConta() {
 
       <div className={`conta-grid${ehAdmin ? '' : ' conta-grid--single'}`}>
         {loading ? (
-          <section className="card conta-perfil" aria-busy="true" aria-label="Carregando seus dados">
+          <section className="card conta-perfil" aria-busy="true" aria-label={tr('Carregando seus dados')}>
             <div className="conta-perfil__head">
               <div className="skeleton conta-perfil__avatar-skeleton" />
               <div className="conta-perfil__quem">
@@ -73,27 +75,27 @@ export default function MinhaConta() {
 
             <dl className="conta-detalhes">
               <div>
-                <dt>Telefone</dt>
+                <dt>{tr('Telefone')}</dt>
                 <dd>{perfil.telefone}</dd>
               </div>
               <div>
-                <dt>Membro desde</dt>
-                <dd>{new Date(perfil.createdAt).toLocaleDateString('pt-BR')}</dd>
+                <dt>{tr('Membro desde')}</dt>
+                <dd>{new Date(perfil.createdAt).toLocaleDateString(localeAtual())}</dd>
               </div>
               {!soAfiliado && (
                 <div>
-                  <dt>Clínica</dt>
+                  <dt>{tr('Clínica')}</dt>
                   <dd>{perfil.nomeEmpresa || '—'}</dd>
                 </div>
               )}
               {ehAfiliado && (
                 <>
                   <div>
-                    <dt>CPF ou CNPJ</dt>
+                    <dt>{tr('CPF ou CNPJ')}</dt>
                     <dd>{perfil.documento ? formatarDocumento(perfil.documento) : '—'}</dd>
                   </div>
                   <div>
-                    <dt>Chave Pix</dt>
+                    <dt>{tr('Chave Pix')}</dt>
                     <dd>{perfil.chavePix || '—'}</dd>
                   </div>
                 </>
@@ -104,16 +106,22 @@ export default function MinhaConta() {
                   <dd>{perfil.cnpj || '—'}</dd>
                 </div>
               )}
+              {ehAdmin && (
+                <div>
+                  <dt>{tr('País da clínica')}</dt>
+                  <dd>{nomeDoPais(perfil.pais ?? 'BR', idiomaAtual())}</dd>
+                </div>
+              )}
             </dl>
 
             <div className="conta-perfil__acoes">
-              <button type="button" className="btn btn--primary" onClick={() => setEditandoDados(true)}>Editar dados</button>
-              <button type="button" className="btn btn--ghost" onClick={() => setAlterandoSenha(true)}>{temSenha ? 'Alterar senha' : 'Criar senha'}</button>
+              <button type="button" className="btn btn--primary" onClick={() => setEditandoDados(true)}>{tr('Editar dados')}</button>
+              <button type="button" className="btn btn--ghost" onClick={() => setAlterandoSenha(true)}>{temSenha ? tr('Alterar senha') : tr('Criar senha')}</button>
             </div>
           </section>
         ) : (
           <section className="card conta-perfil">
-            <p className="alert alert--error" role="alert">{error?.message ?? 'Não foi possível carregar seus dados.'}</p>
+            <p className="alert alert--error" role="alert">{error?.message ?? tr('Não foi possível carregar seus dados.')}</p>
           </section>
         )}
 

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import Modal from '@/components/Modal/Modal';
 import ModalForm from '@/components/Modal/ModalForm';
 import { normalizarEmail } from '@/utils/email';
+import { tr } from '@/i18n';
 
 const FORM_CRIAR_INICIAL = {
   razaoSocial: '',
@@ -21,11 +22,11 @@ export default function NovaEmpresaModal({ erro, onSave, onClose }) {
   }
 
   return (
-    <Modal title="Nova empresa" onClose={onClose}>
+    <Modal title={tr('Nova empresa')} onClose={onClose}>
       {(fechar) => (
-        <ModalForm erro={erro} fechar={fechar} submitLabel="Cadastrar empresa" loadingLabel="Cadastrando..." onSubmit={() => onSave(formCriar)}>
+        <ModalForm erro={erro} fechar={fechar} submitLabel={tr('Cadastrar empresa')} loadingLabel={tr('Cadastrando...')} onSubmit={() => onSave(formCriar)}>
           <div className="field">
-            <label className="field__label" htmlFor="nova-empresa-razao">Razão Social</label>
+            <label className="field__label" htmlFor="nova-empresa-razao">{tr('Razão Social')}</label>
             <input
               id="nova-empresa-razao"
               className="input"
@@ -38,7 +39,7 @@ export default function NovaEmpresaModal({ erro, onSave, onClose }) {
 
           <div className="modal-form__row">
             <div className="field">
-              <label className="field__label" htmlFor="nova-empresa-fantasia">Nome Fantasia</label>
+              <label className="field__label" htmlFor="nova-empresa-fantasia">{tr('Nome Fantasia')}</label>
               <input
                 id="nova-empresa-fantasia"
                 className="input"
@@ -63,7 +64,7 @@ export default function NovaEmpresaModal({ erro, onSave, onClose }) {
 
           <div className="modal-form__row">
             <div className="field">
-              <label className="field__label" htmlFor="nova-empresa-telefone">Telefone</label>
+              <label className="field__label" htmlFor="nova-empresa-telefone">{tr('Telefone')}</label>
               <input
                 id="nova-empresa-telefone"
                 className="input"
@@ -74,7 +75,7 @@ export default function NovaEmpresaModal({ erro, onSave, onClose }) {
             </div>
 
             <div className="field">
-              <label className="field__label" htmlFor="nova-empresa-email">Email</label>
+              <label className="field__label" htmlFor="nova-empresa-email">{tr('Email')}</label>
               <input
                 id="nova-empresa-email"
                 className="input"
@@ -86,7 +87,7 @@ export default function NovaEmpresaModal({ erro, onSave, onClose }) {
           </div>
 
           <div className="field">
-            <label className="field__label" htmlFor="nova-empresa-endereco">Endereço</label>
+            <label className="field__label" htmlFor="nova-empresa-endereco">{tr('Endereço')}</label>
             <input
               id="nova-empresa-endereco"
               className="input"
@@ -97,14 +98,14 @@ export default function NovaEmpresaModal({ erro, onSave, onClose }) {
           </div>
 
           <div className="field">
-            <label className="field__label" htmlFor="nova-empresa-setor">Setor</label>
+            <label className="field__label" htmlFor="nova-empresa-setor">{tr('Setor')}</label>
             <input
               id="nova-empresa-setor"
               className="input"
               type="text"
               value={formCriar.setor}
               onChange={(e) => handleChangeCriar('setor', e.target.value)}
-              placeholder="Ex: Indústria, Comércio, Serviços"
+              placeholder={tr('Ex: Indústria, Comércio, Serviços')}
             />
           </div>
         </ModalForm>

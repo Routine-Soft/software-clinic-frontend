@@ -3,6 +3,7 @@ import Modal from '@/components/Modal/Modal';
 import { formatarData, formatarPreco } from '@/modules/assinatura/assinatura.utils';
 import { getHistoricoPagamentosAdmin } from '../clinica-admin.api';
 import { tempoDeCasa, ROTULO_METODO_PAGAMENTO } from '../clinica-admin.utils';
+import { tr } from '@/i18n';
 
 function Numero({ rotulo, valor, tom }) {
   return (
@@ -33,33 +34,33 @@ export default function DetalhesClinicaModal({ admin, onClose }) {
       {() => (
         <div className="clinica-detalhes">
           <p className="clinica-detalhes__sub">
-            {admin.nomeCompleto} · cliente {tempo === 'hoje' ? 'desde hoje' : `há ${tempo}`} (desde {formatarData(admin.createdAt)})
+            {tr('{nomeCompleto} · cliente {p0} (desde {p1})', { nomeCompleto: admin.nomeCompleto, p0: tempo === 'hoje' ? tr('desde hoje') : tr('há {tempo}', { tempo }), p1: formatarData(admin.createdAt) })}
           </p>
 
-          <section aria-label="Cadastros">
-            <h4 className="clinica-detalhes__titulo">Cadastros</h4>
+          <section aria-label={tr('Cadastros')}>
+            <h4 className="clinica-detalhes__titulo">{tr('Cadastros')}</h4>
             <div className="clinica-numeros">
-              <Numero rotulo={e.usuarios === 1 ? 'Usuário' : 'Usuários'} valor={e.usuarios ?? 0} />
-              <Numero rotulo={e.profissionais === 1 ? 'Profissional' : 'Profissionais'} valor={e.profissionais ?? 0} />
-              <Numero rotulo={e.pacientes === 1 ? 'Paciente' : 'Pacientes'} valor={e.pacientes ?? 0} />
-              <Numero rotulo={e.empresas === 1 ? 'Empresa' : 'Empresas'} valor={e.empresas ?? 0} />
+              <Numero rotulo={e.usuarios === 1 ? tr('Usuário') : tr('Usuários')} valor={e.usuarios ?? 0} />
+              <Numero rotulo={e.profissionais === 1 ? tr('Profissional') : tr('Profissionais')} valor={e.profissionais ?? 0} />
+              <Numero rotulo={e.pacientes === 1 ? tr('Paciente') : tr('Pacientes')} valor={e.pacientes ?? 0} />
+              <Numero rotulo={e.empresas === 1 ? tr('Empresa') : tr('Empresas')} valor={e.empresas ?? 0} />
             </div>
           </section>
 
-          <section aria-label="Agendamentos">
-            <h4 className="clinica-detalhes__titulo">Agendamentos</h4>
+          <section aria-label={tr('Agendamentos')}>
+            <h4 className="clinica-detalhes__titulo">{tr('Agendamentos')}</h4>
             <div className="clinica-numeros">
-              <Numero rotulo="Em aberto" valor={e.agendamentos?.abertos ?? 0} tom="info" />
-              <Numero rotulo={e.agendamentos?.realizados === 1 ? 'Realizado' : 'Realizados'} valor={e.agendamentos?.realizados ?? 0} tom="success" />
-              <Numero rotulo={e.agendamentos?.cancelados === 1 ? 'Cancelado' : 'Cancelados'} valor={e.agendamentos?.cancelados ?? 0} tom="danger" />
+              <Numero rotulo={tr('Em aberto')} valor={e.agendamentos?.abertos ?? 0} tom="info" />
+              <Numero rotulo={e.agendamentos?.realizados === 1 ? tr('Realizado') : tr('Realizados')} valor={e.agendamentos?.realizados ?? 0} tom="success" />
+              <Numero rotulo={e.agendamentos?.cancelados === 1 ? tr('Cancelado') : tr('Cancelados')} valor={e.agendamentos?.cancelados ?? 0} tom="danger" />
             </div>
           </section>
 
-          <section aria-label="Pagamentos">
-            <h4 className="clinica-detalhes__titulo">Pagamentos</h4>
+          <section aria-label={tr('Pagamentos')}>
+            <h4 className="clinica-detalhes__titulo">{tr('Pagamentos')}</h4>
             <div className="clinica-numeros">
-              <Numero rotulo="Total pago" valor={formatarPreco(e.totalPago ?? 0)} tom="success" />
-              <Numero rotulo={e.pagamentos === 1 ? 'Pagamento' : 'Pagamentos'} valor={e.pagamentos ?? 0} />
+              <Numero rotulo={tr('Total pago')} valor={formatarPreco(e.totalPago ?? 0, e.moedaPaga)} tom="success" />
+              <Numero rotulo={e.pagamentos === 1 ? tr('Pagamento') : tr('Pagamentos')} valor={e.pagamentos ?? 0} />
             </div>
 
             {erro ? (
@@ -67,23 +68,23 @@ export default function DetalhesClinicaModal({ admin, onClose }) {
             ) : pagamentos === null ? (
               <div className="skeleton skeleton--line" style={{ width: '60%' }} aria-busy="true" />
             ) : pagamentos.length === 0 ? (
-              <p className="clinica-detalhes__vazio">Nenhum pagamento recebido ainda.</p>
+              <p className="clinica-detalhes__vazio">{tr('Nenhum pagamento recebido ainda.')}</p>
             ) : (
               <div className="table-wrap">
                 <table className="table clinica-pagamentos">
                   <thead>
                     <tr>
-                      <th>Data</th>
-                      <th>Valor</th>
-                      <th>Forma</th>
-                      <th>Plano</th>
+                      <th>{tr('Data')}</th>
+                      <th>{tr('Valor')}</th>
+                      <th>{tr('Forma')}</th>
+                      <th>{tr('Plano')}</th>
                     </tr>
                   </thead>
                   <tbody>
                     {pagamentos.map((p) => (
                       <tr key={p._id}>
                         <td className="nowrap">{formatarData(p.aprovadoEm)}</td>
-                        <td className="nowrap">{formatarPreco(p.valor)}</td>
+                        <td className="nowrap">{formatarPreco(p.valor, p.moeda)}</td>
                         <td>{ROTULO_METODO_PAGAMENTO[p.metodo] ?? p.metodo}</td>
                         <td>{p.plano ?? '—'}</td>
                       </tr>

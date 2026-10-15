@@ -6,6 +6,7 @@ import AssinaturaGuard from '@/modules/assinatura/components/AssinaturaGuard'
 import AvisoVencimento from '@/modules/assinatura/components/AvisoVencimento'
 import { useAuthContext } from '@/hooks/useAuthContext'
 import './MainLayout.css'
+import { tr } from '@/i18n';
 
 export function MainLayout({ children }) {
     const { user } = useAuthContext()
@@ -30,13 +31,13 @@ export function MainLayout({ children }) {
 
     return (
         <div className="app-shell">
-            <a className="app-pular" href="#conteudo">Ir para o conteúdo</a>
+            <a className="app-pular" href="#conteudo">{tr('Ir para o conteúdo')}</a>
 
             <header className="app-topbar">
                 <button
                     type="button"
                     className="icon-btn app-topbar__menu"
-                    aria-label="Abrir menu"
+                    aria-label={tr('Abrir menu')}
                     aria-expanded={menuAberto}
                     aria-controls="menu-principal"
                     onClick={() => setMenuAberto(true)}
@@ -45,7 +46,7 @@ export function MainLayout({ children }) {
                         <path d="M4 6h16M4 12h16M4 18h16" />
                     </svg>
                 </button>
-                <Link to="/home" className="marca-link" aria-label="Ir para o início">
+                <Link to="/home" className="marca-link" aria-label={tr('Ir para o início')}>
                     <Marca empresa={user?.nomeEmpresa} />
                 </Link>
             </header>

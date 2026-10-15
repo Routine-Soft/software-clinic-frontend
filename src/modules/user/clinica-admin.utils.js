@@ -1,3 +1,4 @@
+import { tr } from '@/i18n';
 // "12 dias", "3 meses", "1 ano e 2 meses": há quanto tempo a clínica é cliente.
 export function tempoDeCasa(desde, agora = new Date()) {
   const inicio = new Date(desde);
@@ -23,4 +24,4 @@ export function tempoDeCasa(desde, agora = new Date()) {
   return resto ? `${textoAnos} e ${textoMeses}` : textoAnos;
 }
 
-export const ROTULO_METODO_PAGAMENTO = { pix: 'Pix', recorrente: 'Cartão' };
+export const ROTULO_METODO_PAGAMENTO = { pix: tr('Pix'), recorrente: tr('Cartão'), credito: tr('Desconto de indicação'), stripe: tr('Cartão internacional (Stripe)') };

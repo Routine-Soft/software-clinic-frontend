@@ -1,43 +1,44 @@
+import { tr } from '@/i18n';
 // Roteiro de anamnese neuropsicológica: [campo, rótulo, o que registrar].
 export const CAMPOS_ANAMNESE = [
-  ['gestacaoParto', 'Gestação e parto', 'Intercorrências na gestação, tipo de parto, prematuridade, peso ao nascer'],
-  ['desenvolvimento', 'Desenvolvimento neuropsicomotor', 'Quando sentou, andou e falou; controle esfincteriano; marcos atrasados'],
-  ['escolaridade', 'Escolaridade e vida acadêmica', 'Série/ano, desempenho, reprovações, dificuldades, relatos da escola'],
-  ['historicoMedico', 'Histórico médico', 'Doenças, internações, cirurgias, traumatismos, exames de imagem e laudos anteriores'],
-  ['medicamentos', 'Medicamentos em uso', 'Nome, dose e desde quando'],
-  ['historicoFamiliar', 'Histórico familiar', 'Transtornos neurológicos ou psiquiátricos e dificuldades de aprendizagem na família'],
-  ['aspectosEmocionais', 'Aspectos emocionais e comportamentais', 'Humor, ansiedade, irritabilidade, impulsividade, comportamentos repetitivos'],
-  ['rotinaSono', 'Sono, alimentação e rotina', 'Qualidade do sono, apetite, uso de telas, atividades'],
-  ['relacoesSociais', 'Relações sociais e familiares', 'Amizades, convivência familiar, interação social'],
+  ['gestacaoParto', tr('Gestação e parto'), tr('Intercorrências na gestação, tipo de parto, prematuridade, peso ao nascer')],
+  ['desenvolvimento', tr('Desenvolvimento neuropsicomotor'), 'Quando sentou, andou e falou; controle esfincteriano; marcos atrasados'],
+  ['escolaridade', tr('Escolaridade e vida acadêmica'), tr('Série/ano, desempenho, reprovações, dificuldades, relatos da escola')],
+  ['historicoMedico', tr('Histórico médico'), tr('Doenças, internações, cirurgias, traumatismos, exames de imagem e laudos anteriores')],
+  ['medicamentos', tr('Medicamentos em uso'), tr('Nome, dose e desde quando')],
+  ['historicoFamiliar', tr('Histórico familiar'), tr('Transtornos neurológicos ou psiquiátricos e dificuldades de aprendizagem na família')],
+  ['aspectosEmocionais', tr('Aspectos emocionais e comportamentais'), tr('Humor, ansiedade, irritabilidade, impulsividade, comportamentos repetitivos')],
+  ['rotinaSono', tr('Sono, alimentação e rotina'), tr('Qualidade do sono, apetite, uso de telas, atividades')],
+  ['relacoesSociais', tr('Relações sociais e familiares'), tr('Amizades, convivência familiar, interação social')],
 ];
 
 // Domínios cognitivos usuais nas baterias neuropsicológicas.
 export const DOMINIOS = [
-  'Inteligência',
-  'Atenção',
-  'Memória',
-  'Funções executivas',
-  'Linguagem',
-  'Habilidades visuoespaciais e visuoconstrutivas',
-  'Velocidade de processamento',
-  'Praxias e motricidade',
-  'Aprendizagem e habilidades acadêmicas',
-  'Cognição social',
-  'Comportamento adaptativo',
-  'Aspectos emocionais e comportamentais',
-  'Rastreio cognitivo',
-  'Outro',
+  tr('Inteligência'),
+  tr('Atenção'),
+  tr('Memória'),
+  tr('Funções executivas'),
+  tr('Linguagem'),
+  tr('Habilidades visuoespaciais e visuoconstrutivas'),
+  tr('Velocidade de processamento'),
+  tr('Praxias e motricidade'),
+  tr('Aprendizagem e habilidades acadêmicas'),
+  tr('Cognição social'),
+  tr('Comportamento adaptativo'),
+  tr('Aspectos emocionais e comportamentais'),
+  tr('Rastreio cognitivo'),
+  tr('Outro'),
 ];
 
 // Faixas usuais por percentil (padrão Wechsler). Cada instrumento tem as suas: confira no manual.
 export const CLASSIFICACOES = [
-  ['Muito superior', 98],
-  ['Superior', 91],
-  ['Média superior', 75],
-  ['Média', 25],
-  ['Média inferior', 9],
-  ['Limítrofe', 3],
-  ['Deficitário', 0],
+  [tr('Muito superior'), 98],
+  [tr('Superior'), 91],
+  [tr('Média superior'), 75],
+  [tr('Média'), 25],
+  [tr('Média inferior'), 9],
+  [tr('Limítrofe'), 3],
+  [tr('Deficitário'), 0],
 ];
 
 export function classificacaoSugerida(percentil) {
@@ -48,12 +49,12 @@ export function classificacaoSugerida(percentil) {
 }
 
 export const ABAS = [
-  ['identificacao', 'Identificação e demanda'],
-  ['anamnese', 'Anamnese'],
-  ['sessoes', 'Sessões e procedimento'],
-  ['testes', 'Testes e resultados'],
-  ['conclusao', 'Análise e conclusão'],
-  ['laudo', 'Laudo'],
+  ['identificacao', tr('Identificação e demanda')],
+  ['anamnese', tr('Anamnese')],
+  ['sessoes', tr('Sessões e procedimento')],
+  ['testes', tr('Testes e resultados')],
+  ['conclusao', tr('Análise e conclusão')],
+  ['laudo', tr('Laudo')],
 ];
 
 export function sessaoVazia() {
@@ -96,5 +97,5 @@ export function resumoDasSessoes(sessoes) {
 }
 
 export function situacaoDa(avaliacao) {
-  return avaliacao.finalizadaEm ? ['Finalizada', 'badge--success'] : ['Em andamento', 'badge--live'];
+  return avaliacao.finalizadaEm ? [tr('Finalizada'), 'badge--success'] : [tr('Em andamento'), 'badge--live'];
 }

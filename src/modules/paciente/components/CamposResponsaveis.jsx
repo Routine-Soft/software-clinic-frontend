@@ -2,6 +2,7 @@ import { useId } from 'react';
 import { normalizarEmail } from '@/utils/email';
 import { IconeMais, IconeX } from '@/components/CrudCard/icones';
 import { PARENTESCOS, RESPONSAVEL_VAZIO } from '../paciente.utils';
+import { tr } from '@/i18n';
 
 // Até dois responsáveis legais. Para menor de idade o bloco já aparece aberto; para adulto, só se a clínica pedir
 // (ex.: paciente interditado). Por enquanto todos os campos são opcionais; só o nome passa a ser exigido
@@ -14,7 +15,7 @@ export default function CamposResponsaveis({ responsaveis, onChange, menor }) {
     return (
       <button type="button" className="btn btn--ghost btn--sm responsaveis__abrir" onClick={() => onChange([{ ...RESPONSAVEL_VAZIO }])}>
         <IconeMais />
-        Adicionar responsável legal
+        {tr('Adicionar responsável legal')}
       </button>
     );
   }
@@ -29,11 +30,11 @@ export default function CamposResponsaveis({ responsaveis, onChange, menor }) {
 
   return (
     <fieldset className="modal-form__section responsaveis">
-      <legend>{menor ? 'Responsáveis (paciente menor de idade)' : 'Responsáveis'}</legend>
+      <legend>{menor ? tr('Responsáveis (paciente menor de idade)') : tr('Responsáveis')}</legend>
       <p className="modal-form__hint">
         {menor
-          ? 'Opcional por enquanto. Sem telefone ou e-mail da criança, o contato da clínica é com o responsável.'
-          : 'Opcional. Use para paciente que precisa de um responsável legal.'}
+          ? tr('Opcional por enquanto. Sem telefone ou e-mail da criança, o contato da clínica é com o responsável.')
+          : tr('Opcional. Use para paciente que precisa de um responsável legal.')}
       </p>
 
       {lista.map((responsavel, i) => {
@@ -42,9 +43,9 @@ export default function CamposResponsaveis({ responsaveis, onChange, menor }) {
         return (
           <div key={i} className="responsavel">
             <div className="responsavel__cab">
-              <strong>{i === 0 ? 'Responsável' : 'Segundo responsável'}</strong>
+              <strong>{i === 0 ? tr('Responsável') : tr('Segundo responsável')}</strong>
               {(lista.length > 1 || !menor) && (
-                <button type="button" className="icon-btn" aria-label={`Remover ${i === 0 ? 'responsável' : 'segundo responsável'}`} title="Remover" onClick={() => remover(i)}>
+                <button type="button" className="icon-btn" aria-label={`Remover ${i === 0 ? tr('responsável') : tr('segundo responsável')}`} title={tr('Remover')} onClick={() => remover(i)}>
                   <IconeX />
                 </button>
               )}
@@ -52,14 +53,14 @@ export default function CamposResponsaveis({ responsaveis, onChange, menor }) {
 
             <div className="responsavel__campos">
               <div className="field responsavel__nome">
-                <label className="field__label" htmlFor={`${id}-nome`}>Nome</label>
+                <label className="field__label" htmlFor={`${id}-nome`}>{tr('Nome')}</label>
                 <input id={`${id}-nome`} className="input" type="text" value={responsavel.nome} onChange={(e) => alterar(i, 'nome', e.target.value)} required={algoPreenchido} />
               </div>
 
               <div className="field">
-                <label className="field__label" htmlFor={`${id}-parentesco`}>Parentesco</label>
+                <label className="field__label" htmlFor={`${id}-parentesco`}>{tr('Parentesco')}</label>
                 <select id={`${id}-parentesco`} className="input" value={responsavel.parentesco} onChange={(e) => alterar(i, 'parentesco', e.target.value)}>
-                  <option value="">Selecione</option>
+                  <option value="">{tr('Selecione')}</option>
                   {PARENTESCOS.map((p) => <option key={p} value={p}>{p}</option>)}
                 </select>
               </div>
@@ -70,12 +71,12 @@ export default function CamposResponsaveis({ responsaveis, onChange, menor }) {
               </div>
 
               <div className="field">
-                <label className="field__label" htmlFor={`${id}-telefone`}>Telefone</label>
+                <label className="field__label" htmlFor={`${id}-telefone`}>{tr('Telefone')}</label>
                 <input id={`${id}-telefone`} className="input" type="tel" value={responsavel.telefone} onChange={(e) => alterar(i, 'telefone', e.target.value)} />
               </div>
 
               <div className="field">
-                <label className="field__label" htmlFor={`${id}-email`}>Email</label>
+                <label className="field__label" htmlFor={`${id}-email`}>{tr('Email')}</label>
                 <input id={`${id}-email`} className="input" type="email" value={responsavel.email} onChange={(e) => alterar(i, 'email', normalizarEmail(e.target.value))} />
               </div>
             </div>
@@ -86,7 +87,7 @@ export default function CamposResponsaveis({ responsaveis, onChange, menor }) {
       {lista.length < 2 && (
         <button type="button" className="btn btn--ghost btn--sm responsaveis__abrir" onClick={() => onChange([...lista, { ...RESPONSAVEL_VAZIO }])}>
           <IconeMais />
-          Adicionar segundo responsável
+          {tr('Adicionar segundo responsável')}
         </button>
       )}
     </fieldset>

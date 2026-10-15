@@ -16,29 +16,30 @@ import { Icone, IconeMais } from '@/components/CrudCard/icones'
 import { ICONES } from '@/components/Sidebar/menuIcones'
 import { iniciais } from '@/utils/nome'
 import './Home.css'
+import { localeAtual, tr } from '@/i18n';
 
 const CLASSE_STATUS = { aguardando: 'badge--info', realizado: 'badge--success', cancelado: 'badge--danger' }
 
 const ATALHOS = [
-    { label: 'Novo agendamento', descricao: 'Marcar uma consulta na agenda', to: '/agenda', icone: 'agenda', roles: ['admin', 'profissional', 'recepcao'] },
-    { label: 'Pacientes', descricao: 'Cadastro e busca de pacientes', to: '/pacientes', icone: 'pacientes', roles: ['admin', 'profissional', 'recepcao'] },
-    { label: 'Prontuário', descricao: 'Atendimentos e histórico clínico', to: '/prontuario', icone: 'prontuario', roles: ['admin', 'profissional'] },
-    { label: 'Lista de espera', descricao: 'Fila de pacientes aguardando vaga', to: '/lista-espera', icone: 'espera', roles: ['admin', 'profissional', 'recepcao'] },
-    { label: 'Avaliações NR-01', descricao: 'Riscos psicossociais das empresas', to: '/avaliacoes-nr01', icone: 'nr01', roles: ['admin', 'profissional'] },
-    { label: 'Avaliação neuropsicológica', descricao: 'Anamnese, testes e laudo', to: '/avaliacoes-neuropsicologicas', icone: 'neuro', roles: ['admin', 'profissional'] },
-    { label: 'Repasses', descricao: 'O que pagar a cada profissional', to: '/repasses', icone: 'receita', roles: ['admin'] },
-    { label: 'Meus repasses', descricao: 'Quanto você tem a receber', to: '/meus-repasses', icone: 'receita', roles: ['profissional'] },
-    { label: 'Usuários', descricao: 'Colaboradores e permissões da clínica', to: '/usuarios', icone: 'usuarios', roles: ['admin', 'recepcao'] },
-    { label: 'Painel Super Admin', descricao: 'Total de clínicas e quem está pagando', to: '/super-admin', icone: 'painel', roles: ['super_admin'] },
-    { label: 'Clínicas', descricao: 'Clínicas cadastradas na plataforma', to: '/clinicas', icone: 'empresas', roles: ['super_admin'] },
-    { label: 'Planos', descricao: 'Planos de assinatura da plataforma', to: '/planos', icone: 'planos', roles: ['super_admin'] },
-    { label: 'Minha conta', descricao: 'Seus dados e senha', to: '/minha-conta', icone: 'usuarios', roles: ['super_admin', 'admin', 'profissional', 'recepcao'] },
+    { label: tr('Novo agendamento'), descricao: tr('Marcar uma consulta na agenda'), to: '/agenda', icone: 'agenda', roles: ['admin', 'profissional', 'recepcao'] },
+    { label: tr('Pacientes'), descricao: tr('Cadastro e busca de pacientes'), to: '/pacientes', icone: 'pacientes', roles: ['admin', 'profissional', 'recepcao'] },
+    { label: tr('Prontuário'), descricao: tr('Atendimentos e histórico clínico'), to: '/prontuario', icone: 'prontuario', roles: ['admin', 'profissional'] },
+    { label: tr('Lista de espera'), descricao: tr('Fila de pacientes aguardando vaga'), to: '/lista-espera', icone: 'espera', roles: ['admin', 'profissional', 'recepcao'] },
+    { label: tr('Avaliações NR-01'), descricao: tr('Riscos psicossociais das empresas'), to: '/avaliacoes-nr01', icone: 'nr01', roles: ['admin', 'profissional'] },
+    { label: tr('Avaliação neuropsicológica'), descricao: tr('Anamnese, testes e laudo'), to: '/avaliacoes-neuropsicologicas', icone: 'neuro', roles: ['admin', 'profissional'] },
+    { label: tr('Repasses'), descricao: tr('O que pagar a cada profissional'), to: '/repasses', icone: 'receita', roles: ['admin'] },
+    { label: tr('Meus repasses'), descricao: tr('Quanto você tem a receber'), to: '/meus-repasses', icone: 'receita', roles: ['profissional'] },
+    { label: tr('Usuários'), descricao: tr('Colaboradores e permissões da clínica'), to: '/usuarios', icone: 'usuarios', roles: ['admin', 'recepcao'] },
+    { label: tr('Painel Super Admin'), descricao: tr('Total de clínicas e quem está pagando'), to: '/super-admin', icone: 'painel', roles: ['super_admin'] },
+    { label: tr('Clínicas'), descricao: tr('Clínicas cadastradas na plataforma'), to: '/clinicas', icone: 'empresas', roles: ['super_admin'] },
+    { label: tr('Planos'), descricao: tr('Planos de assinatura da plataforma'), to: '/planos', icone: 'planos', roles: ['super_admin'] },
+    { label: tr('Minha conta'), descricao: tr('Seus dados e senha'), to: '/minha-conta', icone: 'usuarios', roles: ['super_admin', 'admin', 'profissional', 'recepcao'] },
 ]
 
 function saudacao(hora) {
-    if (hora < 12) return 'Bom dia'
-    if (hora < 18) return 'Boa tarde'
-    return 'Boa noite'
+    if (hora < 12) return tr('Bom dia')
+    if (hora < 18) return tr('Boa tarde')
+    return tr('Boa noite')
 }
 
 function capitalizar(texto) {
@@ -91,7 +92,7 @@ function Kpi({ icone, rotulo, valor, detalhe, tom = 'primary', to, indice }) {
 // Recepção e admin sem vínculo veem só a quantidade aberta na clínica, sem nenhum dado clínico.
 function KpiEmAtendimentoDoUsuario({ indice, veTotalDaClinica }) {
     const { carregando, profissional } = useAcessoProntuario()
-    if (carregando) return <Kpi icone="prontuario" rotulo="Em atendimento" valor={null} tom="success" indice={indice} />
+    if (carregando) return <Kpi icone="prontuario" rotulo={tr('Em atendimento')} valor={null} tom="success" indice={indice} />
     if (profissional) return <KpiEmAtendimento indice={indice} />
     return veTotalDaClinica ? <KpiEmAtendimentoDaClinica indice={indice} /> : null
 }
@@ -107,7 +108,7 @@ function KpiEmAtendimentoDaClinica({ indice }) {
         return () => { ignore = true }
     }, [])
 
-    return <Kpi icone="prontuario" rotulo="Em atendimento" valor={total} detalhe={total === 1 ? 'atendimento aberto agora' : 'atendimentos abertos agora'} tom="success" indice={indice} />
+    return <Kpi icone="prontuario" rotulo={tr('Em atendimento')} valor={total} detalhe={total === 1 ? tr('atendimento aberto agora') : tr('atendimentos abertos agora')} tom="success" indice={indice} />
 }
 
 // Cancelamentos das consultas marcadas para este mês; o card abre a agenda só com os cancelados.
@@ -116,13 +117,13 @@ function KpiCancelados({ agora, indice, filtrar }) {
     const fim = paraISO(new Date(agora.getFullYear(), agora.getMonth() + 1, 0))
     const { agendas, loading } = useAgendas({ dataInicio: inicio, dataFim: fim })
     const total = filtrar(agendas).filter((a) => a.status === 'cancelado').length
-    return <Kpi icone="cancelado" rotulo="Agendamentos cancelados" valor={loading ? null : total} detalhe="neste mês" tom="danger" to="/agenda?status=cancelado" indice={indice} />
+    return <Kpi icone="cancelado" rotulo={tr('Agendamentos cancelados')} valor={loading ? null : total} detalhe={tr('neste mês')} tom="danger" to="/agenda?status=cancelado" indice={indice} />
 }
 
 function KpiEmAtendimento({ indice }) {
     const { prontuarios, loading } = useTodosProntuarios()
     const total = useMemo(() => prontuarios.filter(atendimentoEmAndamento).length, [prontuarios])
-    return <Kpi icone="prontuario" rotulo="Em atendimento" valor={loading ? null : total} detalhe={total === 1 ? 'atendimento aberto agora' : 'atendimentos abertos agora'} tom="success" to="/prontuario" indice={indice} />
+    return <Kpi icone="prontuario" rotulo={tr('Em atendimento')} valor={loading ? null : total} detalhe={total === 1 ? tr('atendimento aberto agora') : tr('atendimentos abertos agora')} tom="success" to="/prontuario" indice={indice} />
 }
 
 function AgendaDeHoje({ agendas, loading, agora, clinico, onAbrir }) {
@@ -132,10 +133,10 @@ function AgendaDeHoje({ agendas, loading, agora, clinico, onAbrir }) {
         <section className="card home-agenda">
             <header className="home-card__topo">
                 <div>
-                    <h3>Agenda de hoje</h3>
-                    <p>Clique em uma pessoa para {clinico ? 'abrir o prontuário' : 'ver os detalhes'}</p>
+                    <h3>{tr('Agenda de hoje')}</h3>
+                    <p>{tr('Clique em uma pessoa para {p0}', { p0: clinico ? tr('abrir o prontuário') : tr('ver os detalhes') })}</p>
                 </div>
-                <Link to="/agenda" className="btn btn--ghost btn--sm">Abrir agenda</Link>
+                <Link to="/agenda" className="btn btn--ghost btn--sm">{tr('Abrir agenda')}</Link>
             </header>
 
             {loading ? (
@@ -147,8 +148,8 @@ function AgendaDeHoje({ agendas, loading, agora, clinico, onAbrir }) {
             ) : agendas.length === 0 ? (
                 <div className="home-vazio">
                     <Icone>{ICONES.agenda}</Icone>
-                    <p>Nenhum agendamento para hoje.</p>
-                    <Link to="/agenda" className="btn btn--primary btn--sm"><IconeMais />Agendar</Link>
+                    <p>{tr('Nenhum agendamento para hoje.')}</p>
+                    <Link to="/agenda" className="btn btn--primary btn--sm"><IconeMais />{tr('Agendar')}</Link>
                 </div>
             ) : (
                 <ul className="home-agenda__lista">
@@ -169,11 +170,11 @@ function AgendaDeHoje({ agendas, loading, agora, clinico, onAbrir }) {
                                     </span>
                                     <span className="home-agenda__avatar" aria-hidden="true">{iniciais(agenda.pacienteId?.nome)}</span>
                                     <span className="home-agenda__dados">
-                                        <strong>{agenda.pacienteId?.nome ?? 'Paciente'}</strong>
+                                        <strong>{agenda.pacienteId?.nome ?? tr('Paciente')}</strong>
                                         <span>{[agenda.profissionalId?.nome, agenda.servicoId?.nome].filter(Boolean).join(' · ')}</span>
                                     </span>
                                     {agoraMesmo
-                                        ? <span className="badge badge--live badge--success">Agora</span>
+                                        ? <span className="badge badge--live badge--success">{tr('Agora')}</span>
                                         : <span className={`badge ${CLASSE_STATUS[agenda.status] ?? ''}`}>{STATUS_AGENDA[agenda.status] ?? agenda.status}</span>}
                                 </button>
                             </li>
@@ -192,8 +193,8 @@ function Atalhos({ hasRole }) {
         <section className="card home-atalhos">
             <header className="home-card__topo">
                 <div>
-                    <h3>Atalhos</h3>
-                    <p>Vá direto ao que você mais usa</p>
+                    <h3>{tr('Atalhos')}</h3>
+                    <p>{tr('Vá direto ao que você mais usa')}</p>
                 </div>
             </header>
             <ul>
@@ -236,30 +237,30 @@ function PainelDaClinica({ agora, clinico, admin, recepcao, hasRole, user }) {
             <div className="home-kpis">
                 <Kpi
                     icone="agenda"
-                    rotulo="Agendamentos hoje"
+                    rotulo={tr('Agendamentos hoje')}
                     valor={carregandoAgenda ? null : ativas.length}
-                    detalhe={ativas.length === 0 ? 'nada marcado' : `${restantes} ainda por vir${realizados ? ` · ${realizados} realizado${realizados > 1 ? 's' : ''}` : ''}`}
+                    detalhe={ativas.length === 0 ? tr('nada marcado') : tr('{restantes} ainda por vir{p0}', { restantes, p0: realizados ? tr(' · {realizados} realizado{p0}', { realizados, p0: realizados > 1 ? 's' : '' }) : '' })}
                     to="/agenda"
                     indice={0}
                 />
-                <Kpi icone="espera" rotulo="Na lista de espera" valor={carregandoFila ? null : fila.length} detalhe="aguardando vaga" tom="warning" to="/lista-espera" indice={1} />
-                <Kpi icone="pacientes" rotulo="Pacientes" valor={carregandoPacientes ? null : pacientes.length} detalhe="cadastrados" tom="info" to="/pacientes" indice={2} />
+                <Kpi icone="espera" rotulo={tr('Na lista de espera')} valor={carregandoFila ? null : fila.length} detalhe={tr('aguardando vaga')} tom="warning" to="/lista-espera" indice={1} />
+                <Kpi icone="pacientes" rotulo={tr('Pacientes')} valor={carregandoPacientes ? null : pacientes.length} detalhe={tr('cadastrados')} tom="info" to="/pacientes" indice={2} />
                 <KpiEmAtendimentoDoUsuario indice={3} veTotalDaClinica={admin || recepcao} />
                 <KpiCancelados agora={agora} indice={4} filtrar={filtrar} />
                 <Kpi
                     icone="profissionais"
-                    rotulo="Profissionais"
+                    rotulo={tr('Profissionais')}
                     valor={carregandoProfissionais ? null : profissionais.length}
-                    detalhe={profissionais.length === 1 ? 'na equipe' : 'na equipe de atendimento'}
+                    detalhe={profissionais.length === 1 ? tr('na equipe') : tr('na equipe de atendimento')}
                     tom="success"
                     to={admin ? '/profissionais' : undefined}
                     indice={5}
                 />
                 <Kpi
                     icone="empresas"
-                    rotulo="Empresas"
+                    rotulo={tr('Empresas')}
                     valor={carregandoEmpresas ? null : empresas.length}
-                    detalhe={empresas.length === 1 ? 'empresa cliente' : 'empresas clientes'}
+                    detalhe={empresas.length === 1 ? tr('empresa cliente') : tr('empresas clientes')}
                     tom="warning"
                     to={admin ? '/empresas' : undefined}
                     indice={6}
@@ -301,14 +302,14 @@ export function Home() {
         <div className="page home">
             <header className="home-hero">
                 <div>
-                    <p className="home-hero__data">{capitalizar(agora.toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' }))}</p>
+                    <p className="home-hero__data">{capitalizar(agora.toLocaleDateString(localeAtual(), { weekday: 'long', day: 'numeric', month: 'long' }))}</p>
                     <h2 className="page-title">{saudacao(agora.getHours())}, {primeiroNome}!</h2>
-                    <p className="page-subtitle">{daClinica ? (user?.nomeEmpresa ? `Resumo de hoje em ${user.nomeEmpresa}` : 'Resumo de hoje') : 'Painel de administração da plataforma'}</p>
+                    <p className="page-subtitle">{daClinica ? (user?.nomeEmpresa ? tr('Resumo de hoje em {nomeEmpresa}', { nomeEmpresa: user.nomeEmpresa }) : tr('Resumo de hoje')) : tr('Painel de administração da plataforma')}</p>
                 </div>
                 {daClinica && (
                     <Link to="/agenda" className="btn btn--primary">
                         <IconeMais />
-                        Novo agendamento
+                        {tr('Novo agendamento')}
                     </Link>
                 )}
             </header>

@@ -1,8 +1,9 @@
+import { tr } from '@/i18n';
 // Para que a avaliação ofereça este serviço: null é atendimento comum (consulta ou pacote da agenda).
 export const MODULOS_SERVICO = [
-  ['', 'Atendimento comum'],
-  ['neuropsicologica', 'Avaliação neuropsicológica'],
-  ['nr01', 'Avaliação NR-01'],
+  ['', tr('Atendimento comum')],
+  ['neuropsicologica', tr('Avaliação neuropsicológica')],
+  ['nr01', tr('Avaliação NR-01')],
 ];
 
 export const ROTULO_MODULO = Object.fromEntries(MODULOS_SERVICO.filter(([valor]) => valor));
@@ -11,15 +12,15 @@ export const ROTULO_MODULO = Object.fromEntries(MODULOS_SERVICO.filter(([valor])
 export const MODELOS_SERVICO = [
   {
     chave: 'neuropsicologica',
-    rotulo: 'Avaliação neuropsicológica',
-    dados: { nome: 'Avaliação neuropsicológica', tipo: 'pacote', qtdDias: 8, modulo: 'neuropsicologica' },
-    dica: 'Pacote de 8 sessões (anamnese, testagem e devolutiva). Ajuste a quantidade se precisar.',
+    rotulo: tr('Avaliação neuropsicológica'),
+    dados: { nome: tr('Avaliação neuropsicológica'), tipo: 'pacote', qtdDias: 8, modulo: 'neuropsicologica' },
+    dica: tr('Pacote de 8 sessões (anamnese, testagem e devolutiva). Ajuste a quantidade se precisar.'),
   },
   {
     chave: 'nr01',
-    rotulo: 'Avaliação NR-01',
-    dados: { nome: 'Avaliação NR-01 (riscos psicossociais)', tipo: 'consulta', qtdDias: '', modulo: 'nr01' },
-    dica: 'Avaliação de riscos psicossociais para empresas.',
+    rotulo: tr('Avaliação NR-01'),
+    dados: { nome: tr('Avaliação NR-01 (riscos psicossociais)'), tipo: 'consulta', qtdDias: '', modulo: 'nr01' },
+    dica: tr('Avaliação de riscos psicossociais para empresas.'),
   },
 ];
 
@@ -65,11 +66,11 @@ export function montarPayloadServico(form) {
 
 // O servidor recusaria estes casos; o formulário avisa antes de enviar.
 export function problemaDoFormulario(form) {
-  const linhas = [{ ...form, rotulo: 'do preço padrão' }, ...form.tabelaConvenios.map((l) => ({ ...l, rotulo: 'de um convênio' }))];
-  if (form.tabelaConvenios.some((l) => !l.convenioId)) return 'Escolha o convênio de cada linha da tabela.';
+  const linhas = [{ ...form, rotulo: tr('do preço padrão') }, ...form.tabelaConvenios.map((l) => ({ ...l, rotulo: tr('de um convênio') }))];
+  if (form.tabelaConvenios.some((l) => !l.convenioId)) return tr('Escolha o convênio de cada linha da tabela.');
   for (const l of linhas) {
-    if (l.comissaoTipo === 'percentual' && Number(l.comissao) > 100) return `O repasse ${l.rotulo} não pode passar de 100%.`;
-    if (l.comissaoTipo === 'valor' && Number(l.comissao) > Number(l.preco)) return `O repasse ${l.rotulo} não pode ser maior que o preço.`;
+    if (l.comissaoTipo === 'percentual' && Number(l.comissao) > 100) return tr('O repasse {rotulo} não pode passar de 100%.', { rotulo: l.rotulo });
+    if (l.comissaoTipo === 'valor' && Number(l.comissao) > Number(l.preco)) return tr('O repasse {rotulo} não pode ser maior que o preço.', { rotulo: l.rotulo });
   }
   return null;
 }
@@ -90,8 +91,8 @@ export function sugestaoDeNome(form, servicos = [], idAtual = null) {
   const base = servicoComMesmoNome(form.nome, servicos, idAtual)?.nome.trim() ?? form.nome.trim();
   const sessoes = Number(form.qtdDias);
   const complemento = form.tipo === 'pacote'
-    ? (sessoes > 0 ? `pacote ${sessoes} ${sessoes === 1 ? 'sessão' : 'sessões'}` : 'pacote')
-    : 'consulta avulsa';
+    ? (sessoes > 0 ? `pacote ${sessoes} ${sessoes === 1 ? tr('sessão') : tr('sessões')}` : 'pacote')
+    : tr('consulta avulsa');
   let sugestao = `${base} – ${complemento}`;
   for (let n = 2; servicoComMesmoNome(sugestao, servicos, idAtual); n += 1) sugestao = `${base} – ${complemento} ${n}`;
   return sugestao;

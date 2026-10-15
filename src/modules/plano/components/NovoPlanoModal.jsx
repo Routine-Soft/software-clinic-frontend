@@ -2,8 +2,9 @@ import { useState } from 'react';
 import Modal from '@/components/Modal/Modal';
 import ModalForm from '@/components/Modal/ModalForm';
 import { recursosDoTexto } from '../plano.utils';
+import { tr } from '@/i18n';
 
-const FORM_CRIAR_INICIAL = { nome: '', tipo: 'gratis', preco: '', duracaoDiasTrial: '', individual: false, descricao: '', recursos: '' };
+const FORM_CRIAR_INICIAL = { nome: '', tipo: 'gratis', preco: '', duracaoDiasTrial: '', individual: false, descricao: '', recursos: '', moeda: 'BRL' };
 
 export default function NovoPlanoModal({ erro, onSave, onClose }) {
   const [formCriar, setFormCriar] = useState(FORM_CRIAR_INICIAL);
@@ -16,6 +17,7 @@ export default function NovoPlanoModal({ erro, onSave, onClose }) {
     return {
       nome: formCriar.nome,
       tipo: formCriar.tipo,
+      moeda: formCriar.tipo === 'pago' ? formCriar.moeda : 'BRL',
       preco: Number(formCriar.preco) || 0,
       duracaoDiasTrial: formCriar.tipo === 'gratis' ? Number(formCriar.duracaoDiasTrial) || null : null,
       individual: formCriar.tipo === 'pago' && formCriar.individual,
@@ -25,11 +27,11 @@ export default function NovoPlanoModal({ erro, onSave, onClose }) {
   }
 
   return (
-    <Modal title="Novo plano" onClose={onClose}>
+    <Modal title={tr('Novo plano')} onClose={onClose}>
       {(fechar) => (
-        <ModalForm erro={erro} fechar={fechar} submitLabel="Cadastrar plano" loadingLabel="Cadastrando..." onSubmit={() => onSave(montarPayload())}>
+        <ModalForm erro={erro} fechar={fechar} submitLabel={tr('Cadastrar plano')} loadingLabel={tr('Cadastrando...')} onSubmit={() => onSave(montarPayload())}>
           <div className="field">
-            <label className="field__label" htmlFor="novo-plano-nome">Nome</label>
+            <label className="field__label" htmlFor="novo-plano-nome">{tr('Nome')}</label>
             <input
               id="novo-plano-nome"
               className="input"
@@ -42,16 +44,26 @@ export default function NovoPlanoModal({ erro, onSave, onClose }) {
 
           <div className="modal-form__row">
             <div className="field">
-              <label className="field__label" htmlFor="novo-plano-tipo">Tipo</label>
+              <label className="field__label" htmlFor="novo-plano-tipo">{tr('Tipo')}</label>
               <select id="novo-plano-tipo" className="input" value={formCriar.tipo} onChange={(e) => handleChangeCriar('tipo', e.target.value)}>
-                <option value="gratis">Teste grátis (cadastro)</option>
-                <option value="pago">Pago</option>
+                <option value="gratis">{tr('Teste grátis (cadastro)')}</option>
+                <option value="pago">{tr('Pago')}</option>
               </select>
             </div>
 
+            {formCriar.tipo === 'pago' && (
+              <div className="field field--reveal">
+                <label className="field__label" htmlFor="novo-plano-moeda">{tr('Moeda (quem pode assinar)')}</label>
+                <select id="novo-plano-moeda" className="input" value={formCriar.moeda} onChange={(e) => handleChangeCriar('moeda', e.target.value)}>
+                  <option value="BRL">{tr('Real (R$): clínicas do Brasil, Mercado Pago')}</option>
+                  <option value="USD">{tr('Dólar (US$): clínicas de fora, Stripe')}</option>
+                </select>
+              </div>
+            )}
+
             {formCriar.tipo === 'gratis' && (
               <div className="field field--reveal">
-                <label className="field__label" htmlFor="novo-plano-trial">Duração do trial (dias)</label>
+                <label className="field__label" htmlFor="novo-plano-trial">{tr('Duração do trial (dias)')}</label>
                 <input
                   id="novo-plano-trial"
                   className="input"
@@ -66,9 +78,9 @@ export default function NovoPlanoModal({ erro, onSave, onClose }) {
           </div>
 
           <div className="field">
-            <label className="field__label" htmlFor="novo-plano-preco">Preço mensal</label>
+            <label className="field__label" htmlFor="novo-plano-preco">{tr('Preço mensal')}</label>
             <div className="input-group">
-              <span className="input-group__prefix">R$</span>
+              <span className="input-group__prefix">{formCriar.moeda === 'USD' && formCriar.tipo === 'pago' ? 'US$' : 'R$'}</span>
               <input
                 id="novo-plano-preco"
                 className="input"
@@ -85,28 +97,28 @@ export default function NovoPlanoModal({ erro, onSave, onClose }) {
           {formCriar.tipo === 'pago' && (
             <>
               <div className="field">
-                <label className="field__label" htmlFor="novo-plano-descricao">Descrição (aparece na landing)</label>
+                <label className="field__label" htmlFor="novo-plano-descricao">{tr('Descrição (aparece na landing)')}</label>
                 <input
                   id="novo-plano-descricao"
                   className="input"
                   type="text"
                   maxLength={120}
-                  placeholder="Ex.: O plano para quem trabalha sozinho"
+                  placeholder={tr('Ex.: O plano para quem trabalha sozinho')}
                   value={formCriar.descricao}
                   onChange={(e) => handleChangeCriar('descricao', e.target.value)}
                 />
               </div>
               <div className="field">
-                <label className="field__label" htmlFor="novo-plano-recursos">O que o plano inclui (um por linha)</label>
+                <label className="field__label" htmlFor="novo-plano-recursos">{tr('O que o plano inclui (um por linha)')}</label>
                 <textarea
                   id="novo-plano-recursos"
                   className="input textarea"
                   rows={7}
-                  placeholder={'Agenda\nProntuário eletrônico\nConvênios'}
+                  placeholder={tr('Agenda\nProntuário eletrônico\nConvênios')}
                   value={formCriar.recursos}
                   onChange={(e) => handleChangeCriar('recursos', e.target.value)}
                 />
-                <p className="field__hint">O que um plano tem e o outro não aparece em destaque na landing.</p>
+                <p className="field__hint">{tr('O que um plano tem e o outro não aparece em destaque na landing.')}</p>
               </div>
             </>
           )}
@@ -118,7 +130,7 @@ export default function NovoPlanoModal({ erro, onSave, onClose }) {
                 checked={formCriar.individual}
                 onChange={(e) => handleChangeCriar('individual', e.target.checked)}
               />
-              <span>Individual: só o dono da conta usa o sistema (um profissional, sem recepção)</span>
+              <span>{tr('Individual: só o dono da conta usa o sistema (um profissional, sem recepção)')}</span>
             </label>
           )}
         </ModalForm>

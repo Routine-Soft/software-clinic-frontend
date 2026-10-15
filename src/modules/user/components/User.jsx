@@ -5,6 +5,8 @@ import AuthLayout from "./AuthLayout";
 import BotaoGoogle from "./BotaoGoogle";
 import { normalizarEmail } from "@/utils/email";
 import CampoSenha from '@/components/CampoSenha/CampoSenha';
+import { useIdioma } from '@/i18n/useIdioma';
+import { tr } from '@/i18n';
 
 export default function User() {
   const { isAuthenticated, loading, error, login, entrarComGoogle } = useAuthContext();
@@ -12,6 +14,7 @@ export default function User() {
   // Quem veio de outra página (ex.: "Seja afiliado") volta para ela depois de entrar.
   const voltarPara = useLocation().state?.voltarPara ?? '/home';
 
+  const { t } = useIdioma();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -47,27 +50,27 @@ export default function User() {
 
   return (
     <AuthLayout>
-      <h2 className="auth-title">Login</h2>
-      <p className="auth-subtitle">Entre com suas credenciais para acessar o sistema</p>
+      <h2 className="auth-title">{t('auth.login.titulo')}</h2>
+      <p className="auth-subtitle">{t('auth.login.subtitulo')}</p>
 
       <form className="auth-form stagger" onSubmit={handleSubmit}>
         {error && <p className="alert alert--error" role="alert">{error.message}</p>}
 
         <div className="field">
-          <label className="field__label" htmlFor="login-email">E-mail</label>
+          <label className="field__label" htmlFor="login-email">{t('auth.campos.email')}</label>
           <input
             id="login-email"
             className="input"
             type="email"
             value={email}
             onChange={(e) => setEmail(normalizarEmail(e.target.value))}
-            placeholder="seu@email.com"
+            placeholder={tr('seu@email.com')}
             required
           />
         </div>
 
         <div className="field">
-          <label className="field__label" htmlFor="login-password">Senha</label>
+          <label className="field__label" htmlFor="login-password">{t('auth.campos.senha')}</label>
           <CampoSenha
             id="login-password"
             className="input"
@@ -76,19 +79,19 @@ export default function User() {
             placeholder="••••••••"
             required
           />
-          <Link className="link auth-esqueci" to="/esqueci-senha">Esqueceu a senha?</Link>
+          <Link className="link auth-esqueci" to="/esqueci-senha">{t('auth.login.esqueceu')}</Link>
         </div>
 
         <button className={`btn btn--primary${loading ? ' btn--loading' : ''}`} type="submit" disabled={loading}>
-          {loading ? 'Entrando...' : 'Entrar'}
+          {loading ? t('auth.login.entrando') : t('auth.login.entrar')}
         </button>
       </form>
 
-      <div className="auth-divisor"><span>ou</span></div>
+      <div className="auth-divisor"><span>{t('auth.divisor')}</span></div>
       <BotaoGoogle onCredencial={handleGoogle} />
 
       <p className="auth-footer">
-        Ainda não tem uma conta? <Link className="link" to="/registro">Criar conta</Link>
+        {t('auth.login.semConta')} <Link className="link" to="/registro">{t('auth.login.criarConta')}</Link>
       </p>
     </AuthLayout>
   );

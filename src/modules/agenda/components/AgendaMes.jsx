@@ -1,4 +1,5 @@
 import { NOMES_DIAS_CURTOS, descreverAgendamento, paraISO, confirmadoPeloWhatsapp } from '../agenda.utils';
+import { localeAtual, tr } from '@/i18n';
 
 const MAXIMO_POR_DIA = 3;
 
@@ -28,7 +29,7 @@ export default function AgendaMes({ dataReferencia, dias, porDia, corDe, descrev
               <button
                 type="button"
                 className="agenda-celula__numero"
-                aria-label={`Ver o dia ${dia.toLocaleDateString('pt-BR', { day: 'numeric', month: 'long' })}`}
+                aria-label={tr('Ver o dia {p0}', { p0: dia.toLocaleDateString(localeAtual(), { day: 'numeric', month: 'long' }) })}
                 onClick={(e) => { e.stopPropagation(); onIrParaDia(dia); }}
               >
                 {dia.getDate()}
@@ -48,7 +49,7 @@ export default function AgendaMes({ dataReferencia, dias, porDia, corDe, descrev
                       onClick={(e) => { e.stopPropagation(); onAbrir(agenda); }}
                     >
                       <span className="agenda-chip__hora">{agenda.horaInicio}</span>
-                      <span className="agenda-chip__nome">{confirmadoPeloWhatsapp(agenda) && <span className="agenda-confirmado" aria-label="Confirmado">✓ </span>}{nome}</span>
+                      <span className="agenda-chip__nome">{confirmadoPeloWhatsapp(agenda) && <span className="agenda-confirmado" aria-label={tr('Confirmado')}>✓ </span>}{nome}</span>
                       {sub && <span className="agenda-chip__prof">{sub}</span>}
                     </button>
                   </li>
@@ -62,7 +63,7 @@ export default function AgendaMes({ dataReferencia, dias, porDia, corDe, descrev
                   className="agenda-celula__mais"
                   onClick={(e) => { e.stopPropagation(); onIrParaDia(dia); }}
                 >
-                  +{restantes}<span> mais</span>
+                  +{restantes}<span> {tr('mais')}</span>
                 </button>
               )}
             </div>

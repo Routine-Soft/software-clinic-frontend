@@ -9,6 +9,7 @@ import EditarPacienteModal from './EditarPacienteModal';
 import NovoPacienteModal from './NovoPacienteModal';
 import '@/components/CrudCard/CrudCard.css';
 import SeloTeste from './SeloTeste';
+import { tr } from '@/i18n';
 
 const IconePacientes = () => (
   <Icone>
@@ -59,13 +60,13 @@ export default function PacienteCard({ className = '' }) {
         <div className="crud-card__icon"><IconePacientes /></div>
 
         <div className="crud-card__titulos">
-          <h3 className="crud-card__titulo">Pacientes</h3>
-          <p className="crud-card__subtitulo">Busque, cadastre e edite pacientes</p>
+          <h3 className="crud-card__titulo">{tr('Pacientes')}</h3>
+          <p className="crud-card__subtitulo">{tr('Busque, cadastre e edite pacientes')}</p>
         </div>
 
         {!loading && (
           <span className="badge badge--primary">
-            {pacientes.length} {pacientes.length === 1 ? 'paciente' : 'pacientes'}
+            {pacientes.length} {pacientes.length === 1 ? tr('paciente') : tr('pacientes')}
           </span>
         )}
       </header>
@@ -85,19 +86,19 @@ export default function PacienteCard({ className = '' }) {
             type="search"
             value={busca}
             onChange={(e) => setBusca(e.target.value)}
-            placeholder="Nome, CPF, telefone ou e-mail"
-            aria-label="Buscar paciente"
+            placeholder={tr('Nome, CPF, telefone ou e-mail')}
+            aria-label={tr('Buscar paciente')}
           />
         </div>
 
         <button type="button" className="btn btn--primary" onClick={() => setCriandoPaciente(true)}>
           <IconeMais />
-          Novo
+          {tr('Novo')}
         </button>
       </div>
 
       {loading ? (
-        <ul className="crud-lista" aria-busy="true" aria-label="Carregando pacientes">
+        <ul className="crud-lista" aria-busy="true" aria-label={tr('Carregando pacientes')}>
           {[0, 1, 2].map((i) => (
             <li key={i} className="crud-item crud-item--skeleton" style={{ '--i': i }}>
               <div className="skeleton crud-item__icone-skeleton" />
@@ -108,7 +109,7 @@ export default function PacienteCard({ className = '' }) {
       ) : pacientesFiltrados.length === 0 ? (
         <div className="crud-vazio">
           <IconePacientes />
-          <p>{pacientes.length === 0 ? 'Nenhum paciente cadastrado ainda.' : 'Nenhum paciente encontrado para essa busca.'}</p>
+          <p>{pacientes.length === 0 ? tr('Nenhum paciente cadastrado ainda.') : tr('Nenhum paciente encontrado para essa busca.')}</p>
         </div>
       ) : (
         <ul className="crud-lista">
@@ -126,32 +127,32 @@ export default function PacienteCard({ className = '' }) {
                   <span>{contatoDoPaciente(paciente).telefone}</span>
                   {paciente.convenioId?.nome
                     ? <span className="badge badge--info">{paciente.convenioId.nome}</span>
-                    : <span className="badge">Sem convênio</span>}
+                    : <span className="badge">{tr('Sem convênio')}</span>}
                   <SeloTeste paciente={paciente} />
                   {paciente.empresaId?.razaoSocial && <span className="badge badge--primary">{paciente.empresaId.razaoSocial}</span>}
                 </span>
                 <span className="crud-item__sub" title={contatoDoPaciente(paciente).email}>{contatoDoPaciente(paciente).email}</span>
                 {paciente.responsaveis?.length > 0 && (
-                  <span className="crud-item__sub">Resp.: {paciente.responsaveis.map(rotuloDoResponsavel).join(', ')}</span>
+                  <span className="crud-item__sub">{tr('Resp.: {p0}', { p0: paciente.responsaveis.map(rotuloDoResponsavel).join(', ') })}</span>
                 )}
               </div>
 
               {confirmandoId === paciente._id ? (
                 <div className="crud-item__confirmar">
-                  <span>{paciente.teste ? 'Excluir com tudo?' : 'Excluir?'}</span>
-                  <button type="button" className="icon-btn icon-btn--danger" aria-label={`Confirmar exclusão de ${paciente.nome}`} onClick={() => handleDelete(paciente._id)}>
+                  <span>{paciente.teste ? tr('Excluir com tudo?') : tr('Excluir?')}</span>
+                  <button type="button" className="icon-btn icon-btn--danger" aria-label={tr('Confirmar exclusão de {nome}', { nome: paciente.nome })} onClick={() => handleDelete(paciente._id)}>
                     <IconeCheck />
                   </button>
-                  <button type="button" className="icon-btn" aria-label="Cancelar exclusão" onClick={() => setConfirmandoId(null)}>
+                  <button type="button" className="icon-btn" aria-label={tr('Cancelar exclusão')} onClick={() => setConfirmandoId(null)}>
                     <IconeX />
                   </button>
                 </div>
               ) : (
                 <div className="crud-item__acoes">
-                  <button type="button" className="icon-btn" aria-label={`Editar ${paciente.nome}`} title="Editar" onClick={() => handleEdit(paciente)}>
+                  <button type="button" className="icon-btn" aria-label={`Editar ${paciente.nome}`} title={tr('Editar')} onClick={() => handleEdit(paciente)}>
                     <IconeLapis />
                   </button>
-                  <button type="button" className="icon-btn icon-btn--danger" aria-label={`Excluir ${paciente.nome}`} title="Excluir" onClick={() => setConfirmandoId(paciente._id)}>
+                  <button type="button" className="icon-btn icon-btn--danger" aria-label={`Excluir ${paciente.nome}`} title={tr('Excluir')} onClick={() => setConfirmandoId(paciente._id)}>
                     <IconeLixeira />
                   </button>
                 </div>

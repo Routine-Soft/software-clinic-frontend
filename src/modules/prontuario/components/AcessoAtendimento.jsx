@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { textoDeAcesso } from '../prontuario.utils';
+import { tr } from '@/i18n';
 
 const idDe = (esp) => String(esp?._id ?? esp);
 
@@ -10,7 +11,7 @@ export function EscolhaEspecialidades({ id, especialidades, selecionadas, onChan
   }
 
   if (especialidades.length === 0) {
-    return <p className="field__hint">Nenhuma especialidade cadastrada na clínica. Só você poderá ler.</p>;
+    return <p className="field__hint">{tr('Nenhuma especialidade cadastrada na clínica. Só você poderá ler.')}</p>;
   }
 
   return (
@@ -46,10 +47,10 @@ export default function AcessoAtendimento({ prontuario, especialidades, souAutor
   if (!editando) {
     return (
       <div className="pront-acesso pront-no-print">
-        <span className="pront-acesso__resumo"><strong>Quem pode ler:</strong> {textoDeAcesso(nomes)}</span>
+        <span className="pront-acesso__resumo"><strong>{tr('Quem pode ler:')}</strong> {textoDeAcesso(nomes)}</span>
         {souAutor && (
           <button type="button" className="link pront-acesso__alterar" onClick={() => { setSelecionadas(atuais); setEditando(true); }}>
-            Alterar
+            {tr('Alterar')}
           </button>
         )}
       </div>
@@ -58,13 +59,13 @@ export default function AcessoAtendimento({ prontuario, especialidades, souAutor
 
   return (
     <div className="pront-acesso pront-acesso--editando pront-no-print">
-      <span className="field__label" id={`${id}-rotulo`}>Quem mais pode ler este atendimento</span>
+      <span className="field__label" id={`${id}-rotulo`}>{tr('Quem mais pode ler este atendimento')}</span>
       <EscolhaEspecialidades id={id} especialidades={especialidades} selecionadas={selecionadas} onChange={setSelecionadas} />
-      <p className="field__hint">Qualquer profissional da clínica com uma das especialidades marcadas poderá ler. Só você edita.</p>
+      <p className="field__hint">{tr('Qualquer profissional da clínica com uma das especialidades marcadas poderá ler. Só você edita.')}</p>
       <div className="pront-rodape">
-        <button type="button" className="btn btn--ghost btn--sm" onClick={() => setEditando(false)}>Cancelar</button>
+        <button type="button" className="btn btn--ghost btn--sm" onClick={() => setEditando(false)}>{tr('Cancelar')}</button>
         <button type="button" className={`btn btn--primary btn--sm${salvando ? ' btn--loading' : ''}`} disabled={salvando || !mudou} onClick={salvar}>
-          {salvando ? 'Salvando...' : 'Salvar acesso'}
+          {salvando ? tr('Salvando...') : tr('Salvar acesso')}
         </button>
       </div>
     </div>

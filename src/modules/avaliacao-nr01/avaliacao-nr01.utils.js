@@ -1,7 +1,8 @@
+import { tr } from '@/i18n';
 export const RISCOS = {
-  alto: ['Alto', 'badge--danger'],
-  medio: ['Médio', 'badge--warning'],
-  baixo: ['Baixo', 'badge--success'],
+  alto: [tr('Alto'), 'badge--danger'],
+  medio: [tr('Médio'), 'badge--warning'],
+  baixo: [tr('Baixo'), 'badge--success'],
 };
 
 function normalizar(texto = '') {

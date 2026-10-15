@@ -8,6 +8,7 @@ import AvisoPreRequisito from '@/components/AvisoPreRequisito/AvisoPreRequisito'
 import { Icone, IconeMais, IconeLapis, IconeLixeira, IconeCheck, IconeX } from '@/components/CrudCard/icones';
 import { iniciais } from '@/utils/nome';
 import '@/components/CrudCard/CrudCard.css';
+import { tr } from '@/i18n';
 
 const IconeProfissionais = () => (
   <Icone>
@@ -59,18 +60,18 @@ export default function ProfissionalADM({ className = '' }) {
         <div className="crud-card__icon"><IconeProfissionais /></div>
 
         <div className="crud-card__titulos">
-          <h3 className="crud-card__titulo">Profissionais</h3>
-          <p className="crud-card__subtitulo">Equipe de atendimento e seus registros</p>
+          <h3 className="crud-card__titulo">{tr('Profissionais')}</h3>
+          <p className="crud-card__subtitulo">{tr('Equipe de atendimento e seus registros')}</p>
         </div>
 
         {!loading && (
           <span className="badge badge--primary">
-            {profissionais.length} {profissionais.length === 1 ? 'profissional' : 'profissionais'}
+            {profissionais.length} {profissionais.length === 1 ? tr('profissional') : tr('profissionais')}
           </span>
         )}
-        <button type="button" className="btn btn--primary btn--sm crud-card__novo-btn" onClick={() => setCriandoProfissional(true)} aria-label="Adicionar profissional">
+        <button type="button" className="btn btn--primary btn--sm crud-card__novo-btn" onClick={() => setCriandoProfissional(true)} aria-label={tr('Adicionar profissional')}>
           <IconeMais />
-          <span className="crud-card__rotulo">Adicionar</span>
+          <span className="crud-card__rotulo">{tr('Adicionar')}</span>
         </button>
       </header>
 
@@ -83,12 +84,12 @@ export default function ProfissionalADM({ className = '' }) {
 
       {!carregandoEspecialidades && especialidades.length === 0 && (
         <div className="alerts crud-card__alertas">
-          <AvisoPreRequisito acao="adicionar profissionais" faltando={['uma especialidade']} onde="Use o card Especialidades, passo 1 do Painel Admin." />
+          <AvisoPreRequisito acao={tr('adicionar profissionais')} faltando={[tr('uma especialidade')]} onde={tr('Use o card Especialidades, passo 1 do Painel Admin.')} />
         </div>
       )}
 
       {loading ? (
-        <ul className="crud-lista" aria-busy="true" aria-label="Carregando profissionais">
+        <ul className="crud-lista" aria-busy="true" aria-label={tr('Carregando profissionais')}>
           {[0, 1, 2].map((i) => (
             <li key={i} className="crud-item crud-item--skeleton" style={{ '--i': i }}>
               <div className="skeleton crud-item__icone-skeleton" />
@@ -99,7 +100,7 @@ export default function ProfissionalADM({ className = '' }) {
       ) : profissionais.length === 0 ? (
         <div className="crud-vazio">
           <IconeProfissionais />
-          <p>Nenhum profissional cadastrado ainda.</p>
+          <p>{tr('Nenhum profissional cadastrado ainda.')}</p>
         </div>
       ) : (
         <ul className="crud-lista">
@@ -122,26 +123,26 @@ export default function ProfissionalADM({ className = '' }) {
                     ))}
                   </span>
                   <span className="crud-item__sub" title={profissional.usuarioId?.email}>
-                    {profissional.usuarioId?.email ?? 'Sem usuário vinculado'}
+                    {profissional.usuarioId?.email ?? tr('Sem usuário vinculado')}
                   </span>
                 </div>
 
                 {confirmandoId === profissional._id ? (
                   <div className="crud-item__confirmar">
-                    <span>Excluir?</span>
-                    <button type="button" className="icon-btn icon-btn--danger" aria-label={`Confirmar exclusão de ${profissional.nome}`} onClick={() => handleDelete(profissional._id)}>
+                    <span>{tr('Excluir?')}</span>
+                    <button type="button" className="icon-btn icon-btn--danger" aria-label={tr('Confirmar exclusão de {nome}', { nome: profissional.nome })} onClick={() => handleDelete(profissional._id)}>
                       <IconeCheck />
                     </button>
-                    <button type="button" className="icon-btn" aria-label="Cancelar exclusão" onClick={() => setConfirmandoId(null)}>
+                    <button type="button" className="icon-btn" aria-label={tr('Cancelar exclusão')} onClick={() => setConfirmandoId(null)}>
                       <IconeX />
                     </button>
                   </div>
                 ) : (
                   <div className="crud-item__acoes">
-                    <button type="button" className="icon-btn" aria-label={`Editar ${profissional.nome}`} title="Editar" onClick={() => handleEdit(profissional)}>
+                    <button type="button" className="icon-btn" aria-label={`Editar ${profissional.nome}`} title={tr('Editar')} onClick={() => handleEdit(profissional)}>
                       <IconeLapis />
                     </button>
-                    <button type="button" className="icon-btn icon-btn--danger" aria-label={`Excluir ${profissional.nome}`} title="Excluir" onClick={() => setConfirmandoId(profissional._id)}>
+                    <button type="button" className="icon-btn icon-btn--danger" aria-label={`Excluir ${profissional.nome}`} title={tr('Excluir')} onClick={() => setConfirmandoId(profissional._id)}>
                       <IconeLixeira />
                     </button>
                   </div>

@@ -3,6 +3,7 @@ import Modal from '@/components/Modal/Modal';
 import ModalForm from '@/components/Modal/ModalForm';
 import { normalizarEmail } from '@/utils/email';
 import CampoSenha from '@/components/CampoSenha/CampoSenha';
+import { tr } from '@/i18n';
 
 const FORM_CRIAR_INICIAL = { nomeCompleto: '', email: '', telefone: '', password: '', role: 'recepcao' };
 
@@ -14,13 +15,13 @@ export default function NovoUsuarioModal({ erro, onSave, onClose }) {
   }
 
   return (
-    <Modal title="Novo colaborador" onClose={onClose}>
+    <Modal title={tr('Novo colaborador')} onClose={onClose}>
       {(fechar) => (
         <ModalForm
           erro={erro}
           fechar={fechar}
-          submitLabel="Cadastrar usuário"
-          loadingLabel="Cadastrando..."
+          submitLabel={tr('Cadastrar usuário')}
+          loadingLabel={tr('Cadastrando...')}
           onSubmit={() => onSave({
             nomeCompleto: formCriar.nomeCompleto,
             email: formCriar.email,
@@ -30,7 +31,7 @@ export default function NovoUsuarioModal({ erro, onSave, onClose }) {
           })}
         >
           <div className="field">
-            <label className="field__label" htmlFor="novo-usuario-nome">Nome completo</label>
+            <label className="field__label" htmlFor="novo-usuario-nome">{tr('Nome completo')}</label>
             <input
               id="novo-usuario-nome"
               className="input"
@@ -42,7 +43,7 @@ export default function NovoUsuarioModal({ erro, onSave, onClose }) {
           </div>
 
           <div className="field">
-            <label className="field__label" htmlFor="novo-usuario-email">Email</label>
+            <label className="field__label" htmlFor="novo-usuario-email">{tr('Email')}</label>
             <input
               id="novo-usuario-email"
               className="input"
@@ -55,7 +56,7 @@ export default function NovoUsuarioModal({ erro, onSave, onClose }) {
 
           <div className="modal-form__row">
             <div className="field">
-              <label className="field__label" htmlFor="novo-usuario-telefone">Telefone</label>
+              <label className="field__label" htmlFor="novo-usuario-telefone">{tr('Telefone')}</label>
               <input
                 id="novo-usuario-telefone"
                 className="input"
@@ -67,21 +68,21 @@ export default function NovoUsuarioModal({ erro, onSave, onClose }) {
             </div>
 
             <div className="field">
-              <label className="field__label" htmlFor="novo-usuario-funcao">Função</label>
+              <label className="field__label" htmlFor="novo-usuario-funcao">{tr('Função')}</label>
               <select
                 id="novo-usuario-funcao"
                 className="input"
                 value={formCriar.role}
                 onChange={(e) => handleChangeCriar('role', e.target.value)}
               >
-                <option value="recepcao">Recepção</option>
-                <option value="profissional">Profissional</option>
+                <option value="recepcao">{tr('Recepção')}</option>
+                <option value="profissional">{tr('Profissional')}</option>
               </select>
             </div>
           </div>
 
           <div className="field">
-            <label className="field__label" htmlFor="novo-usuario-senha">Senha</label>
+            <label className="field__label" htmlFor="novo-usuario-senha">{tr('Senha')}</label>
             <CampoSenha
               id="novo-usuario-senha"
               className="input"

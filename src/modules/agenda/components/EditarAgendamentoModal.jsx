@@ -6,6 +6,7 @@ import { useDadosAgendamento } from '../useDadosAgendamento';
 import { formularioDaAgenda, horarioInvalido, montarPayload } from '../agendamento.form';
 import AgendamentoCampos from './AgendamentoCampos';
 import '../agenda.css';
+import { tr } from '@/i18n';
 
 export default function EditarAgendamentoModal({ agenda, erro, onSave, onClose }) {
   const dados = useDadosAgendamento();
@@ -13,7 +14,7 @@ export default function EditarAgendamentoModal({ agenda, erro, onSave, onClose }
   const [paciente, setPaciente] = useState(agenda.pacienteId);
 
   return (
-    <Modal title="Editar agendamento" wide onClose={onClose}>
+    <Modal title={tr('Editar agendamento')} wide onClose={onClose}>
       {(fechar) => (
         <div className="modal-form">
           <PacientePicker

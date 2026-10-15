@@ -1,5 +1,6 @@
 import { useSalas } from '../sala.hooks';
 import CrudCard from '@/components/CrudCard/CrudCard';
+import { tr } from '@/i18n';
 
 const IconeSala = () => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -15,15 +16,15 @@ export default function SalaADM({ className }) {
   return (
     <CrudCard
       className={className}
-      titulo="Salas"
-      subtitulo="Ambientes de atendimento da clínica"
+      titulo={tr('Salas')}
+      subtitulo={tr('Ambientes de atendimento da clínica')}
       icone={<IconeSala />}
       singular="sala"
       plural="salas"
-      labelNovo="Nova sala"
-      placeholder="Ex: Sala 1, Consultório A"
-      textoVazio="Nenhuma sala cadastrada ainda."
-      tituloEdicao="Editar sala"
+      labelNovo={tr('Nova sala')}
+      placeholder={tr('Ex: Sala 1, Consultório A')}
+      textoVazio={tr('Nenhuma sala cadastrada ainda.')}
+      tituloEdicao={tr('Editar sala')}
       itens={salas}
       loading={loading}
       error={error}

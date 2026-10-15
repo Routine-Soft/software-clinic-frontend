@@ -1,5 +1,6 @@
 import { useEspecialidades } from '../especialidade.hooks';
 import CrudCard from '@/components/CrudCard/CrudCard';
+import { tr } from '@/i18n';
 
 const IconeEspecialidade = () => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -14,15 +15,15 @@ export default function EspecialidadeADM({ className }) {
   return (
     <CrudCard
       className={className}
-      titulo="Especialidades"
-      subtitulo="Áreas de atuação dos profissionais da clínica"
+      titulo={tr('Especialidades')}
+      subtitulo={tr('Áreas de atuação dos profissionais da clínica')}
       icone={<IconeEspecialidade />}
       singular="especialidade"
       plural="especialidades"
-      labelNovo="Nova especialidade"
-      placeholder="Ex: Fisioterapia, Dermatologia"
-      textoVazio="Nenhuma especialidade cadastrada ainda."
-      tituloEdicao="Editar especialidade"
+      labelNovo={tr('Nova especialidade')}
+      placeholder={tr('Ex: Fisioterapia, Dermatologia')}
+      textoVazio={tr('Nenhuma especialidade cadastrada ainda.')}
+      tituloEdicao={tr('Editar especialidade')}
       itens={especialidades}
       loading={loading}
       error={error}

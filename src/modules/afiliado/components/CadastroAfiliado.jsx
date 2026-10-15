@@ -7,6 +7,7 @@ import { criarAfiliado, ativarAfiliado } from '../afiliado.api';
 import '@/modules/user/components/user.css';
 import './afiliado.css';
 import CampoSenha from '@/components/CampoSenha/CampoSenha';
+import { tr } from '@/i18n';
 
 // Três situações: visitante (cria a conta de afiliado), já usa a Sonelia (ativa na própria conta,
 // com o mesmo e-mail) ou já é afiliado (vai para o painel).
@@ -44,8 +45,8 @@ export default function CadastroAfiliado() {
   if (isAuthenticated && user?.afiliadoDesde) {
     return (
       <section className="card afiliado-cadastro afiliado-cadastro--pronto">
-        <p>Você já é afiliado da Sonelia.</p>
-        <Link className="btn btn--primary" to="/afiliado">Abrir o painel do afiliado</Link>
+        <p>{tr('Você já é afiliado da Sonelia.')}</p>
+        <Link className="btn btn--primary" to="/afiliado">{tr('Abrir o painel do afiliado')}</Link>
       </section>
     );
   }
@@ -54,13 +55,13 @@ export default function CadastroAfiliado() {
     <section className="card afiliado-cadastro">
       {isAuthenticated ? (
         <p className="alert alert--info" role="status">
-          Você está ativando o programa na sua conta <strong>{user?.email}</strong>. Continua usando a Sonelia normalmente e ganha um painel de afiliado.
-          {['admin', 'super_admin'].includes(user?.role) && ' Dica: o seu "Indique e ganhe" (desconto na mensalidade) continua valendo, com outro link.'}
+          {tr('Você está ativando o programa na sua conta')} <strong>{user?.email}</strong>. {tr('Continua usando a Sonelia normalmente e ganha um painel de afiliado.')}
+          {['admin', 'super_admin'].includes(user?.role) && tr(' Dica: o seu "Indique e ganhe" (desconto na mensalidade) continua valendo, com outro link.')}
         </p>
       ) : (
         <p className="afiliado-cadastro__ja-tem">
-          Já usa a Sonelia (recepção, profissional ou clínica)?{' '}
-          <Link className="link" to="/login" state={{ voltarPara: '/afiliados' }}>Entre e ative com o mesmo e-mail</Link>
+          {tr('Já usa a Sonelia (recepção, profissional ou clínica)?')}{' '}
+          <Link className="link" to="/login" state={{ voltarPara: '/afiliados' }}>{tr('Entre e ative com o mesmo e-mail')}</Link>
         </p>
       )}
 
@@ -70,43 +71,43 @@ export default function CadastroAfiliado() {
         {!isAuthenticated && (
           <>
             <div className="field field--full">
-              <label className="field__label" htmlFor="afiliado-nome">Nome completo</label>
+              <label className="field__label" htmlFor="afiliado-nome">{tr('Nome completo')}</label>
               <input id="afiliado-nome" className="input" type="text" value={form.nomeCompleto} onChange={(e) => handleChange('nomeCompleto', e.target.value)} required />
             </div>
 
             <div className="field">
-              <label className="field__label" htmlFor="afiliado-email">E-mail</label>
+              <label className="field__label" htmlFor="afiliado-email">{tr('E-mail')}</label>
               <input id="afiliado-email" className="input" type="email" value={form.email} onChange={(e) => handleChange('email', normalizarEmail(e.target.value))} required />
             </div>
 
             <div className="field">
-              <label className="field__label" htmlFor="afiliado-telefone">WhatsApp</label>
+              <label className="field__label" htmlFor="afiliado-telefone">{tr('WhatsApp')}</label>
               <input id="afiliado-telefone" className="input" type="tel" value={form.telefone} onChange={(e) => handleChange('telefone', e.target.value)} required />
             </div>
           </>
         )}
 
         <div className="field">
-          <label className="field__label" htmlFor="afiliado-documento">CPF ou CNPJ</label>
+          <label className="field__label" htmlFor="afiliado-documento">{tr('CPF ou CNPJ')}</label>
           <input id="afiliado-documento" className="input" type="text" inputMode="numeric" value={form.documento} onChange={(e) => handleChange('documento', e.target.value)} required />
         </div>
 
         <div className="field">
-          <label className="field__label" htmlFor="afiliado-pix">Chave Pix (para receber)</label>
+          <label className="field__label" htmlFor="afiliado-pix">{tr('Chave Pix (para receber)')}</label>
           <input id="afiliado-pix" className="input" type="text" value={form.chavePix} onChange={(e) => handleChange('chavePix', e.target.value)} required />
         </div>
 
         {!isAuthenticated && (
           <div className="field field--full">
-            <label className="field__label" htmlFor="afiliado-senha">Senha</label>
+            <label className="field__label" htmlFor="afiliado-senha">{tr('Senha')}</label>
             <CampoSenha id="afiliado-senha" className="input" minLength={6} value={form.password} onChange={(e) => handleChange('password', e.target.value)} required />
           </div>
         )}
 
-        <CampoAceiteTermos marcado={form.aceitouTermos} onChange={(valor) => handleChange('aceitouTermos', valor)} rota="/termos-afiliado" nome="Termos do afiliado" />
+        <CampoAceiteTermos marcado={form.aceitouTermos} onChange={(valor) => handleChange('aceitouTermos', valor)} rota="/termos-afiliado" nome={tr('Termos do afiliado')} />
 
         <button className={`btn btn--primary${loading ? ' btn--loading' : ''}`} type="submit" disabled={loading}>
-          {loading ? 'Salvando...' : isAuthenticated ? 'Ativar como afiliado' : 'Criar conta de afiliado'}
+          {loading ? tr('Salvando...') : isAuthenticated ? tr('Ativar como afiliado') : tr('Criar conta de afiliado')}
         </button>
       </form>
     </section>

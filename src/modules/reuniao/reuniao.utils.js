@@ -1,12 +1,13 @@
 import { somarMinutos } from '@/modules/agenda/agendamento.form';
+import { tr } from '@/i18n';
 
 export const DURACAO_PADRAO_REUNIAO = 60;
 
 // Mesmos valores de status da agenda, para o calendário reaproveitar as cores (riscado = cancelada).
 export const STATUS_REUNIAO = {
-  aguardando: ['Agendada', 'badge--info'],
-  realizado: ['Realizada', 'badge--success'],
-  cancelado: ['Cancelada', 'badge--danger'],
+  aguardando: [tr('Agendada'), 'badge--info'],
+  realizado: [tr('Realizada'), 'badge--success'],
+  cancelado: [tr('Cancelada'), 'badge--danger'],
 };
 
 // Todas as reuniões usam a mesma cor no calendário (não há profissional para diferenciar).
@@ -21,7 +22,7 @@ export function descreverReuniao(reuniao) {
       `${reuniao.horaInicio} – ${reuniao.horaFim}`,
       reuniao.nome,
       reuniao.observacoes,
-      reuniao.status === 'cancelado' ? 'Cancelada' : null,
+      reuniao.status === 'cancelado' ? tr('Cancelada') : null,
     ].filter(Boolean).join(' · '),
   };
 }

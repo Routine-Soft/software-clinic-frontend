@@ -2,6 +2,7 @@ import { useState } from 'react';
 import Modal from '@/components/Modal/Modal';
 import ModalForm from '@/components/Modal/ModalForm';
 import CampoUsuarioVinculado from './CampoUsuarioVinculado';
+import { tr } from '@/i18n';
 
 export default function EditarProfissionalModal({ profissional, especialidades, usuariosVinculaveis, loadingUsuarios, erro, onSave, onClose }) {
   const [formEdicao, setFormEdicao] = useState({
@@ -35,7 +36,7 @@ export default function EditarProfissionalModal({ profissional, especialidades, 
   }
 
   return (
-    <Modal title="Editar profissional" onClose={onClose}>
+    <Modal title={tr('Editar profissional')} onClose={onClose}>
       {(fechar) => (
         <ModalForm
           erro={erro}
@@ -52,7 +53,7 @@ export default function EditarProfissionalModal({ profissional, especialidades, 
           />
 
           <div className="field">
-            <label className="field__label" htmlFor="editar-profissional-nome">Nome</label>
+            <label className="field__label" htmlFor="editar-profissional-nome">{tr('Nome')}</label>
             <input
               id="editar-profissional-nome"
               className="input"
@@ -66,20 +67,20 @@ export default function EditarProfissionalModal({ profissional, especialidades, 
 
           <div className="modal-form__row">
             <div className="field">
-              <label className="field__label" htmlFor="editar-profissional-tipo">Tipo de Registro</label>
+              <label className="field__label" htmlFor="editar-profissional-tipo">{tr('Tipo de Registro')}</label>
               <input
                 id="editar-profissional-tipo"
                 className="input"
                 type="text"
                 value={formEdicao.tipoRegistro}
                 onChange={(e) => handleChangeEdicao('tipoRegistro', e.target.value)}
-                placeholder="Ex: CRM, CRO, CREFITO"
+                placeholder={tr('Ex: CRM, CRO, CREFITO')}
                 required
               />
             </div>
 
             <div className="field">
-              <label className="field__label" htmlFor="editar-profissional-numero">Número do Registro</label>
+              <label className="field__label" htmlFor="editar-profissional-numero">{tr('Número do Registro')}</label>
               <input
                 id="editar-profissional-numero"
                 className="input"
@@ -92,7 +93,7 @@ export default function EditarProfissionalModal({ profissional, especialidades, 
           </div>
 
           <div className="field">
-            <span className="field__label">Especialidades</span>
+            <span className="field__label">{tr('Especialidades')}</span>
             {especialidades.length > 0 ? (
               <div className="check-list">
                 {especialidades.map((especialidade) => (
@@ -107,7 +108,7 @@ export default function EditarProfissionalModal({ profissional, especialidades, 
                 ))}
               </div>
             ) : (
-              <p className="modal-form__hint">Nenhuma especialidade cadastrada ainda.</p>
+              <p className="modal-form__hint">{tr('Nenhuma especialidade cadastrada ainda.')}</p>
             )}
           </div>
 
@@ -117,7 +118,7 @@ export default function EditarProfissionalModal({ profissional, especialidades, 
               checked={formEdicao.exibirNaTv}
               onChange={(e) => handleChangeEdicao('exibirNaTv', e.target.checked)}
             />
-            Mostrar o nome do profissional na TV da sala de espera
+            {tr('Mostrar o nome do profissional na TV da sala de espera')}
           </label>
         </ModalForm>
       )}

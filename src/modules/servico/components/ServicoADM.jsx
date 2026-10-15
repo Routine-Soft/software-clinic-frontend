@@ -8,6 +8,7 @@ import { ROTULO_MODULO } from '../servico.form';
 import '../servico.css';
 import { useConvenios } from '@/modules/convenio/convenio.hooks';
 import '@/components/CrudCard/CrudCard.css';
+import { tr } from '@/i18n';
 
 const IconeServicos = () => (
   <Icone>
@@ -41,7 +42,7 @@ function rotuloDias(qtdDias) {
 export default function ServicoADM({ className = '' }) {
   const { servicos, loading, error, successMessage, addServico, editServico, removeServico } = useServicos();
   const { convenios, refreshConvenios } = useConvenios();
-  const nomeDoConvenio = (id) => convenios.find((c) => c._id === String(id))?.nome ?? 'Convênio';
+  const nomeDoConvenio = (id) => convenios.find((c) => c._id === String(id))?.nome ?? tr('Convênio');
 
   const [servicoEditando, setServicoEditando] = useState(null);
   const [confirmandoId, setConfirmandoId] = useState(null);
@@ -80,18 +81,18 @@ export default function ServicoADM({ className = '' }) {
         <div className="crud-card__icon"><IconeServicos /></div>
 
         <div className="crud-card__titulos">
-          <h3 className="crud-card__titulo">Serviços</h3>
-          <p className="crud-card__subtitulo">Consultas e pacotes oferecidos pela clínica</p>
+          <h3 className="crud-card__titulo">{tr('Serviços')}</h3>
+          <p className="crud-card__subtitulo">{tr('Consultas e pacotes oferecidos pela clínica')}</p>
         </div>
 
         {!loading && (
           <span className="badge badge--primary">
-            {servicos.length} {servicos.length === 1 ? 'serviço' : 'serviços'}
+            {servicos.length} {servicos.length === 1 ? tr('serviço') : tr('serviços')}
           </span>
         )}
-        <button type="button" className="btn btn--primary btn--sm crud-card__novo-btn" onClick={handleNovo} aria-label="Adicionar serviço">
+        <button type="button" className="btn btn--primary btn--sm crud-card__novo-btn" onClick={handleNovo} aria-label={tr('Adicionar serviço')}>
           <IconeMais />
-          <span className="crud-card__rotulo">Adicionar</span>
+          <span className="crud-card__rotulo">{tr('Adicionar')}</span>
         </button>
       </header>
 
@@ -103,7 +104,7 @@ export default function ServicoADM({ className = '' }) {
       )}
 
       {loading ? (
-        <ul className="crud-lista" aria-busy="true" aria-label="Carregando serviços">
+        <ul className="crud-lista" aria-busy="true" aria-label={tr('Carregando serviços')}>
           {[0, 1, 2].map((i) => (
             <li key={i} className="crud-item crud-item--skeleton" style={{ '--i': i }}>
               <div className="skeleton crud-item__icone-skeleton" />
@@ -114,7 +115,7 @@ export default function ServicoADM({ className = '' }) {
       ) : servicos.length === 0 ? (
         <div className="crud-vazio">
           <IconeServicos />
-          <p>Nenhum serviço cadastrado ainda.</p>
+          <p>{tr('Nenhum serviço cadastrado ainda.')}</p>
         </div>
       ) : (
         <ul className="crud-lista">
@@ -132,15 +133,15 @@ export default function ServicoADM({ className = '' }) {
                 <div className="crud-item__info">
                   <span className="crud-item__nome" title={servico.nome}>{servico.nome}</span>
                   <span className="crud-item__meta">
-                    <span className={`badge ${ehPacote ? 'badge--primary' : 'badge--info'}`}>{ehPacote ? 'Pacote' : 'Consulta'}</span>
+                    <span className={`badge ${ehPacote ? 'badge--primary' : 'badge--info'}`}>{ehPacote ? tr('Pacote') : tr('Consulta')}</span>
                     {ehPacote && servico.qtdDias ? <span>{rotuloDias(servico.qtdDias)}</span> : null}
-                    {ehPacote && temComissao ? <span>repasse por sessão</span> : null}
+                    {ehPacote && temComissao ? <span>{tr('repasse por sessão')}</span> : null}
                     {servico.modulo && <span className="badge badge--success">{ROTULO_MODULO[servico.modulo]}</span>}
                   </span>
                 </div>
 
                 <ul className="servico-precos">
-                  {[{ nome: 'Padrão', regra: servico }, ...(servico.tabelaConvenios ?? []).map((linha) => ({ nome: nomeDoConvenio(linha.convenioId), regra: linha }))].map(({ nome, regra }, i) => (
+                  {[{ nome: tr('Padrão'), regra: servico }, ...(servico.tabelaConvenios ?? []).map((linha) => ({ nome: nomeDoConvenio(linha.convenioId), regra: linha }))].map(({ nome, regra }, i) => (
                     <li key={i}>
                       <strong>{nome}:</strong> <span>{formatarPreco(regra.preco)} ·</span> <span>{textoComissaoDaLinha(regra)}</span>
                     </li>
@@ -149,20 +150,20 @@ export default function ServicoADM({ className = '' }) {
 
                 {confirmandoId === servico._id ? (
                   <div className="crud-item__confirmar">
-                    <span>Excluir?</span>
-                    <button type="button" className="icon-btn icon-btn--danger" aria-label={`Confirmar exclusão de ${servico.nome}`} onClick={() => handleDelete(servico._id)}>
+                    <span>{tr('Excluir?')}</span>
+                    <button type="button" className="icon-btn icon-btn--danger" aria-label={tr('Confirmar exclusão de {nome}', { nome: servico.nome })} onClick={() => handleDelete(servico._id)}>
                       <IconeCheck />
                     </button>
-                    <button type="button" className="icon-btn" aria-label="Cancelar exclusão" onClick={() => setConfirmandoId(null)}>
+                    <button type="button" className="icon-btn" aria-label={tr('Cancelar exclusão')} onClick={() => setConfirmandoId(null)}>
                       <IconeX />
                     </button>
                   </div>
                 ) : (
                   <div className="crud-item__acoes">
-                    <button type="button" className="icon-btn" aria-label={`Editar ${servico.nome}`} title="Editar" onClick={() => handleEdit(servico)}>
+                    <button type="button" className="icon-btn" aria-label={`Editar ${servico.nome}`} title={tr('Editar')} onClick={() => handleEdit(servico)}>
                       <IconeLapis />
                     </button>
-                    <button type="button" className="icon-btn icon-btn--danger" aria-label={`Excluir ${servico.nome}`} title="Excluir" onClick={() => setConfirmandoId(servico._id)}>
+                    <button type="button" className="icon-btn icon-btn--danger" aria-label={`Excluir ${servico.nome}`} title={tr('Excluir')} onClick={() => setConfirmandoId(servico._id)}>
                       <IconeLixeira />
                     </button>
                   </div>

@@ -1,5 +1,6 @@
 import { useState, useCallback } from 'react'
 import apiService from '@/services/httpClient'
+import { tr } from '@/i18n';
 
 export function useApi() {
   const [loading, setLoading] = useState(false)
@@ -29,12 +30,12 @@ export function useApi() {
           response = await apiService.delete(url)
           break
         default:
-          throw new Error(`Método HTTP inválido: ${method}`)
+          throw new Error(tr('Método HTTP inválido: {method}', { method }))
       }
 
       return response
     } catch (err) {
-      const errorMessage = err.message || 'Erro na requisição'
+      const errorMessage = err.message || tr('Erro na requisição')
       setError(errorMessage)
       throw err
     } finally {

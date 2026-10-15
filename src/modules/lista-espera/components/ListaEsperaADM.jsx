@@ -11,11 +11,12 @@ import { Icone, IconeMais, IconeLixeira, IconeCheck, IconeX } from '@/components
 import NovoItemEsperaModal from './NovoItemEsperaModal';
 import '@/components/CrudCard/CrudCard.css';
 import './lista-espera.css';
+import { tr } from '@/i18n';
 
 const STATUS = {
-  aguardando: { rotulo: 'Aguardando', badge: 'warning' },
-  chamado: { rotulo: 'Chamado', badge: 'info' },
-  atendido: { rotulo: 'Atendido', badge: 'success' },
+  aguardando: { rotulo: tr('Aguardando'), badge: 'warning' },
+  chamado: { rotulo: tr('Chamado'), badge: 'info' },
+  atendido: { rotulo: tr('Atendido'), badge: 'success' },
 };
 
 const ORDEM_STATUS = { chamado: 0, aguardando: 1, atendido: 2 };
@@ -41,11 +42,11 @@ const IconeVoltar = () => (
 function tempoDesde(iso) {
   const minutos = Math.floor((Date.now() - new Date(iso).getTime()) / 60000);
   if (minutos < 1) return 'agora';
-  if (minutos < 60) return `há ${minutos} min`;
+  if (minutos < 60) return tr('há {minutos} min', { minutos });
   const horas = Math.floor(minutos / 60);
-  if (horas < 24) return `há ${horas} h`;
+  if (horas < 24) return tr('há {horas} h', { horas });
   const dias = Math.floor(horas / 24);
-  return `há ${dias} ${dias === 1 ? 'dia' : 'dias'}`;
+  return tr('há {dias} {p0}', { dias, p0: dias === 1 ? 'dia' : 'dias' });
 }
 
 export default function ListaEsperaADM({ className = '' }) {
@@ -105,13 +106,13 @@ export default function ListaEsperaADM({ className = '' }) {
         <div className="crud-card__icon"><IconeFila /></div>
 
         <div className="crud-card__titulos">
-          <h3 className="crud-card__titulo">Lista de espera</h3>
-          <p className="crud-card__subtitulo">Pacientes aguardando atendimento</p>
+          <h3 className="crud-card__titulo">{tr('Lista de espera')}</h3>
+          <p className="crud-card__subtitulo">{tr('Pacientes aguardando atendimento')}</p>
         </div>
 
         {!loading && (
           <span className="badge badge--warning badge--live">
-            {contagens.aguardando} na fila
+            {tr('{aguardando} na fila', { aguardando: contagens.aguardando })}
           </span>
         )}
       </header>
@@ -128,9 +129,9 @@ export default function ListaEsperaADM({ className = '' }) {
           className="input espera-select"
           value={filtroEspecialidade}
           onChange={(e) => setFiltroEspecialidade(e.target.value)}
-          aria-label="Filtrar por especialidade"
+          aria-label={tr('Filtrar por especialidade')}
         >
-          <option value="">Todas as especialidades</option>
+          <option value="">{tr('Todas as especialidades')}</option>
           {especialidades.map((e) => (
             <option key={e._id} value={e._id}>{e.nome}</option>
           ))}
@@ -138,12 +139,12 @@ export default function ListaEsperaADM({ className = '' }) {
 
         <button type="button" className="btn btn--primary" onClick={() => setCriandoItem(true)}>
           <IconeMais />
-          Adicionar
+          {tr('Adicionar')}
         </button>
       </div>
 
-      <div className="espera-abas" role="group" aria-label="Filtrar por status">
-        {[['', 'Todos', itens.length], ['aguardando', 'Aguardando', contagens.aguardando], ['chamado', 'Chamados', contagens.chamado], ['atendido', 'Atendidos', contagens.atendido]].map(([valor, rotulo, total]) => (
+      <div className="espera-abas" role="group" aria-label={tr('Filtrar por status')}>
+        {[['', tr('Todos'), itens.length], ['aguardando', tr('Aguardando'), contagens.aguardando], ['chamado', tr('Chamados'), contagens.chamado], ['atendido', tr('Atendidos'), contagens.atendido]].map(([valor, rotulo, total]) => (
           <button
             key={valor || 'todos'}
             type="button"
@@ -158,7 +159,7 @@ export default function ListaEsperaADM({ className = '' }) {
       </div>
 
       {loading ? (
-        <ul className="crud-lista" aria-busy="true" aria-label="Carregando lista de espera">
+        <ul className="crud-lista" aria-busy="true" aria-label={tr('Carregando lista de espera')}>
           {[0, 1, 2].map((i) => (
             <li key={i} className="crud-item crud-item--skeleton" style={{ '--i': i }}>
               <div className="skeleton crud-item__icone-skeleton" />
@@ -169,7 +170,7 @@ export default function ListaEsperaADM({ className = '' }) {
       ) : itensVisiveis.length === 0 ? (
         <div className="crud-vazio">
           <IconeFila />
-          <p>{itens.length === 0 ? 'Ninguém na lista de espera.' : 'Nenhum paciente com esse status.'}</p>
+          <p>{itens.length === 0 ? tr('Ninguém na lista de espera.') : tr('Nenhum paciente com esse status.')}</p>
         </div>
       ) : (
         <ul className="crud-lista">
@@ -188,8 +189,8 @@ export default function ListaEsperaADM({ className = '' }) {
                     <span className="badge badge--primary">{item.especialidadeId?.nome}</span>
                   </span>
                   <span className="crud-item__sub">
-                    {item.profissionalId?.nome ?? 'Qualquer profissional'}
-                    {item.dataDesejada && ` · desejada ${formatDataBR(item.dataDesejada)}`}
+                    {item.profissionalId?.nome ?? tr('Qualquer profissional')}
+                    {item.dataDesejada && tr(' · desejada {p0}', { p0: formatDataBR(item.dataDesejada) })}
                     {item.status !== 'atendido' && ` · ${tempoDesde(item.createdAt)}`}
                   </span>
                   {item.observacao && <span className="espera-item__obs" title={item.observacao}>{item.observacao}</span>}
@@ -197,28 +198,28 @@ export default function ListaEsperaADM({ className = '' }) {
 
                 {confirmandoId === item._id ? (
                   <div className="crud-item__confirmar">
-                    <span>Remover?</span>
-                    <button type="button" className="icon-btn icon-btn--danger" aria-label={`Confirmar remoção de ${item.pacienteId?.nome}`} onClick={() => handleDelete(item._id)}>
+                    <span>{tr('Remover?')}</span>
+                    <button type="button" className="icon-btn icon-btn--danger" aria-label={tr('Confirmar remoção de {nome}', { nome: item.pacienteId?.nome })} onClick={() => handleDelete(item._id)}>
                       <IconeCheck />
                     </button>
-                    <button type="button" className="icon-btn" aria-label="Cancelar remoção" onClick={() => setConfirmandoId(null)}>
+                    <button type="button" className="icon-btn" aria-label={tr('Cancelar remoção')} onClick={() => setConfirmandoId(null)}>
                       <IconeX />
                     </button>
                   </div>
                 ) : (
                   <div className="espera-item__acoes">
                     {item.status === 'aguardando' && (
-                      <button type="button" className="btn btn--primary btn--sm" onClick={() => handleStatusChange(item._id, 'chamado')}>Chamar</button>
+                      <button type="button" className="btn btn--primary btn--sm" onClick={() => handleStatusChange(item._id, 'chamado')}>{tr('Chamar')}</button>
                     )}
                     {item.status === 'chamado' && (
-                      <button type="button" className="btn btn--primary btn--sm" onClick={() => handleStatusChange(item._id, 'atendido')}>Atendido</button>
+                      <button type="button" className="btn btn--primary btn--sm" onClick={() => handleStatusChange(item._id, 'atendido')}>{tr('Atendido')}</button>
                     )}
                     {item.status !== 'aguardando' && (
-                      <button type="button" className="icon-btn" aria-label={`Voltar ${item.pacienteId?.nome} para a fila`} title="Voltar para a fila" onClick={() => handleStatusChange(item._id, 'aguardando')}>
+                      <button type="button" className="icon-btn" aria-label={tr('Voltar {nome} para a fila', { nome: item.pacienteId?.nome })} title={tr('Voltar para a fila')} onClick={() => handleStatusChange(item._id, 'aguardando')}>
                         <IconeVoltar />
                       </button>
                     )}
-                    <button type="button" className="icon-btn icon-btn--danger" aria-label={`Remover ${item.pacienteId?.nome}`} title="Remover" onClick={() => setConfirmandoId(item._id)}>
+                    <button type="button" className="icon-btn icon-btn--danger" aria-label={`Remover ${item.pacienteId?.nome}`} title={tr('Remover')} onClick={() => setConfirmandoId(item._id)}>
                       <IconeLixeira />
                     </button>
                   </div>

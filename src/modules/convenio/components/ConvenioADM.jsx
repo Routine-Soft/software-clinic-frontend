@@ -1,5 +1,6 @@
 import { useConvenios } from '../convenio.hooks';
 import CrudCard from '@/components/CrudCard/CrudCard';
+import { tr } from '@/i18n';
 
 const IconeConvenio = () => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -14,16 +15,16 @@ export default function ConvenioADM({ className }) {
   return (
     <CrudCard
       className={className}
-      titulo="Convênios"
-      subtitulo="Particular e planos de saúde aceitos pela clínica"
+      titulo={tr('Convênios')}
+      subtitulo={tr('Particular e planos de saúde aceitos pela clínica')}
       icone={<IconeConvenio />}
-      singular="convênio"
-      plural="convênios"
-      labelNovo="Novo convênio"
-      placeholder="Ex.: Particular, Unimed, Bradesco Saúde"
-      dica="Cadastre cada forma de atendimento da clínica, inclusive o Particular. Só o que estiver aqui aparece no agendamento."
-      textoVazio="Nenhum convênio cadastrado ainda. Comece pelo Particular."
-      tituloEdicao="Editar convênio"
+      singular={tr('convênio')}
+      plural={tr('convênios')}
+      labelNovo={tr('Novo convênio')}
+      placeholder={tr('Ex.: Particular, Unimed, Bradesco Saúde')}
+      dica={tr('Cadastre cada forma de atendimento da clínica, inclusive o Particular. Só o que estiver aqui aparece no agendamento.')}
+      textoVazio={tr('Nenhum convênio cadastrado ainda. Comece pelo Particular.')}
+      tituloEdicao={tr('Editar convênio')}
       itens={convenios}
       loading={loading}
       error={error}

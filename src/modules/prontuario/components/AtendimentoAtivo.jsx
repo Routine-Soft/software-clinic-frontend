@@ -2,6 +2,7 @@ import { useState } from 'react';
 import CamposClinicos from './CamposClinicos';
 import AcessoAtendimento from './AcessoAtendimento';
 import { camposDoProntuario, prepararPayload, formatHoraBR } from '../prontuario.utils';
+import { tr } from '@/i18n';
 
 // Os campos começam do que já está salvo no servidor: quem fechou o prontuário no meio
 // do atendimento retoma de onde parou. O `key` no pai recria o componente a cada atendimento.
@@ -18,10 +19,10 @@ export default function AtendimentoAtivo({ atendimento, especialidades = [], onC
   return (
     <div className="pront-ativo">
       <div className="pront-ativo__banner">
-        <span className="badge badge--live">Em andamento</span>
+        <span className="badge badge--live">{tr('Em andamento')}</span>
         <span>
-          Atendimento iniciado às <strong>{formatHoraBR(atendimento.atendimentoIniciadoEm)}</strong>
-          {atendimento.profissionalId?.nome && <> com <strong>{atendimento.profissionalId.nome}</strong></>}
+          {tr('Atendimento iniciado às')} <strong>{formatHoraBR(atendimento.atendimentoIniciadoEm)}</strong>
+          {atendimento.profissionalId?.nome && <> {tr('com')} <strong>{atendimento.profissionalId.nome}</strong></>}
         </span>
       </div>
 
@@ -36,7 +37,7 @@ export default function AtendimentoAtivo({ atendimento, especialidades = [], onC
           disabled={acao !== null}
           onClick={() => executar('rascunho', onSalvarRascunho)}
         >
-          {acao === 'rascunho' ? 'Salvando...' : 'Salvar rascunho'}
+          {acao === 'rascunho' ? tr('Salvando...') : tr('Salvar rascunho')}
         </button>
         <button
           type="button"
@@ -44,7 +45,7 @@ export default function AtendimentoAtivo({ atendimento, especialidades = [], onC
           disabled={acao !== null}
           onClick={() => executar('finalizar', onFinalizar)}
         >
-          {acao === 'finalizar' ? 'Finalizando...' : 'Finalizar atendimento'}
+          {acao === 'finalizar' ? tr('Finalizando...') : tr('Finalizar atendimento')}
         </button>
       </div>
     </div>

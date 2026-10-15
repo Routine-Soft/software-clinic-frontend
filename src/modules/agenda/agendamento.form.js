@@ -1,23 +1,24 @@
 import { horarioDosMinutos, minutosDoHorario, paraISO } from './agenda.utils';
 import { regraDoServico } from '@/modules/servico/servico.utils';
+import { tr } from '@/i18n';
 
 export const DURACAO_PADRAO_MINUTOS = 30;
 
 export const DIAS_SEMANA = [
-  { valor: 0, label: 'Dom' },
-  { valor: 1, label: 'Seg' },
-  { valor: 2, label: 'Ter' },
-  { valor: 3, label: 'Qua' },
-  { valor: 4, label: 'Qui' },
-  { valor: 5, label: 'Sex' },
-  { valor: 6, label: 'Sáb' },
+  { valor: 0, label: tr('Dom') },
+  { valor: 1, label: tr('Seg') },
+  { valor: 2, label: tr('Ter') },
+  { valor: 3, label: tr('Qua') },
+  { valor: 4, label: tr('Qui') },
+  { valor: 5, label: tr('Sex') },
+  { valor: 6, label: tr('Sáb') },
 ];
 
 export const FORMAS_PAGAMENTO = [
-  ['pix', 'Pix'],
-  ['dinheiro', 'Dinheiro'],
-  ['cartao_credito', 'Cartão de crédito'],
-  ['cartao_debito', 'Cartão de débito'],
+  ['pix', tr('Pix')],
+  ['dinheiro', tr('Dinheiro')],
+  ['cartao_credito', tr('Cartão de crédito')],
+  ['cartao_debito', tr('Cartão de débito')],
 ];
 
 export function somarMinutos(horario, minutos) {

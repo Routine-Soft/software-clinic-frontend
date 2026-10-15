@@ -6,11 +6,12 @@ import { IconeBusca, IconeX } from '@/components/CrudCard/icones';
 import '@/components/CrudCard/CrudCard.css';
 import './paciente-picker.css';
 import SeloTeste from './SeloTeste';
+import { tr } from '@/i18n';
 
 // Escolhe um paciente por busca (nome, CPF, telefone) ou cadastra um novo na hora.
 // `onCriarPaciente` deve devolver o paciente criado (ou lançar erro).
 // Não renderiza <form> próprio ao redor, então pode ficar ao lado de um <form> sem aninhar.
-export default function PacientePicker({ pacientes, convenios, empresas, valor, onChange, onCriarPaciente, rotulo = 'Paciente' }) {
+export default function PacientePicker({ pacientes, convenios, empresas, valor, onChange, onCriarPaciente, rotulo = tr('Paciente') }) {
   const [busca, setBusca] = useState('');
   const [mostrandoNovo, setMostrandoNovo] = useState(false);
   const [erroNovo, setErroNovo] = useState(null);
@@ -33,7 +34,7 @@ export default function PacientePicker({ pacientes, convenios, empresas, valor, 
       selecionar(criado);
       return true;
     } catch (err) {
-      setErroNovo(err.message || 'Erro ao cadastrar paciente');
+      setErroNovo(err.message || tr('Erro ao cadastrar paciente'));
       return false;
     }
   }
@@ -48,7 +49,7 @@ export default function PacientePicker({ pacientes, convenios, empresas, valor, 
           <span className="picker__paciente-nome">{valor.nome}</span>
           <SeloTeste paciente={valor} />
           <span className="picker__paciente-cpf">{cpfDoPaciente(valor)}</span>
-          <button type="button" className="icon-btn" aria-label="Trocar paciente" onClick={() => onChange(null)}>
+          <button type="button" className="icon-btn" aria-label={tr('Trocar paciente')} onClick={() => onChange(null)}>
             <IconeX />
           </button>
         </div>
@@ -61,8 +62,8 @@ export default function PacientePicker({ pacientes, convenios, empresas, valor, 
               type="search"
               value={busca}
               onChange={(e) => setBusca(e.target.value)}
-              placeholder="Buscar por nome, CPF ou telefone"
-              aria-label="Buscar paciente"
+              placeholder={tr('Buscar por nome, CPF ou telefone')}
+              aria-label={tr('Buscar paciente')}
               autoComplete="off"
             />
           </div>
@@ -72,7 +73,7 @@ export default function PacientePicker({ pacientes, convenios, empresas, valor, 
               {sugestoes.map((p) => (
                 <li key={p._id}>
                   <button type="button" onClick={() => selecionar(p)}>
-                    <strong>{p.nome}{p.teste && ' (teste)'}</strong>
+                    <strong>{p.nome}{p.teste && tr(' (teste)')}</strong>
                     <span>{cpfDoPaciente(p)}</span>
                   </button>
                 </li>
@@ -80,10 +81,10 @@ export default function PacientePicker({ pacientes, convenios, empresas, valor, 
             </ul>
           )}
 
-          {busca.trim() && sugestoes.length === 0 && <p className="modal-form__hint">Nenhum paciente encontrado.</p>}
+          {busca.trim() && sugestoes.length === 0 && <p className="modal-form__hint">{tr('Nenhum paciente encontrado.')}</p>}
 
           <button type="button" className="btn btn--ghost btn--sm picker__novo" onClick={() => setMostrandoNovo(!mostrandoNovo)}>
-            {mostrandoNovo ? 'Cancelar cadastro' : '+ Cadastrar novo paciente'}
+            {mostrandoNovo ? tr('Cancelar cadastro') : tr('+ Cadastrar novo paciente')}
           </button>
 
           {erroNovo && <p className="alert alert--error" role="alert">{erroNovo}</p>}

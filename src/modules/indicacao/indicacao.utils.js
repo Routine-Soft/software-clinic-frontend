@@ -1,11 +1,13 @@
+import { localeAtual, tr } from '@/i18n';
+
 // Código de quem indicou, guardado quando a pessoa chega pelo link. Fica salvo até a conta ser criada,
 // mesmo que ela passe pela landing, pelo login ou pelo Google antes de chegar ao cadastro.
 const CHAVE = 'codigo-indicacao';
 
 export const STATUS_INDICACAO = {
-  aguardando: { rotulo: 'Aguardando o 1º pagamento', tom: 'warning' },
-  liberada: { rotulo: 'Desconto guardado', tom: 'success' },
-  usada: { rotulo: 'Desconto usado', tom: 'info' },
+  aguardando: { rotulo: tr('Aguardando o 1º pagamento'), tom: 'warning' },
+  liberada: { rotulo: tr('Desconto guardado'), tom: 'success' },
+  usada: { rotulo: tr('Desconto usado'), tom: 'info' },
 };
 
 export function normalizarCodigo(codigo = '') {
@@ -50,9 +52,9 @@ export function linkWhatsappTexto(texto) {
 }
 
 export function mensagemConviteClinica(link) {
-  return `Uso a Sonelia para organizar a agenda, os prontuários e os repasses da minha clínica, e recomendo! Crie sua conta pelo meu link e teste grátis: ${link}`;
+  return tr('Uso a Sonelia para organizar a agenda, os prontuários e os repasses da minha clínica, e recomendo! Crie sua conta pelo meu link e teste grátis: {link}', { link });
 }
 
 export function formatarReais(valor) {
-  return Number(valor ?? 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', minimumFractionDigits: 0 });
+  return Number(valor ?? 0).toLocaleString(localeAtual(), { style: 'currency', currency: 'BRL', minimumFractionDigits: 0 });
 }

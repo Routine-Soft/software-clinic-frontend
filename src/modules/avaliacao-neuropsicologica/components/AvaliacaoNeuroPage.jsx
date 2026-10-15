@@ -11,12 +11,13 @@ import { ABAS, formularioDaAvaliacao, situacaoDa } from '../avaliacao-neuro.util
 import { AbaIdentificacao, AbaAnamnese, AbaSessoes, AbaTestes, AbaConclusao } from './CamposAvaliacao';
 import LaudoNeuro from './LaudoNeuro';
 import '../avaliacao-neuro.css';
+import { localeAtual, tr } from '@/i18n';
 
 function Voltar() {
   return (
     <Link to="/avaliacoes-neuropsicologicas" className="link neuro-voltar">
       <IconeSetaEsquerda />
-      Todas as avaliações
+      {tr('Todas as avaliações')}
     </Link>
   );
 }
@@ -28,7 +29,7 @@ export default function AvaliacaoNeuroPage() {
   if (!acesso.carregando && !acesso.profissional) {
     return (
       <div className="page">
-        <header className="page-header"><div><Voltar /><h2 className="page-title">Avaliação neuropsicológica</h2></div></header>
+        <header className="page-header"><div><Voltar /><h2 className="page-title">{tr('Avaliação neuropsicológica')}</h2></div></header>
         <SemAcessoProntuario />
       </div>
     );
@@ -43,7 +44,7 @@ function Carregar({ id, profissional, carregandoAcesso }) {
   if (loading || carregandoAcesso) {
     return (
       <div className="page">
-        <header className="page-header"><div><Voltar /><h2 className="page-title">Avaliação neuropsicológica</h2></div></header>
+        <header className="page-header"><div><Voltar /><h2 className="page-title">{tr('Avaliação neuropsicológica')}</h2></div></header>
         <section className="card neuro-editor" aria-busy="true"><div className="skeleton skeleton--bloco" /></section>
       </div>
     );
@@ -52,7 +53,7 @@ function Carregar({ id, profissional, carregandoAcesso }) {
   if (error) {
     return (
       <div className="page">
-        <header className="page-header"><div><Voltar /><h2 className="page-title">Avaliação neuropsicológica</h2></div></header>
+        <header className="page-header"><div><Voltar /><h2 className="page-title">{tr('Avaliação neuropsicológica')}</h2></div></header>
         <p className="alert alert--error" role="alert">{error.message}</p>
       </div>
     );
@@ -100,7 +101,7 @@ function Editor({ avaliacao, profissional, onSalva }) {
         onSalva(response.data);
         setForm(formularioDaAvaliacao(response.data));
       }
-      setAviso({ tipo: 'success', texto: response?.message ?? 'Pronto.' });
+      setAviso({ tipo: 'success', texto: response?.message ?? tr('Pronto.') });
       setAcao(null);
       setConfirmando(null);
       return response;
@@ -112,10 +113,10 @@ function Editor({ avaliacao, profissional, onSalva }) {
     }
   }
 
-  const salvar = () => executar('salvar', () => updateAvaliacaoNeuro(avaliacao._id, payload()), 'Não foi possível salvar.');
-  const finalizar = () => executar('finalizar', () => finalizarAvaliacaoNeuro(avaliacao._id, payload()), 'Não foi possível finalizar.');
+  const salvar = () => executar('salvar', () => updateAvaliacaoNeuro(avaliacao._id, payload()), tr('Não foi possível salvar.'));
+  const finalizar = () => executar('finalizar', () => finalizarAvaliacaoNeuro(avaliacao._id, payload()), tr('Não foi possível finalizar.'));
   async function excluir() {
-    const ok = await executar('excluir', () => deleteAvaliacaoNeuro(avaliacao._id), 'Não foi possível excluir.');
+    const ok = await executar('excluir', () => deleteAvaliacaoNeuro(avaliacao._id), tr('Não foi possível excluir.'));
     if (ok) navigate('/avaliacoes-neuropsicologicas');
   }
 
@@ -126,18 +127,18 @@ function Editor({ avaliacao, profissional, onSalva }) {
       <header className="page-header neuro-no-print">
         <div>
           <Voltar />
-          <h2 className="page-title">Avaliação neuropsicológica</h2>
+          <h2 className="page-title">{tr('Avaliação neuropsicológica')}</h2>
         </div>
       </header>
 
       <section className="card neuro-editor">
         <header className="neuro-cab neuro-no-print">
           <div>
-            <h3 className="neuro-cab__nome">{paciente.nome ?? 'Paciente removido'}</h3>
+            <h3 className="neuro-cab__nome">{paciente.nome ?? tr('Paciente removido')}</h3>
             <p className="neuro-sub">
               {[
-                paciente.dataNascimento && `${formatDataBR(paciente.dataNascimento)}${idade !== null ? ` (${idade} ${idade === 1 ? 'ano' : 'anos'})` : ''}`,
-                `Responsável: ${avaliacao.profissionalId?.nome ?? '—'}`,
+                paciente.dataNascimento && `${formatDataBR(paciente.dataNascimento)}${idade !== null ? ` (${idade} ${idade === 1 ? tr('ano') : tr('anos')})` : ''}`,
+                tr('Responsável: {p0}', { p0: avaliacao.profissionalId?.nome ?? '—' }),
                 avaliacao.servicoId?.nome,
               ].filter(Boolean).join(' · ')}
             </p>
@@ -148,12 +149,12 @@ function Editor({ avaliacao, profissional, onSalva }) {
         {somenteLeitura && (
           <p className="neuro-trava neuro-no-print" role="note">
             {finalizada
-              ? `Avaliação finalizada em ${new Date(avaliacao.finalizadaEm).toLocaleDateString('pt-BR')}: o conteúdo não pode mais ser alterado.`
-              : 'Somente leitura: só o profissional responsável altera esta avaliação.'}
+              ? tr('Avaliação finalizada em {p0}: o conteúdo não pode mais ser alterado.', { p0: new Date(avaliacao.finalizadaEm).toLocaleDateString(localeAtual()) })
+              : tr('Somente leitura: só o profissional responsável altera esta avaliação.')}
           </p>
         )}
 
-        <div className="neuro-abas neuro-no-print" role="tablist" aria-label="Etapas da avaliação">
+        <div className="neuro-abas neuro-no-print" role="tablist" aria-label={tr('Etapas da avaliação')}>
           {ABAS.map(([chave, rotulo], index) => (
             <button
               key={chave}
@@ -176,12 +177,11 @@ function Editor({ avaliacao, profissional, onSalva }) {
             <div className="neuro-laudo">
               <div className="neuro-laudo__barra neuro-no-print">
                 <p className="neuro-sub">
-                  O laudo é montado com o que foi preenchido nas outras abas, nas seis partes da Resolução CFP 06/2019.
-                  {alterado && ' Há alterações ainda não salvas.'}
+                  {tr('O laudo é montado com o que foi preenchido nas outras abas, nas seis partes da Resolução CFP 06/2019. {p0}', { p0: alterado && tr(' Há alterações ainda não salvas.') })}
                 </p>
                 <button type="button" className="btn btn--ghost btn--sm" onClick={() => window.print()}>
                   <IconeImpressora />
-                  Imprimir ou salvar PDF
+                  {tr('Imprimir ou salvar PDF')}
                 </button>
               </div>
               <LaudoNeuro avaliacao={avaliacao} form={form} />
@@ -203,33 +203,33 @@ function Editor({ avaliacao, profissional, onSalva }) {
           <div className="neuro-rodape neuro-no-print">
             {confirmando === 'excluir' ? (
               <div className="neuro-confirmar">
-                <span>Excluir esta avaliação em andamento?</span>
-                <button type="button" className="icon-btn icon-btn--danger" aria-label="Confirmar exclusão" onClick={excluir}><IconeCheck /></button>
-                <button type="button" className="icon-btn" aria-label="Cancelar exclusão" onClick={() => setConfirmando(null)}><IconeX /></button>
+                <span>{tr('Excluir esta avaliação em andamento?')}</span>
+                <button type="button" className="icon-btn icon-btn--danger" aria-label={tr('Confirmar exclusão')} onClick={excluir}><IconeCheck /></button>
+                <button type="button" className="icon-btn" aria-label={tr('Cancelar exclusão')} onClick={() => setConfirmando(null)}><IconeX /></button>
               </div>
             ) : (
               <button type="button" className="btn btn--ghost btn--sm neuro-rodape__excluir" disabled={acao !== null} onClick={() => setConfirmando('excluir')}>
                 <IconeLixeira />
-                Excluir rascunho
+                {tr('Excluir rascunho')}
               </button>
             )}
 
             <div className="neuro-rodape__acoes">
-              {alterado && <span className="neuro-sub">Alterações não salvas</span>}
+              {alterado && <span className="neuro-sub">{tr('Alterações não salvas')}</span>}
               <button type="button" className={`btn btn--ghost${acao === 'salvar' ? ' btn--loading' : ''}`} disabled={acao !== null || !alterado} onClick={salvar}>
-                {acao === 'salvar' ? 'Salvando...' : 'Salvar'}
+                {acao === 'salvar' ? tr('Salvando...') : tr('Salvar')}
               </button>
               {confirmando === 'finalizar' ? (
                 <div className="neuro-confirmar">
-                  <span>Finalizar? Depois disso não dá mais para editar.</span>
+                  <span>{tr('Finalizar? Depois disso não dá mais para editar.')}</span>
                   <button type="button" className="btn btn--primary btn--sm" disabled={acao !== null} onClick={finalizar}>
-                    {acao === 'finalizar' ? 'Finalizando...' : 'Confirmar'}
+                    {acao === 'finalizar' ? tr('Finalizando...') : tr('Confirmar')}
                   </button>
-                  <button type="button" className="icon-btn" aria-label="Cancelar" onClick={() => setConfirmando(null)}><IconeX /></button>
+                  <button type="button" className="icon-btn" aria-label={tr('Cancelar')} onClick={() => setConfirmando(null)}><IconeX /></button>
                 </div>
               ) : (
                 <button type="button" className="btn btn--primary" disabled={acao !== null} onClick={() => setConfirmando('finalizar')}>
-                  Finalizar avaliação
+                  {tr('Finalizar avaliação')}
                 </button>
               )}
             </div>

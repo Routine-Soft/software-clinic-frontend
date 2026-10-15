@@ -5,6 +5,7 @@ import { IconeSetaEsquerda } from '@/components/CrudCard/icones';
 import ProntuarioPaciente from './ProntuarioPaciente';
 import SemAcessoProntuario from './SemAcessoProntuario';
 import { useAcessoProntuario } from '../prontuario.hooks';
+import { tr } from '@/i18n';
 
 // Prontuário em tela cheia (rota /prontuario/:pacienteId), mesma ficha do modal.
 export default function ProntuarioPacientePage() {
@@ -30,9 +31,9 @@ export default function ProntuarioPacientePage() {
         <div>
           <Link to="/prontuario" className="link pront-voltar">
             <IconeSetaEsquerda />
-            Todos os prontuários
+            {tr('Todos os prontuários')}
           </Link>
-          <h2 className="page-title">Prontuário</h2>
+          <h2 className="page-title">{tr('Prontuário')}</h2>
         </div>
       </header>
 
@@ -43,7 +44,7 @@ export default function ProntuarioPacientePage() {
       ) : !acesso.profissional ? (
         <SemAcessoProntuario />
       ) : estado.erro ? (
-        <p className="alert alert--error" role="alert">{estado.erro.message || 'Paciente não encontrado.'}</p>
+        <p className="alert alert--error" role="alert">{estado.erro.message || tr('Paciente não encontrado.')}</p>
       ) : (
         <section className="card pront-pagina">
           <ProntuarioPaciente key={estado.paciente._id} paciente={estado.paciente} profissional={acesso.profissional} />

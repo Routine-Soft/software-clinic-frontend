@@ -1,6 +1,7 @@
 import { Link, NavLink } from 'react-router-dom'
 import { useAuthContext } from '@/hooks/useAuthContext'
 import ThemeToggle from '@/components/ThemeToggle/ThemeToggle'
+import IdiomaToggle from '@/components/IdiomaToggle/IdiomaToggle'
 import { Icone, IconeX } from '@/components/CrudCard/icones'
 import { ROTULO_FUNCAO } from '@/modules/user/user.constants'
 import { iniciais } from '@/utils/nome'
@@ -8,55 +9,56 @@ import Marca from './Marca'
 import BotaoInstalar from './BotaoInstalar'
 import { ICONES } from './menuIcones'
 import './Sidebar.css'
+import { tr } from '@/i18n';
 
 const TODOS = ['super_admin', 'admin', 'profissional', 'recepcao']
 
 // Os cadastros (profissionais, serviços, salas...) ficam no Painel Admin; o menu tem só o dia a dia.
 const GRUPOS = [
     {
-        titulo: 'Principal',
+        titulo: tr('Principal'),
         itens: [
-            { label: 'Página inicial', path: '/home', icone: 'inicio', roles: TODOS },
-            { label: 'Painel Admin', path: '/dashboard-admin', icone: 'painel', roles: ['admin', 'recepcao'] },
-            { label: 'Agenda', path: '/agenda', icone: 'agenda', roles: ['admin', 'profissional', 'recepcao'] },
-            { label: 'Sala de espera', path: '/sala-de-espera', icone: 'tv', roles: ['admin', 'profissional', 'recepcao'] },
-            { label: 'Reuniões', path: '/reunioes', icone: 'reunioes', roles: ['admin', 'recepcao'] },
+            { label: tr('Página inicial'), path: '/home', icone: 'inicio', roles: TODOS },
+            { label: tr('Painel Admin'), path: '/dashboard-admin', icone: 'painel', roles: ['admin', 'recepcao'] },
+            { label: tr('Agenda'), path: '/agenda', icone: 'agenda', roles: ['admin', 'profissional', 'recepcao'] },
+            { label: tr('Sala de espera'), path: '/sala-de-espera', icone: 'tv', roles: ['admin', 'profissional', 'recepcao'] },
+            { label: tr('Reuniões'), path: '/reunioes', icone: 'reunioes', roles: ['admin', 'recepcao'] },
         ],
     },
     {
-        titulo: 'Clínica',
+        titulo: tr('Clínica'),
         itens: [
-            { label: 'Pacientes', path: '/pacientes', icone: 'pacientes', roles: ['admin', 'profissional', 'recepcao'] },
-            { label: 'Prontuário', path: '/prontuario', icone: 'prontuario', roles: ['admin', 'profissional'] },
-            { label: 'Avaliações NR-01', path: '/avaliacoes-nr01', icone: 'nr01', roles: ['admin', 'profissional'] },
-            { label: 'Avaliação neuropsicológica', path: '/avaliacoes-neuropsicologicas', icone: 'neuro', roles: ['admin', 'profissional'] },
-            { label: 'Repasses', path: '/repasses', icone: 'receita', roles: ['admin'] },
-            { label: 'Usuários', path: '/usuarios', icone: 'usuarios', roles: ['admin', 'recepcao'] },
-            { label: 'Meus repasses', path: '/meus-repasses', icone: 'receita', roles: ['profissional'] },
+            { label: tr('Pacientes'), path: '/pacientes', icone: 'pacientes', roles: ['admin', 'profissional', 'recepcao'] },
+            { label: tr('Prontuário'), path: '/prontuario', icone: 'prontuario', roles: ['admin', 'profissional'] },
+            { label: tr('Avaliações NR-01'), path: '/avaliacoes-nr01', icone: 'nr01', roles: ['admin', 'profissional'] },
+            { label: tr('Avaliação neuropsicológica'), path: '/avaliacoes-neuropsicologicas', icone: 'neuro', roles: ['admin', 'profissional'] },
+            { label: tr('Repasses'), path: '/repasses', icone: 'receita', roles: ['admin'] },
+            { label: tr('Usuários'), path: '/usuarios', icone: 'usuarios', roles: ['admin', 'recepcao'] },
+            { label: tr('Meus repasses'), path: '/meus-repasses', icone: 'receita', roles: ['profissional'] },
         ],
     },
     {
-        titulo: 'Super Admin',
+        titulo: tr('Super Admin'),
         itens: [
-            { label: 'Painel Super Admin', path: '/super-admin', icone: 'painel', roles: ['super_admin'] },
-            { label: 'Clínicas', path: '/clinicas', icone: 'empresas', roles: ['super_admin'] },
-            { label: 'Planos', path: '/planos', icone: 'planos', roles: ['super_admin'] },
-            { label: 'Afiliados', path: '/afiliados-adm', icone: 'indicacao', roles: ['super_admin'] },
+            { label: tr('Painel Super Admin'), path: '/super-admin', icone: 'painel', roles: ['super_admin'] },
+            { label: tr('Clínicas'), path: '/clinicas', icone: 'empresas', roles: ['super_admin'] },
+            { label: tr('Planos'), path: '/planos', icone: 'planos', roles: ['super_admin'] },
+            { label: tr('Afiliados'), path: '/afiliados-adm', icone: 'indicacao', roles: ['super_admin'] },
         ],
     },
     {
-        titulo: 'Afiliado',
+        titulo: tr('Afiliado'),
         itens: [
             // soAfiliado: aparece para quem ativou o programa, seja qual for o papel (recepção, profissional...).
-            { label: 'Painel do afiliado', path: '/afiliado', icone: 'receita', roles: [], soAfiliado: true },
+            { label: tr('Painel do afiliado'), path: '/afiliado', icone: 'receita', roles: [], soAfiliado: true },
         ],
     },
     {
-        titulo: 'Conta',
+        titulo: tr('Conta'),
         itens: [
-            { label: 'Assinaturas', path: '/assinaturas', icone: 'assinatura', roles: ['super_admin', 'admin', 'recepcao'] },
-            { label: 'Indique e ganhe', path: '/indique', icone: 'indicacao', roles: ['admin'] },
-            { label: 'Minha conta', path: '/minha-conta', icone: 'usuarios', roles: [...TODOS, 'afiliado'] },
+            { label: tr('Assinaturas'), path: '/assinaturas', icone: 'assinatura', roles: ['super_admin', 'admin', 'recepcao'] },
+            { label: tr('Indique e ganhe'), path: '/indique', icone: 'indicacao', roles: ['admin'] },
+            { label: tr('Minha conta'), path: '/minha-conta', icone: 'usuarios', roles: [...TODOS, 'afiliado'] },
         ],
     },
 ]
@@ -73,12 +75,12 @@ export function Sidebar({ aberto = false, onFechar }) {
         .filter((grupo) => grupo.itens.length > 0)
 
     return (
-        <aside id="menu-principal" className={`sidebar${aberto ? ' is-aberto' : ''}`} aria-label="Menu principal">
+        <aside id="menu-principal" className={`sidebar${aberto ? ' is-aberto' : ''}`} aria-label={tr('Menu principal')}>
             <div className="sidebar__topo">
-                <Link to="/home" className="marca-link" aria-label="Ir para o início" onClick={onFechar}>
+                <Link to="/home" className="marca-link" aria-label={tr('Ir para o início')} onClick={onFechar}>
                     <Marca empresa={user?.nomeEmpresa} />
                 </Link>
-                <button type="button" className="icon-btn sidebar__fechar" aria-label="Fechar menu" onClick={onFechar}>
+                <button type="button" className="icon-btn sidebar__fechar" aria-label={tr('Fechar menu')} onClick={onFechar}>
                     <IconeX />
                 </button>
             </div>
@@ -112,11 +114,15 @@ export function Sidebar({ aberto = false, onFechar }) {
                     </span>
                 </div>
 
+                <div className="sidebar__idioma">
+                    <IdiomaToggle />
+                </div>
+
                 <div className="sidebar__acoes">
                     <ThemeToggle />
                     <button type="button" className="btn btn--ghost btn--sm sidebar__sair" onClick={handleLogout}>
                         <Icone>{ICONES.sair}</Icone>
-                        Sair
+                        {tr('Sair')}
                     </button>
                 </div>
             </div>

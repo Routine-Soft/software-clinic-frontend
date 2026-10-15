@@ -25,7 +25,8 @@ export async function deletePlano(id) {
   return response;
 }
 // Sem login: os planos à venda, para a landing.
-export async function getPlanosPublicos() {
-  const response = await httpClient.get('/planos/publicos');
+// pais: país provável do visitante (Brasil vê os planos em reais; os demais, em dólar).
+export async function getPlanosPublicos(pais) {
+  const response = await httpClient.get(`/planos/publicos?pais=${encodeURIComponent(pais ?? 'BR')}`);
   return response;
 }

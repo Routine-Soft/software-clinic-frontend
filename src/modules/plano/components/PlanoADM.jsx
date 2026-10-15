@@ -3,10 +3,11 @@ import { usePlanos } from '../plano.hooks';
 import EditarPlanoModal from './EditarPlanoModal';
 import NovoPlanoModal from './NovoPlanoModal';
 import { IconeMais } from '@/components/CrudCard/icones';
+import { localeAtual, tr } from '@/i18n';
 
 function formatarPreco(plano) {
-  if (plano.tipo === 'gratis' && !plano.preco) return 'Grátis';
-  return plano.preco.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+  if (plano.tipo === 'gratis' && !plano.preco) return tr('Grátis');
+  return plano.preco.toLocaleString(localeAtual(), { style: 'currency', currency: plano.moeda === 'USD' ? 'USD' : 'BRL' });
 }
 
 export default function PlanoADM() {
@@ -41,18 +42,18 @@ export default function PlanoADM() {
     <div className="page">
       <header className="page-header">
         <div>
-          <h2 className="page-title">Planos</h2>
-          <p className="page-subtitle">Planos de assinatura oferecidos às clínicas</p>
+          <h2 className="page-title">{tr('Planos')}</h2>
+          <p className="page-subtitle">{tr('Planos de assinatura oferecidos às clínicas')}</p>
         </div>
         <div className="page-header__acoes">
           {!loading && (
             <span className="badge badge--primary">
-            {planos.length} {planos.length === 1 ? 'plano' : 'planos'}
+            {planos.length} {planos.length === 1 ? tr('plano') : tr('planos')}
           </span>
           )}
           <button type="button" className="btn btn--primary" onClick={() => setCriandoPlano(true)}>
             <IconeMais />
-            Novo plano
+            {tr('Novo plano')}
           </button>
         </div>
       </header>
@@ -68,11 +69,11 @@ export default function PlanoADM() {
         <table className="table">
           <thead>
             <tr>
-              <th>Plano</th>
-              <th>Preço mensal</th>
-              <th>Trial</th>
-              <th>Status</th>
-              <th>Ações</th>
+              <th>{tr('Plano')}</th>
+              <th>{tr('Preço mensal')}</th>
+              <th>{tr('Trial')}</th>
+              <th>{tr('Status')}</th>
+              <th>{tr('Ações')}</th>
             </tr>
           </thead>
           <tbody>
@@ -88,7 +89,7 @@ export default function PlanoADM() {
               ))
             ) : planos.length === 0 ? (
               <tr>
-                <td className="table__empty" colSpan={5}>Nenhum plano cadastrado ainda.</td>
+                <td className="table__empty" colSpan={5}>{tr('Nenhum plano cadastrado ainda.')}</td>
               </tr>
             ) : (
               planos.map((plano, index) => (
@@ -101,9 +102,14 @@ export default function PlanoADM() {
                     <div className="dim">
                       <strong>{plano.nome}</strong>{' '}
                       <span className={`badge ${plano.tipo === 'pago' ? 'badge--primary' : 'badge--info'}`}>
-                        {plano.tipo === 'pago' ? 'Pago' : 'Teste grátis do cadastro'}
+                        {plano.tipo === 'pago' ? tr('Pago') : tr('Teste grátis do cadastro')}
                       </span>
-                      {plano.individual && <span className="badge badge--info">Individual</span>}
+                      {plano.individual && <span className="badge badge--info">{tr('Individual')}</span>}
+                      {plano.moeda === 'USD' && (
+                        <span className={`badge ${plano.stripePriceId ? 'badge--success' : 'badge--warning'}`} title={plano.stripePriceId ?? tr('Ainda sem preço no Stripe: confira as chaves do Stripe e salve o plano de novo')}>
+                          {plano.stripePriceId ? tr('Dólar · Stripe') : tr('Dólar · sem preço no Stripe')}
+                        </span>
+                      )}
                     </div>
                   </td>
                   <td className="table__num">
@@ -117,18 +123,18 @@ export default function PlanoADM() {
                       type="button"
                       role="switch"
                       aria-checked={plano.ativo}
-                      aria-label={`${plano.ativo ? 'Desativar' : 'Ativar'} plano ${plano.nome}`}
+                      aria-label={`${plano.ativo ? tr('Desativar') : tr('Ativar')} plano ${plano.nome}`}
                       className="switch"
                       onClick={() => handleToggleAtivo(plano)}
                     >
                       <span className="switch__track" />
-                      {plano.ativo ? 'Ativo' : 'Inativo'}
+                      {plano.ativo ? tr('Ativo') : tr('Inativo')}
                     </button>
                   </td>
                   <td>
                     <div className="table__actions">
-                      <button className="btn btn--ghost btn--sm" onClick={() => handleEdit(plano)}>Editar</button>
-                      <button className="btn btn--danger btn--sm" onClick={() => handleDelete(plano._id)}>Excluir</button>
+                      <button className="btn btn--ghost btn--sm" onClick={() => handleEdit(plano)}>{tr('Editar')}</button>
+                      <button className="btn btn--danger btn--sm" onClick={() => handleDelete(plano._id)}>{tr('Excluir')}</button>
                     </div>
                   </td>
                 </tr>

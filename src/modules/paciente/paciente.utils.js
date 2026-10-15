@@ -1,4 +1,5 @@
 import { calcularIdade } from '@/utils/date';
+import { tr } from '@/i18n';
 
 function normalizar(texto = '') {
   return texto.toString().normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
@@ -29,7 +30,7 @@ export function filtrarPacientes(pacientes, termo) {
 
 const MAIORIDADE = 18;
 
-export const PARENTESCOS = ['Mãe', 'Pai', 'Avó', 'Avô', 'Tia', 'Tio', 'Irmã', 'Irmão', 'Tutor(a) legal', 'Outro'];
+export const PARENTESCOS = [tr('Mãe'), tr('Pai'), tr('Avó'), tr('Avô'), tr('Tia'), tr('Tio'), tr('Irmã'), tr('Irmão'), tr('Tutor(a) legal'), tr('Outro')];
 
 export const RESPONSAVEL_VAZIO = { nome: '', parentesco: '', cpf: '', telefone: '', email: '' };
 
@@ -56,13 +57,13 @@ export function contatoDoPaciente(paciente) {
 export function cpfDoPaciente(paciente) {
   if (paciente.cpf) return `CPF ${paciente.cpf}`;
   const doResponsavel = (paciente.responsaveis ?? []).find((r) => r.cpf)?.cpf;
-  return doResponsavel ? `CPF do responsável ${doResponsavel}` : 'Sem CPF';
+  return doResponsavel ? tr('CPF do responsável {doResponsavel}', { doResponsavel }) : tr('Sem CPF');
 }
 
 // Como o nome aparece na TV da sala de espera (igual a nomeParaTv do backend, em chamada.utils.js).
 export const OPCOES_NOME_NA_TV = [
-  ['completo', 'Mostrar o nome completo'],
-  ['oculto', 'Não mostrar o nome (só a sala)'],
+  ['completo', tr('Mostrar o nome completo')],
+  ['oculto', tr('Não mostrar o nome (só a sala)')],
 ];
 
 // "abreviado" e "primeiro" eram opções de uma versão anterior: hoje a TV mostra o nome completo.

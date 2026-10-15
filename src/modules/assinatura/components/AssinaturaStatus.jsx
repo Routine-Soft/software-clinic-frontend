@@ -2,43 +2,44 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAssinatura } from '../assinatura.hooks';
 import './assinatura.css';
+import { localeAtual, tr } from '@/i18n';
 
 const STATUS = {
   trial: {
-    rotulo: 'Período de teste',
+    rotulo: tr('Período de teste'),
     badge: 'info',
     pulsa: true,
-    mensagem: 'Você está aproveitando o teste gratuito. Assine para continuar usando o sistema depois que ele terminar.',
+    mensagem: tr('Você está aproveitando o teste gratuito. Assine para continuar usando o sistema depois que ele terminar.'),
   },
   pendente: {
-    rotulo: 'Pagamento pendente',
+    rotulo: tr('Pagamento pendente'),
     badge: 'warning',
     pulsa: true,
-    mensagem: 'Estamos aguardando a confirmação do seu pagamento. Isso costuma levar alguns minutos.',
+    mensagem: tr('Estamos aguardando a confirmação do seu pagamento. Isso costuma levar alguns minutos.'),
   },
   ativa: {
-    rotulo: 'Ativa',
+    rotulo: tr('Ativa'),
     badge: 'success',
     pulsa: true,
-    mensagem: 'Tudo certo com a sua assinatura.',
+    mensagem: tr('Tudo certo com a sua assinatura.'),
   },
   inadimplente: {
-    rotulo: 'Inadimplente',
+    rotulo: tr('Inadimplente'),
     badge: 'danger',
     pulsa: false,
-    mensagem: 'Não conseguimos processar o último pagamento. Regularize sua assinatura para evitar bloqueios.',
+    mensagem: tr('Não conseguimos processar o último pagamento. Regularize sua assinatura para evitar bloqueios.'),
   },
   cancelada: {
-    rotulo: 'Cancelada',
+    rotulo: tr('Cancelada'),
     badge: 'muted',
     pulsa: false,
-    mensagem: 'Esta assinatura foi cancelada. Assine novamente para voltar a usar todos os recursos.',
+    mensagem: tr('Esta assinatura foi cancelada. Assine novamente para voltar a usar todos os recursos.'),
   },
   expirada: {
-    rotulo: 'Expirada',
+    rotulo: tr('Expirada'),
     badge: 'muted',
     pulsa: false,
-    mensagem: 'O período de teste terminou. Assine um plano para continuar usando o sistema.',
+    mensagem: tr('O período de teste terminou. Assine um plano para continuar usando o sistema.'),
   },
 };
 
@@ -46,11 +47,11 @@ const STATUS_QUE_PODEM_ASSINAR = ['trial', 'inadimplente', 'cancelada', 'expirad
 const DIA_EM_MS = 24 * 60 * 60 * 1000;
 
 function formatarData(data) {
-  return new Date(data).toLocaleDateString('pt-BR');
+  return new Date(data).toLocaleDateString(localeAtual());
 }
 
-function formatarPreco(preco) {
-  return preco.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+function formatarPreco(preco, moeda = 'BRL') {
+  return preco.toLocaleString(localeAtual(), { style: 'currency', currency: moeda === 'USD' ? 'USD' : 'BRL' });
 }
 
 function calcularTrial(assinatura) {
@@ -64,9 +65,9 @@ function calcularTrial(assinatura) {
 }
 
 function rotuloDiasRestantes(dias) {
-  if (dias === 0) return 'Termina hoje';
-  if (dias === 1) return 'Falta 1 dia';
-  return `Faltam ${dias} dias`;
+  if (dias === 0) return tr('Termina hoje');
+  if (dias === 1) return tr('Falta 1 dia');
+  return tr('Faltam {dias} dias', { dias });
 }
 
 function IconeAssinatura() {
@@ -79,13 +80,13 @@ function IconeAssinatura() {
 }
 
 export default function AssinaturaStatus({ className = '' }) {
-  const { assinatura, loading, error, iniciandoCheckout, iniciarCheckout, sincronizando, sincronizar, cancelando, cancelar, erroAcao } = useAssinatura();
+  const { assinatura, loading, error, iniciandoCheckout, iniciarCheckout, sincronizando, sincronizar, cancelando, cancelar, erroAcao, abrindoPortal, abrirPortal } = useAssinatura();
   const [confirmandoCancelamento, setConfirmandoCancelamento] = useState(false);
   const classes = `card assinatura-card ${className}`.trim();
 
   if (loading) {
     return (
-      <section className={classes} aria-busy="true" aria-label="Carregando assinatura">
+      <section className={classes} aria-busy="true" aria-label={tr('Carregando assinatura')}>
         <div className="assinatura-card__head">
           <div className="skeleton assinatura-card__icon-skeleton" />
           <div className="assinatura-card__titulos">
@@ -111,7 +112,7 @@ export default function AssinaturaStatus({ className = '' }) {
   if (!assinatura) {
     return (
       <section className={classes}>
-        <p className="assinatura-card__vazio">Nenhuma assinatura encontrada.</p>
+        <p className="assinatura-card__vazio">{tr('Nenhuma assinatura encontrada.')}</p>
       </section>
     );
   }
@@ -124,11 +125,13 @@ export default function AssinaturaStatus({ className = '' }) {
   // Pago por Pix: cada pagamento vale 30 dias e não renova sozinho, então não há cobrança recorrente para cancelar.
   const porPix = assinatura.cobranca === 'pix';
   const ativaPorPix = assinatura.status === 'ativa' && porPix;
+  // Fora do Brasil: assinatura no Stripe, com o portal para trocar o cartão, ver faturas e cancelar.
+  const porStripe = assinatura.cobranca === 'stripe' && !!assinatura.stripeCustomerId;
   const podeCancelar = ['ativa', 'inadimplente', 'pendente'].includes(assinatura.status) && !ativaPorPix;
   const testeVigente = !!assinatura.dataFimTrial && new Date(assinatura.dataFimTrial) > new Date();
   let mensagem = status.mensagem;
-  if (ativaPorPix) mensagem = `Você paga por Pix, que não renova sozinho. Renove antes de ${formatarData(assinatura.proximaCobranca)} para não perder o acesso.`;
-  if (assinatura.status === 'expirada' && porPix) mensagem = 'O período pago por Pix terminou. Renove para continuar usando o sistema.';
+  if (ativaPorPix) mensagem = tr('Você paga por Pix, que não renova sozinho. Renove antes de {p0} para não perder o acesso.', { p0: formatarData(assinatura.proximaCobranca) });
+  if (assinatura.status === 'expirada' && porPix) mensagem = tr('O período pago por Pix terminou. Renove para continuar usando o sistema.');
   const acessoAte = assinatura.status === 'cancelada' && assinatura.acesso?.liberado ? assinatura.acesso.ate : null;
   const emTrial = assinatura.status === 'trial' && assinatura.dataFimTrial;
   const trial = emTrial ? calcularTrial(assinatura) : null;
@@ -142,16 +145,16 @@ export default function AssinaturaStatus({ className = '' }) {
         </div>
 
         <div className="assinatura-card__titulos">
-          <h3 className="assinatura-card__titulo">Minha assinatura</h3>
+          <h3 className="assinatura-card__titulo">{tr('Minha assinatura')}</h3>
           <span className={`badge badge--${status.badge}${status.pulsa ? ' badge--live' : ''}`}>{status.rotulo}</span>
         </div>
       </header>
 
       <div className="assinatura-card__plano">
-        <span className="assinatura-card__plano-rotulo">Plano</span>
+        <span className="assinatura-card__plano-rotulo">{tr('Plano')}</span>
         <p className="assinatura-card__plano-nome">
-          {assinatura.planoId?.nome ?? '—'}
-          {preco > 0 && <small>{formatarPreco(preco)} / mês</small>}
+          {assinatura.planoId?.nome ? tr(assinatura.planoId.nome) : '—'}
+          {preco > 0 && <small>{formatarPreco(preco, assinatura.planoId?.moeda)} {tr('/ mês')}</small>}
         </p>
       </div>
 
@@ -159,7 +162,7 @@ export default function AssinaturaStatus({ className = '' }) {
         <div className="assinatura-card__trial">
           <div className="assinatura-card__trial-linha">
             <span>{rotuloDiasRestantes(trial.diasRestantes)}</span>
-            <span>até {formatarData(assinatura.dataFimTrial)}</span>
+            <span>{tr('até {p0}', { p0: formatarData(assinatura.dataFimTrial) })}</span>
           </div>
           <div
             className="assinatura-card__barra"
@@ -167,7 +170,7 @@ export default function AssinaturaStatus({ className = '' }) {
             aria-valuemin={0}
             aria-valuemax={100}
             aria-valuenow={trial.percentual}
-            aria-label="Progresso do período de teste"
+            aria-label={tr('Progresso do período de teste')}
           >
             <span className="assinatura-card__barra-fill" style={{ '--pct': `${trial.percentual}%` }} />
           </div>
@@ -178,33 +181,33 @@ export default function AssinaturaStatus({ className = '' }) {
         <dl className="assinatura-card__info">
           {assinatura.dataInicio && (
             <div>
-              <dt>{assinatura.status === 'trial' ? 'Teste iniciado em' : 'Assinante desde'}</dt>
+              <dt>{assinatura.status === 'trial' ? tr('Teste iniciado em') : tr('Assinante desde')}</dt>
               <dd>{formatarData(assinatura.dataInicio)}</dd>
             </div>
           )}
           {acessoAte && (
             <div>
-              <dt>Acesso liberado até</dt>
+              <dt>{tr('Acesso liberado até')}</dt>
               <dd>{formatarData(acessoAte)}</dd>
             </div>
           )}
           {assinatura.status === 'ativa' && assinatura.proximaCobranca && (
             <div>
-              <dt>{porPix ? 'Acesso liberado até' : 'Próxima cobrança'}</dt>
+              <dt>{porPix ? tr('Acesso liberado até') : tr('Próxima cobrança')}</dt>
               <dd>{formatarData(assinatura.proximaCobranca)}</dd>
             </div>
           )}
-          {ativaPorPix && (
+          {(ativaPorPix || porStripe) && (
             <div>
-              <dt>Forma de pagamento</dt>
-              <dd>Pix</dd>
+              <dt>{tr('Forma de pagamento')}</dt>
+              <dd>{porStripe ? tr('Cartão internacional (Stripe)') : tr('Pix')}</dd>
             </div>
           )}
         </dl>
       )}
 
       {acessoAte
-        ? <p className="assinatura-card__mensagem">Assinatura cancelada. Você continua com acesso até {formatarData(acessoAte)}; depois disso, o sistema será bloqueado.</p>
+        ? <p className="assinatura-card__mensagem">{tr('Assinatura cancelada. Você continua com acesso até')} {formatarData(acessoAte)}{tr('; depois disso, o sistema será bloqueado.')}</p>
         : mensagem && <p className="assinatura-card__mensagem">{mensagem}</p>}
 
       {erroAcao && <p className="alert alert--error" role="alert">{erroAcao.message}</p>}
@@ -217,54 +220,63 @@ export default function AssinaturaStatus({ className = '' }) {
             onClick={sincronizar}
             disabled={sincronizando}
           >
-            {sincronizando ? 'Verificando...' : 'Já paguei — verificar agora'}
+            {sincronizando ? tr('Verificando...') : tr('Já paguei — verificar agora')}
           </button>
           <button type="button" className="btn btn--ghost btn--block" onClick={() => iniciarCheckout()} disabled={iniciandoCheckout}>
-            {iniciandoCheckout ? 'Redirecionando...' : 'Refazer o pagamento'}
+            {iniciandoCheckout ? tr('Redirecionando...') : tr('Refazer o pagamento')}
           </button>
         </div>
       )}
 
       {podeCancelar && (confirmandoCancelamento ? (
-        <div className="assinatura-card__confirmar" role="alertdialog" aria-label={desistindo ? 'Confirmar desistência' : 'Confirmar cancelamento'}>
+        <div className="assinatura-card__confirmar" role="alertdialog" aria-label={desistindo ? tr('Confirmar desistência') : tr('Confirmar cancelamento')}>
           {desistindo ? (
             <p>
-              Desistir da assinatura? O pagamento pendente é cancelado e você volta ao teste grátis
-              {testeVigente
-                ? `, com o teste até ${formatarData(assinatura.dataFimTrial)}.`
-                : '. O período de teste já terminou, então será preciso assinar um plano para continuar usando o sistema.'}
+              {tr('Desistir da assinatura? O pagamento pendente é cancelado e você volta ao teste grátis {p0}', { p0: testeVigente
+                ? tr(', com o teste até {p0}.', { p0: formatarData(assinatura.dataFimTrial) })
+                : tr('. O período de teste já terminou, então será preciso assinar um plano para continuar usando o sistema.') })}
             </p>
           ) : (
             <p>
-              Cancelar a assinatura?
-              {assinatura.proximaCobranca ? ` Você continua com acesso até ${formatarData(assinatura.proximaCobranca)}, e nenhuma nova cobrança será feita.` : ' Nenhuma nova cobrança será feita.'}
+              {tr('Cancelar a assinatura? {p0}', { p0: assinatura.proximaCobranca ? tr(' Você continua com acesso até {p0}, e nenhuma nova cobrança será feita.', { p0: formatarData(assinatura.proximaCobranca) }) : tr(' Nenhuma nova cobrança será feita.') })}
             </p>
           )}
           <div className="assinatura-card__acoes assinatura-card__acoes--linha">
-            <button type="button" className="btn btn--ghost btn--sm" onClick={() => setConfirmandoCancelamento(false)} disabled={cancelando}>{desistindo ? 'Continuar aguardando' : 'Manter assinatura'}</button>
+            <button type="button" className="btn btn--ghost btn--sm" onClick={() => setConfirmandoCancelamento(false)} disabled={cancelando}>{desistindo ? tr('Continuar aguardando') : tr('Manter assinatura')}</button>
             <button
               type="button"
               className={`btn btn--danger btn--sm${cancelando ? ' btn--loading' : ''}`}
               disabled={cancelando}
               onClick={async () => { if (await cancelar()) setConfirmandoCancelamento(false); }}
             >
-              {cancelando ? (desistindo ? 'Desistindo...' : 'Cancelando...') : (desistindo ? 'Sim, desistir' : 'Sim, cancelar')}
+              {cancelando ? (desistindo ? tr('Desistindo...') : tr('Cancelando...')) : (desistindo ? tr('Sim, desistir') : tr('Sim, cancelar'))}
             </button>
           </div>
         </div>
       ) : (
         <button type="button" className="assinatura-card__cancelar" onClick={() => setConfirmandoCancelamento(true)}>
-          {desistindo ? 'Desistir e voltar ao teste grátis' : 'Cancelar assinatura'}
+          {desistindo ? tr('Desistir e voltar ao teste grátis') : tr('Cancelar assinatura')}
         </button>
       ))}
 
       {ativaPorPix && (
-        <Link to="/assinaturas" className="btn btn--primary btn--block assinatura-card__cta">Renovar por Pix</Link>
+        <Link to="/assinaturas" className="btn btn--primary btn--block assinatura-card__cta">{tr('Renovar por Pix')}</Link>
+      )}
+
+      {porStripe && ['ativa', 'cancelada', 'inadimplente'].includes(assinatura.status) && (
+        <button
+          type="button"
+          className={`btn ${assinatura.status === 'inadimplente' ? 'btn--primary' : 'btn--ghost'} btn--block${abrindoPortal ? ' btn--loading' : ''}`}
+          onClick={abrirPortal}
+          disabled={abrindoPortal}
+        >
+          {abrindoPortal ? tr('Redirecionando...') : tr('Gerenciar assinatura (cartão e faturas)')}
+        </button>
       )}
 
       {podeAssinar && (
         <Link to="/assinaturas" className="btn btn--primary btn--block assinatura-card__cta">
-          {assinatura.status === 'inadimplente' ? 'Regularizar pagamento' : 'Ver planos e assinar'}
+          {assinatura.status === 'inadimplente' ? tr('Regularizar pagamento') : tr('Ver planos e assinar')}
         </Link>
       )}
     </section>

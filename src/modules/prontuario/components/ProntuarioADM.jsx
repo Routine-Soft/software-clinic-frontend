@@ -15,6 +15,7 @@ import SemAcessoProntuario from './SemAcessoProntuario';
 import '@/modules/paciente/components/paciente.css';
 import '../prontuario.css';
 import SeloTeste from '@/modules/paciente/components/SeloTeste';
+import { tr } from '@/i18n';
 
 const COLUNAS = 5;
 
@@ -28,7 +29,7 @@ export default function ProntuarioADM() {
     <div className="page">
       <header className="page-header">
         <div>
-          <h2 className="page-title">Prontuário</h2>
+          <h2 className="page-title">{tr('Prontuário')}</h2>
         </div>
       </header>
       {acesso.carregando ? <div className="skeleton skeleton--bloco" /> : <SemAcessoProntuario />}
@@ -88,16 +89,16 @@ function ListaDeProntuarios() {
     <div className="page">
       <header className="page-header">
         <div>
-          <h2 className="page-title">Prontuário</h2>
-          <p className="page-subtitle">Escolha um paciente para abrir a ficha, registrar atendimentos e consultar o histórico</p>
+          <h2 className="page-title">{tr('Prontuário')}</h2>
+          <p className="page-subtitle">{tr('Escolha um paciente para abrir a ficha, registrar atendimentos e consultar o histórico')}</p>
         </div>
         <div className="page-header__acoes">
           {!carregando && emAtendimento > 0 && (
-            <span className="badge badge--live">{emAtendimento} em atendimento</span>
+            <span className="badge badge--live">{tr('{emAtendimento} em atendimento', { emAtendimento })}</span>
           )}
           <button type="button" className="btn btn--primary" onClick={() => setCriandoPaciente(true)}>
             <IconeMais />
-            Novo paciente
+            {tr('Novo paciente')}
           </button>
         </div>
       </header>
@@ -117,8 +118,8 @@ function ListaDeProntuarios() {
               type="search"
               value={busca}
               onChange={(e) => setBusca(e.target.value)}
-              placeholder="Buscar por nome, CPF, telefone ou e-mail"
-              aria-label="Buscar paciente"
+              placeholder={tr('Buscar por nome, CPF, telefone ou e-mail')}
+              aria-label={tr('Buscar paciente')}
             />
           </div>
           {!loading && busca && (
@@ -132,11 +133,11 @@ function ListaDeProntuarios() {
           <table className="table paciente-table" aria-busy={carregando}>
             <thead>
               <tr>
-                <th>Paciente</th>
-                <th>Última consulta</th>
-                <th>Atendimentos</th>
-                <th>Convênio</th>
-                <th>Prontuário</th>
+                <th>{tr('Paciente')}</th>
+                <th>{tr('Última consulta')}</th>
+                <th>{tr('Atendimentos')}</th>
+                <th>{tr('Convênio')}</th>
+                <th>{tr('Prontuário')}</th>
               </tr>
             </thead>
             <tbody>
@@ -153,7 +154,7 @@ function ListaDeProntuarios() {
               ) : pacientesFiltrados.length === 0 ? (
                 <tr>
                   <td className="table__empty" colSpan={COLUNAS}>
-                    {pacientes.length === 0 ? 'Nenhum paciente cadastrado ainda.' : 'Nenhum paciente encontrado para essa busca.'}
+                    {pacientes.length === 0 ? tr('Nenhum paciente cadastrado ainda.') : tr('Nenhum paciente encontrado para essa busca.')}
                   </td>
                 </tr>
               ) : (
@@ -169,7 +170,7 @@ function ListaDeProntuarios() {
                             <Link to={`/prontuario/${paciente._id}`} className="pessoa__nome pront-link-nome">{paciente.nome}</Link>
                             <span className="pessoa__sub nowrap">
                               {formatDataBR(paciente.dataNascimento) ?? '—'}
-                              {idade !== null && ` · ${idade} ${idade === 1 ? 'ano' : 'anos'}`}
+                              {idade !== null && ` · ${idade} ${idade === 1 ? tr('ano') : tr('anos')}`}
                               {' '}<SeloTeste paciente={paciente} />
                             </span>
                           </div>
@@ -177,30 +178,30 @@ function ListaDeProntuarios() {
                       </td>
                       <td className="nowrap">
                         {resumo?.emAtendimento ? (
-                          <span className="badge badge--live">Em atendimento</span>
+                          <span className="badge badge--live">{tr('Em atendimento')}</span>
                         ) : resumo ? (
                           formatDataInstanteBR(resumo.ultima)
                         ) : (
-                          <span className="pessoa__sub">Nunca atendido</span>
+                          <span className="pessoa__sub">{tr('Nunca atendido')}</span>
                         )}
                       </td>
                       <td className="nowrap">{resumo?.total ?? 0}</td>
                       <td>
                         {paciente.convenioId?.nome
                           ? <span className="badge badge--info">{paciente.convenioId.nome}</span>
-                          : <span className="badge">Sem convênio</span>}
+                          : <span className="badge">{tr('Sem convênio')}</span>}
                       </td>
                       <td>
                         <div className="table__actions">
                           <Link to={`/prontuario/${paciente._id}`} className="btn btn--primary btn--sm">
                             <IconeFicha />
-                            Abrir
+                            {tr('Abrir')}
                           </Link>
                           <button
                             type="button"
                             className="icon-btn"
-                            aria-label={`Abrir prontuário de ${paciente.nome} em janela`}
-                            title="Abrir em janela"
+                            aria-label={tr('Abrir prontuário de {nome} em janela', { nome: paciente.nome })}
+                            title={tr('Abrir em janela')}
                             onClick={() => setPacienteEmJanela(paciente)}
                           >
                             <IconeAbrirJanela />

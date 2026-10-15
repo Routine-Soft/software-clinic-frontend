@@ -28,16 +28,18 @@ import DetalhesClinicaModal from './DetalhesClinicaModal';
 import { tempoDeCasa } from '../clinica-admin.utils';
 import { linkWhatsapp } from '@/utils/whatsapp';
 import './clinicas-adm.css';
+import { idiomaAtual, tr } from '@/i18n';
+import { nomeDoPais } from '@/i18n/paises';
 
-const COBRANCA_ROTULO = { recorrente: 'Cartão', pix: 'Pix', manual: 'Manual' };
+const COBRANCA_ROTULO = { recorrente: tr('Cartão'), pix: tr('Pix'), manual: tr('Manual'), stripe: tr('Stripe') };
 
 const STATUS_INFO = {
-  trial: { rotulo: 'Teste', tom: 'info' },
-  pendente: { rotulo: 'Pendente', tom: 'warning' },
-  ativa: { rotulo: 'Ativa', tom: 'success' },
-  inadimplente: { rotulo: 'Em atraso', tom: 'danger' },
-  cancelada: { rotulo: 'Cancelada', tom: '' },
-  expirada: { rotulo: 'Expirada', tom: '' },
+  trial: { rotulo: tr('Teste'), tom: 'info' },
+  pendente: { rotulo: tr('Pendente'), tom: 'warning' },
+  ativa: { rotulo: tr('Ativa'), tom: 'success' },
+  inadimplente: { rotulo: tr('Em atraso'), tom: 'danger' },
+  cancelada: { rotulo: tr('Cancelada'), tom: '' },
+  expirada: { rotulo: tr('Expirada'), tom: '' },
 };
 
 export default function ClinicasADM() {
@@ -51,7 +53,7 @@ export default function ClinicasADM() {
   const [detalhesDe, setDetalhesDe] = useState(null);
   const [confirmando, setConfirmando] = useState(null); // { id, acao: 'excluir' | 'revogar' }
 
-  const resumoContagem = useMemo(() => `${admins.length} ${admins.length === 1 ? 'clínica' : 'clínicas'}`, [admins.length]);
+  const resumoContagem = useMemo(() => `${admins.length} ${admins.length === 1 ? tr('clínica') : tr('clínicas')}`, [admins.length]);
   const algumModalAberto = criando || !!editando || !!trocandoPlanoDe || !!redefinindoSenhaDe;
 
   function fecharConfirmacao() {
@@ -76,14 +78,14 @@ export default function ClinicasADM() {
     <div className="page">
       <header className="page-header">
         <div>
-          <h2 className="page-title">Clínicas</h2>
-          <p className="page-subtitle">Clínicas cadastradas na plataforma: edite dados, troque o plano ou revogue o acesso</p>
+          <h2 className="page-title">{tr('Clínicas')}</h2>
+          <p className="page-subtitle">{tr('Clínicas cadastradas na plataforma: edite dados, troque o plano ou revogue o acesso')}</p>
         </div>
         <div className="page-header__acoes">
           {!loading && <span className="badge badge--primary">{resumoContagem}</span>}
           <button type="button" className="btn btn--primary" onClick={() => setCriando(true)}>
             <IconeMais />
-            Nova clínica
+            {tr('Nova clínica')}
           </button>
         </div>
       </header>
@@ -104,8 +106,8 @@ export default function ClinicasADM() {
               type="search"
               value={busca}
               onChange={(e) => setBusca(e.target.value)}
-              placeholder="Nome, e-mail ou clínica"
-              aria-label="Buscar clínica"
+              placeholder={tr('Nome, e-mail ou clínica')}
+              aria-label={tr('Buscar clínica')}
             />
           </div>
         </div>
@@ -113,11 +115,11 @@ export default function ClinicasADM() {
         <table className="table">
           <thead>
             <tr>
-              <th>Clínica</th>
-              <th>Contato</th>
-              <th>Plano</th>
-              <th>Situação</th>
-              <th>Ações</th>
+              <th>{tr('Clínica')}</th>
+              <th>{tr('Contato')}</th>
+              <th>{tr('Plano')}</th>
+              <th>{tr('Situação')}</th>
+              <th>{tr('Ações')}</th>
             </tr>
           </thead>
           <tbody>
@@ -134,7 +136,7 @@ export default function ClinicasADM() {
             ) : admins.length === 0 ? (
               <tr>
                 <td className="table__empty" colSpan={5}>
-                  {busca ? 'Nenhuma clínica encontrada para essa busca.' : 'Nenhuma clínica cadastrada ainda.'}
+                  {busca ? tr('Nenhuma clínica encontrada para essa busca.') : tr('Nenhuma clínica cadastrada ainda.')}
                 </td>
               </tr>
             ) : (
@@ -152,16 +154,19 @@ export default function ClinicasADM() {
                       <div className="clinica-pessoa">
                         <div className="clinica-pessoa__avatar" aria-hidden="true">{iniciais(admin.nomeCompleto)}</div>
                         <div className="clinica-pessoa__dados">
-                          <span className="clinica-pessoa__nome" title={admin.nomeCompleto}>{admin.nomeEmpresa}</span>
+                          <span className="clinica-pessoa__nome" title={admin.nomeCompleto}>
+                            {admin.nomeEmpresa}
+                            {admin.pais && admin.pais !== 'BR' && <span className="badge badge--info clinica-pais" title={nomeDoPais(admin.pais, idiomaAtual())}>{admin.pais}</span>}
+                          </span>
                           <span className="clinica-pessoa__sub" title={admin.nomeCompleto}>{admin.nomeCompleto}</span>
                           {admin.cnpj && <span className="clinica-pessoa__sub">{formatCnpj(admin.cnpj)}</span>}
                           <span className="clinica-pessoa__sub" title={`Desde ${formatarData(admin.createdAt)}`}>
-                            Cliente {tempoDeCasa(admin.createdAt) === 'hoje' ? 'desde hoje' : `há ${tempoDeCasa(admin.createdAt)}`} ({formatarData(admin.createdAt)})
+                            {tr('Cliente {p0} ({p1})', { p0: tempoDeCasa(admin.createdAt) === 'hoje' ? tr('desde hoje') : tr('há {p0}', { p0: tempoDeCasa(admin.createdAt) }), p1: formatarData(admin.createdAt) })}
                           </span>
                           {admin.estatisticas && (
                             <span className="clinica-uso">
                               {[
-                                ['usuarios', 'usuário', 'usuários'],
+                                ['usuarios', tr('usuário'), tr('usuários')],
                                 ['profissionais', 'profissional', 'profissionais'],
                                 ['pacientes', 'paciente', 'pacientes'],
                                 ['empresas', 'empresa', 'empresas'],
@@ -169,9 +174,9 @@ export default function ClinicasADM() {
                                 <span key={campo}><strong>{admin.estatisticas[campo]}</strong> {admin.estatisticas[campo] === 1 ? singular : plural}</span>
                               ))}
                               <span>
-                                Agenda: <strong>{admin.estatisticas.agendamentos.abertos}</strong> em aberto,{' '}
-                                <strong>{admin.estatisticas.agendamentos.realizados}</strong> {admin.estatisticas.agendamentos.realizados === 1 ? 'realizado' : 'realizados'},{' '}
-                                <strong>{admin.estatisticas.agendamentos.cancelados}</strong> {admin.estatisticas.agendamentos.cancelados === 1 ? 'cancelado' : 'cancelados'}
+                                {tr('Agenda:')} <strong>{admin.estatisticas.agendamentos.abertos}</strong> {tr('em aberto,')}{' '}
+                                <strong>{admin.estatisticas.agendamentos.realizados}</strong> {admin.estatisticas.agendamentos.realizados === 1 ? tr('realizado') : tr('realizados')},{' '}
+                                <strong>{admin.estatisticas.agendamentos.cancelados}</strong> {admin.estatisticas.agendamentos.cancelados === 1 ? tr('cancelado') : tr('cancelados')}
                               </span>
                             </span>
                           )}
@@ -182,7 +187,7 @@ export default function ClinicasADM() {
                       <div className="clinica-contato">
                         <span><EmailQuebravel email={admin.email} /></span>
                         {linkWhatsapp(admin.telefone) ? (
-                          <a className="clinica-whats" href={linkWhatsapp(admin.telefone)} target="_blank" rel="noopener noreferrer" title="Abrir conversa no WhatsApp">
+                          <a className="clinica-whats" href={linkWhatsapp(admin.telefone)} target="_blank" rel="noopener noreferrer" title={tr('Abrir conversa no WhatsApp')}>
                             <IconeTelefone />
                             {admin.telefone}
                           </a>
@@ -194,33 +199,33 @@ export default function ClinicasADM() {
                     <td>
                       {assinatura?.planoId ? (
                         <div className="clinica-plano">
-                          <span>{assinatura.planoId.nome}</span>
+                          <span>{tr(assinatura.planoId.nome)}</span>
                           <span className="clinica-plano__preco">
                             {assinatura.planoId.preco > 0
-                              ? `${formatarPreco(assinatura.planoId.preco)} · ${COBRANCA_ROTULO[assinatura.cobranca] ?? assinatura.cobranca}`
-                              : 'Grátis'}
+                              ? `${formatarPreco(assinatura.planoId.preco, assinatura.planoId.moeda)} · ${COBRANCA_ROTULO[assinatura.cobranca] ?? assinatura.cobranca}`
+                              : tr('Grátis')}
                           </span>
                         </div>
                       ) : (
-                        <span className="clinica-pessoa__sub">Sem assinatura</span>
+                        <span className="clinica-pessoa__sub">{tr('Sem assinatura')}</span>
                       )}
                       {admin.estatisticas && (
-                        <span className="clinica-plano__pago">Total pago: {formatarPreco(admin.estatisticas.totalPago)}</span>
+                        <span className="clinica-plano__pago">{tr('Total pago: {p0}', { p0: formatarPreco(admin.estatisticas.totalPago, admin.estatisticas.moedaPaga) })}</span>
                       )}
                     </td>
                     <td>
                       <div className="clinica-situacao">
                         <span className="badge-linha">
-                          {revogado && <span className="badge badge--danger">Acesso revogado</span>}
-                          {!revogado && bloqueado && <span className="badge badge--danger">Bloqueada</span>}
+                          {revogado && <span className="badge badge--danger">{tr('Acesso revogado')}</span>}
+                          {!revogado && bloqueado && <span className="badge badge--danger">{tr('Bloqueada')}</span>}
                           {status && (!revogado) && (
                             <span className={`badge${status.tom ? ` badge--${status.tom}` : ''}`}>{status.rotulo}</span>
                           )}
-                          {admin.lembretesWhatsapp && <span className="badge badge--success">WhatsApp</span>}
+                          {admin.lembretesWhatsapp && <span className="badge badge--success">{tr('WhatsApp')}</span>}
                         </span>
                         {assinatura?.acesso?.ate && (
                           <span className="clinica-situacao__ate">
-                            {assinatura.acesso.liberado ? 'Acesso até' : 'Venceu em'} {formatarData(assinatura.acesso.ate)}
+                            {assinatura.acesso.liberado ? tr('Acesso até') : tr('Venceu em')} {formatarData(assinatura.acesso.ate)}
                           </span>
                         )}
                       </div>
@@ -228,67 +233,67 @@ export default function ClinicasADM() {
                     <td>
                       {confirmando?.id === admin._id ? (
                         <div className="clinica-confirmar">
-                          <span>{confirmando.acao === 'excluir' ? 'Apagar clínica?' : 'Revogar acesso?'}</span>
+                          <span>{confirmando.acao === 'excluir' ? tr('Apagar clínica?') : tr('Revogar acesso?')}</span>
                           <button
                             type="button"
                             className="icon-btn icon-btn--danger"
-                            aria-label="Confirmar"
+                            aria-label={tr('Confirmar')}
                             title={confirmando.acao === 'excluir'
-                              ? 'Remove o administrador e o registro de assinatura. Pacientes, agenda e demais dados da clínica não são apagados.'
-                              : 'Bloqueia o acesso de toda a clínica até você restabelecer'}
+                              ? tr('Remove o administrador e o registro de assinatura. Pacientes, agenda e demais dados da clínica não são apagados.')
+                              : tr('Bloqueia o acesso de toda a clínica até você restabelecer')}
                             onClick={() => (confirmando.acao === 'excluir' ? handleExcluir(admin._id) : handleRevogar(admin._id, true))}
                           >
                             <IconeCheck />
                           </button>
-                          <button type="button" className="icon-btn" aria-label="Cancelar" onClick={fecharConfirmacao}>
+                          <button type="button" className="icon-btn" aria-label={tr('Cancelar')} onClick={fecharConfirmacao}>
                             <IconeX />
                           </button>
                         </div>
                       ) : (
                         <div className="table__actions clinica-acoes">
-                          <button type="button" className="icon-btn" title="Detalhes e pagamentos" aria-label={`Detalhes e pagamentos de ${admin.nomeEmpresa}`} onClick={() => setDetalhesDe(admin)}>
+                          <button type="button" className="icon-btn" title={tr('Detalhes e pagamentos')} aria-label={tr('Detalhes e pagamentos de {nomeEmpresa}', { nomeEmpresa: admin.nomeEmpresa })} onClick={() => setDetalhesDe(admin)}>
                             <IconeGrafico />
                           </button>
-                          <button type="button" className="icon-btn" title="Editar" aria-label={`Editar ${admin.nomeEmpresa}`} onClick={() => setEditando(admin)}>
+                          <button type="button" className="icon-btn" title={tr('Editar')} aria-label={`Editar ${admin.nomeEmpresa}`} onClick={() => setEditando(admin)}>
                             <IconeLapis />
                           </button>
-                          <button type="button" className="icon-btn" title="Trocar plano" aria-label={`Trocar plano de ${admin.nomeEmpresa}`} onClick={() => setTrocandoPlanoDe(admin)}>
+                          <button type="button" className="icon-btn" title={tr('Trocar plano')} aria-label={tr('Trocar plano de {nomeEmpresa}', { nomeEmpresa: admin.nomeEmpresa })} onClick={() => setTrocandoPlanoDe(admin)}>
                             <IconeTrocar />
                           </button>
                           <button
                             type="button"
                             className={`icon-btn${admin.lembretesWhatsapp ? ' icon-btn--ativo' : ''}`}
                             aria-pressed={!!admin.lembretesWhatsapp}
-                            title={admin.lembretesWhatsapp ? 'Lembretes pelo WhatsApp ligados (clique para desligar)' : 'Ligar lembretes pelo WhatsApp'}
-                            aria-label={`Lembretes pelo WhatsApp de ${admin.nomeEmpresa}`}
+                            title={admin.lembretesWhatsapp ? tr('Lembretes pelo WhatsApp ligados (clique para desligar)') : tr('Ligar lembretes pelo WhatsApp')}
+                            aria-label={tr('Lembretes pelo WhatsApp de {nomeEmpresa}', { nomeEmpresa: admin.nomeEmpresa })}
                             onClick={() => definirLembretesWhatsapp(admin._id, !admin.lembretesWhatsapp)}
                           >
                             <IconeMensagem />
                           </button>
-                          <button type="button" className="icon-btn" title="Redefinir senha" aria-label={`Redefinir senha de ${admin.nomeEmpresa}`} onClick={() => setRedefinindoSenhaDe(admin)}>
+                          <button type="button" className="icon-btn" title={tr('Redefinir senha')} aria-label={tr('Redefinir senha de {nomeEmpresa}', { nomeEmpresa: admin.nomeEmpresa })} onClick={() => setRedefinindoSenhaDe(admin)}>
                             <IconeChave />
                           </button>
                           {podeEstenderTeste && (
                             <button
                               type="button"
                               className="icon-btn"
-                              title="Estender teste em +3 dias"
-                              aria-label={`Estender teste de ${admin.nomeEmpresa} em mais 3 dias`}
+                              title={tr('Estender teste em +3 dias')}
+                              aria-label={tr('Estender teste de {nomeEmpresa} em mais 3 dias', { nomeEmpresa: admin.nomeEmpresa })}
                               onClick={() => handleEstenderTeste(admin._id)}
                             >
                               <IconeRelogioMais />
                             </button>
                           )}
                           {revogado ? (
-                            <button type="button" className="icon-btn" title="Restabelecer acesso" aria-label={`Restabelecer acesso de ${admin.nomeEmpresa}`} onClick={() => handleRevogar(admin._id, false)}>
+                            <button type="button" className="icon-btn" title={tr('Restabelecer acesso')} aria-label={tr('Restabelecer acesso de {nomeEmpresa}', { nomeEmpresa: admin.nomeEmpresa })} onClick={() => handleRevogar(admin._id, false)}>
                               <IconeCadeadoAberto />
                             </button>
                           ) : (
                             <button
                               type="button"
                               className="icon-btn"
-                              title="Revogar acesso"
-                              aria-label={`Revogar acesso de ${admin.nomeEmpresa}`}
+                              title={tr('Revogar acesso')}
+                              aria-label={tr('Revogar acesso de {nomeEmpresa}', { nomeEmpresa: admin.nomeEmpresa })}
                               onClick={() => setConfirmando({ id: admin._id, acao: 'revogar' })}
                             >
                               <IconeCadeado />
@@ -297,7 +302,7 @@ export default function ClinicasADM() {
                           <button
                             type="button"
                             className="icon-btn icon-btn--danger"
-                            title="Excluir"
+                            title={tr('Excluir')}
                             aria-label={`Excluir ${admin.nomeEmpresa}`}
                             onClick={() => setConfirmando({ id: admin._id, acao: 'excluir' })}
                           >
@@ -315,7 +320,7 @@ export default function ClinicasADM() {
       </section>
 
       <p className="page-subtitle">
-        Excluir uma clínica remove o administrador e o registro de assinatura; pacientes, agenda e os demais dados dela permanecem no banco.
+        {tr('Excluir uma clínica remove o administrador e o registro de assinatura; pacientes, agenda e os demais dados dela permanecem no banco.')}
       </p>
 
       {criando && (

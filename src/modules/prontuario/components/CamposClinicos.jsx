@@ -1,6 +1,7 @@
 import { useId } from 'react';
 import { IconeMais, IconeX } from '@/components/CrudCard/icones';
 import { CAMPOS_TEXTO, TIPOS_ANEXO } from '../prontuario.utils';
+import { tr } from '@/i18n';
 
 export default function CamposClinicos({ valores, onChange }) {
   const id = useId();
@@ -45,43 +46,43 @@ export default function CamposClinicos({ valores, onChange }) {
       <div className="pront-grid">
         <div className="field">
           <label className="field__label" htmlFor={`${id}-cid10`}>CID-10</label>
-          <input id={`${id}-cid10`} className="input" type="text" value={valores.cid10} onChange={(e) => set('cid10', e.target.value)} placeholder="Ex: J45.0" />
+          <input id={`${id}-cid10`} className="input" type="text" value={valores.cid10} onChange={(e) => set('cid10', e.target.value)} placeholder={tr('Ex: J45.0')} />
         </div>
 
         <div className="field">
-          <label className="field__label" htmlFor={`${id}-retorno`}>Próximo retorno</label>
+          <label className="field__label" htmlFor={`${id}-retorno`}>{tr('Próximo retorno')}</label>
           <input id={`${id}-retorno`} className="input" type="date" value={valores.proximoRetorno} onChange={(e) => set('proximoRetorno', e.target.value)} />
         </div>
       </div>
 
       <fieldset className="pront-section">
-        <legend>Sinais vitais</legend>
+        <legend>{tr('Sinais vitais')}</legend>
 
         <div className="pront-grid pront-grid--sinais">
           <div className="field">
-            <label className="field__label" htmlFor={`${id}-peso`}>Peso (kg)</label>
+            <label className="field__label" htmlFor={`${id}-peso`}>{tr('Peso (kg)')}</label>
             <input id={`${id}-peso`} className="input" type="number" step="0.1" value={valores.sinaisVitais.peso} onChange={(e) => setSinalVital('peso', e.target.value)} />
           </div>
 
           <div className="field">
-            <label className="field__label" htmlFor={`${id}-altura`}>Altura (m)</label>
+            <label className="field__label" htmlFor={`${id}-altura`}>{tr('Altura (m)')}</label>
             <input id={`${id}-altura`} className="input" type="number" step="0.01" value={valores.sinaisVitais.altura} onChange={(e) => setSinalVital('altura', e.target.value)} />
           </div>
 
           <div className="field">
-            <label className="field__label" htmlFor={`${id}-pa`}>Pressão arterial</label>
+            <label className="field__label" htmlFor={`${id}-pa`}>{tr('Pressão arterial')}</label>
             <input
               id={`${id}-pa`}
               className="input"
               type="text"
-              placeholder="Ex: 120/80"
+              placeholder={tr('Ex: 120/80')}
               value={valores.sinaisVitais.pressaoArterial}
               onChange={(e) => setSinalVital('pressaoArterial', e.target.value)}
             />
           </div>
 
           <div className="field">
-            <label className="field__label" htmlFor={`${id}-fc`}>Freq. cardíaca (bpm)</label>
+            <label className="field__label" htmlFor={`${id}-fc`}>{tr('Freq. cardíaca (bpm)')}</label>
             <input
               id={`${id}-fc`}
               className="input"
@@ -92,27 +93,27 @@ export default function CamposClinicos({ valores, onChange }) {
           </div>
 
           <div className="field">
-            <label className="field__label" htmlFor={`${id}-temp`}>Temperatura (°C)</label>
+            <label className="field__label" htmlFor={`${id}-temp`}>{tr('Temperatura (°C)')}</label>
             <input id={`${id}-temp`} className="input" type="number" step="0.1" value={valores.sinaisVitais.temperatura} onChange={(e) => setSinalVital('temperatura', e.target.value)} />
           </div>
         </div>
       </fieldset>
 
       <fieldset className="pront-section">
-        <legend>Anexos</legend>
+        <legend>{tr('Anexos')}</legend>
 
-        {valores.anexos.length === 0 && <p className="pront-section__vazio">Nenhum anexo. Informe o link de exames, fotos ou laudos.</p>}
+        {valores.anexos.length === 0 && <p className="pront-section__vazio">{tr('Nenhum anexo. Informe o link de exames, fotos ou laudos.')}</p>}
 
         {valores.anexos.map((anexo, index) => (
           <div className="pront-anexo-form" key={index}>
-            <input className="input" type="text" placeholder="Nome" aria-label={`Nome do anexo ${index + 1}`} value={anexo.nome} onChange={(e) => atualizarAnexo(index, 'nome', e.target.value)} />
-            <input className="input" type="text" placeholder="URL" aria-label={`URL do anexo ${index + 1}`} value={anexo.url} onChange={(e) => atualizarAnexo(index, 'url', e.target.value)} />
-            <select className="input" aria-label={`Tipo do anexo ${index + 1}`} value={anexo.tipo} onChange={(e) => atualizarAnexo(index, 'tipo', e.target.value)}>
+            <input className="input" type="text" placeholder={tr('Nome')} aria-label={tr('Nome do anexo {p0}', { p0: index + 1 })} value={anexo.nome} onChange={(e) => atualizarAnexo(index, 'nome', e.target.value)} />
+            <input className="input" type="text" placeholder="URL" aria-label={tr('URL do anexo {p0}', { p0: index + 1 })} value={anexo.url} onChange={(e) => atualizarAnexo(index, 'url', e.target.value)} />
+            <select className="input" aria-label={tr('Tipo do anexo {p0}', { p0: index + 1 })} value={anexo.tipo} onChange={(e) => atualizarAnexo(index, 'tipo', e.target.value)}>
               {TIPOS_ANEXO.map(([valor, rotulo]) => (
                 <option key={valor} value={valor}>{rotulo}</option>
               ))}
             </select>
-            <button type="button" className="icon-btn icon-btn--danger" aria-label={`Remover anexo ${index + 1}`} onClick={() => removerAnexo(index)}>
+            <button type="button" className="icon-btn icon-btn--danger" aria-label={tr('Remover anexo {p0}', { p0: index + 1 })} onClick={() => removerAnexo(index)}>
               <IconeX />
             </button>
           </div>
@@ -120,7 +121,7 @@ export default function CamposClinicos({ valores, onChange }) {
 
         <button type="button" className="btn btn--ghost btn--sm pront-section__add" onClick={adicionarAnexo}>
           <IconeMais />
-          Adicionar anexo
+          {tr('Adicionar anexo')}
         </button>
       </fieldset>
     </div>

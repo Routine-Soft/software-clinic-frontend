@@ -225,6 +225,10 @@
   color: var(--text-muted);
 }
 
+.sidebar__idioma {
+  display: flex;
+}
+
 .sidebar__acoes {
   display: flex;
   gap: 8px;

@@ -1,8 +1,9 @@
+import { tr } from '@/i18n';
 export const PERIODOS = [
-  ['diario', 'Diário'],
-  ['semanal', 'Semanal'],
-  ['mensal', 'Mensal'],
-  ['anual', 'Anual'],
+  ['diario', tr('Diário')],
+  ['semanal', tr('Semanal')],
+  ['mensal', tr('Mensal')],
+  ['anual', tr('Anual')],
 ];
 
-export const ROTULO_PERIODO = { diario: 'hoje', semanal: 'nesta semana', mensal: 'neste mês', anual: 'neste ano' };
+export const ROTULO_PERIODO = { diario: 'hoje', semanal: tr('nesta semana'), mensal: tr('neste mês'), anual: tr('neste ano') };

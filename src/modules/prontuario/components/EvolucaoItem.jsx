@@ -8,6 +8,7 @@ import {
   formatDuracao,
   formatDataHoraBR,
 } from '../prontuario.utils';
+import { tr } from '@/i18n';
 
 // Atendimento do histórico. Depois de finalizado o texto não muda mais: o autor corrige ou complementa
 // com um adendo, que fica registrado com data e autor abaixo do texto original.
@@ -41,13 +42,13 @@ export default function EvolucaoItem({ prontuario, destaque = false, souAutor = 
         <header className="pront-evolucao__topo">
           <div className="pront-evolucao__quando">
             <strong>{formatDataHoraBR(prontuario.createdAt)}</strong>
-            <span>{prontuario.profissionalId?.nome ?? 'Profissional removido'}</span>
+            <span>{prontuario.profissionalId?.nome ?? tr('Profissional removido')}</span>
           </div>
 
           <div className="pront-evolucao__selos">
-            {destaque && <span className="badge badge--success">Desta consulta</span>}
-            {!finalizado && <span className="badge badge--live">Em andamento</span>}
-            <span className={`badge${prontuario.convenioId?.nome ? ' badge--info' : ''}`}>{prontuario.convenioId?.nome ?? 'Particular'}</span>
+            {destaque && <span className="badge badge--success">{tr('Desta consulta')}</span>}
+            {!finalizado && <span className="badge badge--live">{tr('Em andamento')}</span>}
+            <span className={`badge${prontuario.convenioId?.nome ? ' badge--info' : ''}`}>{prontuario.convenioId?.nome ?? tr('Particular')}</span>
             {prontuario.atendimentoIniciadoEm && prontuario.atendimentoFinalizadoEm && (
               <span className="badge">{formatDuracao(prontuario.atendimentoIniciadoEm, prontuario.atendimentoFinalizadoEm)}</span>
             )}
@@ -57,7 +58,7 @@ export default function EvolucaoItem({ prontuario, destaque = false, souAutor = 
             <div className="pront-evolucao__acoes pront-no-print">
               <button type="button" className="btn btn--ghost btn--sm" onClick={() => setEscrevendo(true)}>
                 <IconeMais />
-                Adendo
+                {tr('Adendo')}
               </button>
             </div>
           )}
@@ -66,7 +67,7 @@ export default function EvolucaoItem({ prontuario, destaque = false, souAutor = 
         <AcessoAtendimento key={(prontuario.compartilhadoCom ?? []).map((e) => e?._id ?? e).join()} prontuario={prontuario} especialidades={especialidades} souAutor={souAutor} onSalvar={onCompartilhar} />
 
         <div className="pront-evolucao__conteudo">
-          {semConteudo && <p className="pront-evolucao__vazio">Atendimento sem anotações registradas.</p>}
+          {semConteudo && <p className="pront-evolucao__vazio">{tr('Atendimento sem anotações registradas.')}</p>}
 
           {preenchidos.map(([campo, label]) => (
             <div className="pront-texto" key={campo}>
@@ -84,7 +85,7 @@ export default function EvolucaoItem({ prontuario, destaque = false, souAutor = 
 
           {sinais.length > 0 && (
             <div className="pront-texto">
-              <span className="pront-texto__rotulo">Sinais vitais</span>
+              <span className="pront-texto__rotulo">{tr('Sinais vitais')}</span>
               <ul className="pront-sinais">
                 {sinais.map(([rotulo, valor]) => (
                   <li key={rotulo}><span>{rotulo}</span><strong>{valor}</strong></li>
@@ -95,7 +96,7 @@ export default function EvolucaoItem({ prontuario, destaque = false, souAutor = 
 
           {prontuario.anexos?.length > 0 && (
             <div className="pront-texto">
-              <span className="pront-texto__rotulo">Anexos</span>
+              <span className="pront-texto__rotulo">{tr('Anexos')}</span>
               <ul className="pront-anexos">
                 {prontuario.anexos.map((anexo, i) => (
                   <li key={i}>
@@ -108,17 +109,17 @@ export default function EvolucaoItem({ prontuario, destaque = false, souAutor = 
           )}
 
           {prontuario.proximoRetorno && (
-            <p className="pront-retorno">Próximo retorno: <strong>{formatDataBR(prontuario.proximoRetorno)}</strong></p>
+            <p className="pront-retorno">{tr('Próximo retorno:')} <strong>{formatDataBR(prontuario.proximoRetorno)}</strong></p>
           )}
 
           {adendos.length > 0 && (
             <div className="pront-texto">
-              <span className="pront-texto__rotulo">Adendos</span>
+              <span className="pront-texto__rotulo">{tr('Adendos')}</span>
               <ol className="pront-adendos">
                 {adendos.map((adendo) => (
                   <li key={adendo._id} className="pront-adendo">
                     <span className="pront-adendo__meta">
-                      {formatDataHoraBR(adendo.criadoEm)} · {adendo.profissionalId?.nome ?? 'Profissional removido'}
+                      {formatDataHoraBR(adendo.criadoEm)} · {adendo.profissionalId?.nome ?? tr('Profissional removido')}
                     </span>
                     <p>{adendo.texto}</p>
                   </li>
@@ -130,7 +131,7 @@ export default function EvolucaoItem({ prontuario, destaque = false, souAutor = 
           {escrevendo && (
             <form className="pront-adendo-form pront-no-print" onSubmit={salvarAdendo}>
               <div className="field">
-                <label className="field__label" htmlFor={`adendo-${prontuario._id}`}>Novo adendo</label>
+                <label className="field__label" htmlFor={`adendo-${prontuario._id}`}>{tr('Novo adendo')}</label>
                 <textarea
                   id={`adendo-${prontuario._id}`}
                   className="input textarea"
@@ -138,16 +139,16 @@ export default function EvolucaoItem({ prontuario, destaque = false, souAutor = 
                   maxLength={5000}
                   value={texto}
                   onChange={(e) => setTexto(e.target.value)}
-                  placeholder="Correção ou complemento deste atendimento"
+                  placeholder={tr('Correção ou complemento deste atendimento')}
                   required
                   autoFocus
                 />
               </div>
-              <p className="pront-trava">O texto original do atendimento não muda. O adendo fica registrado com data e seu nome, e não pode ser apagado.</p>
+              <p className="pront-trava">{tr('O texto original do atendimento não muda. O adendo fica registrado com data e seu nome, e não pode ser apagado.')}</p>
               <div className="pront-rodape">
-                <button type="button" className="btn btn--ghost" onClick={() => { setEscrevendo(false); setTexto(''); }}>Cancelar</button>
+                <button type="button" className="btn btn--ghost" onClick={() => { setEscrevendo(false); setTexto(''); }}>{tr('Cancelar')}</button>
                 <button type="submit" className={`btn btn--primary${salvando ? ' btn--loading' : ''}`} disabled={salvando || !texto.trim()}>
-                  {salvando ? 'Salvando...' : 'Registrar adendo'}
+                  {salvando ? tr('Salvando...') : tr('Registrar adendo')}
                 </button>
               </div>
             </form>

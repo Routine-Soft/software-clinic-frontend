@@ -1,4 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
+import { useIdioma } from '@/i18n/useIdioma';
+import { tr } from '@/i18n';
 
 // O Client ID é público; a variável de ambiente permite trocar sem mexer no código.
 const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID
@@ -17,7 +19,7 @@ function carregarScriptGoogle() {
       script.onload = () => resolve(window.google);
       script.onerror = () => {
         scriptGoogle = null;
-        reject(new Error('Não foi possível carregar o login do Google.'));
+        reject(new Error(tr('Não foi possível carregar o login do Google.')));
       };
       document.head.appendChild(script);
     });
@@ -27,6 +29,7 @@ function carregarScriptGoogle() {
 
 // Botão oficial "Continuar com o Google". Entrega o token (credential) para quem usa o componente.
 export default function BotaoGoogle({ onCredencial }) {
+  const { locale } = useIdioma();
   const areaRef = useRef(null);
   const onCredencialRef = useRef(onCredencial);
   const [erro, setErro] = useState(null);
@@ -55,7 +58,7 @@ export default function BotaoGoogle({ onCredencial }) {
           shape: 'pill',
           text: 'continue_with',
           logo_alignment: 'center',
-          locale: 'pt-BR',
+          locale,
           width: Math.min(400, Math.max(200, Math.floor(areaRef.current.clientWidth))),
         });
       })
@@ -66,7 +69,7 @@ export default function BotaoGoogle({ onCredencial }) {
     return () => {
       cancelado = true;
     };
-  }, []);
+  }, [locale]);
 
   return (
     <div className="auth-google">

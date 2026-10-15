@@ -3,6 +3,7 @@ import EditarNomeModal from './EditarNomeModal'
 import NovoNomeModal from './NovoNomeModal'
 import { IconeMais, IconeLapis, IconeLixeira, IconeCheck, IconeX } from './icones'
 import './CrudCard.css'
+import { tr } from '@/i18n';
 
 export default function CrudCard({
     titulo,
@@ -59,7 +60,7 @@ export default function CrudCard({
                 )}
                 <button type="button" className="btn btn--primary btn--sm crud-card__novo-btn" onClick={() => setCriando(true)} aria-label={`Adicionar ${singular}`}>
                     <IconeMais />
-                    <span className="crud-card__rotulo">Adicionar</span>
+                    <span className="crud-card__rotulo">{tr('Adicionar')}</span>
                 </button>
             </header>
 
@@ -97,20 +98,20 @@ export default function CrudCard({
 
                             {confirmandoId === item._id ? (
                                 <div className="crud-item__confirmar">
-                                    <span>Excluir?</span>
-                                    <button type="button" className="icon-btn icon-btn--danger" aria-label={`Confirmar exclusão de ${item.nome}`} onClick={() => handleDelete(item._id)}>
+                                    <span>{tr('Excluir?')}</span>
+                                    <button type="button" className="icon-btn icon-btn--danger" aria-label={tr('Confirmar exclusão de {nome}', { nome: item.nome })} onClick={() => handleDelete(item._id)}>
                                         <IconeCheck />
                                     </button>
-                                    <button type="button" className="icon-btn" aria-label="Cancelar exclusão" onClick={() => setConfirmandoId(null)}>
+                                    <button type="button" className="icon-btn" aria-label={tr('Cancelar exclusão')} onClick={() => setConfirmandoId(null)}>
                                         <IconeX />
                                     </button>
                                 </div>
                             ) : (
                                 <div className="crud-item__acoes">
-                                    <button type="button" className="icon-btn" aria-label={`Editar ${item.nome}`} title="Editar" onClick={() => handleEdit(item)}>
+                                    <button type="button" className="icon-btn" aria-label={`Editar ${item.nome}`} title={tr('Editar')} onClick={() => handleEdit(item)}>
                                         <IconeLapis />
                                     </button>
-                                    <button type="button" className="icon-btn icon-btn--danger" aria-label={`Excluir ${item.nome}`} title="Excluir" onClick={() => setConfirmandoId(item._id)}>
+                                    <button type="button" className="icon-btn icon-btn--danger" aria-label={`Excluir ${item.nome}`} title={tr('Excluir')} onClick={() => setConfirmandoId(item._id)}>
                                         <IconeLixeira />
                                     </button>
                                 </div>
@@ -135,7 +136,7 @@ export default function CrudCard({
             {criando && (
                 <NovoNomeModal
                     titulo={labelNovo}
-                    label="Nome"
+                    label={tr('Nome')}
                     placeholder={placeholder}
                     dica={dica}
                     erro={error}

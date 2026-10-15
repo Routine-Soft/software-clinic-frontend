@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useAuthContext } from '@/hooks/useAuthContext';
+import { tr } from '@/i18n';
 
 function juntar(itens) {
   if (itens.length <= 1) return itens.join('');
@@ -14,10 +15,10 @@ export default function AvisoPreRequisito({ acao, faltando, onde }) {
 
   return (
     <div className="alert alert--warning" role="alert">
-      <strong>Antes de {acao}, cadastre {juntar(faltando)}.</strong>{' '}
+      <strong>{tr('Antes de {acao}, cadastre {p0}.', { acao, p0: juntar(faltando) })}</strong>{' '}
       {onde ?? (hasRole('admin') || hasRole('recepcao')
-        ? <>Isso é feito no <Link to="/dashboard-admin">Painel Admin</Link>.</>
-        : 'Peça ao administrador da clínica para fazer esse cadastro.')}
+        ? <>{tr('Isso é feito no')} <Link to="/dashboard-admin">{tr('Painel Admin')}</Link>.</>
+        : tr('Peça ao administrador da clínica para fazer esse cadastro.'))}
     </div>
   );
 }

@@ -1,6 +1,7 @@
 import { useId, useState } from 'react'
 import Modal from '@/components/Modal/Modal'
 import ModalForm from '@/components/Modal/ModalForm'
+import { tr } from '@/i18n';
 
 export default function EditarNomeModal({ titulo, item, placeholder, erro, onSave, onClose }) {
     const [formEdicao, setFormEdicao] = useState({ nome: item.nome })
@@ -11,7 +12,7 @@ export default function EditarNomeModal({ titulo, item, placeholder, erro, onSav
             {(fechar) => (
                 <ModalForm erro={erro} fechar={fechar} onSubmit={() => onSave(item._id, formEdicao)}>
                     <div className="field">
-                        <label className="field__label" htmlFor={inputId}>Nome</label>
+                        <label className="field__label" htmlFor={inputId}>{tr('Nome')}</label>
                         <input
                             id={inputId}
                             className="input"

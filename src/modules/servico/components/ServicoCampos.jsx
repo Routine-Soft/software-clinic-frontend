@@ -3,14 +3,15 @@ import { IconeMais, IconeLixeira } from '@/components/CrudCard/icones';
 import { dicaComissao } from '../servico.utils';
 import { linhaConvenioVazia, MODULOS_SERVICO, servicoComMesmoNome, sugestaoDeNome } from '../servico.form';
 import '../servico.css';
+import { tr } from '@/i18n';
 
 function CampoComissao({ id, tipo, valor, preco, onTipo, onValor }) {
   return (
     <div className="field">
-      <label className="field__label" htmlFor={id}>Repasse ao profissional</label>
+      <label className="field__label" htmlFor={id}>{tr('Repasse ao profissional')}</label>
       <div className="comissao-campo">
-        <div className="comissao-campo__tipo" role="group" aria-label="Tipo de repasse">
-          <button type="button" aria-pressed={tipo === 'valor'} onClick={() => onTipo('valor')}>R$</button>
+        <div className="comissao-campo__tipo" role="group" aria-label={tr('Tipo de repasse')}>
+          <button type="button" aria-pressed={tipo === 'valor'} onClick={() => onTipo('valor')}>{tr('R$')}</button>
           <button type="button" aria-pressed={tipo === 'percentual'} onClick={() => onTipo('percentual')}>%</button>
         </div>
         <input
@@ -31,12 +32,12 @@ function CampoComissao({ id, tipo, valor, preco, onTipo, onValor }) {
   );
 }
 
-function CampoPreco({ id, valor, onChange, rotulo = 'Preço' }) {
+function CampoPreco({ id, valor, onChange, rotulo = tr('Preço') }) {
   return (
     <div className="field">
       <label className="field__label" htmlFor={id}>{rotulo}</label>
       <div className="input-group">
-        <span className="input-group__prefix">R$</span>
+        <span className="input-group__prefix">{tr('R$')}</span>
         <input id={id} className="input" type="number" min="0" step="0.01" value={valor} onChange={(e) => onChange(e.target.value)} required />
       </div>
     </div>
@@ -62,19 +63,19 @@ export default function ServicoCampos({ form, setForm, convenios, servicos = [],
   const repetido = servicoComMesmoNome(form.nome, servicos, servicoId);
   const sugestao = repetido ? sugestaoDeNome(form, servicos, servicoId) : '';
   const tipoDoOutro = repetido?.tipo === 'pacote' ? 'pacote' : 'consulta';
-  const paraEste = form.tipo === 'pacote' ? 'Para o pacote' : 'Para a consulta';
+  const paraEste = form.tipo === 'pacote' ? tr('Para o pacote') : tr('Para a consulta');
 
   return (
     <>
       <div className="field">
-        <label className="field__label" htmlFor={`${id}-nome`}>Nome</label>
+        <label className="field__label" htmlFor={`${id}-nome`}>{tr('Nome')}</label>
         <input
           id={`${id}-nome`}
           className="input"
           type="text"
           value={form.nome}
           onChange={(e) => set('nome', e.target.value)}
-          placeholder="Ex: Consulta de rotina, Pacote de fisioterapia"
+          placeholder={tr('Ex: Consulta de rotina, Pacote de fisioterapia')}
           aria-invalid={!!repetido}
           aria-describedby={repetido ? `${id}-nome-repetido` : undefined}
           required
@@ -82,10 +83,10 @@ export default function ServicoCampos({ form, setForm, convenios, servicos = [],
         {repetido && (
           <div id={`${id}-nome-repetido`} className="servico-nome-repetido" role="alert">
             <p>
-              Você já tem o serviço <strong>“{repetido.nome}”</strong> ({tipoDoOutro}). {paraEste}, use outro nome.
+              {tr('Você já tem o serviço')} <strong>“{repetido.nome}”</strong> {tr('({tipoDoOutro}). {paraEste}, use outro nome.', { tipoDoOutro, paraEste })}
             </p>
             <button type="button" className="btn btn--ghost btn--sm" onClick={() => set('nome', sugestao)}>
-              Usar “{sugestao}”
+              {tr('Usar “{sugestao}”', { sugestao })}
             </button>
           </div>
         )}
@@ -93,38 +94,37 @@ export default function ServicoCampos({ form, setForm, convenios, servicos = [],
 
       <div className="modal-form__row">
         <div className="field">
-          <label className="field__label" htmlFor={`${id}-tipo`}>Tipo</label>
+          <label className="field__label" htmlFor={`${id}-tipo`}>{tr('Tipo')}</label>
           <select id={`${id}-tipo`} className="input" value={form.tipo} onChange={(e) => set('tipo', e.target.value)}>
-            <option value="consulta">Consulta</option>
-            <option value="pacote">Pacote</option>
+            <option value="consulta">{tr('Consulta')}</option>
+            <option value="pacote">{tr('Pacote')}</option>
           </select>
         </div>
 
         {form.tipo === 'pacote' && (
           <div className="field field--reveal">
-            <label className="field__label" htmlFor={`${id}-dias`}>Quantidade de dias</label>
+            <label className="field__label" htmlFor={`${id}-dias`}>{tr('Quantidade de dias')}</label>
             <input id={`${id}-dias`} className="input" type="number" min="1" value={form.qtdDias} onChange={(e) => set('qtdDias', e.target.value)} required />
           </div>
         )}
       </div>
 
       <div className="field">
-        <label className="field__label" htmlFor={`${id}-modulo`}>Usado em</label>
+        <label className="field__label" htmlFor={`${id}-modulo`}>{tr('Usado em')}</label>
         <select id={`${id}-modulo`} className="input" value={form.modulo} onChange={(e) => set('modulo', e.target.value)}>
           {MODULOS_SERVICO.map(([valor, rotulo]) => <option key={valor} value={valor}>{rotulo}</option>)}
         </select>
-        <p className="field__hint">Marque quando o serviço for uma avaliação: ele passa a aparecer para escolher na tela da avaliação.</p>
+        <p className="field__hint">{tr('Marque quando o serviço for uma avaliação: ele passa a aparecer para escolher na tela da avaliação.')}</p>
       </div>
 
-      <section className="tabela-preco" aria-label="Preços e repasses">
-        <h4 className="tabela-preco__titulo">Preços e repasses</h4>
+      <section className="tabela-preco" aria-label={tr('Preços e repasses')}>
+        <h4 className="tabela-preco__titulo">{tr('Preços e repasses')}</h4>
         <p className="field__hint">
-          {form.tipo === 'pacote' ? 'O repasse vale por sessão realizada. ' : ''}
-          Convênio que não estiver na lista usa o preço e o repasse padrão.
+          {tr('{p0} Convênio que não estiver na lista usa o preço e o repasse padrão.', { p0: form.tipo === 'pacote' ? tr('O repasse vale por sessão realizada. ') : '' })}
         </p>
 
         <div className="tabela-preco__linha">
-          <span className="tabela-preco__nome">Preço padrão</span>
+          <span className="tabela-preco__nome">{tr('Preço padrão')}</span>
           <div className="modal-form__row">
             <CampoPreco id={`${id}-preco`} valor={form.preco} onChange={(v) => set('preco', v)} />
             <CampoComissao
@@ -145,15 +145,15 @@ export default function ServicoCampos({ form, setForm, convenios, servicos = [],
                 className="input tabela-preco__convenio"
                 value={linha.convenioId}
                 onChange={(e) => setLinha(index, 'convenioId', e.target.value)}
-                aria-label={`Convênio da linha ${index + 1}`}
+                aria-label={tr('Convênio da linha {p0}', { p0: index + 1 })}
                 required
               >
-                <option value="">Escolha o convênio</option>
+                <option value="">{tr('Escolha o convênio')}</option>
                 {convenios.map((c) => (
                   <option key={c._id} value={c._id} disabled={usados.has(c._id) && c._id !== linha.convenioId}>{c.nome}</option>
                 ))}
               </select>
-              <button type="button" className="icon-btn icon-btn--danger" aria-label={`Remover linha ${index + 1}`} title="Remover" onClick={() => removerLinha(index)}>
+              <button type="button" className="icon-btn icon-btn--danger" aria-label={tr('Remover linha {p0}', { p0: index + 1 })} title={tr('Remover')} onClick={() => removerLinha(index)}>
                 <IconeLixeira />
               </button>
             </div>
@@ -172,11 +172,11 @@ export default function ServicoCampos({ form, setForm, convenios, servicos = [],
         ))}
 
         {convenios.length === 0 ? (
-          <p className="modal-form__hint">Para ter preço e repasse por convênio, cadastre os convênios antes (card Convênios, passo 4 do Painel Admin).</p>
+          <p className="modal-form__hint">{tr('Para ter preço e repasse por convênio, cadastre os convênios antes (card Convênios, passo 4 do Painel Admin).')}</p>
         ) : (
           <button type="button" className="btn btn--ghost btn--sm tabela-preco__adicionar" onClick={adicionarLinha} disabled={!podeAdicionar}>
             <IconeMais />
-            {podeAdicionar ? 'Adicionar convênio' : 'Todos os convênios já estão na tabela'}
+            {podeAdicionar ? tr('Adicionar convênio') : tr('Todos os convênios já estão na tabela')}
           </button>
         )}
       </section>

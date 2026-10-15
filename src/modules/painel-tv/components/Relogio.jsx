@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
+import { localeAtual } from '@/i18n';
 
 function formatar(data) {
   return {
-    hora: data.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
-    dia: data.toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' }),
+    hora: data.toLocaleTimeString(localeAtual(), { hour: '2-digit', minute: '2-digit' }),
+    dia: data.toLocaleDateString(localeAtual(), { weekday: 'long', day: 'numeric', month: 'long' }),
   };
 }
 

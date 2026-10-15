@@ -7,6 +7,7 @@ import { IconeCheck, IconeX } from '@/components/CrudCard/icones';
 import PendentesComissaoModal from './PendentesComissaoModal';
 import ComissaoKpi from './ComissaoKpi';
 import '../comissoes.css';
+import { tr } from '@/i18n';
 
 const plural = (n, um, varios) => `${n} ${n === 1 ? um : varios}`;
 
@@ -31,8 +32,8 @@ export default function ComissoesADM() {
     <div className="page comissao-page">
       <header className="page-header">
         <div>
-          <h2 className="page-title">Repasses</h2>
-          <p className="page-subtitle">O que cada profissional tem a receber pelos atendimentos realizados</p>
+          <h2 className="page-title">{tr('Repasses')}</h2>
+          <p className="page-subtitle">{tr('O que cada profissional tem a receber pelos atendimentos realizados')}</p>
         </div>
       </header>
 
@@ -44,19 +45,19 @@ export default function ComissoesADM() {
       )}
 
       <div className="comissao-kpis">
-        <ComissaoKpi icone="receita" tom="warning" rotulo="A pagar" valor={formatarPreco(totalPendente)} loading={loading} detalhe="Soma de todos os repasses pendentes" />
-        <ComissaoKpi icone="agenda" rotulo="Atendimentos aguardando pagamento" valor={atendimentosPendentes} loading={loading} detalhe="Realizados e ainda não pagos" />
-        <ComissaoKpi icone="assinatura" tom="success" rotulo="Já pago" valor={formatarPreco(totalPago)} loading={loading} detalhe="Total de todos os pagamentos feitos" />
+        <ComissaoKpi icone="receita" tom="warning" rotulo={tr('A pagar')} valor={formatarPreco(totalPendente)} loading={loading} detalhe={tr('Soma de todos os repasses pendentes')} />
+        <ComissaoKpi icone="agenda" rotulo={tr('Atendimentos aguardando pagamento')} valor={atendimentosPendentes} loading={loading} detalhe={tr('Realizados e ainda não pagos')} />
+        <ComissaoKpi icone="assinatura" tom="success" rotulo={tr('Já pago')} valor={formatarPreco(totalPago)} loading={loading} detalhe={tr('Total de todos os pagamentos feitos')} />
       </div>
 
       <section className="card table-wrap">
         <table className="table">
           <thead>
             <tr>
-              <th>Profissional</th>
-              <th>A pagar</th>
-              <th>Último pagamento</th>
-              <th>Ações</th>
+              <th>{tr('Profissional')}</th>
+              <th>{tr('A pagar')}</th>
+              <th>{tr('Último pagamento')}</th>
+              <th>{tr('Ações')}</th>
             </tr>
           </thead>
           <tbody>
@@ -70,7 +71,7 @@ export default function ComissoesADM() {
               ))
             ) : resumo.length === 0 ? (
               <tr>
-                <td className="table__empty" colSpan={4}>Nenhum profissional cadastrado ainda.</td>
+                <td className="table__empty" colSpan={4}>{tr('Nenhum profissional cadastrado ainda.')}</td>
               </tr>
             ) : (
               resumo.map(({ profissional, pendente, pago }, index) => {
@@ -83,7 +84,7 @@ export default function ComissoesADM() {
                         <div className="comissao-pessoa__dados">
                           <span className="comissao-pessoa__nome">{profissional.nome}</span>
                           {!profissional.temLogin && (
-                            <span className="comissao-pessoa__sub" title="Sem um usuário vinculado, o profissional não consegue ver os próprios repasses">Sem login no sistema</span>
+                            <span className="comissao-pessoa__sub" title={tr('Sem um usuário vinculado, o profissional não consegue ver os próprios repasses')}>{tr('Sem login no sistema')}</span>
                           )}
                         </div>
                       </div>
@@ -92,7 +93,7 @@ export default function ComissoesADM() {
                       <div className="comissao-valor">
                         <span className="table__num">{formatarPreco(pendente.total)}</span>
                         <span className="comissao-pessoa__sub">
-                          {temPendente ? plural(pendente.quantidade, 'atendimento', 'atendimentos') : 'Nada pendente'}
+                          {temPendente ? plural(pendente.quantidade, 'atendimento', 'atendimentos') : tr('Nada pendente')}
                         </span>
                       </div>
                     </td>
@@ -103,23 +104,23 @@ export default function ComissoesADM() {
                           <span className="comissao-pessoa__sub">{formatarPreco(pago.ultimoValor)}</span>
                         </div>
                       ) : (
-                        <span className="comissao-pessoa__sub">Nenhum ainda</span>
+                        <span className="comissao-pessoa__sub">{tr('Nenhum ainda')}</span>
                       )}
                     </td>
                     <td>
                       {confirmandoId === profissional._id ? (
                         <div className="comissao-confirmar">
-                          <span>Pagar {formatarPreco(pendente.total)}?</span>
+                          <span>{tr('Pagar {p0}?', { p0: formatarPreco(pendente.total) })}</span>
                           <button
                             type="button"
                             className="icon-btn comissao-confirmar__ok"
-                            aria-label={`Confirmar pagamento de ${formatarPreco(pendente.total)} para ${profissional.nome}`}
+                            aria-label={tr('Confirmar pagamento de {p0} para {nome}', { p0: formatarPreco(pendente.total), nome: profissional.nome })}
                             disabled={pagandoId === profissional._id}
                             onClick={() => handlePagar(profissional._id)}
                           >
                             <IconeCheck />
                           </button>
-                          <button type="button" className="icon-btn" aria-label="Cancelar" onClick={() => setConfirmandoId(null)}>
+                          <button type="button" className="icon-btn" aria-label={tr('Cancelar')} onClick={() => setConfirmandoId(null)}>
                             <IconeX />
                           </button>
                         </div>
@@ -131,7 +132,7 @@ export default function ComissoesADM() {
                             disabled={!temPendente}
                             onClick={() => setDetalhesDe(profissional)}
                           >
-                            Ver atendimentos
+                            {tr('Ver atendimentos')}
                           </button>
                           <button
                             type="button"
@@ -139,7 +140,7 @@ export default function ComissoesADM() {
                             disabled={!temPendente}
                             onClick={() => setConfirmandoId(profissional._id)}
                           >
-                            Pagar repasse
+                            {tr('Pagar repasse')}
                           </button>
                         </div>
                       )}
@@ -153,23 +154,22 @@ export default function ComissoesADM() {
       </section>
 
       <p className="page-subtitle comissao-nota">
-        O repasse nasce quando o atendimento é marcado como realizado na agenda, com o valor que o serviço tem naquele momento.
-        Pagar quita de uma vez tudo o que está pendente para o profissional.
+        {tr('O repasse nasce quando o atendimento é marcado como realizado na agenda, com o valor que o serviço tem naquele momento. Pagar quita de uma vez tudo o que está pendente para o profissional.')}
       </p>
 
       <section className="card comissao-historico">
-        <h3 className="comissao-historico__titulo">Pagamentos feitos</h3>
+        <h3 className="comissao-historico__titulo">{tr('Pagamentos feitos')}</h3>
         {!loading && pagamentos.length === 0 ? (
-          <p className="comissao-pessoa__sub">Nenhum pagamento de repasse registrado ainda.</p>
+          <p className="comissao-pessoa__sub">{tr('Nenhum pagamento de repasse registrado ainda.')}</p>
         ) : (
           <ul className="comissao-historico__lista">
             {pagamentos.map((pagamento) => (
               <li key={pagamento._id} className="comissao-historico__item">
                 <div className="comissao-valor">
-                  <strong>{pagamento.profissional?.nome ?? 'Profissional removido'}</strong>
+                  <strong>{pagamento.profissional?.nome ?? tr('Profissional removido')}</strong>
                   <span className="comissao-pessoa__sub">
                     {formatarData(pagamento.pagoEm)} · {plural(pagamento.quantidade, 'atendimento', 'atendimentos')}
-                    {pagamento.pagoPor ? ` · pago por ${pagamento.pagoPor}` : ''}
+                    {pagamento.pagoPor ? tr(' · pago por {pagoPor}', { pagoPor: pagamento.pagoPor }) : ''}
                   </span>
                 </div>
                 <span className="table__num">{formatarPreco(pagamento.valor)}</span>

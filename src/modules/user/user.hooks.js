@@ -17,6 +17,7 @@ import {
   pedirLinkDeSenha,
   redefinirSenhaPeloLink,
 } from "./user.api";
+import { tr } from '@/i18n';
 
 export function useUsuariosDaClinica() {
   const [usuarios, setUsuarios] = useState([]);
@@ -280,7 +281,7 @@ export function useRecuperarSenha() {
     setSucesso(null);
     try {
       const resposta = await acao();
-      setSucesso(resposta?.message ?? 'Pronto.');
+      setSucesso(resposta?.message ?? tr('Pronto.'));
       return true;
     } catch (error) {
       setErro(error);

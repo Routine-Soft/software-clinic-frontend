@@ -2,6 +2,7 @@ import { useState } from 'react';
 import Modal from '@/components/Modal/Modal';
 import ModalForm from '@/components/Modal/ModalForm';
 import CampoUsuarioVinculado from './CampoUsuarioVinculado';
+import { tr } from '@/i18n';
 
 const FORM_CRIAR_INICIAL = { nome: '', tipoRegistro: '', numeroRegistro: '', especialidadeIds: [], usuarioId: '', exibirNaTv: true };
 
@@ -26,13 +27,13 @@ export default function NovoProfissionalModal({ especialidades, usuariosVinculav
   }
 
   return (
-    <Modal title="Novo profissional" onClose={onClose}>
+    <Modal title={tr('Novo profissional')} onClose={onClose}>
       {(fechar) => (
         <ModalForm
           erro={erro}
           fechar={fechar}
-          submitLabel="Cadastrar profissional"
-          loadingLabel="Cadastrando..."
+          submitLabel={tr('Cadastrar profissional')}
+          loadingLabel={tr('Cadastrando...')}
           submitDisabled={formCriar.especialidadeIds.length === 0}
           onSubmit={() => onSave({ ...formCriar, usuarioId: formCriar.usuarioId || null })}
         >
@@ -45,7 +46,7 @@ export default function NovoProfissionalModal({ especialidades, usuariosVinculav
           />
 
           <div className="field">
-            <label className="field__label" htmlFor="novo-profissional-nome">Nome</label>
+            <label className="field__label" htmlFor="novo-profissional-nome">{tr('Nome')}</label>
             <input
               id="novo-profissional-nome"
               className="input"
@@ -59,20 +60,20 @@ export default function NovoProfissionalModal({ especialidades, usuariosVinculav
 
           <div className="modal-form__row">
             <div className="field">
-              <label className="field__label" htmlFor="novo-profissional-tipo">Tipo de Registro</label>
+              <label className="field__label" htmlFor="novo-profissional-tipo">{tr('Tipo de Registro')}</label>
               <input
                 id="novo-profissional-tipo"
                 className="input"
                 type="text"
                 value={formCriar.tipoRegistro}
                 onChange={(e) => handleChangeCriar('tipoRegistro', e.target.value)}
-                placeholder="Ex: CRM, CRO, CREFITO"
+                placeholder={tr('Ex: CRM, CRO, CREFITO')}
                 required
               />
             </div>
 
             <div className="field">
-              <label className="field__label" htmlFor="novo-profissional-numero">Número do Registro</label>
+              <label className="field__label" htmlFor="novo-profissional-numero">{tr('Número do Registro')}</label>
               <input
                 id="novo-profissional-numero"
                 className="input"
@@ -85,7 +86,7 @@ export default function NovoProfissionalModal({ especialidades, usuariosVinculav
           </div>
 
           <div className="field">
-            <span className="field__label">Especialidades</span>
+            <span className="field__label">{tr('Especialidades')}</span>
             {especialidades.length > 0 ? (
               <div className="check-list">
                 {especialidades.map((especialidade) => (
@@ -100,7 +101,7 @@ export default function NovoProfissionalModal({ especialidades, usuariosVinculav
                 ))}
               </div>
             ) : (
-              <p className="modal-form__hint">Nenhuma especialidade cadastrada ainda. Cadastre uma antes de criar um profissional.</p>
+              <p className="modal-form__hint">{tr('Nenhuma especialidade cadastrada ainda. Cadastre uma antes de criar um profissional.')}</p>
             )}
           </div>
 
@@ -110,7 +111,7 @@ export default function NovoProfissionalModal({ especialidades, usuariosVinculav
               checked={formCriar.exibirNaTv}
               onChange={(e) => handleChangeCriar('exibirNaTv', e.target.checked)}
             />
-            Mostrar o nome do profissional na TV da sala de espera
+            {tr('Mostrar o nome do profissional na TV da sala de espera')}
           </label>
         </ModalForm>
       )}

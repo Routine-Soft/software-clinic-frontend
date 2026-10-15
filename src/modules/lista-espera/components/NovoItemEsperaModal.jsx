@@ -4,6 +4,7 @@ import ModalForm from '@/components/Modal/ModalForm';
 import PacientePicker from '@/modules/paciente/components/PacientePicker';
 import AvisoPreRequisito from '@/components/AvisoPreRequisito/AvisoPreRequisito';
 import './lista-espera.css';
+import { tr } from '@/i18n';
 
 const FORM_INICIAL = { especialidadeId: '', profissionalId: '', dataDesejada: '', observacao: '' };
 
@@ -21,7 +22,7 @@ export default function NovoItemEsperaModal({
 }) {
   const [form, setForm] = useState(FORM_INICIAL);
   const [pacienteSelecionado, setPacienteSelecionado] = useState(null);
-  const faltando = !carregandoEspecialidades && especialidades.length === 0 ? ['uma especialidade'] : [];
+  const faltando = !carregandoEspecialidades && especialidades.length === 0 ? [tr('uma especialidade')] : [];
 
   const profissionaisFiltrados = useMemo(() => {
     if (!form.especialidadeId) return profissionais;
@@ -45,10 +46,10 @@ export default function NovoItemEsperaModal({
   }
 
   return (
-    <Modal title="Adicionar à lista de espera" wide onClose={onClose}>
+    <Modal title={tr('Adicionar à lista de espera')} wide onClose={onClose}>
       {(fechar) => (
         <div className="modal-form">
-          <AvisoPreRequisito acao="colocar alguém na lista de espera" faltando={faltando} />
+          <AvisoPreRequisito acao={tr('colocar alguém na lista de espera')} faltando={faltando} />
 
           <PacientePicker
             pacientes={pacientes}
@@ -62,14 +63,14 @@ export default function NovoItemEsperaModal({
           <ModalForm
             erro={erro}
             fechar={fechar}
-            submitLabel="Adicionar à fila"
-            loadingLabel="Adicionando..."
+            submitLabel={tr('Adicionar à fila')}
+            loadingLabel={tr('Adicionando...')}
             submitDisabled={!pacienteSelecionado || faltando.length > 0}
             onSubmit={() => onSave(montarPayload())}
           >
             <div className="modal-form__row">
               <div className="field">
-                <label className="field__label" htmlFor="novo-espera-especialidade">Especialidade</label>
+                <label className="field__label" htmlFor="novo-espera-especialidade">{tr('Especialidade')}</label>
                 <select
                   id="novo-espera-especialidade"
                   className="input"
@@ -77,7 +78,7 @@ export default function NovoItemEsperaModal({
                   onChange={(e) => handleChange('especialidadeId', e.target.value)}
                   required
                 >
-                  <option value="">Selecione</option>
+                  <option value="">{tr('Selecione')}</option>
                   {especialidades.map((e) => (
                     <option key={e._id} value={e._id}>{e.nome}</option>
                   ))}
@@ -85,14 +86,14 @@ export default function NovoItemEsperaModal({
               </div>
 
               <div className="field">
-                <label className="field__label" htmlFor="novo-espera-profissional">Profissional preferido</label>
+                <label className="field__label" htmlFor="novo-espera-profissional">{tr('Profissional preferido')}</label>
                 <select
                   id="novo-espera-profissional"
                   className="input"
                   value={form.profissionalId}
                   onChange={(e) => handleChange('profissionalId', e.target.value)}
                 >
-                  <option value="">Qualquer um</option>
+                  <option value="">{tr('Qualquer um')}</option>
                   {profissionaisFiltrados.map((p) => (
                     <option key={p._id} value={p._id}>{p.nome}</option>
                   ))}
@@ -101,7 +102,7 @@ export default function NovoItemEsperaModal({
             </div>
 
             <div className="field">
-              <label className="field__label" htmlFor="novo-espera-data">Data desejada (opcional)</label>
+              <label className="field__label" htmlFor="novo-espera-data">{tr('Data desejada (opcional)')}</label>
               <input
                 id="novo-espera-data"
                 className="input"
@@ -112,7 +113,7 @@ export default function NovoItemEsperaModal({
             </div>
 
             <div className="field">
-              <label className="field__label" htmlFor="novo-espera-obs">Observação</label>
+              <label className="field__label" htmlFor="novo-espera-obs">{tr('Observação')}</label>
               <textarea
                 id="novo-espera-obs"
                 className="input textarea"

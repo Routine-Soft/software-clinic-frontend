@@ -9,11 +9,12 @@ import ReuniaoFormModal from './ReuniaoFormModal';
 import ReuniaoDetalhesModal from './ReuniaoDetalhesModal';
 import '@/modules/agenda/agenda.css';
 import './reuniao.css';
+import { tr } from '@/i18n';
 
 const VISOES = [
-  ['dia', 'Dia'],
-  ['semana', 'Semana'],
-  ['mes', 'Mês'],
+  ['dia', tr('Dia')],
+  ['semana', tr('Semana')],
+  ['mes', tr('Mês')],
 ];
 
 const corDaReuniao = () => COR_REUNIAO;
@@ -53,7 +54,7 @@ export default function ReunioesCalendario() {
   const porDia = useMemo(() => agruparPorDia(filtradas), [filtradas]);
 
   const totalNoPeriodo = filtradas.filter((r) => r.status !== 'cancelado').length;
-  const noPeriodo = visao === 'dia' ? 'no dia' : visao === 'semana' ? 'na semana' : 'no mês';
+  const noPeriodo = visao === 'dia' ? tr('no dia') : visao === 'semana' ? tr('na semana') : tr('no mês');
 
   function irParaDia(dia) {
     setDataReferencia(dia);
@@ -82,18 +83,18 @@ export default function ReunioesCalendario() {
     <div className="page agenda-page">
       <header className="page-header">
         <div>
-          <h2 className="page-title">Reuniões</h2>
-          <p className="page-subtitle">Reuniões internas, como conversas com clientes antes de contratar. Os profissionais não veem.</p>
+          <h2 className="page-title">{tr('Reuniões')}</h2>
+          <p className="page-subtitle">{tr('Reuniões internas, como conversas com clientes antes de contratar. Os profissionais não veem.')}</p>
         </div>
         <div className="page-header__acoes">
           {!loading && (
             <span className="badge badge--primary">
-              {totalNoPeriodo} {totalNoPeriodo === 1 ? 'reunião' : 'reuniões'} {noPeriodo}
+              {totalNoPeriodo} {totalNoPeriodo === 1 ? tr('reunião') : tr('reuniões')} {noPeriodo}
             </span>
           )}
           <button type="button" className="btn btn--primary" onClick={() => novaReuniao(paraISO(dataReferencia))}>
             <IconeMais />
-            Nova reunião
+            {tr('Nova reunião')}
           </button>
         </div>
       </header>
@@ -108,17 +109,17 @@ export default function ReunioesCalendario() {
       <section className="card agenda-cal" aria-busy={loading}>
         <div className="agenda-toolbar">
           <div className="agenda-toolbar__nav">
-            <button type="button" className="btn btn--ghost btn--sm" onClick={() => setDataReferencia(new Date())}>Hoje</button>
-            <button type="button" className="icon-btn" aria-label="Período anterior" onClick={() => setDataReferencia(navegar(visao, dataReferencia, -1))}>
+            <button type="button" className="btn btn--ghost btn--sm" onClick={() => setDataReferencia(new Date())}>{tr('Hoje')}</button>
+            <button type="button" className="icon-btn" aria-label={tr('Período anterior')} onClick={() => setDataReferencia(navegar(visao, dataReferencia, -1))}>
               <IconeSetaEsq />
             </button>
-            <button type="button" className="icon-btn" aria-label="Próximo período" onClick={() => setDataReferencia(navegar(visao, dataReferencia, 1))}>
+            <button type="button" className="icon-btn" aria-label={tr('Próximo período')} onClick={() => setDataReferencia(navegar(visao, dataReferencia, 1))}>
               <IconeSetaDir />
             </button>
             <h3 className="agenda-toolbar__titulo" aria-live="polite">{tituloDaVisao(visao, dataReferencia)}</h3>
           </div>
 
-          <div className="agenda-visoes" role="group" aria-label="Modo de visualização">
+          <div className="agenda-visoes" role="group" aria-label={tr('Modo de visualização')}>
             {VISOES.map(([chave, rotulo]) => (
               <button key={chave} type="button" className="agenda-visao" aria-pressed={visao === chave} onClick={() => setVisao(chave)}>
                 {rotulo}
@@ -130,11 +131,11 @@ export default function ReunioesCalendario() {
         <div className="agenda-filtros">
           <div className="search">
             <IconeBusca />
-            <input className="input" type="search" value={busca} onChange={(e) => setBusca(e.target.value)} placeholder="Buscar por nome, telefone ou assunto" aria-label="Buscar reunião" />
+            <input className="input" type="search" value={busca} onChange={(e) => setBusca(e.target.value)} placeholder={tr('Buscar por nome, telefone ou assunto')} aria-label={tr('Buscar reunião')} />
           </div>
 
           <button type="button" className="agenda-filtros__toggle" aria-pressed={mostrarCanceladas} onClick={() => setMostrarCanceladas(!mostrarCanceladas)}>
-            Canceladas
+            {tr('Canceladas')}
           </button>
         </div>
 
@@ -166,7 +167,7 @@ export default function ReunioesCalendario() {
         )}
 
         {!loading && visao === 'dia' && filtradas.length === 0 && (
-          <p className="agenda-vazio">Nenhuma reunião neste dia. Clique no horário desejado para agendar.</p>
+          <p className="agenda-vazio">{tr('Nenhuma reunião neste dia. Clique no horário desejado para agendar.')}</p>
         )}
       </section>
 

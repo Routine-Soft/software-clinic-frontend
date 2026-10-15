@@ -2,6 +2,7 @@ import { useState } from 'react';
 import Modal from '@/components/Modal/Modal';
 import ModalForm from '@/components/Modal/ModalForm';
 import { normalizarEmail } from '@/utils/email';
+import { tr } from '@/i18n';
 
 export default function EditarEmpresaModal({ empresa, erro, onSave, onClose }) {
   const [formEdicao, setFormEdicao] = useState({
@@ -19,11 +20,11 @@ export default function EditarEmpresaModal({ empresa, erro, onSave, onClose }) {
   }
 
   return (
-    <Modal title="Editar empresa" onClose={onClose}>
+    <Modal title={tr('Editar empresa')} onClose={onClose}>
       {(fechar) => (
         <ModalForm erro={erro} fechar={fechar} onSubmit={() => onSave(empresa._id, formEdicao)}>
           <div className="field">
-            <label className="field__label" htmlFor="editar-empresa-razao">Razão Social</label>
+            <label className="field__label" htmlFor="editar-empresa-razao">{tr('Razão Social')}</label>
             <input
               id="editar-empresa-razao"
               className="input"
@@ -36,7 +37,7 @@ export default function EditarEmpresaModal({ empresa, erro, onSave, onClose }) {
 
           <div className="modal-form__row">
             <div className="field">
-              <label className="field__label" htmlFor="editar-empresa-fantasia">Nome Fantasia</label>
+              <label className="field__label" htmlFor="editar-empresa-fantasia">{tr('Nome Fantasia')}</label>
               <input
                 id="editar-empresa-fantasia"
                 className="input"
@@ -61,7 +62,7 @@ export default function EditarEmpresaModal({ empresa, erro, onSave, onClose }) {
 
           <div className="modal-form__row">
             <div className="field">
-              <label className="field__label" htmlFor="editar-empresa-telefone">Telefone</label>
+              <label className="field__label" htmlFor="editar-empresa-telefone">{tr('Telefone')}</label>
               <input
                 id="editar-empresa-telefone"
                 className="input"
@@ -72,7 +73,7 @@ export default function EditarEmpresaModal({ empresa, erro, onSave, onClose }) {
             </div>
 
             <div className="field">
-              <label className="field__label" htmlFor="editar-empresa-email">Email</label>
+              <label className="field__label" htmlFor="editar-empresa-email">{tr('Email')}</label>
               <input
                 id="editar-empresa-email"
                 className="input"
@@ -84,7 +85,7 @@ export default function EditarEmpresaModal({ empresa, erro, onSave, onClose }) {
           </div>
 
           <div className="field">
-            <label className="field__label" htmlFor="editar-empresa-endereco">Endereço</label>
+            <label className="field__label" htmlFor="editar-empresa-endereco">{tr('Endereço')}</label>
             <input
               id="editar-empresa-endereco"
               className="input"
@@ -95,14 +96,14 @@ export default function EditarEmpresaModal({ empresa, erro, onSave, onClose }) {
           </div>
 
           <div className="field">
-            <label className="field__label" htmlFor="editar-empresa-setor">Setor</label>
+            <label className="field__label" htmlFor="editar-empresa-setor">{tr('Setor')}</label>
             <input
               id="editar-empresa-setor"
               className="input"
               type="text"
               value={formEdicao.setor}
               onChange={(e) => handleChangeEdicao('setor', e.target.value)}
-              placeholder="Ex: Indústria, Comércio, Serviços"
+              placeholder={tr('Ex: Indústria, Comércio, Serviços')}
             />
           </div>
         </ModalForm>

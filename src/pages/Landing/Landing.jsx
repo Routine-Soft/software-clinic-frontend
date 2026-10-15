@@ -5,24 +5,16 @@ import { Link, useLocation } from 'react-router-dom';
 import { useAuthContext } from '@/hooks/useAuthContext';
 import { Icone, IconeCheck, IconeX } from '@/components/CrudCard/icones';
 import { ICONES } from '@/components/Sidebar/menuIcones';
-import {
-  DORES,
-  DUVIDAS,
-  ESPECIALIDADES,
-  FUNCIONALIDADES,
-  PASSOS,
-  PERFIS,
-  PLANOS_PADRAO,
-  SECOES,
-  SEGURANCA,
-  VITRINE,
-} from './landing.dados';
+import { useIdioma } from '@/i18n/useIdioma';
+import { planoNoIdioma } from '@/modules/plano/plano.utils';
 import BotaoWhatsapp, { IconeWhatsapp } from './BotaoWhatsapp';
-import { LINK_WHATSAPP, WHATSAPP_EXIBICAO } from '@/utils/contato';
+import { WHATSAPP_EXIBICAO } from '@/utils/contato';
+import { LINK_WHATSAPP_SITE as LINK_WHATSAPP } from '@/utils/whatsappSite';
 import CabecalhoSite from './CabecalhoSite';
 import LogoSite from './LogoSite';
 import { irPara } from './landing.navegacao';
 import './landing.css';
+import { tr } from '@/i18n';
 
 function IconeMenu({ nome }) {
   return <Icone>{ICONES[nome]}</Icone>;
@@ -50,52 +42,49 @@ function Celular({ src, alt, className = '' }) {
 }
 
 function Hero({ logado }) {
+  const { t } = useIdioma();
+  const L = t('landing.hero');
   return (
     <section className="lp-hero">
       <div className="lp-container lp-hero__grade">
         <div className="lp-hero__texto">
-          <span className="lp-selo">Sistema completo para clínicas</span>
+          <span className="lp-selo">{L.selo}</span>
           <h1 className="lp-hero__titulo">
-            Sua clínica organizada, <span className="lp-degrade">do agendamento ao repasse.</span>
+            {L.titulo} <span className="lp-degrade">{L.destaque}</span>
           </h1>
-          <p className="lp-hero__sub">
-            Agenda, prontuário eletrônico, pacientes, convênios e repasses dos profissionais em um só lugar.
-            Simples para a recepção, seguro para o profissional e claro para a gestão.
-          </p>
+          <p className="lp-hero__sub">{L.sub}</p>
           <div className="lp-hero__acoes">
             {logado ? (
-              <Link to="/home" className="btn btn--primary lp-btn-grande">Acessar o painel</Link>
+              <Link to="/home" className="btn btn--primary lp-btn-grande">{t('landing.menu.painel')}</Link>
             ) : (
-              <Link to="/registro" className="btn btn--primary lp-btn-grande">Começar teste grátis</Link>
+              <Link to="/registro" className="btn btn--primary lp-btn-grande">{L.comecar}</Link>
             )}
-            <button type="button" className="btn btn--ghost lp-btn-grande" onClick={() => irPara('vitrine')}>Ver o sistema por dentro</button>
+            <button type="button" className="btn btn--ghost lp-btn-grande" onClick={() => irPara('vitrine')}>{L.verSistema}</button>
           </div>
           <ul className="lp-hero__garantias">
-            <li><IconeCheck /> 7 dias grátis</li>
-            <li><IconeCheck /> Sem cartão de crédito</li>
-            <li><IconeCheck /> Computador e celular</li>
+            {L.garantias.map((g) => <li key={g}><IconeCheck /> {g}</li>)}
           </ul>
         </div>
 
         <div className="lp-hero__visual">
-          <Janela src="/landing/inicio.jpg" alt="Página inicial da Sonelia com os agendamentos do dia" carregar="eager" />
-          <Celular src="/landing/celular-agenda.jpg" alt="Agenda do dia no celular" className="lp-hero__celular" />
+          <Janela src={`${t('landing.imagens')}/inicio.jpg`} alt={L.altInicio} carregar="eager" />
+          <Celular src={`${t('landing.imagens')}/celular-agenda.jpg`} alt={L.altCelular} className="lp-hero__celular" />
           <div className="lp-flutuante lp-flutuante--1" aria-hidden="true">
             <span className="lp-flutuante__ponto" />
-            <div><strong>Em atendimento</strong><small>Dra. Helena · 10:30</small></div>
+            <div><strong>{L.emAtendimento}</strong><small>{tr('Dra. Helena · 10:30')}</small></div>
           </div>
           <div className="lp-flutuante lp-flutuante--2" aria-hidden="true">
             <span className="lp-flutuante__icone"><IconeMenu nome="receita" /></span>
-            <div><strong>R$ 3.090,00</strong><small>repasses calculados</small></div>
+            <div><strong>{tr('R$ 3.090,00')}</strong><small>{L.repasses}</small></div>
           </div>
         </div>
       </div>
 
       <div className="lp-container">
         <div className="lp-faixa">
-          <span>Feito para</span>
+          <span>{L.feitoPara}</span>
           <ul>
-            {ESPECIALIDADES.map((nome) => <li key={nome}>{nome}</li>)}
+            {t('landing.especialidades').map((nome) => <li key={nome}>{nome}</li>)}
           </ul>
         </div>
       </div>
@@ -104,17 +93,19 @@ function Hero({ logado }) {
 }
 
 function Dores() {
+  const { t } = useIdioma();
+  const cab = t('landing.doresCab');
   return (
     <section className="lp-secao" id="problemas">
       <div className="lp-container">
         <header className="lp-secao__cab">
-          <span className="lp-selo">O dia a dia sem dor de cabeça</span>
-          <h2>Reconhece alguma dessas situações?</h2>
-          <p>Os problemas mais comuns de quem administra uma clínica, e como a Sonelia resolve cada um.</p>
+          <span className="lp-selo">{cab.selo}</span>
+          <h2>{cab.titulo}</h2>
+          <p>{cab.texto}</p>
         </header>
 
         <ul className="lp-dores">
-          {DORES.map((item, i) => (
+          {t('landing.dores').map((item, i) => (
             <li key={item.dor} className="lp-dor lp-revelar" style={{ '--i': i }}>
               <p className="lp-dor__problema"><IconeX /> {item.dor}</p>
               <div className="lp-dor__solucao">
@@ -130,31 +121,34 @@ function Dores() {
 }
 
 function Vitrine() {
-  const [ativa, setAtiva] = useState(VITRINE[0].chave);
-  const tela = VITRINE.find((t) => t.chave === ativa);
+  const { t } = useIdioma();
+  const cab = t('landing.vitrineCab');
+  const vitrine = t('landing.vitrine');
+  const [ativa, setAtiva] = useState(vitrine[0].chave);
+  const tela = vitrine.find((v) => v.chave === ativa);
 
   return (
     <section className="lp-secao lp-secao--destaque" id="vitrine">
       <div className="lp-container">
         <header className="lp-secao__cab">
-          <span className="lp-selo">Veja por dentro</span>
-          <h2>Telas pensadas para quem não é técnico</h2>
-          <p>Imagens reais do sistema, com uma clínica de demonstração. Escolha uma área para conhecer.</p>
+          <span className="lp-selo">{cab.selo}</span>
+          <h2>{cab.titulo}</h2>
+          <p>{cab.texto}</p>
         </header>
 
-        <div className="lp-abas" role="tablist" aria-label="Áreas do sistema">
-          {VITRINE.map((t) => (
+        <div className="lp-abas" role="tablist" aria-label={cab.areas}>
+          {vitrine.map((v) => (
             <button
-              key={t.chave}
+              key={v.chave}
               type="button"
               role="tab"
-              id={`aba-${t.chave}`}
-              aria-selected={ativa === t.chave}
+              id={`aba-${v.chave}`}
+              aria-selected={ativa === v.chave}
               aria-controls="painel-vitrine"
               className="lp-aba"
-              onClick={() => setAtiva(t.chave)}
+              onClick={() => setAtiva(v.chave)}
             >
-              {t.rotulo}
+              {v.rotulo}
             </button>
           ))}
         </div>
@@ -166,7 +160,7 @@ function Vitrine() {
               {tela.itens.map((item) => <li key={item}><IconeCheck /> {item}</li>)}
             </ul>
           </div>
-          <Janela src={tela.imagem} alt={`Tela de ${tela.rotulo} da Sonelia`} className="lp-vitrine__imagem" />
+          <Janela src={tela.imagem} alt={t('landing.vitrineCab.altTela', { nome: tela.rotulo })} className="lp-vitrine__imagem" />
         </div>
       </div>
     </section>
@@ -174,17 +168,19 @@ function Vitrine() {
 }
 
 function Funcionalidades() {
+  const { t } = useIdioma();
+  const cab = t('landing.funcionalidadesCab');
   return (
     <section className="lp-secao" id="funcionalidades">
       <div className="lp-container">
         <header className="lp-secao__cab">
-          <span className="lp-selo">Tudo incluído</span>
-          <h2>Tudo o que a sua clínica precisa, sem pagar à parte</h2>
-          <p>Os recursos de cada plano estão na seção de preços.</p>
+          <span className="lp-selo">{cab.selo}</span>
+          <h2>{cab.titulo}</h2>
+          <p>{cab.texto}</p>
         </header>
 
         <ul className="lp-recursos">
-          {FUNCIONALIDADES.map((f, i) => (
+          {t('landing.funcionalidades').map((f, i) => (
             <li key={f.titulo} className="lp-recurso lp-revelar" style={{ '--i': i % 4 }}>
               <span className="lp-recurso__icone"><IconeMenu nome={f.icone} /></span>
               <h3>{f.titulo}</h3>
@@ -198,17 +194,19 @@ function Funcionalidades() {
 }
 
 function Perfis() {
+  const { t } = useIdioma();
+  const cab = t('landing.perfisCab');
   return (
     <section className="lp-secao lp-secao--destaque" id="para-quem">
       <div className="lp-container">
         <header className="lp-secao__cab">
-          <span className="lp-selo">Para quem</span>
-          <h2>Cada pessoa da clínica vê o que precisa</h2>
-          <p>Gestão, recepção e profissionais usam o mesmo sistema, cada um com o próprio login e o acesso certo.</p>
+          <span className="lp-selo">{cab.selo}</span>
+          <h2>{cab.titulo}</h2>
+          <p>{cab.texto}</p>
         </header>
 
         <ul className="lp-perfis">
-          {PERFIS.map((p, i) => (
+          {t('landing.perfis').map((p, i) => (
             <li key={p.papel} className="lp-perfil lp-revelar" style={{ '--i': i }}>
               <span className="lp-perfil__icone"><IconeMenu nome={p.icone} /></span>
               <h3>{p.papel}</h3>
@@ -225,16 +223,18 @@ function Perfis() {
 }
 
 function ComoFunciona({ logado }) {
+  const { t } = useIdioma();
+  const cab = t('landing.passosCab');
   return (
     <section className="lp-secao" id="como-funciona">
       <div className="lp-container">
         <header className="lp-secao__cab">
-          <span className="lp-selo">Como funciona</span>
-          <h2>Comece hoje, em três passos</h2>
+          <span className="lp-selo">{cab.selo}</span>
+          <h2>{cab.titulo}</h2>
         </header>
 
         <ol className="lp-passos">
-          {PASSOS.map((passo, i) => (
+          {t('landing.passos').map((passo, i) => (
             <li key={passo.titulo} className="lp-passo lp-revelar" style={{ '--i': i }}>
               <span className="lp-passo__numero">{i + 1}</span>
               <h3>{passo.titulo}</h3>
@@ -245,7 +245,7 @@ function ComoFunciona({ logado }) {
 
         {!logado && (
           <div className="lp-centro">
-            <Link to="/registro" className="btn btn--primary lp-btn-grande">Criar minha conta grátis</Link>
+            <Link to="/registro" className="btn btn--primary lp-btn-grande">{cab.criar}</Link>
           </div>
         )}
       </div>
@@ -254,38 +254,35 @@ function ComoFunciona({ logado }) {
 }
 
 function EmQualquerLugar() {
+  const { t } = useIdioma();
+  const L = t('landing.lugar');
   const [tema, setTema] = useState('claro');
 
   return (
     <section className="lp-secao lp-secao--destaque">
       <div className="lp-container lp-duas-colunas">
         <div className="lp-revelar">
-          <span className="lp-selo">No computador e no celular</span>
-          <h2>Leve a clínica no bolso</h2>
-          <p className="lp-paragrafo">
-            A Sonelia se adapta a qualquer tela. A recepção usa no computador, o profissional confere a agenda no
-            celular e a gestão acompanha de onde estiver.
-          </p>
+          <span className="lp-selo">{L.selo}</span>
+          <h2>{L.titulo}</h2>
+          <p className="lp-paragrafo">{L.texto}</p>
           <ul className="lp-lista-check">
-            <li><IconeCheck /> Instale como aplicativo, com ícone na área de trabalho ou na tela inicial</li>
-            <li><IconeCheck /> Atualizações chegam sozinhas, sem baixar nada</li>
-            <li><IconeCheck /> Tema claro ou escuro, do jeito que cada um preferir</li>
+            {L.itens.map((item) => <li key={item}><IconeCheck /> {item}</li>)}
           </ul>
 
-          <div className="lp-tema" role="group" aria-label="Ver o sistema no tema claro ou escuro">
-            <button type="button" aria-pressed={tema === 'claro'} onClick={() => setTema('claro')}>Tema claro</button>
-            <button type="button" aria-pressed={tema === 'escuro'} onClick={() => setTema('escuro')}>Tema escuro</button>
+          <div className="lp-tema" role="group" aria-label={L.temaGrupo}>
+            <button type="button" aria-pressed={tema === 'claro'} onClick={() => setTema('claro')}>{L.temaClaro}</button>
+            <button type="button" aria-pressed={tema === 'escuro'} onClick={() => setTema('escuro')}>{L.temaEscuro}</button>
           </div>
         </div>
 
         <div className="lp-dispositivos">
           <Janela
             key={tema}
-            src={tema === 'claro' ? '/landing/inicio.jpg' : '/landing/inicio-escuro.jpg'}
-            alt={`Página inicial no tema ${tema}`}
+            src={`${t('landing.imagens')}/${tema === 'claro' ? 'inicio' : 'inicio-escuro'}.jpg`}
+            alt={t('landing.lugar.altInicio', { tema: tema === 'claro' ? L.claro : L.escuro })}
             className="lp-dispositivos__janela"
           />
-          <Celular src="/landing/celular-agenda.jpg" alt="Agenda no celular" className="lp-dispositivos__celular" />
+          <Celular src={`${t('landing.imagens')}/celular-agenda.jpg`} alt={L.altCelular} className="lp-dispositivos__celular" />
         </div>
       </div>
     </section>
@@ -293,6 +290,8 @@ function EmQualquerLugar() {
 }
 
 function Seguranca() {
+  const { t } = useIdioma();
+  const cab = t('landing.segurancaCab');
   return (
     <section className="lp-secao">
       <div className="lp-container lp-duas-colunas lp-duas-colunas--invertida">
@@ -300,10 +299,10 @@ function Seguranca() {
           <IconeMenu nome="nr01" />
         </div>
         <div className="lp-revelar">
-          <span className="lp-selo">Segurança e sigilo</span>
-          <h2>Dados de saúde tratados com o cuidado que merecem</h2>
+          <span className="lp-selo">{cab.selo}</span>
+          <h2>{cab.titulo}</h2>
           <ul className="lp-lista-check lp-lista-check--grande">
-            {SEGURANCA.map((item) => <li key={item}><IconeCheck /> {item}</li>)}
+            {t('landing.seguranca').map((item) => <li key={item}><IconeCheck /> {item}</li>)}
           </ul>
         </div>
       </div>
@@ -311,23 +310,27 @@ function Seguranca() {
   );
 }
 
-function formatarPrecoPlano(preco) {
-  return `R$ ${Number(preco).toLocaleString('pt-BR', { minimumFractionDigits: Number.isInteger(preco) ? 0 : 2 })}`;
+// Planos do Brasil em reais; os de fora do Brasil em dólar (preço próprio, não convertido).
+function formatarPrecoPlano(preco, locale, moeda = 'BRL') {
+  const casas = Number.isInteger(Number(preco)) ? 0 : 2;
+  return Number(preco).toLocaleString(locale, { style: 'currency', currency: moeda === 'USD' ? 'USD' : 'BRL', minimumFractionDigits: casas, maximumFractionDigits: casas });
 }
 
 // Os planos vêm do cadastro de Planos do super admin. O que um plano tem e o outro não aparece em destaque.
 function Precos({ logado }) {
+  const { t, idioma, locale } = useIdioma();
+  const P = t('landing.precos');
   const { planos, carregando, falhou } = usePlanosPublicos();
-  const lista = falhou || (planos && !planos.length) ? PLANOS_PADRAO : planos ?? [];
+  const lista = (falhou || (planos && !planos.length) ? t('landing.planosPadrao') : planos ?? []).map((p) => planoNoIdioma(p, idioma));
   const maisCaro = lista.length > 1 ? lista[lista.length - 1]._id : null;
 
   return (
     <section className="lp-secao lp-secao--destaque" id="precos">
       <div className="lp-container">
         <header className="lp-secao__cab">
-          <span className="lp-selo">Preços</span>
-          <h2>Escolha o plano da sua clínica</h2>
-          <p>Teste qualquer um por 7 dias, com tudo liberado e sem cadastrar cartão.</p>
+          <span className="lp-selo">{P.selo}</span>
+          <h2>{P.titulo}</h2>
+          <p>{P.texto}</p>
         </header>
 
         <div className="lp-planos">
@@ -344,48 +347,50 @@ function Precos({ logado }) {
                 const destaque = plano._id === maisCaro;
                 return (
                   <article key={plano._id} className={`lp-plano lp-revelar${destaque ? ' lp-plano--pro' : ''}`} style={{ '--i': i }}>
-                    {destaque && <span className="lp-plano__selo">Mais completo</span>}
+                    {destaque && <span className="lp-plano__selo">{P.maisCompleto}</span>}
                     <div className="lp-plano__cab">
                       <h3>{plano.nome}</h3>
                       {plano.descricao && <p className="lp-plano__descricao">{plano.descricao}</p>}
                     </div>
-                    <p className="lp-plano__preco"><span className="lp-degrade">{formatarPrecoPlano(plano.preco)}</span><small>/mês</small></p>
-                    <p className="lp-plano__teste">7 dias grátis para testar, sem cartão</p>
+                    <p className="lp-plano__preco"><span className="lp-degrade">{formatarPrecoPlano(plano.preco, locale, plano.moeda)}</span><small>{P.porMes}</small></p>
+                    <p className="lp-plano__teste">{P.teste}</p>
                     <ul className="lp-lista-check">
                       {(plano.recursos ?? []).map((item) => (
                         <li key={item} className={exclusivos.has(item) ? 'lp-lista-check__exclusivo' : undefined}>
                           <IconeCheck />
                           <span>
                             {item}
-                            {exclusivos.has(item) && <span className="lp-plano__so">Só no {plano.nome}</span>}
+                            {exclusivos.has(item) && <span className="lp-plano__so">{t('landing.precos.soNo', { plano: plano.nome })}</span>}
                           </span>
                         </li>
                       ))}
                     </ul>
                     <Link to={logado ? '/assinaturas' : '/registro'} className={`btn ${destaque ? 'btn--primary' : 'btn--ghost'} btn--block`}>
-                      {logado ? 'Ver minha assinatura' : 'Testar 7 dias grátis'}
+                      {logado ? P.verAssinatura : P.testar}
                     </Link>
                   </article>
                 );
               })}
         </div>
-        <p className="lp-planos__nota">Pague no Pix ou no cartão. No cartão, renova sozinho todo mês e você cancela quando quiser, sem multa.</p>
+        <p className="lp-planos__nota">{lista[0]?.moeda === 'USD' ? P.notaDolar : P.nota}</p>
       </div>
     </section>
   );
 }
 
 function Duvidas() {
+  const { t } = useIdioma();
+  const cab = t('landing.duvidasCab');
   return (
     <section className="lp-secao" id="duvidas">
       <div className="lp-container lp-container--estreito">
         <header className="lp-secao__cab">
-          <span className="lp-selo">Dúvidas</span>
-          <h2>Perguntas frequentes</h2>
+          <span className="lp-selo">{cab.selo}</span>
+          <h2>{cab.titulo}</h2>
         </header>
 
         <div className="lp-duvidas">
-          {DUVIDAS.map(([pergunta, resposta]) => (
+          {t('landing.duvidas').map(([pergunta, resposta]) => (
             <details key={pergunta} className="lp-duvida">
               <summary>{pergunta}</summary>
               <p>{resposta}</p>
@@ -398,19 +403,21 @@ function Duvidas() {
 }
 
 function ChamadaFinal({ logado }) {
+  const { t } = useIdioma();
+  const C = t('landing.chamada');
   return (
     <section className="lp-secao">
       <div className="lp-container">
         <div className="lp-chamada lp-revelar">
-          <h2>Pronto para organizar a sua clínica?</h2>
-          <p>Crie a conta agora e use tudo liberado por 7 dias, sem cartão.</p>
+          <h2>{C.titulo}</h2>
+          <p>{C.texto}</p>
           <div className="lp-hero__acoes lp-hero__acoes--centro">
             {logado ? (
-              <Link to="/home" className="btn lp-btn-claro lp-btn-grande">Acessar o painel</Link>
+              <Link to="/home" className="btn lp-btn-claro lp-btn-grande">{t('landing.menu.painel')}</Link>
             ) : (
               <>
-                <Link to="/registro" className="btn lp-btn-claro lp-btn-grande">Criar conta grátis</Link>
-                <Link to="/login" className="btn lp-btn-contorno lp-btn-grande">Já tenho conta</Link>
+                <Link to="/registro" className="btn lp-btn-claro lp-btn-grande">{C.criar}</Link>
+                <Link to="/login" className="btn lp-btn-contorno lp-btn-grande">{C.jaTenho}</Link>
               </>
             )}
           </div>
@@ -421,43 +428,46 @@ function ChamadaFinal({ logado }) {
 }
 
 function Rodape({ logado }) {
+  const { t } = useIdioma();
+  const R = t('landing.rodape');
+  const M = t('landing.menu');
   return (
     <footer className="lp-rodape">
       <div className="lp-container lp-rodape__grade">
         <div>
           <LogoSite />
-          <p>Sistema de gestão para clínicas: agenda, prontuário, pacientes, convênios e repasses em um só lugar.</p>
+          <p>{R.descricao}</p>
         </div>
-        <nav aria-label="Produto">
-          <h3>Produto</h3>
-          {SECOES.map(([id, rotulo]) => (
+        <nav aria-label={R.produto}>
+          <h3>{R.produto}</h3>
+          {t('landing.secoes').map(([id, rotulo]) => (
             <button key={id} type="button" onClick={() => irPara(id)}>{rotulo}</button>
           ))}
         </nav>
-        <nav aria-label="Acesso">
-          <h3>Acesso</h3>
+        <nav aria-label={R.acesso}>
+          <h3>{R.acesso}</h3>
           {logado ? (
-            <Link to="/home">Acessar o painel</Link>
+            <Link to="/home">{M.painel}</Link>
           ) : (
             <>
-              <Link to="/login">Entrar</Link>
-              <Link to="/registro">Criar conta grátis</Link>
+              <Link to="/login">{M.entrar}</Link>
+              <Link to="/registro">{M.criarConta}</Link>
             </>
           )}
-          <a href="/blog/">Blog</a>
-          <Link to="/afiliados">Seja afiliado</Link>
-          <Link to="/termos">Termos de uso</Link>
-          <Link to="/privacidade">Privacidade</Link>
+          <a href="/blog/">{M.blog}</a>
+          <Link to="/afiliados">{M.afiliado}</Link>
+          <Link to="/termos">{R.termos}</Link>
+          <Link to="/privacidade">{R.privacidade}</Link>
         </nav>
-        <nav className="lp-rodape__contato" aria-label="Contato">
-          <h3>Contato</h3>
+        <nav className="lp-rodape__contato" aria-label={R.contato}>
+          <h3>{R.contato}</h3>
           <a className="lp-rodape__whats" href={LINK_WHATSAPP} target="_blank" rel="noopener noreferrer">
             <IconeWhatsapp /> {WHATSAPP_EXIBICAO}
           </a>
         </nav>
       </div>
       <div className="lp-container lp-rodape__base">
-        <span>© {new Date().getFullYear()} Sonelia. Feito para clínicas brasileiras.</span>
+        <span>{tr('© {p0} Sonelia. {base}', { p0: new Date().getFullYear(), base: R.base })}</span>
       </div>
     </footer>
   );

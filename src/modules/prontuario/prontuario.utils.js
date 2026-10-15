@@ -1,3 +1,5 @@
+import { localeAtual, tr } from '@/i18n';
+
 export const SINAIS_VITAIS_INICIAL = { peso: '', altura: '', pressaoArterial: '', frequenciaCardiaca: '', temperatura: '' };
 
 export const CAMPOS_ATENDIMENTO_INICIAL = {
@@ -14,30 +16,30 @@ export const CAMPOS_ATENDIMENTO_INICIAL = {
 };
 
 export const CAMPOS_TEXTO = [
-  ['queixaPrincipal', 'Queixa principal', 2],
-  ['historicoAtual', 'Histórico atual (anamnese)', 4],
-  ['exameObjetivo', 'Exame objetivo', 3],
-  ['avaliacao', 'Avaliação', 3],
-  ['conduta', 'Conduta', 3],
-  ['informacoes', 'Informações', 4],
+  ['queixaPrincipal', tr('Queixa principal'), 2],
+  ['historicoAtual', tr('Histórico atual (anamnese)'), 4],
+  ['exameObjetivo', tr('Exame objetivo'), 3],
+  ['avaliacao', tr('Avaliação'), 3],
+  ['conduta', tr('Conduta'), 3],
+  ['informacoes', tr('Informações'), 4],
 ];
 
 export const CAMPOS_PERFIL_CLINICO = [
-  ['alergias', 'Alergias', 2],
-  ['antecedentesClinicos', 'Antecedentes clínicos', 2],
-  ['antecedentesCirurgicos', 'Antecedentes cirúrgicos', 2],
-  ['antecedentesFamiliares', 'Antecedentes familiares', 2],
-  ['habitos', 'Hábitos', 2],
-  ['medicamentosEmUso', 'Medicamentos em uso', 2],
+  ['alergias', tr('Alergias'), 2],
+  ['antecedentesClinicos', tr('Antecedentes clínicos'), 2],
+  ['antecedentesCirurgicos', tr('Antecedentes cirúrgicos'), 2],
+  ['antecedentesFamiliares', tr('Antecedentes familiares'), 2],
+  ['habitos', tr('Hábitos'), 2],
+  ['medicamentosEmUso', tr('Medicamentos em uso'), 2],
 ];
 
 export const CAMPOS_TEXTO_LABEL = Object.fromEntries(CAMPOS_TEXTO.map(([campo, label]) => [campo, label]));
 
 export const TIPOS_ANEXO = [
-  ['exame', 'Exame'],
-  ['foto', 'Foto'],
-  ['laudo', 'Laudo'],
-  ['outro', 'Outro'],
+  ['exame', tr('Exame')],
+  ['foto', tr('Foto')],
+  ['laudo', tr('Laudo')],
+  ['outro', tr('Outro')],
 ];
 
 export function perfilClinicoDoPaciente(paciente) {
@@ -91,11 +93,11 @@ export function prepararPayload(valores) {
 export function sinaisVitaisEmLista(sinais) {
   if (!sinais) return [];
   return [
-    sinais.peso != null && ['Peso', `${sinais.peso} kg`],
-    sinais.altura != null && ['Altura', `${sinais.altura} m`],
+    sinais.peso != null && [tr('Peso'), `${sinais.peso} kg`],
+    sinais.altura != null && [tr('Altura'), `${sinais.altura} m`],
     sinais.pressaoArterial && ['PA', sinais.pressaoArterial],
     sinais.frequenciaCardiaca != null && ['FC', `${sinais.frequenciaCardiaca} bpm`],
-    sinais.temperatura != null && ['Temp.', `${sinais.temperatura} °C`],
+    sinais.temperatura != null && [tr('Temp.'), tr('{temperatura} °C', { temperatura: sinais.temperatura })],
   ].filter(Boolean);
 }
 
@@ -108,17 +110,17 @@ export function formatDuracao(inicio, fim) {
 // Só datas "puras" (nascimento, próximo retorno) precisam de formatDataBR.
 export function formatDataHoraBR(iso) {
   if (!iso) return null;
-  return new Date(iso).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+  return new Date(iso).toLocaleString(localeAtual(), { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
 }
 
 export function formatDataInstanteBR(iso) {
   if (!iso) return null;
-  return new Date(iso).toLocaleDateString('pt-BR');
+  return new Date(iso).toLocaleDateString(localeAtual());
 }
 
 export function formatHoraBR(iso) {
   if (!iso) return null;
-  return new Date(iso).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+  return new Date(iso).toLocaleTimeString(localeAtual(), { hour: '2-digit', minute: '2-digit' });
 }
 
 export function atendimentoEmAndamento(prontuario) {
@@ -136,5 +138,5 @@ export function ehDoProfissional(prontuario, profissionalId) {
 
 // Resumo de quem lê um atendimento: "Só o autor" ou "Autor e Psicologia, Fonoaudiologia".
 export function textoDeAcesso(nomesEspecialidades) {
-  return nomesEspecialidades.length === 0 ? 'Só o autor' : `Autor e ${nomesEspecialidades.join(', ')}`;
+  return nomesEspecialidades.length === 0 ? tr('Só o autor') : tr('Autor e {p0}', { p0: nomesEspecialidades.join(', ') });
 }

@@ -4,11 +4,12 @@ import { textoComissaoCalculada } from '@/modules/servico/servico.utils';
 import { situacaoDoLembrete } from '@/modules/agenda/agenda.utils';
 import { IconeCheck, IconeImpressora, IconeLapis } from '@/components/CrudCard/icones';
 import '../prontuario.css';
+import { tr } from '@/i18n';
 
 const STATUS_AGENDA = {
-  aguardando: ['Aguardando', 'badge--info'],
-  realizado: ['Realizado', 'badge--success'],
-  cancelado: ['Cancelado', 'badge--danger'],
+  aguardando: [tr('Aguardando'), 'badge--info'],
+  realizado: [tr('Realizado'), 'badge--success'],
+  cancelado: [tr('Cancelado'), 'badge--danger'],
 };
 
 // Datas de agendamento são "dia puro" (meia-noite UTC); comparamos só o AAAA-MM-DD com o hoje de Brasília.
@@ -38,10 +39,10 @@ export default function ResumoAgendamento({ agendamento, erro, onEditar, onCance
   const podeDesmarcar = onMarcarRealizado && realizado && !comissaoPaga;
 
   return (
-    <section className="pront-agenda" aria-label="Agendamento">
+    <section className="pront-agenda" aria-label={tr('Agendamento')}>
       <div className="pront-agenda__cab">
         <div>
-          <span className="pront-agenda__rotulo">Agendamento</span>
+          <span className="pront-agenda__rotulo">{tr('Agendamento')}</span>
           <strong className="pront-agenda__horario">
             {formatDataBR(agendamento.data)} · {agendamento.horaInicio} – {agendamento.horaFim}
           </strong>
@@ -50,13 +51,13 @@ export default function ResumoAgendamento({ agendamento, erro, onEditar, onCance
       </div>
 
       <dl className="pront-agenda__dados">
-        <div><dt>Profissional</dt><dd>{agendamento.profissionalId?.nome ?? '—'}</dd></div>
-        <div><dt>Serviço</dt><dd>{agendamento.servicoId?.nome ?? '—'}</dd></div>
-        <div><dt>Sala</dt><dd>{agendamento.salaId?.nome ?? '—'}</dd></div>
-        <div><dt>Convênio</dt><dd>{agendamento.convenioId?.nome ?? 'Particular'}</dd></div>
+        <div><dt>{tr('Profissional')}</dt><dd>{agendamento.profissionalId?.nome ?? '—'}</dd></div>
+        <div><dt>{tr('Serviço')}</dt><dd>{agendamento.servicoId?.nome ?? '—'}</dd></div>
+        <div><dt>{tr('Sala')}</dt><dd>{agendamento.salaId?.nome ?? '—'}</dd></div>
+        <div><dt>{tr('Convênio')}</dt><dd>{agendamento.convenioId?.nome ?? tr('Particular')}</dd></div>
         {lembrete && (
           <div>
-            <dt>Lembrete WhatsApp</dt>
+            <dt>{tr('Lembrete WhatsApp')}</dt>
             <dd>
               <span className={`badge badge--${lembrete.tom}`}>{lembrete.rotulo}</span>
               {lembrete.detalhe && <span className="pront-agenda__detalhe">{lembrete.detalhe}</span>}
@@ -65,7 +66,7 @@ export default function ResumoAgendamento({ agendamento, erro, onEditar, onCance
         )}
         {realizado && agendamento.comissao?.valor > 0 && (
           <div>
-            <dt>Repasse ao profissional</dt>
+            <dt>{tr('Repasse ao profissional')}</dt>
             <dd>{textoComissaoCalculada(agendamento.comissao.valor, agendamento.comissao.percentual)} · {comissaoPaga ? 'paga' : 'pendente'}</dd>
           </div>
         )}
@@ -78,29 +79,29 @@ export default function ResumoAgendamento({ agendamento, erro, onEditar, onCance
           {podeMarcar && (
             <button type="button" className="btn btn--primary btn--sm" disabled={salvando} onClick={() => alternarRealizado(true)}>
               <IconeCheck />
-              {salvando ? 'Salvando...' : 'Marcar como realizado'}
+              {salvando ? tr('Salvando...') : tr('Marcar como realizado')}
             </button>
           )}
           {podeDesmarcar && (
             <button type="button" className="btn btn--ghost btn--sm" disabled={salvando} onClick={() => alternarRealizado(false)}>
-              {salvando ? 'Salvando...' : 'Desmarcar realizado'}
+              {salvando ? tr('Salvando...') : tr('Desmarcar realizado')}
             </button>
           )}
           {onEditar && !cancelado && (
             <button type="button" className="btn btn--ghost btn--sm" onClick={() => onEditar(agendamento)}>
               <IconeLapis />
-              Editar agendamento
+              {tr('Editar agendamento')}
             </button>
           )}
           {onImprimir && (
             <button type="button" className="btn btn--ghost btn--sm" onClick={() => onImprimir(agendamento)}>
               <IconeImpressora />
-              Comprovante
+              {tr('Comprovante')}
             </button>
           )}
           {onCancelar && !cancelado && !comissaoPaga && (
             <button type="button" className="btn btn--danger btn--sm" onClick={() => onCancelar(agendamento)}>
-              Cancelar agendamento
+              {tr('Cancelar agendamento')}
             </button>
           )}
         </div>

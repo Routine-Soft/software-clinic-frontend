@@ -3,6 +3,7 @@ import Modal from '@/components/Modal/Modal';
 import ModalForm from '@/components/Modal/ModalForm';
 import { ROTULO_FUNCAO } from '../user.constants';
 import { normalizarEmail } from '@/utils/email';
+import { tr } from '@/i18n';
 
 const FUNCOES_EDITAVEIS = ['profissional', 'recepcao'];
 
@@ -31,11 +32,11 @@ export default function EditarUsuarioModal({ usuario, erro, onSave, onClose }) {
   }
 
   return (
-    <Modal title="Editar colaborador" onClose={onClose}>
+    <Modal title={tr('Editar colaborador')} onClose={onClose}>
       {(fechar) => (
         <ModalForm erro={erro} fechar={fechar} onSubmit={() => onSave(usuario._id, montarPayload())}>
           <div className="field">
-            <label className="field__label" htmlFor="editar-usuario-nome">Nome completo</label>
+            <label className="field__label" htmlFor="editar-usuario-nome">{tr('Nome completo')}</label>
             <input
               id="editar-usuario-nome"
               className="input"
@@ -47,7 +48,7 @@ export default function EditarUsuarioModal({ usuario, erro, onSave, onClose }) {
           </div>
 
           <div className="field">
-            <label className="field__label" htmlFor="editar-usuario-email">Email</label>
+            <label className="field__label" htmlFor="editar-usuario-email">{tr('Email')}</label>
             <input
               id="editar-usuario-email"
               className="input"
@@ -60,7 +61,7 @@ export default function EditarUsuarioModal({ usuario, erro, onSave, onClose }) {
 
           <div className="modal-form__row">
             <div className="field">
-              <label className="field__label" htmlFor="editar-usuario-telefone">Telefone</label>
+              <label className="field__label" htmlFor="editar-usuario-telefone">{tr('Telefone')}</label>
               <input
                 id="editar-usuario-telefone"
                 className="input"
@@ -72,7 +73,7 @@ export default function EditarUsuarioModal({ usuario, erro, onSave, onClose }) {
             </div>
 
             <div className="field">
-              <label className="field__label" htmlFor="editar-usuario-funcao">Função</label>
+              <label className="field__label" htmlFor="editar-usuario-funcao">{tr('Função')}</label>
               {funcaoEditavel ? (
                 <select
                   id="editar-usuario-funcao"
@@ -80,8 +81,8 @@ export default function EditarUsuarioModal({ usuario, erro, onSave, onClose }) {
                   value={formEdicao.role}
                   onChange={(e) => handleChangeEdicao('role', e.target.value)}
                 >
-                  <option value="recepcao">Recepção</option>
-                  <option value="profissional">Profissional</option>
+                  <option value="recepcao">{tr('Recepção')}</option>
+                  <option value="profissional">{tr('Profissional')}</option>
                 </select>
               ) : (
                 <select id="editar-usuario-funcao" className="input" value={usuario.role} disabled>
@@ -92,7 +93,7 @@ export default function EditarUsuarioModal({ usuario, erro, onSave, onClose }) {
           </div>
 
           {!funcaoEditavel && (
-            <p className="modal-form__hint">A função do administrador não pode ser alterada por aqui.</p>
+            <p className="modal-form__hint">{tr('A função do administrador não pode ser alterada por aqui.')}</p>
           )}
         </ModalForm>
       )}

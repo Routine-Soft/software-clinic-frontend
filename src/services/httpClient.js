@@ -1,3 +1,6 @@
+import { lerIdioma } from '@/i18n/idioma'
+import { tr } from '@/i18n';
+
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080/api'
 
 class TokenManager {
@@ -53,7 +56,9 @@ async function fetchComRetry(url, options, tentativas = 5, atrasoMs = 600) {
 }
 
 async function makeRequest(url, options = {}) {
+  // A API responde os avisos e erros no idioma escolhido.
   const headers = {
+    'Accept-Language': lerIdioma(),
     ...options.headers,
   }
 
@@ -107,7 +112,7 @@ async function makeRequest(url, options = {}) {
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({
-        message: `HTTP Error: ${response.status}`,
+        message: tr('HTTP Error: {status}', { status: response.status }),
       }))
       if (response.status === 402 && errorData.code === 'ASSINATURA_INATIVA') {
         window.dispatchEvent(new CustomEvent('assinatura:inativa', { detail: { motivo: errorData.message } }))
@@ -116,7 +121,7 @@ async function makeRequest(url, options = {}) {
       throw {
         status: response.status,
         code: errorData.code,
-        message: errorData.message || 'Erro na requisição',
+        message: errorData.message || tr('Erro na requisição'),
         data: errorData,
       }
     }

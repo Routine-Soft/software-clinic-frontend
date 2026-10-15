@@ -1,10 +1,11 @@
 import { useTheme } from '@/hooks/useTheme'
 import './ThemeToggle.css'
+import { tr } from '@/i18n';
 
 const OPTIONS = [
     {
         value: 'light',
-        label: 'Tema claro',
+        label: tr('Tema claro'),
         icon: (
             <>
                 <circle cx="12" cy="12" r="4" />
@@ -14,17 +15,17 @@ const OPTIONS = [
     },
     {
         value: 'rosa',
-        label: 'Tema rosa',
+        label: tr('Tema rosa'),
         icon: <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />,
     },
     {
         value: 'dark',
-        label: 'Tema escuro',
+        label: tr('Tema escuro'),
         icon: <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />,
     },
     {
         value: 'system',
-        label: 'Automático (segue o sistema)',
+        label: tr('Automático (segue o sistema)'),
         icon: (
             <>
                 <rect width="20" height="14" x="2" y="3" rx="2" />
@@ -37,7 +38,7 @@ const OPTIONS = [
 export function ThemeToggle() {
     const { theme, setTheme } = useTheme()
     return (
-        <div className="theme-toggle" role="radiogroup" aria-label="Tema da interface">
+        <div className="theme-toggle" role="radiogroup" aria-label={tr('Tema da interface')}>
             {OPTIONS.map((option) => (
                 <button
                     key={option.value}

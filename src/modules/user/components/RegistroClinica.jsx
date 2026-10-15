@@ -8,11 +8,15 @@ import CampoAceiteTermos from './CampoAceiteTermos';
 import { normalizarEmail } from '@/utils/email';
 import { codigoIndicacaoGuardado, esquecerCodigoIndicacao, normalizarCodigo } from '@/modules/indicacao/indicacao.utils';
 import CampoSenha from '@/components/CampoSenha/CampoSenha';
+import SeletorPais from '@/components/SeletorPais/SeletorPais';
+import { adivinharPais } from '@/i18n/paises';
+import { useIdioma } from '@/i18n/useIdioma';
 
 export default function RegistroClinica() {
   const navigate = useNavigate();
   const location = useLocation();
   const { entrarComGoogle } = useAuthContext();
+  const { t } = useIdioma();
 
   // Conta do Google escolhida (aqui ou na tela de login): e-mail e senha saem do formulário.
   const [google, setGoogle] = useState(() => location.state?.google ?? null);
@@ -25,6 +29,7 @@ export default function RegistroClinica() {
     cnpj: '',
     codigoIndicacao: codigoIndicacaoGuardado(),
     aceitouTermos: false,
+    pais: adivinharPais(),
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -61,8 +66,8 @@ export default function RegistroClinica() {
 
     try {
       if (google) {
-        const { nomeCompleto, telefone, nomeEmpresa, cnpj, codigoIndicacao, aceitouTermos } = form;
-        await entrarComGoogle(google.credential, { nomeCompleto, telefone, nomeEmpresa, cnpj, codigoIndicacao, aceitouTermos });
+        const { nomeCompleto, telefone, nomeEmpresa, cnpj, codigoIndicacao, aceitouTermos, pais } = form;
+        await entrarComGoogle(google.credential, { nomeCompleto, telefone, nomeEmpresa, cnpj, codigoIndicacao, aceitouTermos, pais });
         esquecerCodigoIndicacao();
         navigate('/home');
       } else {
@@ -74,7 +79,7 @@ export default function RegistroClinica() {
       // O token do Google vale só alguns minutos: vencido, a pessoa escolhe a conta de novo.
       if (google && err.status === 401) {
         setGoogle(null);
-        setError({ message: 'O login com o Google expirou. Clique em "Continuar com o Google" de novo; os dados preenchidos foram mantidos.' });
+        setError({ message: t('auth.registro.googleExpirou') });
       } else {
         setError(err);
       }
@@ -85,15 +90,15 @@ export default function RegistroClinica() {
 
   return (
     <AuthLayout wide>
-      <h2 className="auth-title">Criar conta</h2>
+      <h2 className="auth-title">{t('auth.registro.titulo')}</h2>
       <p className="auth-subtitle">
-        {google ? 'Falta pouco: informe os dados da sua clínica' : 'Cadastre sua clínica para começar a usar o sistema'}
+        {google ? t('auth.registro.subtituloGoogle') : t('auth.registro.subtitulo')}
       </p>
 
       {!google && (
         <>
           <BotaoGoogle onCredencial={handleGoogle} />
-          <div className="auth-divisor auth-divisor--topo"><span>ou preencha seus dados</span></div>
+          <div className="auth-divisor auth-divisor--topo"><span>{t('auth.registro.ouPreencha')}</span></div>
         </>
       )}
 
@@ -102,13 +107,13 @@ export default function RegistroClinica() {
 
         {google && (
           <div className="auth-google-conta">
-            <span>Conta Google: <strong>{google.email}</strong></span>
-            <button type="button" className="link" onClick={usarOutroEmail}>Usar outro e-mail</button>
+            <span>{t('auth.registro.contaGoogle')} <strong>{google.email}</strong></span>
+            <button type="button" className="link" onClick={usarOutroEmail}>{t('auth.registro.outroEmail')}</button>
           </div>
         )}
 
         <div className="field field--full">
-          <label className="field__label" htmlFor="registro-nome">Nome completo</label>
+          <label className="field__label" htmlFor="registro-nome">{t('auth.campos.nomeCompleto')}</label>
           <input
             id="registro-nome"
             className="input"
@@ -120,7 +125,7 @@ export default function RegistroClinica() {
         </div>
 
         <div className="field">
-          <label className="field__label" htmlFor="registro-clinica">Nome da clínica</label>
+          <label className="field__label" htmlFor="registro-clinica">{t('auth.campos.nomeClinica')}</label>
           <input
             id="registro-clinica"
             className="input"
@@ -132,7 +137,7 @@ export default function RegistroClinica() {
         </div>
 
         <div className="field">
-          <label className="field__label" htmlFor="registro-cnpj">CNPJ (opcional)</label>
+          <label className="field__label" htmlFor="registro-cnpj">{t('auth.campos.cnpj')}</label>
           <input
             id="registro-cnpj"
             className="input"
@@ -143,7 +148,12 @@ export default function RegistroClinica() {
         </div>
 
         <div className="field">
-          <label className="field__label" htmlFor="registro-telefone">Telefone</label>
+          <label className="field__label" htmlFor="registro-pais">{t('auth.campos.pais')}</label>
+          <SeletorPais id="registro-pais" value={form.pais} onChange={(pais) => handleChange('pais', pais)} required />
+        </div>
+
+        <div className="field">
+          <label className="field__label" htmlFor="registro-telefone">{t('auth.campos.telefone')}</label>
           <input
             id="registro-telefone"
             className="input"
@@ -157,7 +167,7 @@ export default function RegistroClinica() {
         {!google && (
           <>
             <div className="field">
-              <label className="field__label" htmlFor="registro-email">E-mail</label>
+              <label className="field__label" htmlFor="registro-email">{t('auth.campos.email')}</label>
               <input
                 id="registro-email"
                 className="input"
@@ -169,7 +179,7 @@ export default function RegistroClinica() {
             </div>
 
             <div className="field field--full">
-              <label className="field__label" htmlFor="registro-senha">Senha</label>
+              <label className="field__label" htmlFor="registro-senha">{t('auth.campos.senha')}</label>
               <CampoSenha
                 id="registro-senha"
                 className="input"
@@ -182,28 +192,28 @@ export default function RegistroClinica() {
         )}
 
         <div className="field field--full">
-          <label className="field__label" htmlFor="registro-indicacao">Código de indicação (opcional)</label>
+          <label className="field__label" htmlFor="registro-indicacao">{t('auth.campos.codigoIndicacao')}</label>
           <input
             id="registro-indicacao"
             className="input"
             type="text"
             value={form.codigoIndicacao}
             onChange={(e) => handleChange('codigoIndicacao', normalizarCodigo(e.target.value))}
-            placeholder="Se outra clínica indicou a Sonelia para você"
+            placeholder={t('auth.campos.codigoIndicacaoDica')}
             maxLength={12}
             autoComplete="off"
           />
         </div>
 
-        <CampoAceiteTermos marcado={form.aceitouTermos} onChange={(valor) => handleChange('aceitouTermos', valor)} rota="/termos" nome="Termos de uso" />
+        <CampoAceiteTermos marcado={form.aceitouTermos} onChange={(valor) => handleChange('aceitouTermos', valor)} rota="/termos" nome={t('auth.aceite.termosDeUso')} />
 
         <button className={`btn btn--primary${loading ? ' btn--loading' : ''}`} type="submit" disabled={loading}>
-          {loading ? 'Criando...' : 'Criar conta'}
+          {loading ? t('auth.registro.criando') : t('auth.registro.criar')}
         </button>
       </form>
 
       <p className="auth-footer">
-        Já tem uma conta? <Link className="link" to="/login">Entrar</Link>
+        {t('auth.registro.jaTem')} <Link className="link" to="/login">{t('auth.registro.entrar')}</Link>
       </p>
     </AuthLayout>
   );

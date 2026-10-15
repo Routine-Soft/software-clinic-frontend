@@ -7,6 +7,7 @@ import { DIAS_SEMANA, formularioNovo, horarioInvalido, montarPayload, comPrecoDa
 import AgendamentoCampos from './AgendamentoCampos';
 import AvisoPreRequisito from '@/components/AvisoPreRequisito/AvisoPreRequisito';
 import '../agenda.css';
+import { tr } from '@/i18n';
 
 export default function NovoAgendamentoModal({ slotInicial, erro, onSave, onClose }) {
   const dados = useDadosAgendamento();
@@ -37,7 +38,7 @@ export default function NovoAgendamentoModal({ slotInicial, erro, onSave, onClos
   const recorrenciaIncompleta = repetir && (diasSemana.length === 0 || !repetirAte);
 
   return (
-    <Modal title="Novo agendamento" wide onClose={onClose}>
+    <Modal title={tr('Novo agendamento')} wide onClose={onClose}>
       {(fechar) => (
         <div className="modal-form">
           <AvisoPreRequisito acao="agendar" faltando={dados.faltando} />
@@ -54,24 +55,24 @@ export default function NovoAgendamentoModal({ slotInicial, erro, onSave, onClos
           <ModalForm
             erro={erro}
             fechar={fechar}
-            submitLabel={repetir ? 'Agendar série' : 'Agendar'}
-            loadingLabel="Agendando..."
+            submitLabel={repetir ? tr('Agendar série') : tr('Agendar')}
+            loadingLabel={tr('Agendando...')}
             submitDisabled={!paciente || horarioInvalido(form) || recorrenciaIncompleta || dados.faltando.length > 0}
             onSubmit={() => onSave(payload())}
           >
             <AgendamentoCampos form={form} setForm={setForm} {...dados} />
 
             <fieldset className="modal-form__section">
-              <legend>Recorrência</legend>
+              <legend>{tr('Recorrência')}</legend>
 
               <label className="check agendamento-repetir">
                 <input type="checkbox" checked={repetir} onChange={(e) => setRepetir(e.target.checked)} />
-                <span>Repetir este agendamento</span>
+                <span>{tr('Repetir este agendamento')}</span>
               </label>
 
               {repetir && (
                 <div className="agendamento-recorrencia">
-                  <div className="agendamento-dias" role="group" aria-label="Dias da semana">
+                  <div className="agendamento-dias" role="group" aria-label={tr('Dias da semana')}>
                     {DIAS_SEMANA.map((dia) => (
                       <label key={dia.valor} className="check">
                         <input type="checkbox" checked={diasSemana.includes(dia.valor)} onChange={() => alternarDia(dia.valor)} />
@@ -81,7 +82,7 @@ export default function NovoAgendamentoModal({ slotInicial, erro, onSave, onClos
                   </div>
 
                   <div className="field">
-                    <label className="field__label" htmlFor="agendamento-repetir-ate">Repetir até</label>
+                    <label className="field__label" htmlFor="agendamento-repetir-ate">{tr('Repetir até')}</label>
                     <input id="agendamento-repetir-ate" className="input" type="date" value={repetirAte} min={form.data} onChange={(e) => setRepetirAte(e.target.value)} required />
                   </div>
                 </div>

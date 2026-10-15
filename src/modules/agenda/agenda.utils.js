@@ -1,9 +1,11 @@
+import { localeAtual, tr } from '@/i18n';
+
 // Datas "puras" (dia do agendamento) são tratadas como texto YYYY-MM-DD ou como Date local
 // montado pelos componentes (ano, mês, dia), nunca via `new Date(iso)`, para não deslocar o dia por fuso.
 
 const pad = (n) => String(n).padStart(2, '0');
 
-export const NOMES_DIAS_CURTOS = ['dom.', 'seg.', 'ter.', 'qua.', 'qui.', 'sex.', 'sáb.'];
+export const NOMES_DIAS_CURTOS = [tr('dom.'), tr('seg.'), tr('ter.'), tr('qua.'), tr('qui.'), tr('sex.'), tr('sáb.')];
 export const NUMERO_DE_CORES = 8;
 
 export function paraISO(data) {
@@ -58,15 +60,15 @@ function capitalizar(texto) {
 }
 
 export function tituloDaVisao(visao, data) {
-  if (visao === 'mes') return capitalizar(data.toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' }));
-  if (visao === 'dia') return capitalizar(data.toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }));
+  if (visao === 'mes') return capitalizar(data.toLocaleDateString(localeAtual(), { month: 'long', year: 'numeric' }));
+  if (visao === 'dia') return capitalizar(data.toLocaleDateString(localeAtual(), { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }));
 
   const { inicio, fim } = intervaloDaVisao('semana', data);
   if (inicio.getMonth() === fim.getMonth()) {
-    return `${inicio.getDate()} – ${fim.getDate()} de ${fim.toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' })}`;
+    return tr('{p0} – {p1} de {p2}', { p0: inicio.getDate(), p1: fim.getDate(), p2: fim.toLocaleDateString(localeAtual(), { month: 'long', year: 'numeric' }) });
   }
-  const curto = (d) => d.toLocaleDateString('pt-BR', { day: 'numeric', month: 'short' }).replace('.', '');
-  return `${curto(inicio)} – ${curto(fim)} de ${fim.getFullYear()}`;
+  const curto = (d) => d.toLocaleDateString(localeAtual(), { day: 'numeric', month: 'short' }).replace('.', '');
+  return tr('{p0} – {p1} de {p2}', { p0: curto(inicio), p1: curto(fim), p2: fim.getFullYear() });
 }
 
 export function minutosDoHorario(horario = '00:00') {
@@ -142,9 +144,9 @@ export function idDoProfissional(agenda) {
 }
 
 export const STATUS_AGENDA = {
-  aguardando: 'Aguardando',
-  realizado: 'Realizado',
-  cancelado: 'Cancelado',
+  aguardando: tr('Aguardando'),
+  realizado: tr('Realizado'),
+  cancelado: tr('Cancelado'),
 };
 
 export function tituloDoAgendamento(agenda) {
@@ -153,8 +155,8 @@ export function tituloDoAgendamento(agenda) {
     agenda.pacienteId?.nome,
     agenda.profissionalId?.nome,
     agenda.servicoId?.nome,
-    agenda.status === 'cancelado' ? 'Cancelado' : null,
-    confirmadoPeloWhatsapp(agenda) ? 'Confirmado pelo WhatsApp' : null,
+    agenda.status === 'cancelado' ? tr('Cancelado') : null,
+    confirmadoPeloWhatsapp(agenda) ? tr('Confirmado pelo WhatsApp') : null,
   ].filter(Boolean).join(' · ');
 }
 
@@ -166,19 +168,19 @@ export function confirmadoPeloWhatsapp(agenda) {
 export function situacaoDoLembrete(agenda) {
   const lembrete = agenda.lembrete;
   if (!lembrete?.situacao) return null;
-  if (lembrete.resposta === 'confirmado') return { rotulo: 'Confirmado pelo paciente', tom: 'success' };
-  if (lembrete.resposta === 'desmarcado') return { rotulo: 'Desmarcado pelo paciente', tom: 'danger' };
-  if (lembrete.situacao === 'falhou') return { rotulo: 'Não enviado', tom: 'danger', detalhe: lembrete.erro };
-  if (lembrete.situacao === 'lido') return { rotulo: 'Lido, sem resposta', tom: 'info' };
-  if (lembrete.situacao === 'entregue') return { rotulo: 'Entregue, sem resposta', tom: 'info' };
-  return { rotulo: 'Enviado', tom: 'info' };
+  if (lembrete.resposta === 'confirmado') return { rotulo: tr('Confirmado pelo paciente'), tom: 'success' };
+  if (lembrete.resposta === 'desmarcado') return { rotulo: tr('Desmarcado pelo paciente'), tom: 'danger' };
+  if (lembrete.situacao === 'falhou') return { rotulo: tr('Não enviado'), tom: 'danger', detalhe: lembrete.erro };
+  if (lembrete.situacao === 'lido') return { rotulo: tr('Lido, sem resposta'), tom: 'info' };
+  if (lembrete.situacao === 'entregue') return { rotulo: tr('Entregue, sem resposta'), tom: 'info' };
+  return { rotulo: tr('Enviado'), tom: 'info' };
 }
 
 // O que cada bloco do calendário mostra. As visões de mês/semana/dia recebem isso por prop, então servem
 // também para outras agendas (ex.: reuniões), cada uma com a sua função de descrever.
 export function descreverAgendamento(agenda, detalhado = false) {
   return {
-    nome: `${agenda.pacienteId?.nome ?? 'Paciente'}${agenda.pacienteId?.teste ? ' (teste)' : ''}`,
+    nome: `${agenda.pacienteId?.nome ?? tr('Paciente')}${agenda.pacienteId?.teste ? tr(' (teste)') : ''}`,
     sub: agenda.profissionalId?.nome ?? null,
     extra: [agenda.servicoId?.nome, detalhado ? agenda.salaId?.nome : null].filter(Boolean).join(' · '),
     titulo: tituloDoAgendamento(agenda),

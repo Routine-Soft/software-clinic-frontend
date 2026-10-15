@@ -6,6 +6,7 @@ import NovaEmpresaModal from './NovaEmpresaModal';
 import { iniciais } from '@/utils/nome';
 import { Icone, IconeMais, IconeLapis, IconeLixeira, IconeCheck, IconeX } from '@/components/CrudCard/icones';
 import '@/components/CrudCard/CrudCard.css';
+import { tr } from '@/i18n';
 
 const IconeEmpresas = () => (
   <Icone>
@@ -48,18 +49,18 @@ export default function EmpresaADM({ className = '' }) {
         <div className="crud-card__icon"><IconeEmpresas /></div>
 
         <div className="crud-card__titulos">
-          <h3 className="crud-card__titulo">Empresas</h3>
-          <p className="crud-card__subtitulo">Clientes pessoa jurídica (NR-01)</p>
+          <h3 className="crud-card__titulo">{tr('Empresas')}</h3>
+          <p className="crud-card__subtitulo">{tr('Clientes pessoa jurídica (NR-01)')}</p>
         </div>
 
         {!loading && (
           <span className="badge badge--primary">
-            {empresas.length} {empresas.length === 1 ? 'empresa' : 'empresas'}
+            {empresas.length} {empresas.length === 1 ? tr('empresa') : tr('empresas')}
           </span>
         )}
-        <button type="button" className="btn btn--primary btn--sm crud-card__novo-btn" onClick={() => setCriandoEmpresa(true)} aria-label="Adicionar empresa">
+        <button type="button" className="btn btn--primary btn--sm crud-card__novo-btn" onClick={() => setCriandoEmpresa(true)} aria-label={tr('Adicionar empresa')}>
           <IconeMais />
-          <span className="crud-card__rotulo">Adicionar</span>
+          <span className="crud-card__rotulo">{tr('Adicionar')}</span>
         </button>
       </header>
 
@@ -71,7 +72,7 @@ export default function EmpresaADM({ className = '' }) {
       )}
 
       {loading ? (
-        <ul className="crud-lista" aria-busy="true" aria-label="Carregando empresas">
+        <ul className="crud-lista" aria-busy="true" aria-label={tr('Carregando empresas')}>
           {[0, 1, 2].map((i) => (
             <li key={i} className="crud-item crud-item--skeleton" style={{ '--i': i }}>
               <div className="skeleton crud-item__icone-skeleton" />
@@ -82,7 +83,7 @@ export default function EmpresaADM({ className = '' }) {
       ) : empresas.length === 0 ? (
         <div className="crud-vazio">
           <IconeEmpresas />
-          <p>Nenhuma empresa cadastrada ainda.</p>
+          <p>{tr('Nenhuma empresa cadastrada ainda.')}</p>
         </div>
       ) : (
         <ul className="crud-lista">
@@ -110,20 +111,20 @@ export default function EmpresaADM({ className = '' }) {
 
                 {confirmandoId === empresa._id ? (
                   <div className="crud-item__confirmar">
-                    <span>Excluir?</span>
-                    <button type="button" className="icon-btn icon-btn--danger" aria-label={`Confirmar exclusão de ${empresa.razaoSocial}`} onClick={() => handleDelete(empresa._id)}>
+                    <span>{tr('Excluir?')}</span>
+                    <button type="button" className="icon-btn icon-btn--danger" aria-label={tr('Confirmar exclusão de {razaoSocial}', { razaoSocial: empresa.razaoSocial })} onClick={() => handleDelete(empresa._id)}>
                       <IconeCheck />
                     </button>
-                    <button type="button" className="icon-btn" aria-label="Cancelar exclusão" onClick={() => setConfirmandoId(null)}>
+                    <button type="button" className="icon-btn" aria-label={tr('Cancelar exclusão')} onClick={() => setConfirmandoId(null)}>
                       <IconeX />
                     </button>
                   </div>
                 ) : (
                   <div className="crud-item__acoes">
-                    <button type="button" className="icon-btn" aria-label={`Editar ${empresa.razaoSocial}`} title="Editar" onClick={() => handleEdit(empresa)}>
+                    <button type="button" className="icon-btn" aria-label={`Editar ${empresa.razaoSocial}`} title={tr('Editar')} onClick={() => handleEdit(empresa)}>
                       <IconeLapis />
                     </button>
-                    <button type="button" className="icon-btn icon-btn--danger" aria-label={`Excluir ${empresa.razaoSocial}`} title="Excluir" onClick={() => setConfirmandoId(empresa._id)}>
+                    <button type="button" className="icon-btn icon-btn--danger" aria-label={`Excluir ${empresa.razaoSocial}`} title={tr('Excluir')} onClick={() => setConfirmandoId(empresa._id)}>
                       <IconeLixeira />
                     </button>
                   </div>

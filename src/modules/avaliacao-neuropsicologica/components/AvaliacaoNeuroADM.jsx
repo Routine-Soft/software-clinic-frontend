@@ -11,6 +11,7 @@ import { createAvaliacaoNeuro } from '../avaliacao-neuro.api';
 import { situacaoDa } from '../avaliacao-neuro.utils';
 import NovaAvaliacaoNeuroModal from './NovaAvaliacaoNeuroModal';
 import '../avaliacao-neuro.css';
+import { tr } from '@/i18n';
 
 const normalizar = (texto = '') => texto.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
 
@@ -24,7 +25,7 @@ export default function AvaliacaoNeuroADM() {
     <div className="page">
       <header className="page-header">
         <div>
-          <h2 className="page-title">Avaliação neuropsicológica</h2>
+          <h2 className="page-title">{tr('Avaliação neuropsicológica')}</h2>
         </div>
       </header>
       {acesso.carregando ? <div className="skeleton skeleton--bloco" /> : <SemAcessoProntuario />}
@@ -63,13 +64,13 @@ function ListaDeAvaliacoes() {
     <div className="page">
       <header className="page-header">
         <div>
-          <h2 className="page-title">Avaliação neuropsicológica</h2>
-          <p className="page-subtitle">Anamnese, sessões, testes e laudo no formato da Resolução CFP 06/2019</p>
+          <h2 className="page-title">{tr('Avaliação neuropsicológica')}</h2>
+          <p className="page-subtitle">{tr('Anamnese, sessões, testes e laudo no formato da Resolução CFP 06/2019')}</p>
         </div>
         <div className="page-header__acoes">
           <button type="button" className="btn btn--primary" onClick={() => { setErroCriar(null); setCriando(true); }}>
             <IconeMais />
-            Nova avaliação
+            {tr('Nova avaliação')}
           </button>
         </div>
       </header>
@@ -84,7 +85,7 @@ function ListaDeAvaliacoes() {
         <div className="neuro-toolbar">
           <div className="search">
             <IconeBusca />
-            <input className="input" type="search" value={busca} onChange={(e) => setBusca(e.target.value)} placeholder="Buscar por paciente, profissional ou finalidade" aria-label="Buscar avaliação" />
+            <input className="input" type="search" value={busca} onChange={(e) => setBusca(e.target.value)} placeholder={tr('Buscar por paciente, profissional ou finalidade')} aria-label={tr('Buscar avaliação')} />
           </div>
         </div>
 
@@ -92,12 +93,12 @@ function ListaDeAvaliacoes() {
           <table className="table" aria-busy={loading}>
             <thead>
               <tr>
-                <th>Paciente</th>
-                <th>Profissional</th>
-                <th>Início</th>
-                <th>Sessões</th>
-                <th>Situação</th>
-                <th>Avaliação</th>
+                <th>{tr('Paciente')}</th>
+                <th>{tr('Profissional')}</th>
+                <th>{tr('Início')}</th>
+                <th>{tr('Sessões')}</th>
+                <th>{tr('Situação')}</th>
+                <th>{tr('Avaliação')}</th>
               </tr>
             </thead>
             <tbody>
@@ -112,7 +113,7 @@ function ListaDeAvaliacoes() {
               ) : filtradas.length === 0 ? (
                 <tr>
                   <td className="table__empty" colSpan={6}>
-                    {avaliacoes.length === 0 ? 'Nenhuma avaliação ainda. Use "Nova avaliação" para começar.' : 'Nenhuma avaliação encontrada para essa busca.'}
+                    {avaliacoes.length === 0 ? tr('Nenhuma avaliação ainda. Use "Nova avaliação" para começar.') : tr('Nenhuma avaliação encontrada para essa busca.')}
                   </td>
                 </tr>
               ) : (
@@ -121,7 +122,7 @@ function ListaDeAvaliacoes() {
                   return (
                     <tr key={avaliacao._id} style={{ '--i': Math.min(index, 12) }}>
                       <td>
-                        <Link to={`/avaliacoes-neuropsicologicas/${avaliacao._id}`} className="neuro-link">{avaliacao.pacienteId?.nome ?? 'Paciente removido'}</Link>
+                        <Link to={`/avaliacoes-neuropsicologicas/${avaliacao._id}`} className="neuro-link">{avaliacao.pacienteId?.nome ?? tr('Paciente removido')}</Link>
                         {avaliacao.finalidade && <span className="neuro-sub">{avaliacao.finalidade}</span>}
                       </td>
                       <td>{avaliacao.profissionalId?.nome ?? '—'}</td>
@@ -131,7 +132,7 @@ function ListaDeAvaliacoes() {
                       <td>
                         <Link to={`/avaliacoes-neuropsicologicas/${avaliacao._id}`} className="btn btn--primary btn--sm">
                           <IconeFicha />
-                          Abrir
+                          {tr('Abrir')}
                         </Link>
                       </td>
                     </tr>

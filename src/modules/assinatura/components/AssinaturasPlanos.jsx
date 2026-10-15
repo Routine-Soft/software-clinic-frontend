@@ -8,24 +8,25 @@ import { recursosExclusivos } from '@/modules/plano/plano.utils';
 import AvisoDescontoIndicacao from '@/modules/indicacao/components/AvisoDescontoIndicacao';
 import './assinatura.css';
 import './assinaturas-planos.css';
+import { tr } from '@/i18n';
 
 // O rótulo diz o que o plano é para a clínica (o plano da assinatura atual ganha um selo com o estado dela).
 const SELO_DO_PLANO_ATUAL = {
-  trial: { texto: 'Plano atual', tom: 'info' },
-  ativa: { texto: 'Plano atual', tom: 'success' },
-  pendente: { texto: 'Aguardando pagamento', tom: 'warning' },
-  inadimplente: { texto: 'Pagamento em atraso', tom: 'danger' },
-  cancelada: { texto: 'Cancelado', tom: 'muted' },
-  expirada: { texto: 'Teste encerrado', tom: 'muted' },
+  trial: { texto: tr('Plano atual'), tom: 'info' },
+  ativa: { texto: tr('Plano atual'), tom: 'success' },
+  pendente: { texto: tr('Aguardando pagamento'), tom: 'warning' },
+  inadimplente: { texto: tr('Pagamento em atraso'), tom: 'danger' },
+  cancelada: { texto: tr('Cancelado'), tom: 'muted' },
+  expirada: { texto: tr('Teste encerrado'), tom: 'muted' },
 };
 
 const ROTULO_DA_ASSINATURA = {
-  trial: 'em período de teste',
+  trial: tr('em período de teste'),
   ativa: 'ativa',
-  pendente: 'aguardando pagamento',
-  inadimplente: 'com pagamento em atraso',
+  pendente: tr('aguardando pagamento'),
+  inadimplente: tr('com pagamento em atraso'),
   cancelada: 'cancelada',
-  expirada: 'com o teste encerrado',
+  expirada: tr('com o teste encerrado'),
 };
 
 // Gratuito primeiro, depois os pagos do mais barato ao mais caro.
@@ -40,11 +41,11 @@ function textoDoBotaoCartao(plano, assinatura) {
   const status = assinatura.status;
   const ehAtual = assinatura.planoId?._id === plano._id;
 
-  if (status === 'ativa' && assinatura.cobranca === 'pix') return ehAtual ? 'Passar para o cartão' : 'Indisponível';
-  if (status === 'ativa') return ehAtual ? 'Plano atual' : 'Indisponível';
-  if (ehAtual && status === 'pendente') return 'Refazer o pagamento';
-  if (ehAtual && status === 'inadimplente') return 'Regularizar no cartão';
-  return 'Assinar no cartão';
+  if (status === 'ativa' && assinatura.cobranca === 'pix') return ehAtual ? tr('Passar para o cartão') : tr('Indisponível');
+  if (status === 'ativa') return ehAtual ? tr('Plano atual') : tr('Indisponível');
+  if (ehAtual && status === 'pendente') return tr('Refazer o pagamento');
+  if (ehAtual && status === 'inadimplente') return tr('Regularizar no cartão');
+  return tr('Assinar no cartão');
 }
 
 function IconePix() {
@@ -64,14 +65,17 @@ function IconeCheck() {
 }
 
 // O que o plano inclui vem do cadastro de Planos (o que só ele tem fica em destaque), mais como o pagamento funciona.
-function BeneficiosDoPlano({ plano, planos }) {
+function BeneficiosDoPlano({ plano, planos, stripe }) {
   const exclusivos = recursosExclusivos(plano, planos);
   const recursos = plano.recursos?.length
     ? plano.recursos
-    : ['Acesso completo ao sistema', plano.individual ? 'Para quem atende sozinho: só você usa o sistema' : 'Profissionais, recepção e usuários sem limite'];
+    : [tr('Acesso completo ao sistema'), plano.individual ? tr('Para quem atende sozinho: só você usa o sistema') : tr('Profissionais, recepção e usuários sem limite')];
   const itens = [
     ...recursos.map((texto) => ({ texto, destaque: exclusivos.has(texto) })),
-    ...['No cartão, renova sozinho todo mês', 'No Pix, cada pagamento vale 30 dias', 'Cancele quando quiser, sem multa'].map((texto) => ({ texto, pagamento: true })),
+    ...(stripe
+      ? [tr('Cartão de crédito internacional, em dólar'), tr('No cartão, renova sozinho todo mês'), tr('Cancele quando quiser, sem multa')]
+      : [tr('No cartão, renova sozinho todo mês'), tr('No Pix, cada pagamento vale 30 dias'), tr('Cancele quando quiser, sem multa')]
+    ).map((texto) => ({ texto, pagamento: true })),
   ];
 
   return (
@@ -103,7 +107,10 @@ export default function AssinaturasPlanos() {
   const podeContratar = ['admin', 'super_admin', 'recepcao'].includes(user?.role);
   const podeCancelar = user?.role === 'admin' || user?.role === 'super_admin';
   // O plano gratuito é só o teste de 7 dias do cadastro: não aparece para escolher, só os pagos.
-  const planosAtivos = ordenarPlanos(planos.filter((plano) => plano.ativo && plano.tipo !== 'gratis'));
+  // Só os planos da moeda da clínica: Brasil em reais (Mercado Pago), fora do Brasil em dólar (Stripe).
+  const moedaDaClinica = assinatura?.moeda ?? 'BRL';
+  const pagaPeloStripe = assinatura?.gateway === 'stripe';
+  const planosAtivos = ordenarPlanos(planos.filter((plano) => plano.ativo && plano.tipo !== 'gratis' && (plano.moeda ?? 'BRL') === moedaDaClinica));
   const emTeste = assinatura?.status === 'trial';
   const assinaturaAtiva = assinatura?.status === 'ativa';
   // Pix é pago período a período e não renova sozinho; o cartão renova todo mês no Mercado Pago.
@@ -120,8 +127,8 @@ export default function AssinaturasPlanos() {
     <div className="page assinaturas">
       <header className="page-header">
         <div>
-          <h2 className="page-title">Assinaturas</h2>
-          <p className="page-subtitle">Compare os planos e escolha o melhor para a sua clínica</p>
+          <h2 className="page-title">{tr('Assinaturas')}</h2>
+          <p className="page-subtitle">{tr('Compare os planos e escolha o melhor para a sua clínica')}</p>
         </div>
       </header>
 
@@ -134,51 +141,52 @@ export default function AssinaturasPlanos() {
       {assinatura && (
         <p className="assinaturas__resumo" data-status={assinatura.status}>
           <span>
-            Sua assinatura atual: <strong>{assinatura.planoId?.nome ?? '—'}</strong>, {ativaPorPix ? 'ativa por Pix' : (ROTULO_DA_ASSINATURA[assinatura.status] ?? assinatura.status)}
-            {assinatura.acesso?.liberado && ['cancelada', 'ativa'].includes(assinatura.status) && assinatura.acesso.ate && ` (acesso até ${formatarData(assinatura.acesso.ate)})`}
-            {assinatura.status === 'trial' && assinatura.dataFimTrial && ` (até ${formatarData(assinatura.dataFimTrial)})`}
+            {tr('Sua assinatura atual:')} <strong>{assinatura.planoId?.nome ? tr(assinatura.planoId.nome) : '—'}</strong>, {ativaPorPix ? tr('ativa por Pix') : (ROTULO_DA_ASSINATURA[assinatura.status] ?? assinatura.status)}
+            {assinatura.acesso?.liberado && ['cancelada', 'ativa'].includes(assinatura.status) && assinatura.acesso.ate && tr(' (acesso até {p0})', { p0: formatarData(assinatura.acesso.ate) })}
+            {assinatura.status === 'trial' && assinatura.dataFimTrial && tr(' (até {p0})', { p0: formatarData(assinatura.dataFimTrial) })}
             .
           </span>
         </p>
       )}
 
       {!podeContratar && !carregando && (
-        <p className="alert alert--info" role="status">Só o administrador e a recepção da clínica podem pagar ou trocar de plano.</p>
+        <p className="alert alert--info" role="status">{tr('Só o administrador e a recepção da clínica podem pagar ou trocar de plano.')}</p>
       )}
 
       {podeContratar && ativaNoCartao && (
         <p className="alert alert--info" role="status">
-          Para trocar de plano, cancele a assinatura atual em <strong>Minha assinatura</strong> e escolha o novo plano aqui.
+          {pagaPeloStripe
+            ? tr('Para trocar de plano ou de cartão, use "Gerenciar assinatura" em Minha assinatura.')
+            : <>{tr('Para trocar de plano, cancele a assinatura atual em')} <strong>{tr('Minha assinatura')}</strong> {tr('e escolha o novo plano aqui.')}</>}
         </p>
       )}
 
       {podeContratar && ativaPorPix && (
         <p className="alert alert--info" role="status">
-          Seu período pago por Pix vai até <strong>{formatarData(assinatura.proximaCobranca)}</strong>. Você pode renovar por Pix a qualquer momento
-          ou passar o plano atual para o cartão: a primeira cobrança no cartão só acontece em {formatarData(assinatura.proximaCobranca)}, quando o Pix acaba.
-          Para trocar de plano, aguarde o fim do período.
+          {tr('Seu período pago por Pix vai até')} <strong>{formatarData(assinatura.proximaCobranca)}</strong>{tr('. Você pode renovar por Pix a qualquer momento ou passar o plano atual para o cartão: a primeira cobrança no cartão só acontece em')} {formatarData(assinatura.proximaCobranca)}{tr(', quando o Pix acaba. Para trocar de plano, aguarde o fim do período.')}
         </p>
       )}
 
       {podeContratar && aguardandoCartao && (
         <p className="alert alert--info" role="status">
-          Há um pagamento no cartão aguardando confirmação. Para pagar por Pix, conclua ou desista dele primeiro.
+          {tr('Há um pagamento no cartão aguardando confirmação. Para pagar por Pix, conclua ou desista dele primeiro.')}
         </p>
       )}
 
       {podeContratar && emTeste && (
         <p className="alert alert--info" role="status">
-          Você está no teste grátis, com tudo liberado e sem cartão{assinatura.dataFimTrial && ` até ${formatarData(assinatura.dataFimTrial)}`}.
-          Para continuar depois, escolha um dos planos e pague no cartão ou no Pix.
+          {pagaPeloStripe
+            ? tr('Você está no teste grátis, com tudo liberado e sem cartão{p0}. Para continuar depois, escolha um dos planos e pague no cartão de crédito.', { p0: assinatura.dataFimTrial && tr(' até {p0}', { p0: formatarData(assinatura.dataFimTrial) }) })
+            : tr('Você está no teste grátis, com tudo liberado e sem cartão{p0}. Para continuar depois, escolha um dos planos e pague no cartão ou no Pix.', { p0: assinatura.dataFimTrial && tr(' até {p0}', { p0: formatarData(assinatura.dataFimTrial) }) })}
         </p>
       )}
 
-      {podeCancelar && <AvisoDescontoIndicacao />}
+      {podeCancelar && !pagaPeloStripe && <AvisoDescontoIndicacao />}
 
       {erroAcao && <p className="alert alert--error" role="alert">{erroAcao.message}</p>}
 
       {carregando ? (
-        <div className="assinaturas__grade" aria-busy="true" aria-label="Carregando planos">
+        <div className="assinaturas__grade" aria-busy="true" aria-label={tr('Carregando planos')}>
           {[0, 1, 2].map((i) => (
             <div key={i} className="card plano-opcao" style={{ '--i': i }}>
               <div className="skeleton skeleton--line" style={{ width: '50%' }} />
@@ -190,7 +198,7 @@ export default function AssinaturasPlanos() {
         </div>
       ) : planosAtivos.length === 0 ? (
         <div className="crud-vazio">
-          <p>Nenhum plano disponível no momento.</p>
+          <p>{tr('Nenhum plano disponível no momento.')}</p>
         </div>
       ) : (
         <div className="assinaturas__grade">
@@ -213,25 +221,25 @@ export default function AssinaturasPlanos() {
                 style={{ '--i': index }}
               >
                 <header className="plano-opcao__topo">
-                  <h3 className="plano-opcao__nome">{plano.nome}</h3>
+                  <h3 className="plano-opcao__nome">{tr(plano.nome)}</h3>
                   {selo && <span className={`badge badge--${selo.tom}`}>{selo.texto}</span>}
                 </header>
 
                 <p className="plano-opcao__preco">
                   {gratuito && !plano.preco ? (
                     <>
-                      <strong>Grátis</strong>
-                      <span>{plano.duracaoDiasTrial ? `por ${plano.duracaoDiasTrial} dias` : ''}</span>
+                      <strong>{tr('Grátis')}</strong>
+                      <span>{plano.duracaoDiasTrial ? tr('por {duracaoDiasTrial} dias', { duracaoDiasTrial: plano.duracaoDiasTrial }) : ''}</span>
                     </>
                   ) : (
                     <>
-                      <strong>{formatarPreco(plano.preco)}</strong>
-                      <span>/ mês</span>
+                      <strong>{formatarPreco(plano.preco, plano.moeda)}</strong>
+                      <span>{tr('/ mês')}</span>
                     </>
                   )}
                 </p>
 
-                <BeneficiosDoPlano plano={plano} planos={planosAtivos} />
+                <BeneficiosDoPlano plano={plano} planos={planosAtivos} stripe={pagaPeloStripe} />
 
                 {!gratuito && podeContratar && (
                   <div className="plano-opcao__acoes">
@@ -241,26 +249,28 @@ export default function AssinaturasPlanos() {
                       onClick={() => escolher(plano)}
                       disabled={cartaoDesabilitado}
                     >
-                      {carregandoEste ? 'Redirecionando...' : textoDoBotaoCartao(plano, assinatura ?? {})}
+                      {carregandoEste ? tr('Redirecionando...') : textoDoBotaoCartao(plano, assinatura ?? {})}
                     </button>
-                    <button
-                      type="button"
-                      className={`btn ${renovando ? 'btn--primary' : 'btn--ghost'} btn--block plano-opcao__pix`}
-                      onClick={() => setPix({ plano, renovacao: renovando })}
-                      disabled={pixDesabilitado}
-                    >
-                      <IconePix />
-                      {renovando ? 'Renovar por Pix' : 'Pagar com Pix'}
-                    </button>
+                    {!pagaPeloStripe && (
+                      <button
+                        type="button"
+                        className={`btn ${renovando ? 'btn--primary' : 'btn--ghost'} btn--block plano-opcao__pix`}
+                        onClick={() => setPix({ plano, renovacao: renovando })}
+                        disabled={pixDesabilitado}
+                      >
+                        <IconePix />
+                        {renovando ? tr('Renovar por Pix') : tr('Pagar com Pix')}
+                      </button>
+                    )}
                   </div>
                 )}
 
                 {podeCancelar && ehAtual && assinatura.status === 'pendente' && (confirmandoDesistencia ? (
-                  <div className="assinatura-card__confirmar" role="alertdialog" aria-label="Confirmar desistência">
-                    <p>Desistir da assinatura? O pagamento pendente é cancelado e você volta ao teste grátis.</p>
+                  <div className="assinatura-card__confirmar" role="alertdialog" aria-label={tr('Confirmar desistência')}>
+                    <p>{tr('Desistir da assinatura? O pagamento pendente é cancelado e você volta ao teste grátis.')}</p>
                     <div className="assinatura-card__acoes assinatura-card__acoes--linha">
                       <button type="button" className="btn btn--ghost btn--sm" onClick={() => setConfirmandoDesistencia(false)} disabled={cancelando}>
-                        Continuar aguardando
+                        {tr('Continuar aguardando')}
                       </button>
                       <button
                         type="button"
@@ -268,13 +278,13 @@ export default function AssinaturasPlanos() {
                         disabled={cancelando}
                         onClick={async () => { if (await cancelar()) setConfirmandoDesistencia(false); }}
                       >
-                        {cancelando ? 'Desistindo...' : 'Sim, desistir'}
+                        {cancelando ? tr('Desistindo...') : tr('Sim, desistir')}
                       </button>
                     </div>
                   </div>
                 ) : (
                   <button type="button" className="assinatura-card__cancelar" onClick={() => setConfirmandoDesistencia(true)}>
-                    Desistir e voltar ao teste grátis
+                    {tr('Desistir e voltar ao teste grátis')}
                   </button>
                 ))}
               </article>

@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { sincronizarAssinatura } from '../assinatura.api';
+import { Link, useLocation } from 'react-router-dom';
+import { sincronizarAssinatura, sincronizarStripe } from '../assinatura.api';
 import './assinatura.css';
+import { localeAtual, tr } from '@/i18n';
 
 const TENTATIVAS_MAXIMAS = 6;
 const INTERVALO_MS = 4000;
@@ -14,12 +15,13 @@ const ICONES = {
 };
 
 function formatarData(data) {
-  return new Date(data).toLocaleDateString('pt-BR');
+  return new Date(data).toLocaleDateString(localeAtual());
 }
 
-// Para onde o Mercado Pago devolve o cliente depois do checkout (back_url).
-// Consulta o pagamento no backend; se ainda estiver pendente, tenta de novo algumas vezes.
+// Para onde o Mercado Pago (back_url) ou o Stripe (success_url, com ?stripe_session=) devolvem o cliente depois do
+// checkout. Consulta o pagamento no backend; se ainda estiver pendente, tenta de novo algumas vezes.
 export default function AssinaturaRetorno() {
+  const sessaoStripe = new URLSearchParams(useLocation().search).get('stripe_session');
   const [assinatura, setAssinatura] = useState(null);
   const [verificando, setVerificando] = useState(true);
   const [erro, setErro] = useState(null);
@@ -31,12 +33,13 @@ export default function AssinaturaRetorno() {
 
     async function verificar(tentativa) {
       try {
-        const { data } = await sincronizarAssinatura();
+        const { data } = sessaoStripe ? await sincronizarStripe(sessaoStripe) : await sincronizarAssinatura();
         if (cancelado) return;
         setAssinatura(data);
         setErro(null);
 
-        if (data.status === 'pendente' && tentativa < TENTATIVAS_MAXIMAS) {
+        const aindaEsperando = data.status === 'pendente' || (sessaoStripe && data.status !== 'ativa');
+        if (aindaEsperando && tentativa < TENTATIVAS_MAXIMAS) {
           timer = setTimeout(() => verificar(tentativa + 1), INTERVALO_MS);
         } else {
           setVerificando(false);
@@ -54,7 +57,7 @@ export default function AssinaturaRetorno() {
       cancelado = true;
       clearTimeout(timer);
     };
-  }, [rodada]);
+  }, [rodada, sessaoStripe]);
 
   function verificarNovamente() {
     setErro(null);
@@ -66,10 +69,10 @@ export default function AssinaturaRetorno() {
   const situacao = erro ? 'problema' : verificando ? 'verificando' : status === 'ativa' ? 'ativa' : status === 'pendente' ? 'pendente' : 'problema';
 
   const textos = {
-    verificando: ['Confirmando seu pagamento...', 'Estamos conferindo com o Mercado Pago. Isso leva só alguns segundos.'],
-    ativa: ['Assinatura ativa!', assinatura?.proximaCobranca ? `Tudo certo. A próxima cobrança será em ${formatarData(assinatura.proximaCobranca)}.` : 'Tudo certo. Obrigado por assinar!'],
-    pendente: ['Aguardando a confirmação', 'O Mercado Pago ainda não confirmou o pagamento. Assim que ele confirmar, sua assinatura será ativada. Você pode verificar de novo agora ou voltar mais tarde.'],
-    problema: [erro ? 'Não foi possível verificar' : 'Pagamento não concluído', erro ? erro.message : 'O Mercado Pago não aprovou o pagamento, e nada foi cobrado. Você continua no plano gratuito e pode tentar de novo, no cartão ou por Pix.'],
+    verificando: [tr('Confirmando seu pagamento...'), tr('Estamos conferindo com o Mercado Pago. Isso leva só alguns segundos.')],
+    ativa: [tr('Assinatura ativa!'), assinatura?.proximaCobranca ? tr('Tudo certo. A próxima cobrança será em {p0}.', { p0: formatarData(assinatura.proximaCobranca) }) : tr('Tudo certo. Obrigado por assinar!')],
+    pendente: [tr('Aguardando a confirmação'), tr('O Mercado Pago ainda não confirmou o pagamento. Assim que ele confirmar, sua assinatura será ativada. Você pode verificar de novo agora ou voltar mais tarde.')],
+    problema: [erro ? tr('Não foi possível verificar') : tr('Pagamento não concluído'), erro ? erro.message : tr('O Mercado Pago não aprovou o pagamento, e nada foi cobrado. Você continua no plano gratuito e pode tentar de novo, no cartão ou por Pix.')],
   }[situacao];
 
   return (
@@ -85,12 +88,12 @@ export default function AssinaturaRetorno() {
         <p className="assinatura-retorno__texto">{textos[1]}</p>
 
         <div className="assinatura-retorno__acoes">
-          {situacao === 'ativa' && <Link to="/home" className="btn btn--primary">Ir para o início</Link>}
+          {situacao === 'ativa' && <Link to="/home" className="btn btn--primary">{tr('Ir para o início')}</Link>}
           {(situacao === 'pendente' || (situacao === 'problema' && erro)) && (
-            <button type="button" className="btn btn--primary" onClick={verificarNovamente}>Verificar novamente</button>
+            <button type="button" className="btn btn--primary" onClick={verificarNovamente}>{tr('Verificar novamente')}</button>
           )}
-          {situacao === 'problema' && !erro && <Link to="/assinaturas" className="btn btn--primary">Ver planos e tentar de novo</Link>}
-          {situacao !== 'verificando' && <Link to="/assinatura" className="btn btn--ghost">Ver minha assinatura</Link>}
+          {situacao === 'problema' && !erro && <Link to="/assinaturas" className="btn btn--primary">{tr('Ver planos e tentar de novo')}</Link>}
+          {situacao !== 'verificando' && <Link to="/assinatura" className="btn btn--ghost">{tr('Ver minha assinatura')}</Link>}
         </div>
       </section>
     </div>

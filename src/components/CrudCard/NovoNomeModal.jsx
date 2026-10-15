@@ -1,6 +1,7 @@
 import { useId, useState } from 'react'
 import Modal from '@/components/Modal/Modal'
 import ModalForm from '@/components/Modal/ModalForm'
+import { tr } from '@/i18n';
 
 export default function NovoNomeModal({ titulo, label, placeholder, dica, erro, onSave, onClose }) {
     const [formCriar, setFormCriar] = useState({ nome: '' })
@@ -9,7 +10,7 @@ export default function NovoNomeModal({ titulo, label, placeholder, dica, erro, 
     return (
         <Modal title={titulo} onClose={onClose}>
             {(fechar) => (
-                <ModalForm erro={erro} fechar={fechar} submitLabel="Cadastrar" loadingLabel="Cadastrando..." onSubmit={() => onSave(formCriar)}>
+                <ModalForm erro={erro} fechar={fechar} submitLabel={tr('Cadastrar')} loadingLabel={tr('Cadastrando...')} onSubmit={() => onSave(formCriar)}>
                     <div className="field">
                         <label className="field__label" htmlFor={inputId}>{label}</label>
                         <input

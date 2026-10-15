@@ -220,6 +220,15 @@ a.lp-nav__link {
   display: none;
 }
 
+.lp-header__idioma {
+  display: inline-flex;
+}
+
+/* Idioma dentro do menu: só no celular (ver o @media de 560 px). */
+.lp-nav__idioma {
+  display: none;
+}
+
 /* Telas de notebook (1181–1600 px): links mais juntos para caber tudo numa linha. */
 @media (min-width: 1181px) and (max-width: 1600px) {
   .lp-nav {
@@ -1387,6 +1396,16 @@ a.lp-nav__link {
   .lp-perfil,
   .lp-passo {
     padding: 24px;
+  }
+
+  /* No celular não cabem idioma e tema no topo: o idioma vai para dentro do menu. */
+  .lp-header__idioma {
+    display: none;
+  }
+
+  .lp-nav__idioma {
+    display: flex;
+    padding: 0.6rem 0.5rem 0;
   }
 
   /* No celular, o seletor de tema fica entre a marca e o menu, em tamanho compacto. */

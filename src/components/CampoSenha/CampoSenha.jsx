@@ -1,10 +1,12 @@
 import { useState } from 'react';
+import { useIdioma } from '@/i18n/useIdioma';
 import './CampoSenha.css';
 
 // Campo de senha com o botão de olho: a pessoa vê o que digitou para conferir antes de enviar.
 export default function CampoSenha({ className = 'input', ...props }) {
   const [visivel, setVisivel] = useState(false);
-  const rotulo = visivel ? 'Ocultar senha' : 'Mostrar senha';
+  const { t } = useIdioma();
+  const rotulo = t(visivel ? 'comum.ocultarSenha' : 'comum.mostrarSenha');
 
   return (
     <div className="campo-senha">

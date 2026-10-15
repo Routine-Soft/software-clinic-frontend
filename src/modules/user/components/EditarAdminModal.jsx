@@ -2,6 +2,8 @@ import { useState } from 'react';
 import Modal from '@/components/Modal/Modal';
 import ModalForm from '@/components/Modal/ModalForm';
 import { normalizarEmail } from '@/utils/email';
+import { tr } from '@/i18n';
+import SeletorPais from '@/components/SeletorPais/SeletorPais';
 
 export default function EditarAdminModal({ admin, erro, onSave, onClose }) {
   const [form, setForm] = useState({
@@ -10,6 +12,7 @@ export default function EditarAdminModal({ admin, erro, onSave, onClose }) {
     telefone: admin.telefone,
     nomeEmpresa: admin.nomeEmpresa,
     cnpj: admin.cnpj ?? '',
+    pais: admin.pais ?? 'BR',
   });
 
   function handleChange(campo, valor) {
@@ -17,11 +20,11 @@ export default function EditarAdminModal({ admin, erro, onSave, onClose }) {
   }
 
   return (
-    <Modal title="Editar clínica" onClose={onClose}>
+    <Modal title={tr('Editar clínica')} onClose={onClose}>
       {(fechar) => (
         <ModalForm erro={erro} fechar={fechar} onSubmit={() => onSave(admin._id, { ...form, cnpj: form.cnpj || null })}>
           <div className="field">
-            <label className="field__label" htmlFor="editar-admin-nome">Nome completo</label>
+            <label className="field__label" htmlFor="editar-admin-nome">{tr('Nome completo')}</label>
             <input
               id="editar-admin-nome"
               className="input"
@@ -35,7 +38,7 @@ export default function EditarAdminModal({ admin, erro, onSave, onClose }) {
 
           <div className="modal-form__row">
             <div className="field">
-              <label className="field__label" htmlFor="editar-admin-empresa">Nome da clínica</label>
+              <label className="field__label" htmlFor="editar-admin-empresa">{tr('Nome da clínica')}</label>
               <input
                 id="editar-admin-empresa"
                 className="input"
@@ -60,7 +63,7 @@ export default function EditarAdminModal({ admin, erro, onSave, onClose }) {
 
           <div className="modal-form__row">
             <div className="field">
-              <label className="field__label" htmlFor="editar-admin-telefone">Telefone</label>
+              <label className="field__label" htmlFor="editar-admin-telefone">{tr('Telefone')}</label>
               <input
                 id="editar-admin-telefone"
                 className="input"
@@ -72,7 +75,7 @@ export default function EditarAdminModal({ admin, erro, onSave, onClose }) {
             </div>
 
             <div className="field">
-              <label className="field__label" htmlFor="editar-admin-email">E-mail</label>
+              <label className="field__label" htmlFor="editar-admin-email">{tr('E-mail')}</label>
               <input
                 id="editar-admin-email"
                 className="input"
@@ -82,6 +85,11 @@ export default function EditarAdminModal({ admin, erro, onSave, onClose }) {
                 required
               />
             </div>
+          </div>
+          <div className="field">
+            <label className="field__label" htmlFor="editar-admin-pais">{tr('País da clínica')}</label>
+            <SeletorPais id="editar-admin-pais" value={form.pais} onChange={(pais) => handleChange('pais', pais)} />
+            <p className="field__hint">{tr('Brasil paga pelo Mercado Pago, em reais. Outros países pagam pelo Stripe, em dólar.')}</p>
           </div>
         </ModalForm>
       )}

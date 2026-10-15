@@ -1,8 +1,9 @@
 import { PERIODOS } from './periodos';
 import './FiltroPeriodo.css';
+import { tr } from '@/i18n';
 
 // Mesmo visual do seletor Dia/Semana/Mês da agenda. Dentro de um card com --tom, assume a cor dele.
-export default function FiltroPeriodo({ valor, onChange, rotulo = 'Período', className = '' }) {
+export default function FiltroPeriodo({ valor, onChange, rotulo = tr('Período'), className = '' }) {
   return (
     <div className={`filtro-periodo ${className}`.trim()} role="group" aria-label={rotulo}>
       {PERIODOS.map(([chave, texto]) => (

@@ -32,3 +32,16 @@ export async function cancelarAssinatura() {
   const response = await httpClient.post('/assinaturas/cancelar');
   return response;
 }
+
+// Stripe (clínicas de fora do Brasil): abrir o pagamento, abrir o portal (cartão, faturas, cancelar) e conferir a volta.
+export async function iniciarCheckoutStripe(planoId) {
+  return await httpClient.post('/assinaturas/stripe/checkout', { planoId });
+}
+
+export async function abrirPortalStripe() {
+  return await httpClient.post('/assinaturas/stripe/portal', {});
+}
+
+export async function sincronizarStripe(sessionId) {
+  return await httpClient.post('/assinaturas/stripe/sincronizar', { sessionId });
+}

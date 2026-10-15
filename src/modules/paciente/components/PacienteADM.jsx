@@ -11,6 +11,7 @@ import NovoPacienteModal from './NovoPacienteModal';
 import { IconeMais } from '@/components/CrudCard/icones';
 import './paciente.css';
 import SeloTeste from './SeloTeste';
+import { tr } from '@/i18n';
 
 const COLUNAS = 5;
 
@@ -53,18 +54,18 @@ export default function PacienteADM() {
     <div className="page">
       <header className="page-header">
         <div>
-          <h2 className="page-title">Pacientes</h2>
-          <p className="page-subtitle">Cadastro e consulta dos pacientes da clínica</p>
+          <h2 className="page-title">{tr('Pacientes')}</h2>
+          <p className="page-subtitle">{tr('Cadastro e consulta dos pacientes da clínica')}</p>
         </div>
         <div className="page-header__acoes">
           {!loading && (
             <span className="badge badge--primary">
-            {pacientes.length} {pacientes.length === 1 ? 'paciente' : 'pacientes'}
+            {pacientes.length} {pacientes.length === 1 ? tr('paciente') : tr('pacientes')}
           </span>
           )}
           <button type="button" className="btn btn--primary" onClick={() => setCriandoPaciente(true)}>
             <IconeMais />
-            Novo paciente
+            {tr('Novo paciente')}
           </button>
         </div>
       </header>
@@ -85,8 +86,8 @@ export default function PacienteADM() {
               type="search"
               value={busca}
               onChange={(e) => setBusca(e.target.value)}
-              placeholder="Buscar por nome, CPF, telefone ou e-mail"
-              aria-label="Buscar paciente"
+              placeholder={tr('Buscar por nome, CPF, telefone ou e-mail')}
+              aria-label={tr('Buscar paciente')}
             />
           </div>
           {!loading && busca && (
@@ -100,11 +101,11 @@ export default function PacienteADM() {
           <table className="table paciente-table" aria-busy={loading}>
             <thead>
               <tr>
-                <th>Paciente</th>
-                <th>Contato</th>
-                <th>Nascimento</th>
-                <th>Convênio e empresa</th>
-                <th>Ações</th>
+                <th>{tr('Paciente')}</th>
+                <th>{tr('Contato')}</th>
+                <th>{tr('Nascimento')}</th>
+                <th>{tr('Convênio e empresa')}</th>
+                <th>{tr('Ações')}</th>
               </tr>
             </thead>
             <tbody>
@@ -121,7 +122,7 @@ export default function PacienteADM() {
               ) : pacientesFiltrados.length === 0 ? (
                 <tr>
                   <td className="table__empty" colSpan={COLUNAS}>
-                    {pacientes.length === 0 ? 'Nenhum paciente cadastrado ainda.' : 'Nenhum paciente encontrado para essa busca.'}
+                    {pacientes.length === 0 ? tr('Nenhum paciente cadastrado ainda.') : tr('Nenhum paciente encontrado para essa busca.')}
                   </td>
                 </tr>
               ) : (
@@ -142,7 +143,7 @@ export default function PacienteADM() {
                             <strong className="pessoa__nome">{paciente.nome}</strong>
                             <span className="pessoa__sub nowrap">{cpfDoPaciente(paciente)} <SeloTeste paciente={paciente} /></span>
                             {responsaveis.length > 0 && (
-                              <span className="pessoa__resp">Resp.: {responsaveis.map(rotuloDoResponsavel).join(', ')}</span>
+                              <span className="pessoa__resp">{tr('Resp.: {p0}', { p0: responsaveis.map(rotuloDoResponsavel).join(', ') })}</span>
                             )}
                           </div>
                         </div>
@@ -156,14 +157,14 @@ export default function PacienteADM() {
                       <td className="nowrap">
                         <div className="pessoa__dados">
                           <span>{formatDataBR(paciente.dataNascimento) ?? '—'}</span>
-                          {idade !== null && <span className="pessoa__sub">{idade} {idade === 1 ? 'ano' : 'anos'}{idade < 18 ? ' · menor' : ''}</span>}
+                          {idade !== null && <span className="pessoa__sub">{idade} {idade === 1 ? tr('ano') : tr('anos')}{idade < 18 ? tr(' · menor') : ''}</span>}
                         </div>
                       </td>
                       <td>
                         <div className="paciente-vinculos">
                           {paciente.convenioId?.nome
                             ? <span className="badge badge--info">{paciente.convenioId.nome}</span>
-                            : <span className="badge">Sem convênio</span>}
+                            : <span className="badge">{tr('Sem convênio')}</span>}
                           {paciente.empresaId?.razaoSocial && (
                             <span className="badge badge--primary paciente-vinculos__empresa" title={paciente.empresaId.razaoSocial}>
                               {paciente.empresaId.razaoSocial}
@@ -174,20 +175,20 @@ export default function PacienteADM() {
                       <td>
                         {confirmandoId === paciente._id ? (
                           <div className="paciente-confirmar">
-                            <span>{paciente.teste ? 'Excluir com tudo?' : 'Excluir?'}</span>
-                            <button type="button" className="icon-btn icon-btn--danger" aria-label={`Confirmar exclusão de ${paciente.nome}`} onClick={() => handleDelete(paciente._id)}>
+                            <span>{paciente.teste ? tr('Excluir com tudo?') : tr('Excluir?')}</span>
+                            <button type="button" className="icon-btn icon-btn--danger" aria-label={tr('Confirmar exclusão de {nome}', { nome: paciente.nome })} onClick={() => handleDelete(paciente._id)}>
                               <IconeCheck />
                             </button>
-                            <button type="button" className="icon-btn" aria-label="Cancelar exclusão" onClick={() => setConfirmandoId(null)}>
+                            <button type="button" className="icon-btn" aria-label={tr('Cancelar exclusão')} onClick={() => setConfirmandoId(null)}>
                               <IconeX />
                             </button>
                           </div>
                         ) : (
                           <div className="table__actions">
-                            <button type="button" className="icon-btn" aria-label={`Editar ${paciente.nome}`} title="Editar" onClick={() => handleEdit(paciente)}>
+                            <button type="button" className="icon-btn" aria-label={`Editar ${paciente.nome}`} title={tr('Editar')} onClick={() => handleEdit(paciente)}>
                               <IconeLapis />
                             </button>
-                            <button type="button" className="icon-btn icon-btn--danger" aria-label={`Excluir ${paciente.nome}`} title="Excluir" onClick={() => setConfirmandoId(paciente._id)}>
+                            <button type="button" className="icon-btn icon-btn--danger" aria-label={`Excluir ${paciente.nome}`} title={tr('Excluir')} onClick={() => setConfirmandoId(paciente._id)}>
                               <IconeLixeira />
                             </button>
                           </div>

@@ -6,6 +6,7 @@ import SemAcessoProntuario from './SemAcessoProntuario';
 import { contatoDoPaciente } from '@/modules/paciente/paciente.utils';
 import { useAcessoProntuario } from '../prontuario.hooks';
 import SeloTeste from '@/modules/paciente/components/SeloTeste';
+import { tr } from '@/i18n';
 
 // Prontuário em janela: usado pela Agenda (ao clicar num agendamento) e pela lista de prontuários.
 // O clique fora não fecha, porque o atendimento em andamento pode ter anotações ainda não salvas.
@@ -27,7 +28,7 @@ export default function ProntuarioModal({
 
   if (!somenteAgendamento && acesso.carregando) {
     return (
-      <Modal title={agendamento ? 'Agendamento' : 'Prontuário'} onClose={onClose}>
+      <Modal title={agendamento ? tr('Agendamento') : tr('Prontuário')} onClose={onClose}>
         <div className="skeleton skeleton--bloco" />
       </Modal>
     );
@@ -35,7 +36,7 @@ export default function ProntuarioModal({
 
   if (semAcesso && !agendamento) {
     return (
-      <Modal title="Prontuário" onClose={onClose}>
+      <Modal title={tr('Prontuário')} onClose={onClose}>
         <SemAcessoProntuario />
       </Modal>
     );
@@ -43,7 +44,7 @@ export default function ProntuarioModal({
 
   if (semAcesso) {
     return (
-      <Modal title="Agendamento" onClose={onClose}>
+      <Modal title={tr('Agendamento')} onClose={onClose}>
         <div className="prontuario">
           <div className="pront-head">
             <div className="pront-head__avatar" aria-hidden="true">{iniciais(paciente.nome)}</div>
@@ -66,7 +67,7 @@ export default function ProntuarioModal({
   }
 
   return (
-    <Modal title="Prontuário" className="modal--prontuario" persistente onClose={onClose}>
+    <Modal title={tr('Prontuário')} className="modal--prontuario" persistente onClose={onClose}>
       <ProntuarioPaciente
         paciente={paciente}
         profissional={acesso.profissional}

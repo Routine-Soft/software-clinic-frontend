@@ -2,6 +2,7 @@ import { useState } from 'react';
 import Modal from '@/components/Modal/Modal';
 import CampoServicoDoModulo from '@/modules/servico/components/CampoServicoDoModulo';
 import ModalForm from '@/components/Modal/ModalForm';
+import { tr } from '@/i18n';
 
 export default function EditarAvaliacaoNr01Modal({ avaliacao, empresas, pacientes, profissionais, servicos = [], perguntasPadrao, hoje, erro, onSave, onClose }) {
   const [formEdicao, setFormEdicao] = useState({
@@ -48,12 +49,12 @@ export default function EditarAvaliacaoNr01Modal({ avaliacao, empresas, paciente
     : pacientes;
 
   return (
-    <Modal title="Editar avaliação NR-01" wide onClose={onClose}>
+    <Modal title={tr('Editar avaliação NR-01')} wide onClose={onClose}>
       {(fechar) => (
         <ModalForm erro={erro} fechar={fechar} onSubmit={() => onSave(avaliacao._id, montarPayload())}>
           <div className="modal-form__row">
             <div className="field">
-              <label className="field__label" htmlFor="editar-nr01-empresa">Empresa</label>
+              <label className="field__label" htmlFor="editar-nr01-empresa">{tr('Empresa')}</label>
               <select
                 id="editar-nr01-empresa"
                 className="input"
@@ -61,7 +62,7 @@ export default function EditarAvaliacaoNr01Modal({ avaliacao, empresas, paciente
                 onChange={(e) => handleChangeEdicao('empresaId', e.target.value)}
                 required
               >
-                <option value="">Selecione...</option>
+                <option value="">{tr('Selecione...')}</option>
                 {empresas.map((empresa) => (
                   <option key={empresa._id} value={empresa._id}>{empresa.razaoSocial}</option>
                 ))}
@@ -69,14 +70,14 @@ export default function EditarAvaliacaoNr01Modal({ avaliacao, empresas, paciente
             </div>
 
             <div className="field">
-              <label className="field__label" htmlFor="editar-nr01-paciente">Funcionário (opcional)</label>
+              <label className="field__label" htmlFor="editar-nr01-paciente">{tr('Funcionário (opcional)')}</label>
               <select
                 id="editar-nr01-paciente"
                 className="input"
                 value={formEdicao.pacienteId}
                 onChange={(e) => handleChangeEdicao('pacienteId', e.target.value)}
               >
-                <option value="">Avaliação geral da empresa</option>
+                <option value="">{tr('Avaliação geral da empresa')}</option>
                 {pacientesDaEmpresa.map((paciente) => (
                   <option key={paciente._id} value={paciente._id}>{paciente.nome}</option>
                 ))}
@@ -86,7 +87,7 @@ export default function EditarAvaliacaoNr01Modal({ avaliacao, empresas, paciente
 
           <div className="modal-form__row">
             <div className="field">
-              <label className="field__label" htmlFor="editar-nr01-profissional">Profissional responsável</label>
+              <label className="field__label" htmlFor="editar-nr01-profissional">{tr('Profissional responsável')}</label>
               <select
                 id="editar-nr01-profissional"
                 className="input"
@@ -94,7 +95,7 @@ export default function EditarAvaliacaoNr01Modal({ avaliacao, empresas, paciente
                 onChange={(e) => handleChangeEdicao('profissionalId', e.target.value)}
                 required
               >
-                <option value="">Selecione...</option>
+                <option value="">{tr('Selecione...')}</option>
                 {profissionais.map((profissional) => (
                   <option key={profissional._id} value={profissional._id}>{profissional.nome}</option>
                 ))}
@@ -102,7 +103,7 @@ export default function EditarAvaliacaoNr01Modal({ avaliacao, empresas, paciente
             </div>
 
             <div className="field">
-              <label className="field__label" htmlFor="editar-nr01-data">Data</label>
+              <label className="field__label" htmlFor="editar-nr01-data">{tr('Data')}</label>
               <input
                 id="editar-nr01-data"
                 className="input"
@@ -123,7 +124,7 @@ export default function EditarAvaliacaoNr01Modal({ avaliacao, empresas, paciente
           />
 
           <fieldset className="modal-form__section">
-            <legend>Fatores de risco psicossocial avaliados</legend>
+            <legend>{tr('Fatores de risco psicossocial avaliados')}</legend>
             {formEdicao.respostas.map((item, index) => (
               <div key={index} className="modal-form__pair">
                 <input
@@ -131,42 +132,42 @@ export default function EditarAvaliacaoNr01Modal({ avaliacao, empresas, paciente
                   type="text"
                   value={item.pergunta}
                   onChange={(e) => handleItemChange(index, 'pergunta', e.target.value)}
-                  placeholder="Fator de risco"
-                  aria-label={`Fator de risco ${index + 1}`}
+                  placeholder={tr('Fator de risco')}
+                  aria-label={tr('Fator de risco {p0}', { p0: index + 1 })}
                 />
                 <input
                   className="input"
                   type="text"
                   value={item.resposta}
                   onChange={(e) => handleItemChange(index, 'resposta', e.target.value)}
-                  placeholder="Observação (ex: alto)"
-                  aria-label={`Observação do fator ${index + 1}`}
+                  placeholder={tr('Observação (ex: alto)')}
+                  aria-label={tr('Observação do fator {p0}', { p0: index + 1 })}
                 />
-                <button type="button" className="btn btn--danger btn--sm" onClick={() => handleRemoveItem(index)}>Remover</button>
+                <button type="button" className="btn btn--danger btn--sm" onClick={() => handleRemoveItem(index)}>{tr('Remover')}</button>
               </div>
             ))}
             <div>
-              <button type="button" className="btn btn--ghost btn--sm" onClick={handleAddItem}>+ Adicionar fator de risco</button>
+              <button type="button" className="btn btn--ghost btn--sm" onClick={handleAddItem}>{tr('+ Adicionar fator de risco')}</button>
             </div>
           </fieldset>
 
           <div className="field">
-            <label className="field__label" htmlFor="editar-nr01-classificacao">Classificação geral de risco</label>
+            <label className="field__label" htmlFor="editar-nr01-classificacao">{tr('Classificação geral de risco')}</label>
             <select
               id="editar-nr01-classificacao"
               className="input"
               value={formEdicao.classificacaoRisco}
               onChange={(e) => handleChangeEdicao('classificacaoRisco', e.target.value)}
             >
-              <option value="">Não classificado</option>
-              <option value="baixo">Baixo</option>
-              <option value="medio">Médio</option>
-              <option value="alto">Alto</option>
+              <option value="">{tr('Não classificado')}</option>
+              <option value="baixo">{tr('Baixo')}</option>
+              <option value="medio">{tr('Médio')}</option>
+              <option value="alto">{tr('Alto')}</option>
             </select>
           </div>
 
           <div className="field">
-            <label className="field__label" htmlFor="editar-nr01-recomendacoes">Recomendações / plano de ação</label>
+            <label className="field__label" htmlFor="editar-nr01-recomendacoes">{tr('Recomendações / plano de ação')}</label>
             <textarea
               id="editar-nr01-recomendacoes"
               className="input textarea"

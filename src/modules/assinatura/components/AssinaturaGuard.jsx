@@ -3,6 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { useAuthContext } from '@/hooks/useAuthContext';
 import { getAssinaturaAtual } from '../assinatura.api';
 import './assinatura.css';
+import { tr } from '@/i18n';
 
 // Telas que continuam abertas mesmo com o acesso bloqueado, para o cliente conseguir regularizar.
 const ROTAS_LIVRES = ['/assinatura', '/assinaturas', '/minha-conta'];
@@ -18,15 +19,15 @@ function AcessoBloqueado({ motivo, podePagar }) {
           </svg>
         </div>
 
-        <h2 className="assinatura-retorno__titulo">Acesso bloqueado</h2>
+        <h2 className="assinatura-retorno__titulo">{tr('Acesso bloqueado')}</h2>
         <p className="assinatura-retorno__texto">{motivo}</p>
         {!podePagar && (
-          <p className="assinatura-retorno__texto">Fale com o administrador da clínica para regularizar a assinatura.</p>
+          <p className="assinatura-retorno__texto">{tr('Fale com o administrador da clínica para regularizar a assinatura.')}</p>
         )}
 
         <div className="assinatura-retorno__acoes">
-          {podePagar && <Link to="/assinaturas" className="btn btn--primary">Regularizar assinatura</Link>}
-          <Link to="/minha-conta" className="btn btn--ghost">Minha conta</Link>
+          {podePagar && <Link to="/assinaturas" className="btn btn--primary">{tr('Regularizar assinatura')}</Link>}
+          <Link to="/minha-conta" className="btn btn--ghost">{tr('Minha conta')}</Link>
         </div>
       </section>
     </div>
@@ -68,7 +69,7 @@ export default function AssinaturaGuard({ children }) {
   useEffect(() => {
     function aoBloquear(e) {
       bloqueado.current = true;
-      setMotivoDoBloqueio(e.detail?.motivo ?? 'A assinatura da clínica está inativa.');
+      setMotivoDoBloqueio(e.detail?.motivo ?? tr('A assinatura da clínica está inativa.'));
     }
 
     window.addEventListener('assinatura:inativa', aoBloquear);

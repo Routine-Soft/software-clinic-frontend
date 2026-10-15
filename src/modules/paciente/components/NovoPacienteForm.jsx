@@ -6,6 +6,7 @@ import CampoPacienteTeste from './CampoPacienteTeste';
 import CampoNomeNaTv from './CampoNomeNaTv';
 import { ehMenorDeIdade } from '../paciente.utils';
 import CampoAceitaWhatsapp from './CampoAceitaWhatsapp';
+import { tr } from '@/i18n';
 
 const FORM_CRIAR_INICIAL = { nome: '', telefone: '', email: '', cpf: '', dataNascimento: '', convenioId: '', empresaId: '', responsaveis: [], teste: false, nomeNaTv: 'completo', aceitaWhatsapp: false };
 
@@ -37,7 +38,7 @@ export default function NovoPacienteForm({ convenios, empresas, onSubmit }) {
   return (
     <form className="crud-card__form crud-card__form--campos" onSubmit={handleSubmitCriar}>
       <div className="field field--full">
-        <label className="field__label" htmlFor={`${ids}-nome`}>Nome</label>
+        <label className="field__label" htmlFor={`${ids}-nome`}>{tr('Nome')}</label>
         <input
           id={`${ids}-nome`}
           className="input"
@@ -49,7 +50,7 @@ export default function NovoPacienteForm({ convenios, empresas, onSubmit }) {
       </div>
 
       <div className="field">
-        <label className="field__label" htmlFor={`${ids}-telefone`}>Telefone{menor && ' (opcional)'}</label>
+        <label className="field__label" htmlFor={`${ids}-telefone`}>{tr('Telefone{p0}', { p0: menor && tr(' (opcional)') })}</label>
         <input
           id={`${ids}-telefone`}
           className="input"
@@ -61,7 +62,7 @@ export default function NovoPacienteForm({ convenios, empresas, onSubmit }) {
       </div>
 
       <div className="field">
-        <label className="field__label" htmlFor={`${ids}-email`}>Email{menor && ' (opcional)'}</label>
+        <label className="field__label" htmlFor={`${ids}-email`}>{tr('Email{p0}', { p0: menor && tr(' (opcional)') })}</label>
         <input
           id={`${ids}-email`}
           className="input"
@@ -73,7 +74,7 @@ export default function NovoPacienteForm({ convenios, empresas, onSubmit }) {
       </div>
 
       <div className="field">
-        <label className="field__label" htmlFor={`${ids}-cpf`}>CPF (opcional)</label>
+        <label className="field__label" htmlFor={`${ids}-cpf`}>{tr('CPF (opcional)')}</label>
         <input
           id={`${ids}-cpf`}
           className="input"
@@ -84,7 +85,7 @@ export default function NovoPacienteForm({ convenios, empresas, onSubmit }) {
       </div>
 
       <div className="field">
-        <label className="field__label" htmlFor={`${ids}-nascimento`}>Data de nascimento</label>
+        <label className="field__label" htmlFor={`${ids}-nascimento`}>{tr('Data de nascimento')}</label>
         <input
           id={`${ids}-nascimento`}
           className="input"
@@ -101,14 +102,14 @@ export default function NovoPacienteForm({ convenios, empresas, onSubmit }) {
 
       {convenios.length > 0 && (
         <div className="field">
-          <label className="field__label" htmlFor={`${ids}-convenio`}>Convênio (opcional)</label>
+          <label className="field__label" htmlFor={`${ids}-convenio`}>{tr('Convênio (opcional)')}</label>
           <select
             id={`${ids}-convenio`}
             className="input"
             value={formCriar.convenioId}
             onChange={(e) => handleChangeCriar('convenioId', e.target.value)}
           >
-            <option value="">Nenhum</option>
+            <option value="">{tr('Nenhum')}</option>
             {convenios.map((convenio) => (
               <option key={convenio._id} value={convenio._id}>{convenio.nome}</option>
             ))}
@@ -118,14 +119,14 @@ export default function NovoPacienteForm({ convenios, empresas, onSubmit }) {
 
       {empresas.length > 0 && (
         <div className="field">
-          <label className="field__label" htmlFor={`${ids}-empresa`}>Empresa (funcionário)</label>
+          <label className="field__label" htmlFor={`${ids}-empresa`}>{tr('Empresa (funcionário)')}</label>
           <select
             id={`${ids}-empresa`}
             className="input"
             value={formCriar.empresaId}
             onChange={(e) => handleChangeCriar('empresaId', e.target.value)}
           >
-            <option value="">Nenhuma</option>
+            <option value="">{tr('Nenhuma')}</option>
             {empresas.map((empresa) => (
               <option key={empresa._id} value={empresa._id}>{empresa.razaoSocial}</option>
             ))}
@@ -143,7 +144,7 @@ export default function NovoPacienteForm({ convenios, empresas, onSubmit }) {
 
       <button className={`btn btn--primary${criando ? ' btn--loading' : ''}`} type="submit" disabled={criando}>
         {!criando && <IconeMais />}
-        {criando ? 'Cadastrando...' : 'Cadastrar paciente'}
+        {criando ? tr('Cadastrando...') : tr('Cadastrar paciente')}
       </button>
     </form>
   );

@@ -7,6 +7,7 @@ import { useSalaDeEspera } from '../sala-espera.hooks';
 import { situacaoNaSala, SITUACOES, ORDEM_DAS_SITUACOES, textoEspera, horaBR } from '../sala-espera.utils';
 import '@/components/CrudCard/CrudCard.css';
 import './sala-espera.css';
+import { tr } from '@/i18n';
 
 const IconeTv = () => (
   <Icone><rect width="20" height="14" x="2" y="3" rx="2" /><path d="M8 21h8M12 17v4" /></Icone>
@@ -17,8 +18,8 @@ const IconeChamar = () => (
 
 function detalhe(agenda, situacao, agora) {
   if (situacao === 'aguardando') return textoEspera(agenda.chegouEm, agora);
-  if (situacao === 'chamado') return `chamado às ${horaBR(agenda.chamadoEm)}`;
-  return `${agenda.horaInicio} às ${agenda.horaFim}`;
+  if (situacao === 'chamado') return tr('chamado às {p0}', { p0: horaBR(agenda.chamadoEm) });
+  return tr('{horaInicio} às {horaFim}', { horaInicio: agenda.horaInicio, horaFim: agenda.horaFim });
 }
 
 // Recepção marca quem chegou; recepção e profissional chamam o paciente, que aparece na TV da sala de espera.
@@ -37,13 +38,13 @@ export default function SalaDeEspera() {
     <div className="page">
       <header className="page-header">
         <div>
-          <h2 className="page-title">Sala de espera</h2>
-          <p className="page-subtitle">Pacientes de hoje. Ao chamar, o nome aparece na TV.</p>
+          <h2 className="page-title">{tr('Sala de espera')}</h2>
+          <p className="page-subtitle">{tr('Pacientes de hoje. Ao chamar, o nome aparece na TV.')}</p>
         </div>
         {gerenciaTvs && (
           <div className="page-header__acoes">
             <button type="button" className="btn btn--ghost" onClick={() => setMostrandoTvs(true)}>
-              <IconeTv /> TVs
+              <IconeTv /> {tr('TVs')}
             </button>
           </div>
         )}
@@ -65,7 +66,7 @@ export default function SalaDeEspera() {
       ) : agendas.length === 0 ? (
         <section className="card crud-vazio">
           <Icone>{ICONES.espera}</Icone>
-          <p>Nenhum agendamento para hoje.</p>
+          <p>{tr('Nenhum agendamento para hoje.')}</p>
         </section>
       ) : (
         <div className="espera-grade stagger">
@@ -93,25 +94,25 @@ export default function SalaDeEspera() {
                         <div className="espera-paciente__acoes">
                           {s === 'agendado' && (
                             <button type="button" className="btn btn--ghost btn--sm" disabled={ocupado} onClick={() => marcarChegada(a.id)}>
-                              Chegou
+                              {tr('Chegou')}
                             </button>
                           )}
                           {(s === 'aguardando' || s === 'agendado') && (
                             <button type="button" className={`btn btn--primary btn--sm${ocupado ? ' btn--loading' : ''}`} disabled={ocupado} onClick={() => chamar(a.id)}>
-                              <IconeChamar /> Chamar
+                              <IconeChamar /> {tr('Chamar')}
                             </button>
                           )}
                           {s === 'chamado' && (
                             <button type="button" className={`btn btn--ghost btn--sm${ocupado ? ' btn--loading' : ''}`} disabled={ocupado} onClick={() => chamar(a.id)}>
-                              <IconeChamar /> Chamar de novo
+                              <IconeChamar /> {tr('Chamar de novo')}
                             </button>
                           )}
                           {(s === 'aguardando' || s === 'chamado') && (
                             <button
                               type="button"
                               className="icon-btn"
-                              title="Desfazer a chegada"
-                              aria-label={`Desfazer a chegada de ${a.paciente?.nome}`}
+                              title={tr('Desfazer a chegada')}
+                              aria-label={tr('Desfazer a chegada de {nome}', { nome: a.paciente?.nome })}
                               disabled={ocupado}
                               onClick={() => marcarChegada(a.id, false)}
                             >

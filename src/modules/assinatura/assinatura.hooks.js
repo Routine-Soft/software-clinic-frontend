@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { getAssinaturaAtual, iniciarCheckoutAssinatura, sincronizarAssinatura, cancelarAssinatura } from "./assinatura.api";
+import { getAssinaturaAtual, iniciarCheckoutAssinatura, sincronizarAssinatura, cancelarAssinatura, iniciarCheckoutStripe, abrirPortalStripe } from "./assinatura.api";
 
 export function useAssinatura() {
   const [assinatura, setAssinatura] = useState(null);
@@ -52,11 +52,26 @@ export function useAssinatura() {
     setErroAcao(null);
     try {
       setIniciandoCheckout(true);
-      const { data } = await iniciarCheckoutAssinatura(planoId);
+      // Clínica de fora do Brasil paga pelo Stripe (em dólar); do Brasil, pelo Mercado Pago.
+      const { data } = assinatura?.gateway === 'stripe' ? await iniciarCheckoutStripe(planoId) : await iniciarCheckoutAssinatura(planoId);
       window.location.href = data.url;
     } catch (err) {
       setErroAcao(err);
       setIniciandoCheckout(false);
+    }
+  }
+
+  // Portal do Stripe: trocar o cartão, ver as faturas ou cancelar.
+  const [abrindoPortal, setAbrindoPortal] = useState(false);
+  async function abrirPortal() {
+    setErroAcao(null);
+    try {
+      setAbrindoPortal(true);
+      const { data } = await abrirPortalStripe();
+      window.location.href = data.url;
+    } catch (err) {
+      setErroAcao(err);
+      setAbrindoPortal(false);
     }
   }
 
@@ -99,6 +114,8 @@ export function useAssinatura() {
     sincronizar,
     cancelando,
     cancelar,
+    abrindoPortal,
+    abrirPortal,
     erroAcao,
     refreshAssinatura,
     atualizarAssinatura: setAssinatura,

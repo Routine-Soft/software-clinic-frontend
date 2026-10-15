@@ -1,9 +1,15 @@
 // Contato da Sonelia no site (landing, "Seja afiliado" e blog). O blog/gerar.mjs também lê este arquivo.
 export const WHATSAPP = '5521992002356';
 export const WHATSAPP_EXIBICAO = '(21) 99200-2356';
-const MENSAGEM = 'Olá! Vim pelo site da Sonelia e quero saber mais.';
+// Sem dependências: o blog (Node) também importa este arquivo. No site, a mensagem sai no idioma da tela
+// (ver utils/whatsappSite.js).
+export const MENSAGEM_WHATSAPP = 'Olá! Vim pelo site da Sonelia e quero saber mais.';
 
-export const LINK_WHATSAPP = `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(MENSAGEM)}`;
+export function linkWhatsapp(mensagem = MENSAGEM_WHATSAPP) {
+  return `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(mensagem)}`;
+}
+
+export const LINK_WHATSAPP = linkWhatsapp();
 
 // Desenho do logo do WhatsApp (um só caminho), usado no botão flutuante e no rodapé.
 export const CAMINHO_ICONE_WHATSAPP =

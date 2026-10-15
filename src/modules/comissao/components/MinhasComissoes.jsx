@@ -9,6 +9,7 @@ import FiltroPeriodo from '@/components/FiltroPeriodo/FiltroPeriodo';
 import { ROTULO_PERIODO } from '@/components/FiltroPeriodo/periodos';
 import ComissaoKpi from './ComissaoKpi';
 import '../comissoes.css';
+import { tr } from '@/i18n';
 
 const plural = (n, um, varios) => `${n} ${n === 1 ? um : varios}`;
 
@@ -22,14 +23,13 @@ export default function MinhasComissoes() {
       <div className="page comissao-page">
         <header className="page-header">
           <div>
-            <h2 className="page-title">Meus repasses</h2>
+            <h2 className="page-title">{tr('Meus repasses')}</h2>
           </div>
         </header>
         <section className="card comissao-vazio">
           <Icone>{ICONES.receita}</Icone>
           <p>
-            Seu login ainda não está vinculado a um cadastro de profissional. Peça ao administrador da clínica para
-            vincular o seu usuário no cadastro de profissionais.
+            {tr('Seu login ainda não está vinculado a um cadastro de profissional. Peça ao administrador da clínica para vincular o seu usuário no cadastro de profissionais.')}
           </p>
         </section>
       </div>
@@ -40,11 +40,11 @@ export default function MinhasComissoes() {
     <div className="page comissao-page">
       <header className="page-header">
         <div>
-          <h2 className="page-title">Meus repasses</h2>
-          <p className="page-subtitle">{dados?.profissional?.nome ?? 'Repasses pelos atendimentos que você realizou'}</p>
+          <h2 className="page-title">{tr('Meus repasses')}</h2>
+          <p className="page-subtitle">{dados?.profissional?.nome ?? tr('Repasses pelos atendimentos que você realizou')}</p>
         </div>
         <div className="page-header__acoes">
-          <FiltroPeriodo valor={periodo} onChange={setPeriodo} rotulo="Período dos atendimentos" />
+          <FiltroPeriodo valor={periodo} onChange={setPeriodo} rotulo={tr('Período dos atendimentos')} />
         </div>
       </header>
 
@@ -58,19 +58,19 @@ export default function MinhasComissoes() {
         <ComissaoKpi
           icone="receita"
           tom="warning"
-          rotulo="A receber"
+          rotulo={tr('A receber')}
           valor={formatarPreco(dados?.aReceber?.total)}
           loading={loading}
           detalhe={dados?.aReceber?.quantidade
-            ? `${plural(dados.aReceber.quantidade, 'atendimento', 'atendimentos')} aguardando pagamento da clínica`
-            : 'Nada pendente no momento'}
+            ? tr('{p0} aguardando pagamento da clínica', { p0: plural(dados.aReceber.quantidade, 'atendimento', 'atendimentos') })
+            : tr('Nada pendente no momento')}
         />
         <ComissaoKpi
           icone="agenda"
           rotulo={`Atendimentos ${rotuloPeriodo}`}
           valor={dados?.noPeriodo?.atendimentos ?? 0}
           loading={loading}
-          detalhe="Marcados como realizados"
+          detalhe={tr('Marcados como realizados')}
         />
         <ComissaoKpi
           icone="assinatura"
@@ -78,7 +78,7 @@ export default function MinhasComissoes() {
           rotulo={`Repasse ${rotuloPeriodo}`}
           valor={formatarPreco(dados?.noPeriodo?.comissao)}
           loading={loading}
-          detalhe={`${formatarPreco(dados?.noPeriodo?.recebida)} já recebido`}
+          detalhe={tr('{p0} já recebido', { p0: formatarPreco(dados?.noPeriodo?.recebida) })}
         />
       </div>
 
@@ -86,11 +86,11 @@ export default function MinhasComissoes() {
         <table className="table">
           <thead>
             <tr>
-              <th>Data</th>
-              <th>Paciente</th>
-              <th>Serviço</th>
-              <th>Repasse</th>
-              <th>Situação</th>
+              <th>{tr('Data')}</th>
+              <th>{tr('Paciente')}</th>
+              <th>{tr('Serviço')}</th>
+              <th>{tr('Repasse')}</th>
+              <th>{tr('Situação')}</th>
             </tr>
           </thead>
           <tbody>
@@ -104,21 +104,21 @@ export default function MinhasComissoes() {
               ))
             ) : !dados?.atendimentos?.length ? (
               <tr>
-                <td className="table__empty" colSpan={5}>Nenhum atendimento realizado {rotuloPeriodo}.</td>
+                <td className="table__empty" colSpan={5}>{tr('Nenhum atendimento realizado {rotuloPeriodo}.', { rotuloPeriodo })}</td>
               </tr>
             ) : (
               dados.atendimentos.map((item, index) => (
                 <tr key={item._id} style={{ '--i': Math.min(index, 12) }}>
                   <td className="nowrap">{formatDataBR(item.data)} · {item.horaInicio}</td>
                   <td>{item.paciente ?? '—'}</td>
-                  <td>{item.servico ?? '—'}<span className="comissao-pessoa__sub"> · {item.convenio ?? 'Particular'}</span></td>
+                  <td>{item.servico ?? '—'}<span className="comissao-pessoa__sub"> · {item.convenio ?? tr('Particular')}</span></td>
                   <td className="table__num">{item.comissao > 0 ? textoComissaoCalculada(item.comissao, item.comissaoPercentual) : '—'}</td>
                   <td>
                     {item.comissao <= 0
-                      ? <span className="badge">Sem repasse</span>
+                      ? <span className="badge">{tr('Sem repasse')}</span>
                       : item.paga
-                        ? <span className="badge badge--success">Recebido</span>
-                        : <span className="badge badge--warning">A receber</span>}
+                        ? <span className="badge badge--success">{tr('Recebido')}</span>
+                        : <span className="badge badge--warning">{tr('A receber')}</span>}
                   </td>
                 </tr>
               ))
@@ -129,7 +129,7 @@ export default function MinhasComissoes() {
 
       {dados?.pagamentos?.length > 0 && (
         <section className="card comissao-historico">
-          <h3 className="comissao-historico__titulo">Últimos pagamentos recebidos</h3>
+          <h3 className="comissao-historico__titulo">{tr('Últimos pagamentos recebidos')}</h3>
           <ul className="comissao-historico__lista">
             {dados.pagamentos.map((pagamento) => (
               <li key={pagamento._id} className="comissao-historico__item">

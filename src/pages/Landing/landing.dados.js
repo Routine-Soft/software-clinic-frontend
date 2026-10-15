@@ -148,6 +148,7 @@ export const FUNCIONALIDADES = [
   { icone: 'prontuario', titulo: 'Prontuário eletrônico', texto: 'Histórico, CID-10, sinais vitais, anexos, adendos e impressão.' },
   { icone: 'pacientes', titulo: 'Pacientes', texto: 'Cadastro com convênio, empresa e responsáveis para menores.' },
   { icone: 'espera', titulo: 'Lista de espera', texto: 'Quem está aguardando vaga, por especialidade e profissional.' },
+  { icone: 'tv', titulo: 'Chamada na TV', texto: 'O paciente é chamado pelo nome na TV da sala de espera, com aviso sonoro e voz.' },
   { icone: 'convenios', titulo: 'Convênios', texto: 'Preço e repasse diferentes para cada convênio em cada serviço.' },
   { icone: 'receita', titulo: 'Repasses', texto: 'Cálculo automático e histórico de pagamentos aos profissionais.' },
   { icone: 'nr01', titulo: 'Avaliação NR-01', texto: 'Riscos psicossociais dos funcionários das empresas atendidas.' },
@@ -169,13 +170,13 @@ export const PERFIS = [
     icone: 'agenda',
     papel: 'Recepção',
     texto: 'Cuida da agenda e dos pacientes sem ver o conteúdo clínico.',
-    itens: ['Agendar, remarcar e cancelar', 'Cadastrar pacientes e responsáveis', 'Lista de espera e reuniões'],
+    itens: ['Agendar, remarcar e cancelar', 'Cadastrar pacientes e responsáveis', 'Chamar pacientes na TV da sala de espera'],
   },
   {
     icone: 'profissionais',
     papel: 'Profissional',
     texto: 'Abre o sistema já na própria agenda e foca no atendimento.',
-    itens: ['A própria agenda do dia', 'Prontuário dos seus pacientes', 'Quanto tem a receber de repasse'],
+    itens: ['A própria agenda do dia', 'Chamar o paciente na TV', 'Prontuário dos seus pacientes'],
   },
 ];
 
@@ -195,7 +196,7 @@ export const SEGURANCA = [
 ];
 
 // Só se a API não responder: os planos vêm do cadastro de Planos (super admin), em /planos/publicos.
-const RECURSOS_BASE = ['Agenda', 'Prontuário eletrônico', 'Pacientes (cadastro sem limite)', 'Lista de espera', 'Convênios'];
+const RECURSOS_BASE = ['Agenda', 'Prontuário eletrônico', 'Pacientes (cadastro sem limite)', 'Lista de espera', 'Chamada de pacientes na TV da sala de espera', 'Convênios'];
 export const PLANOS_PADRAO = [
   { _id: 'individual', nome: 'Individual', preco: 100, descricao: 'O plano para quem trabalha sozinho', recursos: RECURSOS_BASE },
   {
@@ -211,6 +212,7 @@ export const DUVIDAS = [
   ['Preciso instalar alguma coisa?', 'Não. A Sonelia funciona no navegador do computador, do tablet e do celular. Se quiser, dá para instalar como aplicativo, com ícone na área de trabalho ou na tela inicial.'],
   ['Como funciona o teste grátis?', 'Você usa tudo liberado por 7 dias, sem cadastrar cartão. Depois, é só assinar o plano Individual ou o Pro, no Pix ou no cartão, para continuar.'],
   ['Quantos profissionais posso cadastrar?', 'No plano Pro não há limite de profissionais, pacientes nem usuários. O plano Individual é para quem atende sozinho: só você usa o sistema, sem recepção nem outros profissionais.'],
+  ['Como funciona a chamada na TV?', 'Na TV da sala de espera, abra o navegador em sonelia.com.br/#/tv e conecte com o código que aparece na tela. Quando a recepção ou o profissional clica em "Chamar", o nome do paciente e a sala aparecem na TV, com aviso sonoro e voz. Funciona em qualquer Smart TV com navegador ou num aparelho como Fire TV Stick ou TV box.'],
   ['A recepção consegue ler o prontuário?', 'Não. A recepção vê a agenda e os dados de cadastro, mas o conteúdo clínico fica restrito aos profissionais autorizados.'],
   ['O sistema atende convênios?', 'Sim. Você cadastra os convênios e define, em cada serviço, o preço e o repasse do profissional para cada um deles.'],
   ['Posso cancelar quando quiser?', 'Sim. No cartão, você cancela a renovação a qualquer momento e o acesso continua até o fim do período pago. O Pix não renova sozinho.'],

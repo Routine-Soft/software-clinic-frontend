@@ -88,6 +88,7 @@ export default {
       { icone: 'pacientes', titulo: 'Pacientes', texto: 'Cadastro com convênio, empresa e responsáveis para menores.' },
       { icone: 'espera', titulo: 'Lista de espera', texto: 'Quem está aguardando vaga, por especialidade e profissional.' },
       { icone: 'tv', titulo: 'Chamada na TV', texto: 'O paciente é chamado pelo nome na TV da sala de espera, com aviso sonoro e voz.' },
+      { icone: 'termo', titulo: 'TCLE com assinatura digital', texto: 'Envie o termo de consentimento pelo WhatsApp e o paciente assina pelo celular.' },
       { icone: 'convenios', titulo: 'Convênios', texto: 'Preço e repasse diferentes para cada convênio em cada serviço.' },
       { icone: 'receita', titulo: 'Repasses', texto: 'Cálculo automático e histórico de pagamentos aos profissionais.' },
       { icone: 'nr01', titulo: 'Avaliação NR-01', texto: 'Riscos psicossociais dos funcionários das empresas atendidas.' },
@@ -150,8 +151,8 @@ export default {
     },
     // Só se a API não responder (os planos vêm do cadastro de Planos do super admin).
     planosPadrao: [
-      { _id: 'individual', nome: 'Individual', preco: 100, descricao: 'O plano para quem trabalha sozinho', recursos: ['Agenda', 'Prontuário eletrônico', 'Pacientes (cadastro sem limite)', 'Lista de espera', 'Chamada de pacientes na TV da sala de espera', 'Convênios'] },
-      { _id: 'pro', nome: 'Pro', preco: 200, descricao: 'O plano para clínicas que trabalham em equipe', recursos: ['Agenda', 'Prontuário eletrônico', 'Pacientes (cadastro sem limite)', 'Lista de espera', 'Chamada de pacientes na TV da sala de espera', 'Convênios', 'Lembrete de consulta pelo WhatsApp (em breve)', 'Repasse financeiro para os colaboradores', 'Cadastro de profissionais sem limite'] },
+      { _id: 'individual', nome: 'Individual', preco: 100, descricao: 'O plano para quem trabalha sozinho', recursos: ['Agenda', 'Prontuário eletrônico', 'Pacientes (cadastro sem limite)', 'Lista de espera', 'Chamada de pacientes na TV da sala de espera', 'Termo de consentimento (TCLE) com assinatura digital', 'Convênios'] },
+      { _id: 'pro', nome: 'Pro', preco: 200, descricao: 'O plano para clínicas que trabalham em equipe', recursos: ['Agenda', 'Prontuário eletrônico', 'Pacientes (cadastro sem limite)', 'Lista de espera', 'Chamada de pacientes na TV da sala de espera', 'Termo de consentimento (TCLE) com assinatura digital', 'Convênios', 'Lembrete de consulta pelo WhatsApp (em breve)', 'Repasse financeiro para os colaboradores', 'Cadastro de profissionais sem limite'] },
     ],
     duvidasCab: { selo: 'Dúvidas', titulo: 'Perguntas frequentes' },
     duvidas: [
@@ -159,6 +160,7 @@ export default {
       ['Como funciona o teste grátis?', 'Você usa tudo liberado por 7 dias, sem cadastrar cartão. Depois, é só assinar o plano Individual ou o Pro, no Pix ou no cartão, para continuar.'],
       ['Quantos profissionais posso cadastrar?', 'No plano Pro não há limite de profissionais, pacientes nem usuários. O plano Individual é para quem atende sozinho: só você usa o sistema, sem recepção nem outros profissionais.'],
       ['Como funciona a chamada na TV?', 'Na TV da sala de espera, abra o navegador em sonelia.com.br/#/tv e conecte com o código que aparece na tela. Quando a recepção ou o profissional clica em "Chamar", o nome do paciente e a sala aparecem na TV, com aviso sonoro e voz. Funciona em qualquer Smart TV com navegador ou num aparelho como Fire TV Stick ou TV box.'],
+      ['Como funciona o termo de consentimento (TCLE)?', 'A clínica escolhe o modelo (já vêm dois prontos, que você pode editar) e envia o link pelo WhatsApp. O paciente, ou o responsável, lê no celular, desenha a assinatura com o dedo e confirma nome e CPF. Ficam guardados a data, a hora, o IP e um código que mostra que o texto não foi alterado, e o termo assinado sai em PDF.'],
       ['A recepção consegue ler o prontuário?', 'Não. A recepção vê a agenda e os dados de cadastro, mas o conteúdo clínico fica restrito aos profissionais autorizados.'],
       ['O sistema atende convênios?', 'Sim. Você cadastra os convênios e define, em cada serviço, o preço e o repasse do profissional para cada um deles.'],
       ['Posso cancelar quando quiser?', 'Sim. No cartão, você cancela a renovação a qualquer momento e o acesso continua até o fim do período pago. O Pix não renova sozinho.'],
@@ -267,6 +269,7 @@ export default {
       { icone: 'pacientes', titulo: 'Patients', texto: 'Records with insurance plan, employer and guardians for minors.' },
       { icone: 'espera', titulo: 'Waiting list', texto: 'Who is waiting for a slot, by specialty and practitioner.' },
       { icone: 'tv', titulo: 'TV calling', texto: 'Patients are called by name on the waiting room TV, with a chime and voice.' },
+      { icone: 'termo', titulo: 'Consent forms with e-signature', texto: 'Send the informed consent form on WhatsApp and the patient signs on their phone.' },
       { icone: 'convenios', titulo: 'Insurance plans', texto: 'Different price and payout for each insurance plan in each service.' },
       { icone: 'receita', titulo: 'Payouts', texto: 'Automatic calculation and payment history for practitioners.' },
       { icone: 'nr01', titulo: 'NR-01 assessment', texto: 'Psychosocial risks of the client companies’ employees.' },
@@ -328,8 +331,8 @@ export default {
       notaDolar: 'Prices in US dollars, charged to your credit card. Renews every month and you can cancel anytime, with no fees.',
     },
     planosPadrao: [
-      { _id: 'individual', nome: 'Individual', preco: 100, descricao: 'The plan for solo practitioners', recursos: ['Scheduling', 'Electronic health records', 'Patients (unlimited)', 'Waiting list', 'Waiting room TV calling', 'Insurance plans'] },
-      { _id: 'pro', nome: 'Pro', preco: 200, descricao: 'The plan for clinics that work as a team', recursos: ['Scheduling', 'Electronic health records', 'Patients (unlimited)', 'Waiting list', 'Waiting room TV calling', 'Insurance plans', 'WhatsApp appointment reminders (coming soon)', 'Payouts for team members', 'Unlimited practitioners'] },
+      { _id: 'individual', nome: 'Individual', preco: 100, descricao: 'The plan for solo practitioners', recursos: ['Scheduling', 'Electronic health records', 'Patients (unlimited)', 'Waiting list', 'Waiting room TV calling', 'Informed consent forms (e-signature)', 'Insurance plans'] },
+      { _id: 'pro', nome: 'Pro', preco: 200, descricao: 'The plan for clinics that work as a team', recursos: ['Scheduling', 'Electronic health records', 'Patients (unlimited)', 'Waiting list', 'Waiting room TV calling', 'Informed consent forms (e-signature)', 'Insurance plans', 'WhatsApp appointment reminders (coming soon)', 'Payouts for team members', 'Unlimited practitioners'] },
     ],
     duvidasCab: { selo: 'FAQ', titulo: 'Frequently asked questions' },
     duvidas: [
@@ -337,6 +340,7 @@ export default {
       ['How does the free trial work?', 'You get everything unlocked for 7 days, without a credit card. After that, just subscribe to the Individual or Pro plan, with Pix or a credit card, to keep going.'],
       ['How many practitioners can I add?', 'The Pro plan has no limit on practitioners, patients or users. The Individual plan is for solo practitioners: only you use the system, with no front desk or other practitioners.'],
       ['How does TV calling work?', 'On the waiting room TV, open the browser at sonelia.com.br/#/tv and connect with the code shown on the screen. When the front desk or the practitioner clicks "Call", the patient’s name and room appear on the TV, with a chime and voice. It works on any Smart TV with a browser or on a device like a Fire TV Stick or TV box.'],
+      ['How do consent forms work?', 'The clinic picks a template (two ready-made ones are included and can be edited) and sends the link on WhatsApp. The patient, or their guardian, reads it on their phone, draws their signature with a finger and confirms their name and ID. The date, time, IP and a code showing the text was not changed are stored, and the signed form can be saved as a PDF.'],
       ['Can the front desk read health records?', 'No. The front desk sees the schedule and registration details, but clinical content is restricted to authorized practitioners.'],
       ['Does the system support insurance plans?', 'Yes. You add the insurance plans and set, in each service, the price and the practitioner’s payout for each of them.'],
       ['Can I cancel anytime?', 'Yes. On a credit card, you can cancel the renewal at any time and keep access until the end of the paid period. Pix does not renew automatically.'],

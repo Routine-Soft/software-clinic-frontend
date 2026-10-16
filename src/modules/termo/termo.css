@@ -1,0 +1,421 @@
+/* Termos de consentimento (TCLE): página da clínica, página de assinatura do paciente e impressão. */
+
+/* ---------- Página da clínica ---------- */
+.termos-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+  gap: 18px;
+  align-items: start;
+}
+
+@media (max-width: 1000px) {
+  .termos-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.termos-barra .search {
+  flex: 1 1 220px;
+}
+
+.termos-filtro {
+  display: inline-flex;
+  gap: 4px;
+  padding: 4px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface-2);
+}
+
+.termos-filtro__opcao {
+  padding: 6px 12px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--text-muted);
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s var(--ease), color 0.2s var(--ease);
+}
+
+.termos-filtro__opcao:hover {
+  color: var(--text);
+}
+
+.termos-filtro__opcao.is-ativo {
+  background: var(--surface);
+  color: var(--primary);
+  box-shadow: var(--shadow-sm);
+}
+
+.termos-filtro__opcao:focus-visible {
+  outline: 2px solid var(--primary-ring);
+  outline-offset: 2px;
+}
+
+.termo-item__titulo {
+  overflow: hidden;
+  color: var(--text-muted);
+  font-size: 0.82rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.termo-modelo__previa {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  white-space: normal;
+}
+
+.termos-nota {
+  max-width: 900px;
+  margin: 18px 0 0;
+  color: var(--text-subtle);
+  font-size: 0.82rem;
+  line-height: 1.5;
+}
+
+/* ---------- Modais ---------- */
+.modelo-termo__texto {
+  min-height: 280px;
+  font-size: 0.9rem;
+  line-height: 1.55;
+}
+
+.modelo-termo__marcadores {
+  padding: 10px 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface-2);
+  font-size: 0.85rem;
+}
+
+.modelo-termo__marcadores summary {
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.modelo-termo__marcadores ul {
+  display: grid;
+  gap: 4px;
+  margin: 8px 0 0;
+  padding-left: 18px;
+  color: var(--text-muted);
+}
+
+.modelo-termo__marcadores code {
+  padding: 1px 6px;
+  border-radius: 6px;
+  background: var(--primary-soft);
+  color: var(--primary);
+  font-size: 0.8rem;
+}
+
+.compartilhar-termo {
+  display: grid;
+  gap: 10px;
+}
+
+.compartilhar-termo__link {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+
+.compartilhar-termo__botoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.compartilhar-termo__aviso {
+  flex-basis: 100%;
+  color: var(--warning);
+  font-size: 0.82rem;
+}
+
+/* ---------- Documento ---------- */
+.termo-doc {
+  display: grid;
+  gap: 18px;
+  color: var(--text);
+}
+
+.termo-doc__cabecalho {
+  display: grid;
+  gap: 4px;
+}
+
+.termo-doc__clinica {
+  color: var(--primary);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.termo-doc__titulo {
+  margin: 0;
+  font-size: clamp(1.15rem, 3.5vw, 1.45rem);
+  line-height: 1.25;
+}
+
+.termo-doc__texto {
+  overflow-wrap: break-word;
+  font-size: 0.95rem;
+  line-height: 1.65;
+  white-space: pre-wrap;
+}
+
+.termo-doc__assinatura {
+  display: grid;
+  gap: 4px;
+  justify-items: center;
+  padding-top: 8px;
+  text-align: center;
+}
+
+/* A tinta da assinatura é escura: no tema escuro fica sobre um papel claro. */
+.termo-doc__rubrica {
+  width: min(100%, 340px);
+  height: auto;
+  border-radius: var(--radius-sm);
+  background: #fff;
+}
+
+.termo-doc__linha {
+  width: min(100%, 340px);
+  border-top: 1px solid var(--text-muted);
+}
+
+.termo-doc__assinatura span {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+.termo-doc__prova {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px 16px;
+  width: 100%;
+  margin: 14px 0 0;
+  padding: 12px 14px;
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-md);
+  text-align: left;
+  font-size: 0.78rem;
+}
+
+.termo-doc__prova dt {
+  color: var(--text-subtle);
+  font-weight: 600;
+}
+
+.termo-doc__prova dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+  color: var(--text-muted);
+}
+
+.termo-doc__prova--largo {
+  grid-column: 1 / -1;
+}
+
+.termo-doc__hash {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.72rem;
+}
+
+.termo-doc__nota {
+  margin: 6px 0 0;
+  color: var(--text-subtle);
+  font-size: 0.75rem;
+  line-height: 1.45;
+}
+
+@media (max-width: 520px) {
+  .termo-doc__prova {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* ---------- Página do paciente ---------- */
+.auth-card:has(.assinar) {
+  width: min(100%, 760px);
+}
+
+.assinar {
+  display: grid;
+  gap: 20px;
+}
+
+.assinar__carregando {
+  display: grid;
+  gap: 12px;
+}
+
+.assinar__feito {
+  display: grid;
+  gap: 10px;
+  justify-items: start;
+}
+
+.assinar-form {
+  display: grid;
+  gap: 16px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+  animation: fadeInUp 0.5s var(--ease) backwards;
+}
+
+.assinar-form__titulo {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.assinar-form__quem {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.assinar-form__linha {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  gap: 12px;
+}
+
+@media (max-width: 560px) {
+  .assinar-form__linha {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.assinar-form__aceite {
+  align-items: flex-start;
+  line-height: 1.4;
+}
+
+.assinar-form__dica {
+  margin: 0;
+  color: var(--text-subtle);
+  font-size: 0.78rem;
+  text-align: center;
+}
+
+.quadro-assinatura {
+  display: grid;
+  gap: 8px;
+  justify-items: start;
+}
+
+.quadro-assinatura__area {
+  position: relative;
+  width: 100%;
+}
+
+.quadro-assinatura__canvas {
+  display: block;
+  width: 100%;
+  border: 2px dashed var(--border);
+  border-radius: var(--radius-md);
+  background: #fff;
+  cursor: crosshair;
+  touch-action: none;
+  transition: border-color 0.2s var(--ease);
+}
+
+.quadro-assinatura__canvas:hover,
+.quadro-assinatura__canvas:active {
+  border-color: var(--primary);
+}
+
+.quadro-assinatura__dica {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: #8a94a8;
+  font-size: 0.9rem;
+  pointer-events: none;
+}
+
+.quadro-assinatura__linha {
+  position: absolute;
+  right: 24px;
+  bottom: 40px;
+  left: 24px;
+  border-top: 1px solid #c9d0dc;
+  pointer-events: none;
+}
+
+/* ---------- Impressão (clínica) ---------- */
+.termo-impressao {
+  display: grid;
+  gap: 16px;
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 20px 16px 40px;
+}
+
+.termo-impressao__barra {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.termo-impressao__folha {
+  padding: clamp(20px, 5vw, 48px);
+}
+
+.termo-impressao__paciente {
+  margin: 0 0 12px;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+@media print {
+  .no-print,
+  .auth-toggle,
+  .auth-bg,
+  .auth-logo {
+    display: none !important;
+  }
+
+  body,
+  .auth-page,
+  .auth-card,
+  .termo-impressao__folha {
+    background: #fff !important;
+    box-shadow: none !important;
+    border: 0 !important;
+    backdrop-filter: none !important;
+  }
+
+  .auth-card,
+  .termo-impressao,
+  .termo-impressao__folha {
+    width: 100% !important;
+    max-width: none !important;
+    padding: 0 !important;
+    animation: none !important;
+  }
+
+  .auth-card::before {
+    display: none !important;
+  }
+
+  .termo-doc,
+  .termo-doc * {
+    color: #111 !important;
+  }
+
+  .termo-doc__assinatura {
+    break-inside: avoid;
+  }
+}

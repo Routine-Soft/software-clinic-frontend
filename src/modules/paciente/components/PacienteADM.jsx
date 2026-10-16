@@ -1,11 +1,12 @@
 import { useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { usePacientes } from '../paciente.hooks';
 import { useConvenios } from '@/modules/convenio/convenio.hooks';
 import { useEmpresas } from '@/modules/empresa/empresa.hooks';
 import { filtrarPacientes, ordenarPacientes, contatoDoPaciente, rotuloDoResponsavel, cpfDoPaciente } from '../paciente.utils';
 import { formatDataBR, calcularIdade } from '@/utils/date';
 import { iniciais } from '@/utils/nome';
-import { IconeBusca, IconeLapis, IconeLixeira, IconeCheck, IconeX } from '@/components/CrudCard/icones';
+import { IconeBusca, IconeLapis, IconeLixeira, IconeCheck, IconeX, IconeFicha } from '@/components/CrudCard/icones';
 import EditarPacienteModal from './EditarPacienteModal';
 import NovoPacienteModal from './NovoPacienteModal';
 import { IconeMais } from '@/components/CrudCard/icones';
@@ -19,6 +20,7 @@ export default function PacienteADM() {
   const { pacientes, loading, error, successMessage, addPaciente, editPaciente, removePaciente } = usePacientes();
   const { convenios } = useConvenios();
   const { empresas } = useEmpresas();
+  const navigate = useNavigate();
 
   const [busca, setBusca] = useState('');
   const [criandoPaciente, setCriandoPaciente] = useState(false);
@@ -185,6 +187,15 @@ export default function PacienteADM() {
                           </div>
                         ) : (
                           <div className="table__actions">
+                            <button
+                              type="button"
+                              className="icon-btn"
+                              aria-label={tr('Enviar termo de consentimento para {nome}', { nome: paciente.nome })}
+                              title={tr('Termo de consentimento')}
+                              onClick={() => navigate('/termos-consentimento', { state: { pacienteId: paciente._id } })}
+                            >
+                              <IconeFicha />
+                            </button>
                             <button type="button" className="icon-btn" aria-label={`Editar ${paciente.nome}`} title={tr('Editar')} onClick={() => handleEdit(paciente)}>
                               <IconeLapis />
                             </button>

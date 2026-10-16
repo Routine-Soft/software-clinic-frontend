@@ -4,5 +4,6 @@ import clinica from './clinica';
 import negocio from './negocio';
 import avaliacoes from './avaliacoes';
 import extras from './extras';
+import termos from './termos';
 
-export default { ...geral, ...clinica, ...negocio, ...avaliacoes, ...extras };
+export default { ...geral, ...clinica, ...negocio, ...avaliacoes, ...extras, ...termos };

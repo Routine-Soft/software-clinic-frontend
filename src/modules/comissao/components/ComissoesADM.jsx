@@ -154,7 +154,7 @@ export default function ComissoesADM() {
       </section>
 
       <p className="page-subtitle comissao-nota">
-        {tr('O repasse nasce quando o atendimento é marcado como realizado na agenda, com o valor que o serviço tem naquele momento. Pagar quita de uma vez tudo o que está pendente para o profissional.')}
+        {tr('O repasse nasce quando o profissional finaliza o atendimento no prontuário (ou quando a consulta é marcada como realizada na agenda), com o valor que o serviço tem naquele momento. Pagar quita de uma vez tudo o que está pendente para o profissional.')}
       </p>
 
       <section className="card comissao-historico">

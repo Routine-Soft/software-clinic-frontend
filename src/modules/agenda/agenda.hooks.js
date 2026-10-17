@@ -7,7 +7,8 @@ import {
   cancelarAgenda,
   cancelarGrupoRecorrencia,
   deleteAgenda,
-} from "./agenda.api";
+  getAgendaById,
+} from './agenda.api';
 
 export function useAgendas(filtros = {}) {
   const [agendas, setAgendas] = useState([]);
@@ -84,6 +85,17 @@ export function useAgendas(filtros = {}) {
   }
 
   // Devolve o agendamento atualizado (para a janela aberta refletir o novo status) ou null se falhar.
+  // Depois de finalizar o atendimento no prontuário (a consulta vira "realizado" no servidor): atualiza a lista
+  // e devolve a consulta como está agora.
+  async function recarregarAgenda(id) {
+    try {
+      const [{ data }] = await Promise.all([getAgendaById(id), refreshAgendas()]);
+      return data;
+    } catch {
+      return null;
+    }
+  }
+
   async function marcarRealizado(id, realizado) {
     limparAvisos();
     try {
@@ -141,6 +153,7 @@ export function useAgendas(filtros = {}) {
     addAgenda,
     editAgenda,
     marcarRealizado,
+    recarregarAgenda,
     cancelAgenda,
     cancelGrupo,
     removeAgenda,

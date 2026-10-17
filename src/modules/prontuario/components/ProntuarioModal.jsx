@@ -20,6 +20,7 @@ export default function ProntuarioModal({
   onCancelarAgendamento,
   onImprimirAgendamento,
   onMarcarRealizado,
+  onAtendimentoFinalizado,
   erroAgendamento,
   onClose,
 }) {
@@ -76,6 +77,7 @@ export default function ProntuarioModal({
         onCancelarAgendamento={onCancelarAgendamento}
         onImprimirAgendamento={onImprimirAgendamento}
         onMarcarRealizado={onMarcarRealizado}
+        onAtendimentoFinalizado={onAtendimentoFinalizado}
         erroAgendamento={erroAgendamento}
       />
     </Modal>

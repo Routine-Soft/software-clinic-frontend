@@ -67,7 +67,7 @@ export default function AgendaCalendario() {
   const intervalo = useMemo(() => intervaloDaVisao(visao, dataReferencia), [visao, dataReferencia]);
   const dias = useMemo(() => diasDoIntervalo(intervalo), [intervalo]);
 
-  const { agendas, loading, error, successMessage, addAgenda, editAgenda, marcarRealizado, cancelAgenda, cancelGrupo } = useAgendas({
+  const { agendas, loading, error, successMessage, addAgenda, editAgenda, marcarRealizado, recarregarAgenda, cancelAgenda, cancelGrupo } = useAgendas({
     profissionalId: profissionalId || undefined,
     dataInicio: paraISO(intervalo.inicio),
     dataFim: paraISO(intervalo.fim),
@@ -285,6 +285,7 @@ export default function AgendaCalendario() {
           onCancelarAgendamento={async (agenda) => { const cancelado = await handleCancelar(agenda); if (cancelado) setAgendaDetalhes(null); }}
           onImprimirAgendamento={(agenda) => handleImprimir(agenda._id)}
           onMarcarRealizado={podeMarcarRealizado(agendaDetalhes) ? handleRealizado : undefined}
+          onAtendimentoFinalizado={async (agenda) => { const atualizada = await recarregarAgenda(agenda._id); if (atualizada) setAgendaDetalhes(atualizada); }}
           erroAgendamento={error}
           onClose={() => setAgendaDetalhes(null)}
         />

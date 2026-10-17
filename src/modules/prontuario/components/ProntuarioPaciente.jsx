@@ -22,7 +22,7 @@ const ABAS = [
 ];
 
 // `profissional` é o cadastro de profissional do login (quem abre a ficha já passou pela checagem de acesso).
-export default function ProntuarioPaciente({ paciente, profissional, agendamento = null, onEditarAgendamento, onCancelarAgendamento, onImprimirAgendamento, onMarcarRealizado, erroAgendamento }) {
+export default function ProntuarioPaciente({ paciente, profissional, agendamento = null, onEditarAgendamento, onCancelarAgendamento, onImprimirAgendamento, onMarcarRealizado, onAtendimentoFinalizado, erroAgendamento }) {
   const { convenios } = useConvenios();
   const { especialidades } = useEspecialidades();
   const {
@@ -69,7 +69,10 @@ export default function ProntuarioPaciente({ paciente, profissional, agendamento
 
   async function handleFinalizar(id, payload) {
     const finalizado = await finalizarProntuario(id, payload);
-    if (finalizado) setAba('historico');
+    if (!finalizado) return;
+    setAba('historico');
+    // Finalizar já conta a consulta como realizada (e gera o repasse): a agenda mostra isso na hora.
+    if (agendamento) onAtendimentoFinalizado?.(agendamento);
   }
 
   async function handleSalvarPerfil(e) {

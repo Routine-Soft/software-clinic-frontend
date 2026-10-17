@@ -3,7 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import { usePacientes } from '../paciente.hooks';
 import { useConvenios } from '@/modules/convenio/convenio.hooks';
 import { useEmpresas } from '@/modules/empresa/empresa.hooks';
-import { filtrarPacientes, ordenarPacientes, contatoDoPaciente, rotuloDoResponsavel, cpfDoPaciente } from '../paciente.utils';
+import { filtrarPacientes, ordenarPacientes, contatoDoPaciente, rotuloDoResponsavel, cpfDoPaciente, nomesQueAcompanham } from '../paciente.utils';
+import { useProfissionais } from '@/modules/profissional/profissional.hooks';
+import { Icone } from '@/components/CrudCard/icones';
+import { ICONES } from '@/components/Sidebar/menuIcones';
+import AcompanhamentosModal from './AcompanhamentosModal';
 import { formatDataBR, calcularIdade } from '@/utils/date';
 import { iniciais } from '@/utils/nome';
 import { IconeBusca, IconeLapis, IconeLixeira, IconeCheck, IconeX, IconeFicha } from '@/components/CrudCard/icones';
@@ -17,7 +21,9 @@ import { tr } from '@/i18n';
 const COLUNAS = 5;
 
 export default function PacienteADM() {
-  const { pacientes, loading, error, successMessage, addPaciente, editPaciente, removePaciente } = usePacientes();
+  const { pacientes, loading, error, successMessage, addPaciente, editPaciente, removePaciente, incluirAcompanhamento, finalizarAcompanhamento } = usePacientes();
+  const { profissionais } = useProfissionais();
+  const [pacienteAcompanhamento, setPacienteAcompanhamento] = useState(null);
   const { convenios } = useConvenios();
   const { empresas } = useEmpresas();
   const navigate = useNavigate();
@@ -50,7 +56,7 @@ export default function PacienteADM() {
     await removePaciente(id);
   }
 
-  const algumModalAberto = criandoPaciente || !!pacienteEditando;
+  const algumModalAberto = criandoPaciente || !!pacienteEditando || !!pacienteAcompanhamento;
 
   return (
     <div className="page">
@@ -147,6 +153,9 @@ export default function PacienteADM() {
                             {responsaveis.length > 0 && (
                               <span className="pessoa__resp">{tr('Resp.: {p0}', { p0: responsaveis.map(rotuloDoResponsavel).join(', ') })}</span>
                             )}
+                            {nomesQueAcompanham(paciente).length > 0 && (
+                              <span className="pessoa__acompanha">{tr('Acompanha: {nomes}', { nomes: nomesQueAcompanham(paciente).join(', ') })}</span>
+                            )}
                           </div>
                         </div>
                       </td>
@@ -190,6 +199,15 @@ export default function PacienteADM() {
                             <button
                               type="button"
                               className="icon-btn"
+                              aria-label={tr('Profissionais que acompanham {nome}', { nome: paciente.nome })}
+                              title={tr('Profissionais que acompanham')}
+                              onClick={() => setPacienteAcompanhamento(paciente)}
+                            >
+                              <Icone>{ICONES.profissionais}</Icone>
+                            </button>
+                            <button
+                              type="button"
+                              className="icon-btn"
                               aria-label={tr('Enviar termo de consentimento para {nome}', { nome: paciente.nome })}
                               title={tr('Termo de consentimento')}
                               onClick={() => navigate('/termos-consentimento', { state: { pacienteId: paciente._id } })}
@@ -223,6 +241,18 @@ export default function PacienteADM() {
           erro={error}
           onSave={handleSalvarEdicao}
           onClose={() => setPacienteEditando(null)}
+        />
+      )}
+
+      {pacienteAcompanhamento && (
+        <AcompanhamentosModal
+          key={pacienteAcompanhamento._id}
+          paciente={pacienteAcompanhamento}
+          profissionais={profissionais}
+          erro={error}
+          onIncluir={incluirAcompanhamento}
+          onEncerrar={finalizarAcompanhamento}
+          onClose={() => setPacienteAcompanhamento(null)}
         />
       )}
 

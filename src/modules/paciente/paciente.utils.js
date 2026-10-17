@@ -81,3 +81,29 @@ export function nomeParaTv(nome, modo = 'abreviado') {
   const sobrenome = [...partes.slice(1)].reverse().find((p) => !PARTICULAS.has(p.toLowerCase()));
   return sobrenome ? `${partes[0]} ${sobrenome[0].toUpperCase()}.` : partes[0];
 }
+
+// ---------- Profissionais que acompanham o paciente ----------
+const idDe = (valor) => String(valor?._id ?? valor ?? '');
+
+// Quem acompanha hoje (sem data de saída). Profissional excluído do cadastro some da lista.
+export function acompanhamentosAtivos(paciente) {
+  return (paciente?.acompanhamentos ?? []).filter((a) => !a.ate && a.profissionalId);
+}
+
+export function acompanhamentosEncerrados(paciente) {
+  return (paciente?.acompanhamentos ?? [])
+    .filter((a) => a.ate && a.profissionalId)
+    .sort((a, b) => new Date(b.ate) - new Date(a.ate));
+}
+
+export function idsQueAcompanham(paciente) {
+  return acompanhamentosAtivos(paciente).map((a) => idDe(a.profissionalId));
+}
+
+// Nomes de quem acompanha. O cadastro pode vir só com o id do profissional (ex.: o paciente de um agendamento):
+// aí o nome vem da lista de profissionais, quando ela for passada.
+export function nomesQueAcompanham(paciente, profissionais = []) {
+  return acompanhamentosAtivos(paciente)
+    .map((a) => a.profissionalId?.nome ?? profissionais.find((p) => p._id === idDe(a.profissionalId))?.nome)
+    .filter(Boolean);
+}

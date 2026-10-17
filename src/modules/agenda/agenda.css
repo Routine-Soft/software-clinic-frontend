@@ -684,3 +684,46 @@
   font-weight: 800;
   color: var(--success);
 }
+
+/* Atalhos para os profissionais que acompanham o paciente (formulário do agendamento). */
+.agendamento-acompanha {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+  margin-top: -4px;
+}
+
+.agendamento-acompanha__rotulo {
+  color: var(--text-subtle);
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.agendamento-acompanha__chip {
+  padding: 4px 10px;
+  border: 1px solid var(--primary-ring);
+  border-radius: 999px;
+  background: var(--primary-soft);
+  color: var(--primary);
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s var(--ease), color 0.2s var(--ease), transform 0.2s var(--ease);
+}
+
+.agendamento-acompanha__chip:hover {
+  transform: translateY(-1px);
+}
+
+.agendamento-acompanha__chip.is-ativo {
+  background: var(--gradient-primary);
+  border-color: transparent;
+  color: var(--on-primary);
+}
+
+.agendamento-acompanha__chip:focus-visible {
+  outline: 2px solid var(--primary-ring);
+  outline-offset: 2px;
+}

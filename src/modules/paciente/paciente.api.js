@@ -24,3 +24,12 @@ export async function deletePaciente(id) {
   const response = await httpClient.delete(`/pacientes/${id}`);
   return response;
 }
+
+// Profissionais que acompanham o paciente.
+export async function adicionarAcompanhamento(id, profissionalId) {
+  return await httpClient.post(`/pacientes/${id}/acompanhamentos`, { profissionalId });
+}
+
+export async function encerrarAcompanhamento(id, acompanhamentoId) {
+  return await httpClient.post(`/pacientes/${id}/acompanhamentos/${acompanhamentoId}/encerrar`, {});
+}

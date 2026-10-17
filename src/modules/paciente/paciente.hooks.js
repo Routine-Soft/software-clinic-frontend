@@ -4,7 +4,9 @@ import {
   createPaciente,
   updatePaciente,
   deletePaciente,
-} from "./paciente.api";
+  adicionarAcompanhamento,
+  encerrarAcompanhamento,
+} from './paciente.api';
 
 export function usePacientes() {
   const [pacientes, setPacientes] = useState([]);
@@ -68,6 +70,33 @@ export function usePacientes() {
     }
   }
 
+  // Profissionais que acompanham: devolvem o paciente atualizado (com os nomes), ou undefined com erro.
+  async function incluirAcompanhamento(id, profissionalId) {
+    setError(null);
+    setSuccessMessage(null);
+    try {
+      const response = await adicionarAcompanhamento(id, profissionalId);
+      setSuccessMessage(response.message);
+      await refreshPacientes();
+      return response.data;
+    } catch (err) {
+      setError(err);
+    }
+  }
+
+  async function finalizarAcompanhamento(id, acompanhamentoId) {
+    setError(null);
+    setSuccessMessage(null);
+    try {
+      const response = await encerrarAcompanhamento(id, acompanhamentoId);
+      setSuccessMessage(response.message);
+      await refreshPacientes();
+      return response.data;
+    } catch (err) {
+      setError(err);
+    }
+  }
+
   async function removePaciente(id) {
     setError(null);
     setSuccessMessage(null);
@@ -89,5 +118,7 @@ export function usePacientes() {
     editPaciente,
     removePaciente,
     refreshPacientes,
+    incluirAcompanhamento,
+    finalizarAcompanhamento,
   };
 }

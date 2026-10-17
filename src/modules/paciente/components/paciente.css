@@ -158,6 +158,12 @@
   color: var(--text-muted);
 }
 
+.pessoa__acompanha {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--primary);
+}
+
 .paciente-teste {
   display: flex;
   flex-wrap: wrap;
@@ -174,5 +180,113 @@
 .paciente-teste__dica {
   flex: 1 1 220px;
   font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+/* ---------- Profissionais que acompanham ---------- */
+.acompanhamentos__vazio {
+  margin: 0;
+  padding: 14px;
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-md);
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.acompanhamentos__lista {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.acompanhamentos__item {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface-2);
+  animation: fadeInUp 0.35s var(--ease) backwards;
+  animation-delay: calc(var(--i, 0) * 50ms);
+}
+
+.acompanhamentos__avatar {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--gradient-primary);
+  color: var(--on-primary);
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.acompanhamentos__dados {
+  display: grid;
+  flex: 1;
+  min-width: 0;
+}
+
+.acompanhamentos__dados strong {
+  overflow-wrap: anywhere;
+}
+
+.acompanhamentos__dados span {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}
+
+.acompanhamentos__confirmar {
+  display: inline-flex;
+  gap: 4px;
+  align-items: center;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.acompanhamentos__incluir {
+  display: grid;
+  gap: 6px;
+}
+
+.acompanhamentos__incluir-linha {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.acompanhamentos__incluir-linha .input {
+  flex: 1 1 200px;
+}
+
+.acompanhamentos__historico {
+  font-size: 0.85rem;
+}
+
+.acompanhamentos__historico summary {
+  color: var(--text-muted);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.acompanhamentos__historico ul {
+  display: grid;
+  gap: 6px;
+  margin: 8px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.acompanhamentos__historico li {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+  justify-content: space-between;
   color: var(--text-muted);
 }

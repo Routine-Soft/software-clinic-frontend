@@ -32,7 +32,7 @@ export default function EditarAgendamentoModal({ agenda, erro, onSave, onClose }
             submitDisabled={!paciente || horarioInvalido(form)}
             onSubmit={() => onSave(agenda._id, montarPayload(form, paciente))}
           >
-            <AgendamentoCampos form={form} setForm={setForm} {...dados} />
+            <AgendamentoCampos form={form} setForm={setForm} paciente={paciente} {...dados} />
           </ModalForm>
         </div>
       )}

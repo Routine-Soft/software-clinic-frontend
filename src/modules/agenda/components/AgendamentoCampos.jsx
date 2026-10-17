@@ -1,16 +1,31 @@
 import { useId, useMemo } from 'react';
 import { IconeMais, IconeX } from '@/components/CrudCard/icones';
 import { FORMAS_PAGAMENTO, horarioInvalido, somarMinutos, DURACAO_PADRAO_MINUTOS, comPrecoDaTabela } from '../agendamento.form';
+import { idsQueAcompanham } from '@/modules/paciente/paciente.utils';
 import { tr } from '@/i18n';
 
 // Campos comuns de criar e editar agendamento. O paciente é escolhido fora (PacientePicker).
-export default function AgendamentoCampos({ form, setForm, profissionais, especialidades, salas, servicos, convenios }) {
+export default function AgendamentoCampos({ form, setForm, paciente, profissionais, especialidades, salas, servicos, convenios }) {
   const id = useId();
 
   const profissionaisFiltrados = useMemo(() => {
     if (!form.especialidadeId) return profissionais;
     return profissionais.filter((p) => (p.especialidadeIds ?? []).some((e) => (e?._id ?? e) === form.especialidadeId));
   }, [profissionais, form.especialidadeId]);
+
+  // Quem acompanha o paciente vira atalho acima da lista de profissionais.
+  const queAcompanham = useMemo(() => {
+    const ids = idsQueAcompanham(paciente);
+    return profissionais.filter((p) => ids.includes(p._id));
+  }, [paciente, profissionais]);
+
+  // Escolher pelo atalho tira o filtro de especialidade se ele esconderia o profissional.
+  function escolherProfissional(profissional) {
+    setForm((atual) => {
+      const visivel = !atual.especialidadeId || (profissional.especialidadeIds ?? []).some((e) => (e?._id ?? e) === atual.especialidadeId);
+      return { ...atual, profissionalId: profissional._id, especialidadeId: visivel ? atual.especialidadeId : '' };
+    });
+  }
 
   function set(campo, valor) {
     setForm((atual) => ({ ...atual, [campo]: valor }));
@@ -78,6 +93,23 @@ export default function AgendamentoCampos({ form, setForm, profissionais, especi
           </select>
         </div>
       </div>
+
+      {queAcompanham.length > 0 && (
+        <div className="agendamento-acompanha" role="group" aria-label={tr('Profissionais que acompanham o paciente')}>
+          <span className="agendamento-acompanha__rotulo">{tr('Acompanha:')}</span>
+          {queAcompanham.map((p) => (
+            <button
+              key={p._id}
+              type="button"
+              className={`agendamento-acompanha__chip${form.profissionalId === p._id ? ' is-ativo' : ''}`}
+              aria-pressed={form.profissionalId === p._id}
+              onClick={() => escolherProfissional(p)}
+            >
+              {p.nome}
+            </button>
+          ))}
+        </div>
+      )}
 
       <div className="modal-form__row">
         <div className="field">

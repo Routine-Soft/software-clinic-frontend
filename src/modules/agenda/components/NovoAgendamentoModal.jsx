@@ -7,6 +7,7 @@ import { DIAS_SEMANA, formularioNovo, horarioInvalido, montarPayload, comPrecoDa
 import AgendamentoCampos from './AgendamentoCampos';
 import AvisoPreRequisito from '@/components/AvisoPreRequisito/AvisoPreRequisito';
 import '../agenda.css';
+import { idsQueAcompanham } from '@/modules/paciente/paciente.utils';
 import { tr } from '@/i18n';
 
 export default function NovoAgendamentoModal({ slotInicial, erro, onSave, onClose }) {
@@ -18,8 +19,13 @@ export default function NovoAgendamentoModal({ slotInicial, erro, onSave, onClos
   const [repetirAte, setRepetirAte] = useState('');
 
   // Paciente com convênio no cadastro já traz esse convênio (e o preço dele), se ainda não foi escolhido outro.
+  // Paciente acompanhado por um só profissional já traz esse profissional, se ainda não foi escolhido outro.
   function escolherPaciente(novo) {
     setPaciente(novo);
+    const queAcompanham = idsQueAcompanham(novo).filter((pid) => dados.profissionais.some((p) => p._id === pid));
+    if (queAcompanham.length === 1) {
+      setForm((atual) => (atual.profissionalId ? atual : { ...atual, profissionalId: queAcompanham[0], especialidadeId: '' }));
+    }
     const convenioDoPaciente = String(novo?.convenioId?._id ?? novo?.convenioId ?? '');
     if (convenioDoPaciente) {
       setForm((atual) => (atual.convenioId ? atual : comPrecoDaTabela({ ...atual, convenioId: convenioDoPaciente }, dados.servicos)));
@@ -60,7 +66,7 @@ export default function NovoAgendamentoModal({ slotInicial, erro, onSave, onClos
             submitDisabled={!paciente || horarioInvalido(form) || recorrenciaIncompleta || dados.faltando.length > 0}
             onSubmit={() => onSave(payload())}
           >
-            <AgendamentoCampos form={form} setForm={setForm} {...dados} />
+            <AgendamentoCampos form={form} setForm={setForm} paciente={paciente} {...dados} />
 
             <fieldset className="modal-form__section">
               <legend>{tr('Recorrência')}</legend>

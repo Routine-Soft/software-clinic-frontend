@@ -1,0 +1,21 @@
+// Profissionais que acompanham o paciente.
+export default {
+  'Profissionais que acompanham': 'Care team',
+  'Quem se trata com {nome}. O profissional entra sozinho na primeira consulta e, ao marcar a próxima, já vem sugerido na agenda.': 'Who is treating {nome}. A practitioner is added automatically at the first appointment and is suggested in the schedule when booking the next one.',
+  'Nenhum profissional acompanha este paciente ainda.': 'No practitioner follows this patient yet.',
+  'Desde {data}': 'Since {data}',
+  'Encerrar?': 'End?',
+  'Confirmar: {nome} deixa de acompanhar': 'Confirm: {nome} stops following',
+  'Manter': 'Keep',
+  'Encerrar': 'End',
+  'Incluir profissional': 'Add practitioner',
+  'Todos os profissionais já acompanham': 'All practitioners already follow this patient',
+  'Escolha o profissional': 'Choose the practitioner',
+  'Incluir': 'Add',
+  'Histórico ({n})': 'History ({n})',
+  '{desde} a {ate}': '{desde} to {ate}',
+  'Acompanha: {nomes}': 'Care team: {nomes}',
+  'Profissionais que acompanham {nome}': 'Care team of {nome}',
+  'Profissionais que acompanham o paciente': 'Practitioners who follow the patient',
+  'Acompanha:': 'Care team:',
+};

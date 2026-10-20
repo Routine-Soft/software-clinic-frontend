@@ -47,6 +47,7 @@
 
 .prontuario {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 18px;
   container-type: inline-size;
 }
@@ -235,6 +236,9 @@
 .pront-abas {
   display: flex;
   gap: 4px;
+  min-width: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
   padding: 4px;
   background: var(--surface-2);
   border: 1px solid var(--border);

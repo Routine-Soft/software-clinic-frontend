@@ -13,10 +13,13 @@ import { EscolhaEspecialidades } from './AcessoAtendimento';
 import { contatoDoPaciente, rotuloDoResponsavel } from '@/modules/paciente/paciente.utils';
 import '../prontuario.css';
 import SeloTeste from '@/modules/paciente/components/SeloTeste';
+import { useAnamnesesDoPaciente } from '@/modules/anamnese/anamnese.hooks';
+import AnamnesesDoPaciente from '@/modules/anamnese/components/AnamnesesDoPaciente';
 import { tr } from '@/i18n';
 
 const ABAS = [
   ['atendimento', tr('Atendimento')],
+  ['anamnese', tr('Anamnese')],
   ['historico', tr('Histórico')],
   ['perfil', tr('Perfil clínico')],
 ];
@@ -29,6 +32,7 @@ export default function ProntuarioPaciente({ paciente, profissional, agendamento
     prontuarios, perfilClinico, loading, error, successMessage,
     addProntuario, editProntuario, addAdendo, compartilhar, salvarPerfil, finalizarProntuario,
   } = useProntuarios(paciente._id);
+  const anamneses = useAnamnesesDoPaciente(paciente._id);
 
   const [aba, setAba] = useState('atendimento');
   // compartilhadoCom começa vazio: só o autor lê até ele marcar outras especialidades.
@@ -90,7 +94,7 @@ export default function ProntuarioPaciente({ paciente, profissional, agendamento
     }
   }
 
-  const contagens = { historico: historico.length };
+  const contagens = { historico: historico.length, anamnese: anamneses.anamneses.length };
 
   return (
     <div className="prontuario">
@@ -188,6 +192,17 @@ export default function ProntuarioPaciente({ paciente, profissional, agendamento
           <p className="pront-parcial" role="note">
             {tr('Aparecem aqui os seus atendimentos e os que outros profissionais liberaram para a sua especialidade.')}
           </p>
+        )}
+
+        {aba === 'atendimento' && !anamneses.loading && !anamneses.error && anamneses.anamneses.length === 0 && (
+          <div className="alert alert--warning anamnese-aviso pront-no-print" role="note">
+            <span>{tr('Este paciente ainda não tem anamnese.')}</span>
+            <button type="button" className="btn btn--primary btn--sm" onClick={() => setAba('anamnese')}>{tr('Preencher anamnese')}</button>
+          </div>
+        )}
+
+        {aba === 'anamnese' && (
+          <AnamnesesDoPaciente paciente={paciente} profissional={profissional} especialidades={especialidades} dados={anamneses} />
         )}
 
         {aba === 'atendimento' && (

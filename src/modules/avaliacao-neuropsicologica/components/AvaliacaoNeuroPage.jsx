@@ -8,7 +8,8 @@ import { formatDataBR, calcularIdade } from '@/utils/date';
 import { useAvaliacaoNeuro } from '../avaliacao-neuro.hooks';
 import { updateAvaliacaoNeuro, finalizarAvaliacaoNeuro, deleteAvaliacaoNeuro } from '../avaliacao-neuro.api';
 import { ABAS, formularioDaAvaliacao, situacaoDa } from '../avaliacao-neuro.utils';
-import { AbaIdentificacao, AbaAnamnese, AbaSessoes, AbaTestes, AbaConclusao } from './CamposAvaliacao';
+import { AbaIdentificacao, AbaSessoes, AbaTestes, AbaConclusao } from './CamposAvaliacao';
+import AnamneseNeuro from './AnamneseNeuro';
 import LaudoNeuro from './LaudoNeuro';
 import '../avaliacao-neuro.css';
 import { localeAtual, tr } from '@/i18n';
@@ -81,7 +82,7 @@ function Editor({ avaliacao, profissional, onSalva }) {
   const idade = calcularIdade(paciente.dataNascimento);
 
   const set = (campo, valor) => setForm((atual) => ({ ...atual, [campo]: valor }));
-  const setAnamnese = (campo, valor) => setForm((atual) => ({ ...atual, anamnese: { ...atual.anamnese, [campo]: valor } }));
+  const setResposta = (pergunta, valor) => setForm((atual) => ({ ...atual, anamnese: { respostas: { ...atual.anamnese.respostas, [pergunta]: valor } } }));
   const setLinha = (lista, index, campo, valor) => setForm((atual) => ({
     ...atual,
     [lista]: atual[lista].map((linha, i) => (i === index ? { ...linha, [campo]: valor } : linha)),
@@ -113,6 +114,8 @@ function Editor({ avaliacao, profissional, onSalva }) {
     }
   }
 
+  // Trocar o modelo salva o resto do formulário junto e recomeça a anamnese com as perguntas do novo modelo.
+  const trocarModelo = (modeloId) => executar('modelo', () => updateAvaliacaoNeuro(avaliacao._id, { ...payload(), anamnese: { modeloId } }), tr('Não foi possível trocar o modelo.'));
   const salvar = () => executar('salvar', () => updateAvaliacaoNeuro(avaliacao._id, payload()), tr('Não foi possível salvar.'));
   const finalizar = () => executar('finalizar', () => finalizarAvaliacaoNeuro(avaliacao._id, payload()), tr('Não foi possível finalizar.'));
   async function excluir() {
@@ -120,7 +123,7 @@ function Editor({ avaliacao, profissional, onSalva }) {
     if (ok) navigate('/avaliacoes-neuropsicologicas');
   }
 
-  const props = { form, set, setForm, setAnamnese, setLinha, adicionar, remover, servicos };
+  const props = { form, set, setForm, setLinha, adicionar, remover, servicos };
 
   return (
     <div className="page">
@@ -189,7 +192,16 @@ function Editor({ avaliacao, profissional, onSalva }) {
           ) : (
             <fieldset className="neuro-fieldset" disabled={somenteLeitura}>
               {aba === 'identificacao' && <AbaIdentificacao {...props} />}
-              {aba === 'anamnese' && <AbaAnamnese {...props} />}
+              {aba === 'anamnese' && (
+                <AnamneseNeuro
+                  avaliacao={avaliacao}
+                  respostas={form.anamnese.respostas}
+                  onChange={setResposta}
+                  somenteLeitura={somenteLeitura}
+                  onTrocarModelo={trocarModelo}
+                  trocando={acao === 'modelo'}
+                />
+              )}
               {aba === 'sessoes' && <AbaSessoes {...props} />}
               {aba === 'testes' && <AbaTestes {...props} />}
               {aba === 'conclusao' && <AbaConclusao {...props} />}

@@ -30,7 +30,7 @@ export default function CamposClinicos({ valores, onChange }) {
 
   return (
     <div className="pront-campos">
-      {CAMPOS_TEXTO.map(([campo, label, linhas]) => (
+      {CAMPOS_TEXTO.map(([campo, label, linhas, dica]) => (
         <div className="field" key={campo}>
           <label className="field__label" htmlFor={`${id}-${campo}`}>{label}</label>
           <textarea
@@ -40,6 +40,7 @@ export default function CamposClinicos({ valores, onChange }) {
             onChange={(e) => set(campo, e.target.value)}
             rows={linhas}
           />
+          {dica && <p className="field__hint">{dica}</p>}
         </div>
       ))}
 

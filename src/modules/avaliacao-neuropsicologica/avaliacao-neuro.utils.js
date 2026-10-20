@@ -1,17 +1,5 @@
 import { tr } from '@/i18n';
-// Roteiro de anamnese neuropsicológica: [campo, rótulo, o que registrar].
-export const CAMPOS_ANAMNESE = [
-  ['gestacaoParto', tr('Gestação e parto'), tr('Intercorrências na gestação, tipo de parto, prematuridade, peso ao nascer')],
-  ['desenvolvimento', tr('Desenvolvimento neuropsicomotor'), 'Quando sentou, andou e falou; controle esfincteriano; marcos atrasados'],
-  ['escolaridade', tr('Escolaridade e vida acadêmica'), tr('Série/ano, desempenho, reprovações, dificuldades, relatos da escola')],
-  ['historicoMedico', tr('Histórico médico'), tr('Doenças, internações, cirurgias, traumatismos, exames de imagem e laudos anteriores')],
-  ['medicamentos', tr('Medicamentos em uso'), tr('Nome, dose e desde quando')],
-  ['historicoFamiliar', tr('Histórico familiar'), tr('Transtornos neurológicos ou psiquiátricos e dificuldades de aprendizagem na família')],
-  ['aspectosEmocionais', tr('Aspectos emocionais e comportamentais'), tr('Humor, ansiedade, irritabilidade, impulsividade, comportamentos repetitivos')],
-  ['rotinaSono', tr('Sono, alimentação e rotina'), tr('Qualidade do sono, apetite, uso de telas, atividades')],
-  ['relacoesSociais', tr('Relações sociais e familiares'), tr('Amizades, convivência familiar, interação social')],
-];
-
+import { preencherAutomaticos } from '@/modules/anamnese/anamnese.utils';
 // Domínios cognitivos usuais nas baterias neuropsicológicas.
 export const DOMINIOS = [
   tr('Inteligência'),
@@ -75,7 +63,13 @@ export function formularioDaAvaliacao(avaliacao) {
     finalidade: avaliacao.finalidade ?? '',
     demanda: avaliacao.demanda ?? '',
     informantes: avaliacao.informantes ?? '',
-    anamnese: Object.fromEntries(CAMPOS_ANAMNESE.map(([campo]) => [campo, avaliacao.anamnese?.[campo] ?? ''])),
+    // A ficha (seções) fica na avaliação; o formulário guarda só as respostas, já com o que se preenche sozinho.
+    anamnese: {
+      respostas: preencherAutomaticos(avaliacao.anamnese?.secoes, avaliacao.anamnese?.respostas ?? {}, {
+        paciente: avaliacao.pacienteId,
+        profissional: avaliacao.profissionalId,
+      }),
+    },
     procedimento: avaliacao.procedimento ?? '',
     sessoes: (avaliacao.sessoes ?? []).map((s) => ({ data: dataISO(s.data), duracaoMin: s.duracaoMin ?? '', descricao: s.descricao ?? '' })),
     instrumentos: (avaliacao.instrumentos ?? []).map((i) => ({ ...instrumentoVazio(), ...i, percentil: i.percentil ?? '' })),

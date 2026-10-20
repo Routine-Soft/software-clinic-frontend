@@ -17,7 +17,8 @@ export const CAMPOS_ATENDIMENTO_INICIAL = {
 
 export const CAMPOS_TEXTO = [
   ['queixaPrincipal', tr('Queixa principal'), 2],
-  ['historicoAtual', tr('Histórico atual (anamnese)'), 4],
+  // A anamnese completa fica na aba própria; aqui é só o que o paciente traz nesta consulta.
+  ['historicoAtual', tr('História atual (desde a última consulta)'), 4, tr('A anamnese completa fica na aba Anamnese.')],
   ['exameObjetivo', tr('Exame objetivo'), 3],
   ['avaliacao', tr('Avaliação'), 3],
   ['conduta', tr('Conduta'), 3],

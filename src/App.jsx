@@ -49,6 +49,9 @@ import PainelTv from '@/modules/painel-tv/components/PainelTv'
 import TermosPage from '@/modules/termo/components/TermosPage'
 import TermoImpressao from '@/modules/termo/components/TermoImpressao'
 import AssinarTermo from '@/modules/termo/components/AssinarTermo'
+import AnamnesesPage from '@/modules/anamnese/components/AnamnesesPage'
+import ModeloAnamneseEditor from '@/modules/anamnese/components/ModeloAnamneseEditor'
+import AnamneseImpressao from '@/modules/anamnese/components/AnamneseImpressao'
 import ProtectedRoute from '@/components/ProtectedRoute'
 import { HashRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
 
@@ -132,6 +135,46 @@ function App() {
                 <MainLayout>
                   <PacienteADM />
                 </MainLayout>
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/anamneses"
+            element={
+              <ProtectedRoute requiredRoles={['admin', 'profissional', 'super_admin']}>
+                <MainLayout>
+                  <AnamnesesPage />
+                </MainLayout>
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/anamneses/:id"
+            element={
+              <ProtectedRoute requiredRoles={['admin', 'profissional', 'super_admin']}>
+                <MainLayout>
+                  <ModeloAnamneseEditor />
+                </MainLayout>
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/anamneses/ficha/:id"
+            element={
+              <ProtectedRoute requiredRoles={['admin', 'profissional', 'super_admin']}>
+                <AnamneseImpressao tipo="prontuario" />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/avaliacoes-neuropsicologicas/:id/anamnese"
+            element={
+              <ProtectedRoute requiredRoles={['admin', 'profissional', 'super_admin']}>
+                <AnamneseImpressao tipo="neuro" />
               </ProtectedRoute>
             }
           />

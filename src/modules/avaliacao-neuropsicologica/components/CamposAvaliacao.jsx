@@ -1,6 +1,6 @@
 import { IconeMais, IconeLixeira } from '@/components/CrudCard/icones';
 import {
-  CAMPOS_ANAMNESE, DOMINIOS, CLASSIFICACOES, classificacaoSugerida, sessaoVazia, instrumentoVazio, resumoDasSessoes,
+  DOMINIOS, CLASSIFICACOES, classificacaoSugerida, sessaoVazia, instrumentoVazio, resumoDasSessoes,
 } from '../avaliacao-neuro.utils';
 import CampoServicoDoModulo from '@/modules/servico/components/CampoServicoDoModulo';
 import { tr } from '@/i18n';
@@ -53,16 +53,6 @@ export function AbaIdentificacao({ form, set, servicos }) {
         placeholder={tr('Ex: o próprio paciente, mãe, professora')}
         dica={tr('Quem forneceu as informações. Entra no laudo, em Procedimento.')}
       />
-    </div>
-  );
-}
-
-export function AbaAnamnese({ form, setAnamnese }) {
-  return (
-    <div className="neuro-secao neuro-secao--grade">
-      {CAMPOS_ANAMNESE.map(([campo, rotulo, placeholder]) => (
-        <Texto key={campo} id={`neuro-anamnese-${campo}`} rotulo={rotulo} valor={form.anamnese[campo]} onChange={(v) => setAnamnese(campo, v)} placeholder={placeholder} />
-      ))}
     </div>
   );
 }

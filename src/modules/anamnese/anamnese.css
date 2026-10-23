@@ -581,3 +581,106 @@
   width: 16px;
   height: 16px;
 }
+
+/* Guia "Como montar a sua anamnese": passos numerados em laranja, como os do Painel Admin.
+   O .card não tem espaçamento interno: o respiro das bordas fica aqui. */
+.anamnese-guia {
+  --passo: linear-gradient(135deg, #ea580c, #c2410c);
+  padding: 20px 22px;
+}
+
+.anamnese-guia[open] {
+  display: grid;
+  gap: 18px;
+}
+
+.anamnese-guia__resumo {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  font-size: 1.05rem;
+  font-weight: 800;
+  list-style: none;
+  cursor: pointer;
+}
+
+.anamnese-guia__resumo::-webkit-details-marker {
+  display: none;
+}
+
+/* Setinha que gira ao abrir e fechar. */
+.anamnese-guia__resumo::after {
+  content: '';
+  width: 8px;
+  height: 8px;
+  margin-left: auto;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: rotate(45deg);
+  transition: transform 0.2s var(--ease);
+}
+
+.anamnese-guia[open] .anamnese-guia__resumo::after {
+  transform: rotate(-135deg);
+}
+
+.anamnese-guia__aviso {
+  margin: 0;
+  padding: 14px 16px;
+  line-height: 1.5;
+}
+
+.anamnese-guia__passos {
+  display: grid;
+  gap: 16px;
+  margin: 0;
+  padding: 0 4px;
+  list-style: none;
+}
+
+.anamnese-guia__passo {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+
+.anamnese-guia__passo p {
+  margin: 4px 0 0;
+  line-height: 1.5;
+  color: var(--text-muted);
+}
+
+.anamnese-guia__num {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--passo);
+  color: #fff;
+  font-size: 0.9rem;
+  font-weight: 800;
+}
+
+.anamnese-guia__dica {
+  margin: 0;
+  padding: 12px 14px;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: var(--text-muted);
+  background: var(--surface-2);
+  border-radius: var(--radius-md, 12px);
+}
+
+@media (max-width: 600px) {
+  .anamnese-guia {
+    padding: 16px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .anamnese-guia__resumo::after {
+    transition: none;
+  }
+}

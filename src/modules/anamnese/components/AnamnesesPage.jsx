@@ -37,7 +37,7 @@ export default function AnamnesesPage() {
       <header className="page-header">
         <div>
           <h2 className="page-title">{tr('Anamneses')}</h2>
-          <p className="page-subtitle">{tr('Os modelos da clínica. No prontuário, cada profissional escolhe o seu.')}</p>
+          <p className="page-subtitle">{tr('Aqui você monta os formulários em branco. As respostas de cada paciente ficam no prontuário dele, onde cada profissional escolhe o seu modelo.')}</p>
         </div>
         <div className="page-header__acoes">
           {!loading && <span className="badge badge--primary">{modelos.length === 1 ? tr('1 modelo') : tr('{n} modelos', { n: modelos.length })}</span>}

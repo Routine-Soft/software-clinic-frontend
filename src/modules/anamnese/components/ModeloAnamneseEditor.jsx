@@ -4,6 +4,7 @@ import { Icone, IconeMais, IconeLixeira, IconeSetaEsquerda, IconeCheck, IconeX }
 import { useModeloAnamnese } from '../anamnese.hooks';
 import { AUTOS, TIPOS, comOpcoes, mover, perguntaNova, secaoNova, totalDePerguntas } from '../anamnese.utils';
 import FichaAnamnese from './FichaAnamnese';
+import GuiaModeloAnamnese from './GuiaModeloAnamnese';
 import '../anamnese.css';
 import { tr } from '@/i18n';
 
@@ -124,6 +125,8 @@ function Editor({ modelo, salvar, error, novo }) {
         </section>
       ) : (
         <div className="modelo-editor">
+          <GuiaModeloAnamnese aberto={novo} />
+
           <section className="card modelo-editor__dados">
             <div className="modal-form__row">
               <div className="field">
@@ -145,7 +148,7 @@ function Editor({ modelo, salvar, error, novo }) {
             <section key={secao.id} className="card modelo-editor__secao">
               <div className="modelo-editor__secao-cab">
                 <span className="ficha-secao__num" aria-hidden="true">{i + 1}</span>
-                <input className="input" value={secao.titulo} onChange={(e) => setSecao(i, 'titulo', e.target.value)} placeholder={tr('Título da seção')} aria-label={tr('Título da seção {n}', { n: i + 1 })} />
+                <input className="input" value={secao.titulo} onChange={(e) => setSecao(i, 'titulo', e.target.value)} placeholder={tr('Assunto da seção, ex.: Alimentação')} aria-label={tr('Título da seção {n}', { n: i + 1 })} />
                 <span className="modelo-editor__botoes">
                   <button type="button" className="icon-btn" aria-label={tr('Subir seção')} disabled={i === 0} onClick={() => setSecoes((s) => mover(s, i, -1))}><IconeCima /></button>
                   <button type="button" className="icon-btn" aria-label={tr('Descer seção')} disabled={i === form.secoes.length - 1} onClick={() => setSecoes((s) => mover(s, i, 1))}><IconeBaixo /></button>

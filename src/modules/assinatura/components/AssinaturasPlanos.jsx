@@ -4,11 +4,11 @@ import { usePlanos } from '@/modules/plano/plano.hooks';
 import { useAssinatura } from '../assinatura.hooks';
 import { formatarData, formatarPreco, avisarAssinaturaAtualizada } from '../assinatura.utils';
 import PixModal from './PixModal';
-import { recursosExclusivos } from '@/modules/plano/plano.utils';
+import { recursosExclusivos, planoNoIdioma } from '@/modules/plano/plano.utils';
 import AvisoDescontoIndicacao from '@/modules/indicacao/components/AvisoDescontoIndicacao';
 import './assinatura.css';
 import './assinaturas-planos.css';
-import { tr } from '@/i18n';
+import { tr, idiomaAtual } from '@/i18n';
 
 // O rótulo diz o que o plano é para a clínica (o plano da assinatura atual ganha um selo com o estado dela).
 const SELO_DO_PLANO_ATUAL = {
@@ -110,7 +110,8 @@ export default function AssinaturasPlanos() {
   // Só os planos da moeda da clínica: Brasil em reais (Mercado Pago), fora do Brasil em dólar (Stripe).
   const moedaDaClinica = assinatura?.moeda ?? 'BRL';
   const pagaPeloStripe = assinatura?.gateway === 'stripe';
-  const planosAtivos = ordenarPlanos(planos.filter((plano) => plano.ativo && plano.tipo !== 'gratis' && (plano.moeda ?? 'BRL') === moedaDaClinica));
+  const planosAtivos = ordenarPlanos(planos.filter((plano) => plano.ativo && plano.tipo !== 'gratis' && (plano.moeda ?? 'BRL') === moedaDaClinica))
+    .map((plano) => planoNoIdioma(plano, idiomaAtual()));
   const emTeste = assinatura?.status === 'trial';
   const assinaturaAtiva = assinatura?.status === 'ativa';
   // Pix é pago período a período e não renova sozinho; o cartão renova todo mês no Mercado Pago.

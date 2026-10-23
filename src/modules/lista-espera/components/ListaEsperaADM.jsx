@@ -46,7 +46,7 @@ function tempoDesde(iso) {
   const horas = Math.floor(minutos / 60);
   if (horas < 24) return tr('há {horas} h', { horas });
   const dias = Math.floor(horas / 24);
-  return tr('há {dias} {p0}', { dias, p0: dias === 1 ? 'dia' : 'dias' });
+  return dias === 1 ? tr('há 1 dia') : tr('há {dias} dias', { dias });
 }
 
 export default function ListaEsperaADM({ className = '' }) {

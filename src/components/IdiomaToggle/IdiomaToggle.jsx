@@ -5,9 +5,10 @@ import { tr } from '@/i18n';
 const OPCOES = [
   { valor: 'pt', rotulo: 'PT', nome: tr('Português') },
   { valor: 'en', rotulo: 'EN', nome: tr('English') },
+  { valor: 'es', rotulo: 'ES', nome: tr('Español') },
 ];
 
-// Botões PT / EN. A escolha fica guardada no navegador; sem escolha, vale o idioma do navegador.
+// Botões PT / EN / ES. A escolha fica guardada no navegador; sem escolha, vale o idioma do navegador.
 export default function IdiomaToggle() {
   const { idioma, setIdioma, t } = useIdioma();
 

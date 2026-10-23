@@ -8,11 +8,13 @@ import { iniciais } from '@/utils/nome'
 import Marca from './Marca'
 import BotaoInstalar from './BotaoInstalar'
 import { ICONES } from './menuIcones'
+import { clinicaNoBrasil } from '@/i18n/paises'
 import './Sidebar.css'
 import { tr } from '@/i18n';
 
 const TODOS = ['super_admin', 'admin', 'profissional', 'recepcao']
 
+// soBrasil: só aparece para clínica do Brasil (ver clinicaNoBrasil).
 // Os cadastros (profissionais, serviços, salas...) ficam no Painel Admin; o menu tem só o dia a dia.
 const GRUPOS = [
     {
@@ -30,9 +32,9 @@ const GRUPOS = [
         itens: [
             { label: tr('Pacientes'), path: '/pacientes', icone: 'pacientes', roles: ['admin', 'profissional', 'recepcao'] },
             { label: tr('Prontuário'), path: '/prontuario', icone: 'prontuario', roles: ['admin', 'profissional'] },
-            { label: tr('Anamneses'), path: '/anamneses', icone: 'anamnese', roles: ['admin', 'profissional'] },
+            { label: tr('Anamneses'), path: '/anamneses', icone: 'anamnese', roles: ['admin', 'profissional', 'recepcao'] },
             { label: tr('Termos (TCLE)'), path: '/termos-consentimento', icone: 'termo', roles: ['admin', 'profissional', 'recepcao'] },
-            { label: tr('Avaliações NR-01'), path: '/avaliacoes-nr01', icone: 'nr01', roles: ['admin', 'profissional'] },
+            { label: tr('Avaliações NR-01'), path: '/avaliacoes-nr01', icone: 'nr01', roles: ['admin', 'profissional'], soBrasil: true },
             { label: tr('Avaliação neuropsicológica'), path: '/avaliacoes-neuropsicologicas', icone: 'neuro', roles: ['admin', 'profissional'] },
             { label: tr('Repasses'), path: '/repasses', icone: 'receita', roles: ['admin'] },
             { label: tr('Usuários'), path: '/usuarios', icone: 'usuarios', roles: ['admin', 'recepcao'] },
@@ -59,7 +61,7 @@ const GRUPOS = [
         titulo: tr('Conta'),
         itens: [
             { label: tr('Assinaturas'), path: '/assinaturas', icone: 'assinatura', roles: ['super_admin', 'admin', 'recepcao'] },
-            { label: tr('Indique e ganhe'), path: '/indique', icone: 'indicacao', roles: ['admin'] },
+            { label: tr('Indique e ganhe'), path: '/indique', icone: 'indicacao', roles: ['admin'], soBrasil: true },
             { label: tr('Minha conta'), path: '/minha-conta', icone: 'usuarios', roles: [...TODOS, 'afiliado'] },
         ],
     },
@@ -72,8 +74,10 @@ export function Sidebar({ aberto = false, onFechar }) {
         await logout()
     }
 
+    const noBrasil = clinicaNoBrasil(user)
+    const podeVer = (item) => (item.soAfiliado ? !!user?.afiliadoDesde : item.roles.some((role) => hasRole(role)))
     const grupos = GRUPOS
-        .map((grupo) => ({ ...grupo, itens: grupo.itens.filter((item) => (item.soAfiliado ? !!user?.afiliadoDesde : item.roles.some((role) => hasRole(role)))) }))
+        .map((grupo) => ({ ...grupo, itens: grupo.itens.filter((item) => podeVer(item) && (noBrasil || !item.soBrasil)) }))
         .filter((grupo) => grupo.itens.length > 0)
 
     return (

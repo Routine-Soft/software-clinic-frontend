@@ -15,6 +15,7 @@ import AssinaturaStatus from '@/modules/assinatura/components/AssinaturaStatus'
 import { Icone, IconeMais } from '@/components/CrudCard/icones'
 import { ICONES } from '@/components/Sidebar/menuIcones'
 import { iniciais } from '@/utils/nome'
+import { clinicaNoBrasil } from '@/i18n/paises'
 import './Home.css'
 import { localeAtual, tr } from '@/i18n';
 
@@ -25,7 +26,7 @@ const ATALHOS = [
     { label: tr('Pacientes'), descricao: tr('Cadastro e busca de pacientes'), to: '/pacientes', icone: 'pacientes', roles: ['admin', 'profissional', 'recepcao'] },
     { label: tr('Prontuário'), descricao: tr('Atendimentos e histórico clínico'), to: '/prontuario', icone: 'prontuario', roles: ['admin', 'profissional'] },
     { label: tr('Lista de espera'), descricao: tr('Fila de pacientes aguardando vaga'), to: '/lista-espera', icone: 'espera', roles: ['admin', 'profissional', 'recepcao'] },
-    { label: tr('Avaliações NR-01'), descricao: tr('Riscos psicossociais das empresas'), to: '/avaliacoes-nr01', icone: 'nr01', roles: ['admin', 'profissional'] },
+    { label: tr('Avaliações NR-01'), descricao: tr('Riscos psicossociais das empresas'), to: '/avaliacoes-nr01', icone: 'nr01', roles: ['admin', 'profissional'], soBrasil: true },
     { label: tr('Avaliação neuropsicológica'), descricao: tr('Anamnese, testes e laudo'), to: '/avaliacoes-neuropsicologicas', icone: 'neuro', roles: ['admin', 'profissional'] },
     { label: tr('Repasses'), descricao: tr('O que pagar a cada profissional'), to: '/repasses', icone: 'receita', roles: ['admin'] },
     { label: tr('Meus repasses'), descricao: tr('Quanto você tem a receber'), to: '/meus-repasses', icone: 'receita', roles: ['profissional'] },
@@ -186,8 +187,9 @@ function AgendaDeHoje({ agendas, loading, agora, clinico, onAbrir }) {
     )
 }
 
-function Atalhos({ hasRole }) {
-    const itens = ATALHOS.filter((atalho) => atalho.roles.some((role) => hasRole(role)))
+function Atalhos({ hasRole, user }) {
+    const noBrasil = clinicaNoBrasil(user)
+    const itens = ATALHOS.filter((atalho) => atalho.roles.some((role) => hasRole(role)) && (noBrasil || !atalho.soBrasil))
 
     return (
         <section className="card home-atalhos">
@@ -272,7 +274,7 @@ function PainelDaClinica({ agora, clinico, admin, recepcao, hasRole, user }) {
 
                 <div className="home-lateral">
                     {admin && <AssinaturaStatus className="home-assinatura" />}
-                    <Atalhos hasRole={hasRole} />
+                    <Atalhos hasRole={hasRole} user={user} />
                 </div>
             </div>
 
@@ -318,7 +320,7 @@ export function Home() {
                 <PainelDaClinica agora={agora} clinico={clinico} admin={admin} recepcao={recepcao} hasRole={hasRole} user={user} />
             ) : (
                 <div className="home-grid home-grid--unico">
-                    <Atalhos hasRole={hasRole} />
+                    <Atalhos hasRole={hasRole} user={user} />
                 </div>
             )}
         </div>

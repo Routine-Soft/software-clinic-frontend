@@ -1,3 +1,5 @@
+import PLANOS_ES from '@/i18n/es/planos';
+
 // Recursos que este plano tem e algum outro plano pago não tem: aparecem em destaque ("o que muda" entre os planos).
 export function recursosExclusivos(plano, planos) {
   const outros = planos.filter((p) => p._id !== plano._id && p.tipo !== 'gratis');
@@ -11,7 +13,12 @@ export function recursosDoTexto(texto) {
 }
 
 // Descrição e recursos do plano no idioma da tela (o inglês é cadastrado à parte; sem ele, vale o português).
+// No espanhol, os textos conhecidos passam pela tabela de es/planos.js.
 export function planoNoIdioma(plano, idioma) {
+  if (idioma === 'es') {
+    const es = (texto) => PLANOS_ES[texto] ?? texto;
+    return { ...plano, descricao: plano.descricao && es(plano.descricao), recursos: (plano.recursos ?? []).map(es) };
+  }
   if (idioma !== 'en') return plano;
   return {
     ...plano,

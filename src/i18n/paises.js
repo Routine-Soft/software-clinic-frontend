@@ -25,6 +25,12 @@ export function listaDePaises(idioma) {
     return [...topo, ...nomes.filter((p) => !['BR', 'US'].includes(p.codigo))]
 }
 
+// O que só existe no Brasil (NR-01, "Indique e ganhe" em reais) some para clínica de outro país.
+// Sessões antigas não têm paisClinica: vale o país do próprio usuário (o dono tem) ou Brasil.
+export function clinicaNoBrasil(user) {
+    return (user?.paisClinica ?? user?.pais ?? 'BR') === 'BR'
+}
+
 // Primeiro palpite pelo fuso e pelo idioma do navegador (a pessoa pode trocar).
 export function adivinharPais() {
     try {

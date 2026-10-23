@@ -1,4 +1,4 @@
-import { localeAtual, tr } from '@/i18n';
+import { idiomaAtual, localeAtual, tr } from '@/i18n';
 
 // Chave que a TV recebe ao ser conectada. Fica só no navegador da TV.
 const CHAVE_DA_TV = 'painel-tv-chave';
@@ -53,13 +53,15 @@ export function textoParaFalar(chamada) {
   return chamada.sala ? `${quem}, ${chamada.sala}` : quem;
 }
 
+const VOZ_DO_IDIOMA = { pt: 'pt-BR', en: 'en-US', es: 'es-MX' };
+
 export function falar(texto) {
   const voz = window.speechSynthesis;
   if (!voz || !texto) return;
   voz.cancel();
   const fala = new SpeechSynthesisUtterance(texto);
-  // A voz segue o idioma da TV: em inglês, fala em inglês ("Next patient, Room 2").
-  fala.lang = localeAtual() === 'en-US' ? 'en-US' : 'pt-BR';
+  // A voz segue o idioma da TV: em inglês, fala em inglês ("Next patient, Room 2"); em espanhol, em espanhol.
+  fala.lang = VOZ_DO_IDIOMA[idiomaAtual()] ?? 'pt-BR';
   fala.rate = 0.9;
   const daLingua = voz.getVoices().find((v) => v.lang?.toLowerCase().startsWith(fala.lang.slice(0, 2)));
   if (daLingua) fala.voice = daLingua;

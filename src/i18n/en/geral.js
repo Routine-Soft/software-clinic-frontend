@@ -82,6 +82,7 @@ export default {
   'Empresas': 'Companies',
   'Endereço': 'Address',
   'English': 'English',
+  'Español': 'Español',
   'Erro na requisição': 'Request error',
   'Especialidades': 'Specialties',
   'Ex.: Particular, Unimed, Bradesco Saúde': 'E.g.: Private pay, Unimed, Bradesco Saúde',

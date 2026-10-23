@@ -1,0 +1,28 @@
+// Textos dos planos (cadastrados pelo super admin em português, nos planos em real, e em inglês, nos em dólar).
+// Não entra no index.js: é usado só por planoNoIdioma. Texto que não estiver aqui aparece como foi cadastrado.
+export default {
+  'O plano para quem trabalha sozinho': 'El plan para quien trabaja solo',
+  'The plan for solo practitioners': 'El plan para quien trabaja solo',
+  'O plano para clínicas que trabalham em equipe': 'El plan para clínicas que trabajan en equipo',
+  'The plan for clinics that work as a team': 'El plan para clínicas que trabajan en equipo',
+  'Agenda': 'Agenda',
+  'Scheduling': 'Agenda',
+  'Prontuário eletrônico': 'Historia clínica electrónica',
+  'Electronic health records': 'Historia clínica electrónica',
+  'Pacientes (cadastro sem limite)': 'Pacientes (registro sin límite)',
+  'Patients (unlimited)': 'Pacientes (registro sin límite)',
+  'Lista de espera': 'Lista de espera',
+  'Waiting list': 'Lista de espera',
+  'Chamada de pacientes na TV da sala de espera': 'Llamado de pacientes en la TV de la sala de espera',
+  'Waiting room TV calling': 'Llamado de pacientes en la TV de la sala de espera',
+  'Termo de consentimento (TCLE) com assinatura digital': 'Consentimiento informado con firma digital',
+  'Informed consent forms (e-signature)': 'Consentimiento informado con firma digital',
+  'Convênios': 'Seguros médicos',
+  'Insurance plans': 'Seguros médicos',
+  'Lembrete de consulta pelo WhatsApp (em breve)': 'Recordatorio de citas por WhatsApp (próximamente)',
+  'WhatsApp appointment reminders (coming soon)': 'Recordatorio de citas por WhatsApp (próximamente)',
+  'Repasse financeiro para os colaboradores': 'Pagos a los profesionales del equipo',
+  'Payouts for team members': 'Pagos a los profesionales del equipo',
+  'Cadastro de profissionais sem limite': 'Profesionales sin límite',
+  'Unlimited practitioners': 'Profesionales sin límite',
+};

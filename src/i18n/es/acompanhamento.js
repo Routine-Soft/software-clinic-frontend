@@ -1,0 +1,21 @@
+// Profissionais que acompanham o paciente.
+export default {
+  'Profissionais que acompanham': 'Profesionales que acompañan',
+  'Quem se trata com {nome}. O profissional entra sozinho na primeira consulta e, ao marcar a próxima, já vem sugerido na agenda.': 'Quién atiende a {nome}. El profesional se agrega solo en la primera consulta y, al agendar la próxima, ya aparece sugerido en la agenda.',
+  'Nenhum profissional acompanha este paciente ainda.': 'Ningún profesional acompaña a este paciente todavía.',
+  'Desde {data}': 'Desde el {data}',
+  'Encerrar?': '¿Finalizar?',
+  'Confirmar: {nome} deixa de acompanhar': 'Confirmar: {nome} deja de acompañar',
+  'Manter': 'Mantener',
+  'Encerrar': 'Finalizar',
+  'Incluir profissional': 'Agregar profesional',
+  'Todos os profissionais já acompanham': 'Todos los profesionales ya acompañan',
+  'Escolha o profissional': 'Elige el profesional',
+  'Incluir': 'Agregar',
+  'Histórico ({n})': 'Historial ({n})',
+  '{desde} a {ate}': '{desde} a {ate}',
+  'Acompanha: {nomes}': 'Acompaña: {nomes}',
+  'Profissionais que acompanham {nome}': 'Profesionales que acompañan a {nome}',
+  'Profissionais que acompanham o paciente': 'Profesionales que acompañan al paciente',
+  'Acompanha:': 'Acompaña:',
+};

@@ -142,7 +142,7 @@ function App() {
           <Route
             path="/anamneses"
             element={
-              <ProtectedRoute requiredRoles={['admin', 'profissional', 'super_admin']}>
+              <ProtectedRoute requiredRoles={['admin', 'profissional', 'recepcao', 'super_admin']}>
                 <MainLayout>
                   <AnamnesesPage />
                 </MainLayout>
@@ -153,7 +153,7 @@ function App() {
           <Route
             path="/anamneses/:id"
             element={
-              <ProtectedRoute requiredRoles={['admin', 'profissional', 'super_admin']}>
+              <ProtectedRoute requiredRoles={['admin', 'profissional', 'recepcao', 'super_admin']}>
                 <MainLayout>
                   <ModeloAnamneseEditor />
                 </MainLayout>

@@ -102,7 +102,7 @@ function ListaTermos({ termos, loading, onCompartilhar, onCancelar }) {
   );
 }
 
-function CartaoModelos({ modelos, loading, podeEditar, onNovo, onEditar, onExcluir }) {
+function CartaoModelos({ modelos, loading, onNovo, onEditar, onExcluir }) {
   const [confirmandoId, setConfirmandoId] = useState(null);
 
   return (
@@ -113,12 +113,10 @@ function CartaoModelos({ modelos, loading, podeEditar, onNovo, onEditar, onExclu
           <h3 className="crud-card__titulo">{tr('Modelos de termo')}</h3>
           <p className="crud-card__subtitulo">{tr('O texto base de cada termo da clínica')}</p>
         </div>
-        {podeEditar && (
-          <button type="button" className="btn btn--primary btn--sm crud-card__novo-btn" onClick={onNovo} aria-label={tr('Novo modelo')}>
-            <IconeMais />
-            <span className="crud-card__rotulo">{tr('Novo modelo')}</span>
-          </button>
-        )}
+        <button type="button" className="btn btn--primary btn--sm crud-card__novo-btn" onClick={onNovo} aria-label={tr('Novo modelo')}>
+          <IconeMais />
+          <span className="crud-card__rotulo">{tr('Novo modelo')}</span>
+        </button>
       </header>
 
       {loading ? (
@@ -133,7 +131,7 @@ function CartaoModelos({ modelos, loading, podeEditar, onNovo, onEditar, onExclu
         <div className="crud-vazio">
           <IconeTermo />
           <p>{tr('Nenhum modelo de termo ainda.')}</p>
-          {podeEditar && <button type="button" className="btn btn--primary btn--sm" onClick={onNovo}>{tr('Criar modelo')}</button>}
+          <button type="button" className="btn btn--primary btn--sm" onClick={onNovo}>{tr('Criar modelo')}</button>
         </div>
       ) : (
         <ul className="crud-lista">
@@ -144,7 +142,7 @@ function CartaoModelos({ modelos, loading, podeEditar, onNovo, onEditar, onExclu
                 <span className="crud-item__nome" title={modelo.titulo}>{modelo.titulo}</span>
                 <span className="crud-item__sub termo-modelo__previa">{modelo.texto.replace(/\s+/g, ' ').slice(0, 140)}</span>
               </div>
-              {podeEditar && (confirmandoId === modelo._id ? (
+              {confirmandoId === modelo._id ? (
                 <div className="crud-item__confirmar">
                   <span>{tr('Excluir?')}</span>
                   <button type="button" className="icon-btn icon-btn--danger" aria-label={tr('Confirmar exclusão de {nome}', { nome: modelo.titulo })} onClick={() => { setConfirmandoId(null); onExcluir(modelo._id); }}>
@@ -163,7 +161,7 @@ function CartaoModelos({ modelos, loading, podeEditar, onNovo, onEditar, onExclu
                     <IconeLixeira />
                   </button>
                 </div>
-              ))}
+              )}
             </li>
           ))}
         </ul>
@@ -174,10 +172,9 @@ function CartaoModelos({ modelos, loading, podeEditar, onNovo, onEditar, onExclu
 
 // Termos de consentimento (TCLE): envio do link ao paciente, acompanhamento e modelos da clínica.
 export default function TermosPage() {
-  const { user, hasRole } = useAuthContext();
+  const { user } = useAuthContext();
   const location = useLocation();
   const painel = useTermos();
-  const podeEditar = hasRole('admin') || hasRole('profissional') || hasRole('super_admin');
 
   // Vindo da lista de pacientes ("Termos" na linha do paciente): já abre o envio com ele.
   const pacienteInicialId = location.state?.pacienteId ?? null;
@@ -267,7 +264,6 @@ export default function TermosPage() {
         <CartaoModelos
           modelos={painel.modelos}
           loading={painel.loading}
-          podeEditar={podeEditar}
           onNovo={() => abrirModelo({})}
           onEditar={abrirModelo}
           onExcluir={painel.removeModelo}

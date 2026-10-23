@@ -1,17 +1,18 @@
-// Idioma do sistema (pt ou en), guardado no navegador. Na primeira visita, segue o idioma do navegador:
-// português em qualquer variante vira pt; qualquer outro idioma vira en.
+// Idioma do sistema (pt, en ou es), guardado no navegador. Na primeira visita, segue o idioma do navegador:
+// português em qualquer variante vira pt; espanhol vira es; qualquer outro idioma vira en.
 const CHAVE = 'idioma';
 
 function idiomaDoNavegador() {
   const lista = navigator.languages?.length ? navigator.languages : [navigator.language];
   const principal = String(lista.find(Boolean) ?? 'pt').toLowerCase();
-  return principal.startsWith('pt') ? 'pt' : 'en';
+  if (principal.startsWith('pt')) return 'pt';
+  return principal.startsWith('es') ? 'es' : 'en';
 }
 
 export function lerIdioma() {
   try {
     const salvo = localStorage.getItem(CHAVE);
-    if (salvo === 'pt' || salvo === 'en') return salvo;
+    if (IDIOMAS.includes(salvo)) return salvo;
   } catch {
     // armazenamento indisponível
   }
@@ -25,7 +26,9 @@ export function salvarIdioma(idioma, escolhido = false) {
   } catch {
     // armazenamento indisponível: vale só nesta sessão
   }
-  document.documentElement.lang = idioma === 'en' ? 'en' : 'pt-BR';
+  document.documentElement.lang = LOCALE[idioma] ?? 'pt-BR';
 }
 
-export const LOCALE = { pt: 'pt-BR', en: 'en-US' };
+export const IDIOMAS = ['pt', 'en', 'es'];
+// Espanhol da América Latina (es-419): datas e números no jeito de lá.
+export const LOCALE = { pt: 'pt-BR', en: 'en-US', es: 'es-419' };

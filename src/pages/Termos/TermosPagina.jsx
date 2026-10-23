@@ -2,16 +2,20 @@ import { Link } from 'react-router-dom';
 import ThemeToggle from '@/components/ThemeToggle/ThemeToggle';
 import SimboloMarca from '@/components/Marca/SimboloMarca';
 import { EMPRESA, VERSAO, CONTATO } from './termos.dados';
-import { TERMOS_EN, AVISO_TRADUCAO } from './termos.en';
+import { TERMOS_EN, AVISO_TRADUCAO as AVISO_EN } from './termos.en';
+import { TERMOS_ES, AVISO_TRADUCAO as AVISO_ES } from './termos.es';
 import IdiomaToggle from '@/components/IdiomaToggle/IdiomaToggle';
 import { LINK_WHATSAPP_SITE as LINK_WHATSAPP } from '@/utils/whatsappSite';
 import './termos.css';
 import { tr, idiomaAtual } from '@/i18n';
 
+const TRADUCOES = { en: [TERMOS_EN, AVISO_EN], es: [TERMOS_ES, AVISO_ES] };
+
 // Página pública com um termo (clínica, afiliado, privacidade ou exclusão de dados).
 export default function TermosPagina({ termos: termosPt }) {
-  const emIngles = idiomaAtual() === 'en' && TERMOS_EN.has(termosPt);
-  const termos = emIngles ? { ...TERMOS_EN.get(termosPt), versao: termosPt.versao } : termosPt;
+  const [traducoes, aviso] = TRADUCOES[idiomaAtual()] ?? [];
+  const traduzido = traducoes?.has(termosPt);
+  const termos = traduzido ? { ...traducoes.get(termosPt), versao: termosPt.versao } : termosPt;
   const identificacao = [EMPRESA.razaoSocial, EMPRESA.cnpj && `CNPJ ${EMPRESA.cnpj}`].filter(Boolean).join(' · ');
 
   return (
@@ -31,7 +35,7 @@ export default function TermosPagina({ termos: termosPt }) {
         <p className="termos__versao">{tr('Versão de {p0}', { p0: termos.versao ?? VERSAO })}</p>
         <h1>{termos.titulo}</h1>
         <p className="termos__subtitulo">{termos.subtitulo}</p>
-        {emIngles && <p className="alert alert--info">{AVISO_TRADUCAO}</p>}
+        {traduzido && <p className="alert alert--info">{aviso}</p>}
 
         {termos.secoes.map(([titulo, paragrafos]) => (
           <section key={titulo}>

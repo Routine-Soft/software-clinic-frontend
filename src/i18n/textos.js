@@ -2,8 +2,8 @@ import comum from './textos/comum';
 import landing from '@/pages/Landing/landing.textos';
 import auth from '@/modules/user/auth.textos';
 
-// Cada área tem { pt: {...}, en: {...} }. A chave é "area.caminho.do.texto"; {nome} é trocado pelos parâmetros.
-// Texto que falta em inglês cai no português (e avisa no console em desenvolvimento).
+// Cada área tem { pt: {...}, en: {...}, es: {...} }. A chave é "area.caminho.do.texto"; {nome} é trocado pelos parâmetros.
+// Texto que falta em inglês ou espanhol cai no português (e avisa no console em desenvolvimento).
 const TEXTOS = { comum, landing, auth };
 
 function buscar(tabela, caminho) {

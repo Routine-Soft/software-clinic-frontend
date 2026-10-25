@@ -1,4 +1,4 @@
-// Gera o blog como páginas HTML de verdade em public/blog/ (o Google indexa cada artigo pelo próprio endereço,
+// Gera o blog como páginas HTML de verdade em public/blog/ e as landing pages por área (nichos.mjs) (o Google indexa cada artigo pelo próprio endereço,
 // o que não acontece com as rotas "#/" do sistema), além de public/sitemap.xml, public/robots.txt e o feed RSS.
 // Roda sozinho antes do `npm run dev` e do `npm run build`. Para um artigo novo: crie um arquivo em blog/artigos/
 // e uma imagem 1200×630 em blog/imagens/.
@@ -7,6 +7,8 @@ import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { SITE } from './config.mjs';
 import { paginaArtigo, paginaIndice, paginaLegal, sitemap, feed, SIMBOLO_SVG } from './modelo.mjs';
+import { paginaNicho } from './modelo-nicho.mjs';
+import NICHOS from './nichos.mjs';
 import { TERMOS_CLINICA, PRIVACIDADE, EXCLUSAO_DE_DADOS, VERSAO, EMPRESA, CONTATO } from '../src/pages/Termos/termos.dados.js';
 
 const RAIZ = path.dirname(fileURLToPath(import.meta.url));
@@ -36,6 +38,7 @@ fs.rmSync(TEMP, { recursive: true, force: true });
 fs.mkdirSync(path.join(TEMP, 'fontes'), { recursive: true });
 fs.cpSync(path.join(RAIZ, 'imagens'), path.join(TEMP, 'imagens'), { recursive: true });
 fs.copyFileSync(path.join(RAIZ, 'blog.css'), path.join(TEMP, 'blog.css'));
+fs.copyFileSync(path.join(RAIZ, 'nicho.css'), path.join(TEMP, 'nicho.css'));
 fs.copyFileSync(
   path.join(RAIZ, '..', 'node_modules/@fontsource/dm-serif-display/files/dm-serif-display-latin-400-normal.woff2'),
   path.join(TEMP, 'fontes', 'dm-serif.woff2'),
@@ -68,8 +71,17 @@ for (const pagina of PAGINAS_LEGAIS) {
   fs.writeFileSync(path.join(PUBLICO, pagina.slug, 'index.html'), paginaLegal({ ...pagina, versao: VERSAO, empresa: EMPRESA, contato: CONTATO }, { simbolo }));
 }
 
+// Uma landing page por área (sistema para fisioterapia, psicologia...), em endereço normal para o Google.
+for (const nicho of NICHOS) {
+  if (nicho.tituloSeo.length > 65) console.warn(`aviso: título SEO de ${nicho.slug} tem ${nicho.tituloSeo.length} caracteres (ideal: até 60)`);
+  if (nicho.descricao.length > 160) console.warn(`aviso: descrição de ${nicho.slug} tem ${nicho.descricao.length} caracteres (ideal: até 155)`);
+  for (const slug of nicho.artigos) if (!artigos.some((a) => a.slug === slug)) throw new Error(`nichos.mjs: ${nicho.slug} cita o artigo ${slug}, que não existe`);
+  fs.mkdirSync(path.join(PUBLICO, nicho.slug), { recursive: true });
+  fs.writeFileSync(path.join(PUBLICO, nicho.slug, 'index.html'), paginaNicho(nicho, { simbolo, nichos: NICHOS, artigos }));
+}
+
 const hoje = new Date().toISOString().slice(0, 10);
 fs.writeFileSync(path.join(PUBLICO, 'sitemap.xml'), sitemap(artigos, hoje));
 fs.writeFileSync(path.join(PUBLICO, 'robots.txt'), `User-agent: *\nAllow: /\n\nSitemap: ${SITE}/sitemap.xml\n`);
 
-console.log(`blog: ${artigos.length} ${artigos.length === 1 ? 'artigo gerado' : 'artigos gerados'} em public/blog/`);
+console.log(`blog: ${artigos.length} ${artigos.length === 1 ? 'artigo gerado' : 'artigos gerados'} em public/blog/ e ${NICHOS.length} páginas de área`);

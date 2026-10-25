@@ -356,6 +356,9 @@ img { max-width: 100%; height: auto; }
 .b-rodape__linha { display: flex; flex-wrap: wrap; gap: 14px 28px; align-items: center; justify-content: space-between; }
 .b-rodape nav { display: flex; flex-wrap: wrap; gap: 8px 18px; }
 .b-rodape nav a { color: var(--text-muted); }
+.b-rodape nav.b-rodape__areas { flex: 1 1 100%; order: 3; align-items: baseline; }
+.b-rodape__areas strong { color: var(--text); }
+.b-rodape__linha > span { order: 4; }
 
 @media (max-width: 900px) {
   .b-artigo__grade { grid-template-columns: 1fr; gap: 24px; }

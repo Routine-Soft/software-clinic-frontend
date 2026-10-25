@@ -1,6 +1,7 @@
 // Textos da landing page em português e inglês. Os ícones são chaves de ICONES (components/Sidebar/menuIcones.jsx)
 // e as imagens ficam em public/landing/ (capturas de uma clínica de demonstração com dados fictícios).
 // O preço fica em reais nos dois idiomas: a cobrança é sempre em BRL.
+// Em `especialidades`, o segundo item é o endereço da landing page da área (blog/nichos.mjs, só em português).
 
 export default {
   pt: {
@@ -40,13 +41,15 @@ export default {
       feitoPara: 'Feito para',
     },
     especialidades: [
-      'Clínicas multiprofissionais',
-      'Psicologia',
-      'Psiquiatria',
-      'Nutrição',
-      'Fonoaudiologia',
-      'Neuropsicologia',
-      'Saúde do trabalho (NR-01)',
+      ['Clínica médica', '/sistema-para-clinica-medica/'],
+      ['Fisioterapia', '/sistema-para-fisioterapia/'],
+      ['Psicologia', '/sistema-para-psicologia/'],
+      ['Psiquiatria', '/sistema-para-psiquiatria/'],
+      ['Fonoaudiologia', '/sistema-para-fonoaudiologia/'],
+      ['Estética', '/sistema-para-clinica-de-estetica/'],
+      ['Neuropsicologia', null],
+      ['Saúde do trabalho (NR-01)', null],
+      ['E muitas outras áreas', null],
     ],
     doresCab: {
       selo: 'O dia a dia sem dor de cabeça',
@@ -221,13 +224,15 @@ export default {
       feitoPara: 'Built for',
     },
     especialidades: [
-      'Multidisciplinary clinics',
-      'Psychology',
-      'Psychiatry',
-      'Nutrition',
-      'Speech therapy',
-      'Neuropsychology',
-      'Occupational health',
+      ['General medicine', '/sistema-para-clinica-medica/'],
+      ['Physiotherapy', '/sistema-para-fisioterapia/'],
+      ['Psychology', '/sistema-para-psicologia/'],
+      ['Psychiatry', '/sistema-para-psiquiatria/'],
+      ['Speech therapy', '/sistema-para-fonoaudiologia/'],
+      ['Aesthetics', '/sistema-para-clinica-de-estetica/'],
+      ['Neuropsychology', null],
+      ['Occupational health', null],
+      ['And many other fields', null],
     ],
     doresCab: {
       selo: 'Day-to-day without headaches',
@@ -399,13 +404,15 @@ export default {
       feitoPara: 'Hecho para',
     },
     especialidades: [
-      'Clínicas multidisciplinarias',
-      'Psicología',
-      'Psiquiatría',
-      'Nutrición',
-      'Fonoaudiología',
-      'Neuropsicología',
-      'Fisioterapia',
+      ['Clínica médica', '/sistema-para-clinica-medica/'],
+      ['Fisioterapia', '/sistema-para-fisioterapia/'],
+      ['Psicología', '/sistema-para-psicologia/'],
+      ['Psiquiatría', '/sistema-para-psiquiatria/'],
+      ['Fonoaudiología', '/sistema-para-fonoaudiologia/'],
+      ['Estética', '/sistema-para-clinica-de-estetica/'],
+      ['Neuropsicología', null],
+      ['Salud laboral', null],
+      ['Y muchas otras áreas', null],
     ],
     doresCab: {
       selo: 'Un día a día sin dolores de cabeza',

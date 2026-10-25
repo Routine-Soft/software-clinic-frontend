@@ -469,6 +469,15 @@ a.lp-nav__link {
   list-style: none;
 }
 
+.lp-faixa a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.lp-faixa a:hover {
+  color: var(--primary);
+}
+
 .lp-faixa li {
   padding: 0.35rem 0.8rem;
   font-size: 0.9rem;
@@ -1174,7 +1183,7 @@ a.lp-nav__link {
 
 .lp-rodape__grade {
   display: grid;
-  grid-template-columns: minmax(0, 2fr) repeat(3, minmax(0, 1fr));
+  grid-template-columns: minmax(0, 2fr) repeat(4, minmax(0, 1fr));
   gap: 32px;
 }
 
@@ -1332,7 +1341,7 @@ a.lp-nav__link {
   }
 
   .lp-rodape__grade {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 
   .lp-rodape__grade > div:first-child {

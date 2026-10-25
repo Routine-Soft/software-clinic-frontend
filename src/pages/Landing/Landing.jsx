@@ -84,7 +84,7 @@ function Hero({ logado }) {
         <div className="lp-faixa">
           <span>{L.feitoPara}</span>
           <ul>
-            {t('landing.especialidades').map((nome) => <li key={nome}>{nome}</li>)}
+            {t('landing.especialidades').map(([nome, href]) => <li key={nome}>{href ? <a href={href}>{nome}</a> : nome}</li>)}
           </ul>
         </div>
       </div>
@@ -431,6 +431,7 @@ function Rodape({ logado }) {
   const { t } = useIdioma();
   const R = t('landing.rodape');
   const M = t('landing.menu');
+  const L = t('landing.hero');
   return (
     <footer className="lp-rodape">
       <div className="lp-container lp-rodape__grade">
@@ -443,6 +444,10 @@ function Rodape({ logado }) {
           {t('landing.secoes').map(([id, rotulo]) => (
             <button key={id} type="button" onClick={() => irPara(id)}>{rotulo}</button>
           ))}
+        </nav>
+        <nav aria-label={L.feitoPara}>
+          <h3>{L.feitoPara}</h3>
+          {t('landing.especialidades').filter(([, href]) => href).map(([nome, href]) => <a key={href} href={href}>{nome}</a>)}
         </nav>
         <nav aria-label={R.acesso}>
           <h3>{R.acesso}</h3>

@@ -1,5 +1,6 @@
 import { SITE, NOME, DESCRICAO_BLOG } from './config.mjs';
 import { LINK_WHATSAPP, WHATSAPP_EXIBICAO, CAMINHO_ICONE_WHATSAPP } from '../src/utils/contato.js';
+import NICHOS from './nichos.mjs';
 
 export const esc = (t = '') => String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
@@ -23,7 +24,7 @@ const SCRIPT_TEMA = `<script>try{var t=localStorage.getItem('theme-preference');
 
 const SIMBOLO = '<svg viewBox="0 0 512 512" aria-hidden="true"><path fill="currentColor" d="__SO__"/></svg>';
 
-function cabecalho(simbolo) {
+export function cabecalho(simbolo) {
   return `
 <header class="b-topo">
   <div class="b-container b-topo__linha">
@@ -39,9 +40,9 @@ function cabecalho(simbolo) {
 </header>`;
 }
 
-const ICONE_WHATSAPP = `<svg viewBox="0 0 32 32" aria-hidden="true"><path fill="currentColor" d="${CAMINHO_ICONE_WHATSAPP}"/></svg>`;
+export const ICONE_WHATSAPP = `<svg viewBox="0 0 32 32" aria-hidden="true"><path fill="currentColor" d="${CAMINHO_ICONE_WHATSAPP}"/></svg>`;
 
-function rodape(simbolo) {
+export function rodape(simbolo) {
   return `
 <footer class="b-rodape">
   <div class="b-container b-rodape__linha">
@@ -50,13 +51,16 @@ function rodape(simbolo) {
       <a href="/">Início</a><a href="/blog/">Blog</a><a href="/#/afiliados">Seja afiliado</a><a href="/termos-de-uso/">Termos de uso</a><a href="/privacidade/">Privacidade</a>
       <a class="b-rodape__whats" href="${LINK_WHATSAPP}" target="_blank" rel="noopener noreferrer">${ICONE_WHATSAPP} Contato: ${WHATSAPP_EXIBICAO}</a>
     </nav>
+    <nav class="b-rodape__areas" aria-label="Sistema por área">
+      <strong>Sistema para</strong>${NICHOS.map((n) => `<a href="/${n.slug}/">${esc(n.nome)}</a>`).join('')}
+    </nav>
     <span>© ${new Date().getFullYear()} ${NOME}. Sistema de gestão para clínicas.</span>
   </div>
 </footer>
 <a class="b-whats" href="${LINK_WHATSAPP}" target="_blank" rel="noopener noreferrer" aria-label="Falar com a ${NOME} no WhatsApp" title="Falar no WhatsApp">${ICONE_WHATSAPP}</a>`;
 }
 
-function head({ titulo, descricao, url, imagem, tipo = 'website', extra = '' }) {
+export function head({ titulo, descricao, url, imagem, imagemLargura = 1200, imagemAltura = 630, tipo = 'website', estilos = [], extra = '' }) {
   return `<!doctype html>
 <html lang="pt-BR">
 <head>
@@ -73,22 +77,22 @@ function head({ titulo, descricao, url, imagem, tipo = 'website', extra = '' }) 
 <meta property="og:description" content="${esc(descricao)}">
 <meta property="og:url" content="${url}">
 <meta property="og:image" content="${imagem}">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
+<meta property="og:image:width" content="${imagemLargura}">
+<meta property="og:image:height" content="${imagemAltura}">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#0b1f3a">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
 <link rel="alternate" type="application/rss+xml" title="Blog ${NOME}" href="${SITE}/blog/feed.xml">
 <link rel="preload" href="/blog/fontes/dm-serif.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/blog/blog.css">
+<link rel="stylesheet" href="/blog/blog.css">${estilos.map((e) => `\n<link rel="stylesheet" href="${e}">`).join('')}
 ${SCRIPT_TEMA}
 ${SCRIPT_ANALYTICS}
 ${extra}
 </head>`;
 }
 
-const jsonLd = (dados) => `<script type="application/ld+json">${JSON.stringify(dados).replace(/</g, '\\u003c')}</script>`;
+export const jsonLd = (dados) => `<script type="application/ld+json">${JSON.stringify(dados).replace(/</g, '\\u003c')}</script>`;
 
 function convite(titulo = 'Organize a agenda da sua clínica com a Sonelia') {
   return `
@@ -195,7 +199,7 @@ ${rodape(simbolo)}
 </html>`;
 }
 
-function cartao(a) {
+export function cartao(a) {
   return `<a class="b-cartao" href="/blog/${a.slug}/">
   <img src="/blog/imagens/${a.imagem}" alt="" width="1200" height="630" loading="lazy">
   <span class="b-selo">${esc(a.categoria)}</span>
@@ -241,6 +245,7 @@ ${rodape(simbolo)}
 export function sitemap(artigos, hoje) {
   const urls = [
     [`${SITE}/`, hoje, '1.0'],
+    ...NICHOS.map((n) => [`${SITE}/${n.slug}/`, hoje, '0.9']),
     [`${SITE}/blog/`, artigos[0]?.atualizadoEm ?? hoje, '0.8'],
     ...artigos.map((a) => [`${SITE}/blog/${a.slug}/`, a.atualizadoEm, '0.7']),
   ];

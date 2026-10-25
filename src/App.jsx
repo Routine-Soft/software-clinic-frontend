@@ -14,7 +14,6 @@ import AvaliacaoNr01ADM from './modules/avaliacao-nr01/components/AvaliacaoNr01A
 import AvaliacaoNeuroADM from './modules/avaliacao-neuropsicologica/components/AvaliacaoNeuroADM';
 import AvaliacaoNeuroPage from './modules/avaliacao-neuropsicologica/components/AvaliacaoNeuroPage';
 import ServicoADM from './modules/servico/components/ServicoADM';
-import AgendaCalendario from './modules/agenda/components/AgendaCalendario';
 import ReunioesCalendario from './modules/reuniao/components/ReunioesCalendario';
 import IndiqueGanhe from './modules/indicacao/components/IndiqueGanhe';
 import ProgramaAfiliados from './pages/Afiliados/ProgramaAfiliados';
@@ -323,16 +322,8 @@ function App() {
             }
           />
 
-          <Route
-            path="/agenda"
-            element={
-              <ProtectedRoute requiredRoles={['admin', 'profissional', 'recepcao', 'super_admin']}>
-                <MainLayout>
-                  <AgendaCalendario />
-                </MainLayout>
-              </ProtectedRoute>
-            }
-          />
+          {/* A agenda agora fica na Página inicial; o endereço antigo continua funcionando. */}
+          <Route path="/agenda" element={<Navigate to="/home" replace />} />
 
           <Route
             path="/reunioes"

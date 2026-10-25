@@ -22,7 +22,6 @@ const GRUPOS = [
         itens: [
             { label: tr('Página inicial'), path: '/home', icone: 'inicio', roles: TODOS },
             { label: tr('Painel Admin'), path: '/dashboard-admin', icone: 'painel', roles: ['admin', 'recepcao'] },
-            { label: tr('Agenda'), path: '/agenda', icone: 'agenda', roles: ['admin', 'profissional', 'recepcao'] },
             { label: tr('Sala de espera'), path: '/sala-de-espera', icone: 'tv', roles: ['admin', 'profissional', 'recepcao'] },
             { label: tr('Reuniões'), path: '/reunioes', icone: 'reunioes', roles: ['admin', 'recepcao'] },
         ],

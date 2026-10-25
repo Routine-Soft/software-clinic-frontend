@@ -3,15 +3,19 @@ import Modal from '@/components/Modal/Modal';
 import ModalForm from '@/components/Modal/ModalForm';
 import PacientePicker from '@/modules/paciente/components/PacientePicker';
 import { useDadosAgendamento } from '../useDadosAgendamento';
-import { DIAS_SEMANA, formularioNovo, horarioInvalido, montarPayload, comPrecoDaTabela } from '../agendamento.form';
+import { DIAS_SEMANA, formularioNovo, horarioInvalido, montarPayload, comPrecoDaTabela, comFormaInicial } from '../agendamento.form';
 import AgendamentoCampos from './AgendamentoCampos';
+import FormaPagamentoCampos from './FormaPagamentoCampos';
 import AvisoPreRequisito from '@/components/AvisoPreRequisito/AvisoPreRequisito';
 import '../agenda.css';
 import { idsQueAcompanham } from '@/modules/paciente/paciente.utils';
-import { tr } from '@/i18n';
+import { IconeSetaEsq } from '@/components/CrudCard/icones';
+import { localeAtual, tr } from '@/i18n';
 
+// Duas etapas, para a forma de pagamento não ser esquecida: "Agendar" leva à etapa de pagamento, que confirma.
 export default function NovoAgendamentoModal({ slotInicial, erro, onSave, onClose }) {
   const dados = useDadosAgendamento();
+  const [etapa, setEtapa] = useState('dados');
   const [form, setForm] = useState(() => formularioNovo(slotInicial));
   const [paciente, setPaciente] = useState(null);
   const [repetir, setRepetir] = useState(false);
@@ -43,8 +47,42 @@ export default function NovoAgendamentoModal({ slotInicial, erro, onSave, onClos
 
   const recorrenciaIncompleta = repetir && (diasSemana.length === 0 || !repetirAte);
 
+  function irParaPagamento() {
+    setForm(comFormaInicial);
+    setEtapa('pagamento');
+    return false;
+  }
+
+  if (etapa === 'pagamento') {
+    return (
+      <Modal key="pagamento" title={tr('Forma de pagamento')} wide persistente onClose={onClose}>
+        {(fechar) => (
+          <ModalForm
+            erro={erro}
+            fechar={fechar}
+            submitLabel={repetir ? tr('Confirmar série') : tr('Confirmar agendamento')}
+            loadingLabel={tr('Agendando...')}
+            onSubmit={() => onSave(payload())}
+          >
+            <p className="pagamento-etapa">
+              <span className="badge badge--primary">{tr('Etapa 2 de 2')}</span>
+              <span>{[paciente?.nome, form.data && new Date(`${form.data}T12:00:00`).toLocaleDateString(localeAtual()), form.horaInicio].filter(Boolean).join(' · ')}</span>
+            </p>
+
+            <FormaPagamentoCampos form={form} setForm={setForm} />
+
+            <button type="button" className="btn btn--ghost btn--sm pagamento-voltar" onClick={() => setEtapa('dados')}>
+              <IconeSetaEsq />
+              {tr('Voltar para os dados do agendamento')}
+            </button>
+          </ModalForm>
+        )}
+      </Modal>
+    );
+  }
+
   return (
-    <Modal title={tr('Novo agendamento')} wide onClose={onClose}>
+    <Modal key="dados" title={tr('Novo agendamento')} wide onClose={onClose}>
       {(fechar) => (
         <div className="modal-form">
           <AvisoPreRequisito acao="agendar" faltando={dados.faltando} />
@@ -64,7 +102,7 @@ export default function NovoAgendamentoModal({ slotInicial, erro, onSave, onClos
             submitLabel={repetir ? tr('Agendar série') : tr('Agendar')}
             loadingLabel={tr('Agendando...')}
             submitDisabled={!paciente || horarioInvalido(form) || recorrenciaIncompleta || dados.faltando.length > 0}
-            onSubmit={() => onSave(payload())}
+            onSubmit={irParaPagamento}
           >
             <AgendamentoCampos form={form} setForm={setForm} paciente={paciente} {...dados} />
 

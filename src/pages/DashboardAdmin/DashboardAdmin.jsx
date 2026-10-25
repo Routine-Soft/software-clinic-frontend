@@ -7,12 +7,13 @@ import SalaADM from '@/modules/sala/components/SalaADM'
 import EspecialidadeADM from '@/modules/especialidade/components/EspecialidadeADM'
 import ConvenioADM from '@/modules/convenio/components/ConvenioADM'
 import UsuariosClinicaCard from '@/modules/user/components/UsuariosClinicaCard'
+import AnamnesesADM from '@/modules/anamnese/components/AnamnesesADM'
 import './DashboardAdmin.css'
 import { tr } from '@/i18n';
 
 // Na ordem em que a clínica precisa cadastrar: o profissional exige especialidade (e usa o login do usuário);
 // o serviço tem preço e repasse por convênio; o agendamento exige profissional, serviço e sala;
-// o paciente pode usar convênio e empresa.
+// as anamneses já vêm com modelos prontos; o paciente pode usar convênio e empresa.
 const PASSOS = [
     { chave: 'especialidades', titulo: tr('Especialidades'), Card: EspecialidadeADM },
     { chave: 'usuarios', titulo: tr('Usuários'), opcional: true, Card: UsuariosClinicaCard },
@@ -20,6 +21,7 @@ const PASSOS = [
     { chave: 'convenios', titulo: tr('Convênios'), Card: ConvenioADM },
     { chave: 'servicos', titulo: tr('Serviços'), Card: ServicoADM },
     { chave: 'salas', titulo: tr('Salas'), Card: SalaADM },
+    { chave: 'anamneses', titulo: tr('Anamneses'), Card: AnamnesesADM },
     { chave: 'empresas', titulo: tr('Empresas'), opcional: true, Card: EmpresaADM },
     { chave: 'pacientes', titulo: tr('Pacientes'), Card: PacienteCard },
 ]
@@ -32,7 +34,7 @@ function Passo({ numero, chave, Card }) {
     )
 }
 
-// Trilha dos 8 passos, como uma jornada: cada parada leva ao card correspondente e o destaca por um instante.
+// Trilha dos passos, como uma jornada: cada parada leva ao card correspondente e o destaca por um instante.
 function Jornada() {
     function irPara(chave) {
         const card = document.getElementById(`passo-${chave}`)

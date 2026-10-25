@@ -1,10 +1,10 @@
 import { useId, useMemo } from 'react';
-import { IconeMais, IconeX } from '@/components/CrudCard/icones';
-import { FORMAS_PAGAMENTO, horarioInvalido, somarMinutos, DURACAO_PADRAO_MINUTOS, comPrecoDaTabela } from '../agendamento.form';
+import { horarioInvalido, somarMinutos, DURACAO_PADRAO_MINUTOS, comPrecoDaTabela } from '../agendamento.form';
 import { idsQueAcompanham } from '@/modules/paciente/paciente.utils';
 import { tr } from '@/i18n';
 
-// Campos comuns de criar e editar agendamento. O paciente é escolhido fora (PacientePicker).
+// Campos comuns de criar e editar agendamento. O paciente é escolhido fora (PacientePicker) e o pagamento
+// fica em FormaPagamentoCampos.
 export default function AgendamentoCampos({ form, setForm, paciente, profissionais, especialidades, salas, servicos, convenios }) {
   const id = useId();
 
@@ -31,10 +31,6 @@ export default function AgendamentoCampos({ form, setForm, paciente, profissiona
     setForm((atual) => ({ ...atual, [campo]: valor }));
   }
 
-  function setFinanceiro(campo, valor) {
-    setForm((atual) => ({ ...atual, financeiro: { ...atual.financeiro, [campo]: valor } }));
-  }
-
   // O valor vem da tabela do serviço para o convênio escolhido (ou do preço padrão); dá para ajustar à mão depois.
   function handleServico(servicoId) {
     setForm((atual) => comPrecoDaTabela({ ...atual, servicoId }, servicos));
@@ -46,28 +42,6 @@ export default function AgendamentoCampos({ form, setForm, paciente, profissiona
 
   function handleHoraInicio(valor) {
     setForm((atual) => ({ ...atual, horaInicio: valor, horaFim: somarMinutos(valor, DURACAO_PADRAO_MINUTOS) }));
-  }
-
-  function setForma(index, campo, valor) {
-    setForm((atual) => {
-      const formasPagamento = [...atual.financeiro.formasPagamento];
-      formasPagamento[index] = { ...formasPagamento[index], [campo]: valor };
-      return { ...atual, financeiro: { ...atual.financeiro, formasPagamento } };
-    });
-  }
-
-  function adicionarForma() {
-    setForm((atual) => ({
-      ...atual,
-      financeiro: { ...atual.financeiro, formasPagamento: [...atual.financeiro.formasPagamento, { tipo: 'pix', valor: '' }] },
-    }));
-  }
-
-  function removerForma(index) {
-    setForm((atual) => ({
-      ...atual,
-      financeiro: { ...atual.financeiro, formasPagamento: atual.financeiro.formasPagamento.filter((_, i) => i !== index) },
-    }));
   }
 
   return (
@@ -160,48 +134,6 @@ export default function AgendamentoCampos({ form, setForm, paciente, profissiona
           ))}
         </select>
       </div>
-
-      <fieldset className="modal-form__section">
-        <legend>{tr('Financeiro')}</legend>
-
-        <div className="agendamento-financeiro">
-          <div className="field">
-            <label className="field__label" htmlFor={`${id}-valor`}>{tr('Total a pagar (R$)')}</label>
-            <input id={`${id}-valor`} className="input" type="number" min="0" step="0.01" value={form.financeiro.valor} onChange={(e) => setFinanceiro('valor', e.target.value)} required />
-          </div>
-
-          <div className="field">
-            <label className="field__label" htmlFor={`${id}-venc`}>{tr('Vencimento')}</label>
-            <input id={`${id}-venc`} className="input" type="date" value={form.financeiro.vencimento} onChange={(e) => setFinanceiro('vencimento', e.target.value)} required />
-          </div>
-
-          <div className="field">
-            <label className="field__label" htmlFor={`${id}-parcelas`}>{tr('Parcelas')}</label>
-            <input id={`${id}-parcelas`} className="input" type="number" min="1" value={form.financeiro.parcelamento} onChange={(e) => setFinanceiro('parcelamento', e.target.value)} />
-          </div>
-        </div>
-
-        {form.financeiro.formasPagamento.map((forma, index) => (
-          <div className="agendamento-forma" key={index}>
-            <select className="input" aria-label={tr('Forma de pagamento {p0}', { p0: index + 1 })} value={forma.tipo} onChange={(e) => setForma(index, 'tipo', e.target.value)}>
-              {FORMAS_PAGAMENTO.map(([valor, rotulo]) => (
-                <option key={valor} value={valor}>{rotulo}</option>
-              ))}
-            </select>
-            <input className="input" type="number" min="0" step="0.01" placeholder={tr('Valor')} aria-label={tr('Valor da forma de pagamento {p0}', { p0: index + 1 })} value={forma.valor} onChange={(e) => setForma(index, 'valor', e.target.value)} />
-            <button type="button" className="icon-btn icon-btn--danger" aria-label={tr('Remover forma de pagamento {p0}', { p0: index + 1 })} onClick={() => removerForma(index)}>
-              <IconeX />
-            </button>
-          </div>
-        ))}
-
-        <div>
-          <button type="button" className="btn btn--ghost btn--sm" onClick={adicionarForma}>
-            <IconeMais />
-            {tr('Forma de pagamento')}
-          </button>
-        </div>
-      </fieldset>
     </>
   );
 }

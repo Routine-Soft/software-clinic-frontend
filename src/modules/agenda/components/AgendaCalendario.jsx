@@ -6,7 +6,7 @@ import { filtrarPacientes } from '@/modules/paciente/paciente.utils';
 import ProntuarioModal from '@/modules/prontuario/components/ProntuarioModal';
 import { useAuthContext } from '@/hooks/useAuthContext';
 import { printAgendamento } from '@/modules/print/print.api';
-import { IconeMais, IconeBusca, IconeSetaEsq, IconeSetaDir } from '@/components/CrudCard/icones';
+import { Icone, IconeMais, IconeBusca, IconeSetaEsq, IconeSetaDir } from '@/components/CrudCard/icones';
 import {
   agruparPorDia,
   diasDoIntervalo,
@@ -22,6 +22,7 @@ import AgendaMes from './AgendaMes';
 import AgendaGradeTempo from './AgendaGradeTempo';
 import NovoAgendamentoModal from './NovoAgendamentoModal';
 import EditarAgendamentoModal from './EditarAgendamentoModal';
+import AgendaDeHoje from './AgendaDeHoje';
 import '../agenda.css';
 import { tr } from '@/i18n';
 
@@ -36,11 +37,13 @@ function visaoInicial(soCancelados) {
   return window.matchMedia?.('(max-width: 640px)').matches ? 'dia' : 'mes';
 }
 
-export default function AgendaCalendario() {
+// Calendário da Página inicial. `cabecalho` é o lado esquerdo do topo (saudação) e `resumo` os indicadores,
+// mostrados acima do calendário; `onMudou` avisa quando um agendamento foi criado ou alterado.
+export default function AgendaCalendario({ cabecalho, resumo, onMudou }) {
   const { user, hasRole } = useAuthContext();
   const podeVerProntuario = hasRole('admin') || hasRole('profissional') || hasRole('super_admin');
   const { profissionais } = useProfissionais();
-  // ?status=cancelado (vindo do card "Agendamentos cancelados" da página inicial) mostra só os cancelados.
+  // ?status=cancelado (card "Agendamentos cancelados" ou botão "Só cancelados") mostra só os cancelados.
   const [parametros, setParametros] = useSearchParams();
   const soCancelados = parametros.get('status') === 'cancelado';
 
@@ -52,7 +55,8 @@ export default function AgendaCalendario() {
   const meuProfissional = user?.role === 'profissional' ? profissionalDoUsuario(profissionais, user) : null;
   const profissionalId = profissionalEscolhido ?? meuProfissional?._id ?? '';
   const [busca, setBusca] = useState('');
-  const [mostrarCancelados, setMostrarCancelados] = useState(true);
+  // Muda a cada agendamento criado ou alterado, para a "Agenda de hoje" recarregar.
+  const [versaoHoje, setVersaoHoje] = useState(0);
 
   const [slotNovo, setSlotNovo] = useState(null);
   const [agendaEditando, setAgendaEditando] = useState(null);
@@ -80,13 +84,12 @@ export default function AgendaCalendario() {
   const agendasFiltradas = useMemo(() => {
     let lista = agendas;
     if (soCancelados) lista = lista.filter((a) => a.status === 'cancelado');
-    else if (!mostrarCancelados) lista = lista.filter((a) => a.status !== 'cancelado');
     if (busca.trim()) {
       const ids = new Set(filtrarPacientes(lista.map((a) => a.pacienteId).filter(Boolean), busca).map((p) => p._id));
       lista = lista.filter((a) => ids.has(a.pacienteId?._id));
     }
     return lista;
-  }, [agendas, mostrarCancelados, soCancelados, busca]);
+  }, [agendas, soCancelados, busca]);
 
   const porDia = useMemo(() => agruparPorDia(agendasFiltradas), [agendasFiltradas]);
 
@@ -107,6 +110,20 @@ export default function AgendaCalendario() {
     setParametros(soCancelados ? {} : { status: 'cancelado' }, { replace: true });
   }
 
+  function mudou() {
+    setVersaoHoje((v) => v + 1);
+    onMudou?.();
+  }
+
+  // Repassa o resultado da ação e, se deu certo, avisa que algo mudou.
+  function avisando(acao) {
+    return async (...args) => {
+      const resultado = await acao(...args);
+      if (resultado) mudou();
+      return resultado;
+    };
+  }
+
   function irParaDia(dia) {
     setDataReferencia(dia);
     setVisao('dia');
@@ -119,9 +136,9 @@ export default function AgendaCalendario() {
   async function handleCancelar(agenda) {
     if (agenda.grupoRecorrenciaId) {
       const cancelarTudo = window.confirm('Este agendamento faz parte de uma recorrência. Cancelar todos os horários do grupo?');
-      if (cancelarTudo) return await cancelGrupo(agenda.grupoRecorrenciaId);
+      if (cancelarTudo) return await avisando(cancelGrupo)(agenda.grupoRecorrenciaId);
     }
-    return await cancelAgenda(agenda._id);
+    return await avisando(cancelAgenda)(agenda._id);
   }
 
   // O profissional só marca os próprios atendimentos (o backend confere de novo); admin e recepção marcam qualquer um.
@@ -132,7 +149,10 @@ export default function AgendaCalendario() {
 
   async function handleRealizado(agenda, realizado) {
     const atualizada = await marcarRealizado(agenda._id, realizado);
-    if (atualizada) setAgendaDetalhes(atualizada);
+    if (atualizada) {
+      setAgendaDetalhes(atualizada);
+      mudou();
+    }
     return atualizada;
   }
 
@@ -147,12 +167,9 @@ export default function AgendaCalendario() {
   const algumModalAberto = !!slotNovo || !!agendaEditando;
 
   return (
-    <div className="page agenda-page">
-      <header className="page-header">
-        <div>
-          <h2 className="page-title">{tr('Agenda')}</h2>
-          <p className="page-subtitle">{tr('Clique em um agendamento para abrir o prontuário do paciente')}</p>
-        </div>
+    <>
+      <header className="page-header agenda-topo">
+        {cabecalho}
         <div className="page-header__acoes">
           {!loading && (soCancelados ? (
             <span className="badge badge--danger">
@@ -170,6 +187,16 @@ export default function AgendaCalendario() {
         </div>
       </header>
 
+      {resumo}
+
+      <p className="agenda-manual">
+        <span className="agenda-manual__icone" aria-hidden="true"><Icone><circle cx="12" cy="12" r="10" /><path d="M12 16v-4M12 8h.01" /></Icone></span>
+        <span>
+          <strong>{tr('Como agendar:')}</strong>{' '}
+          {tr('clique no botão "Novo agendamento" ou direto no dia do calendário (na visão de semana ou dia, no horário). Para ver ou mexer em uma consulta, clique nela.')}
+        </span>
+      </p>
+
       {(successMessage || (error && !algumModalAberto)) && (
         <div className="alerts">
           {error && !algumModalAberto && <p className="alert alert--error" role="alert">{error.message}</p>}
@@ -177,103 +204,102 @@ export default function AgendaCalendario() {
         </div>
       )}
 
-      <section className="card agenda-cal" aria-busy={loading}>
-        <div className="agenda-toolbar">
-          <div className="agenda-toolbar__nav">
-            <button type="button" className="btn btn--ghost btn--sm" onClick={() => setDataReferencia(new Date())}>{tr('Hoje')}</button>
-            <button type="button" className="icon-btn" aria-label={tr('Período anterior')} onClick={() => setDataReferencia(navegar(visao, dataReferencia, -1))}>
-              <IconeSetaEsq />
-            </button>
-            <button type="button" className="icon-btn" aria-label={tr('Próximo período')} onClick={() => setDataReferencia(navegar(visao, dataReferencia, 1))}>
-              <IconeSetaDir />
-            </button>
-            <h3 className="agenda-toolbar__titulo" aria-live="polite">{tituloDaVisao(visao, dataReferencia)}</h3>
-          </div>
-
-          <div className="agenda-visoes" role="group" aria-label={tr('Modo de visualização')}>
-            {VISOES.map(([chave, rotulo]) => (
-              <button key={chave} type="button" className="agenda-visao" aria-pressed={visao === chave} onClick={() => setVisao(chave)}>
-                {rotulo}
+      <div className="agenda-layout">
+        <section className="card agenda-cal" aria-busy={loading}>
+          <div className="agenda-toolbar">
+            <div className="agenda-toolbar__nav">
+              <button type="button" className="btn btn--ghost btn--sm" onClick={() => setDataReferencia(new Date())}>{tr('Hoje')}</button>
+              <button type="button" className="icon-btn" aria-label={tr('Período anterior')} onClick={() => setDataReferencia(navegar(visao, dataReferencia, -1))}>
+                <IconeSetaEsq />
               </button>
-            ))}
-          </div>
-        </div>
+              <button type="button" className="icon-btn" aria-label={tr('Próximo período')} onClick={() => setDataReferencia(navegar(visao, dataReferencia, 1))}>
+                <IconeSetaDir />
+              </button>
+              <h3 className="agenda-toolbar__titulo" aria-live="polite">{tituloDaVisao(visao, dataReferencia)}</h3>
+            </div>
 
-        <div className="agenda-filtros">
-          <select className="input agenda-filtros__prof" value={profissionalId} onChange={(e) => setProfissionalEscolhido(e.target.value)} aria-label={tr('Filtrar por profissional')}>
-            <option value="">{tr('Todos os profissionais')}</option>
-            {profissionais.map((p) => (
-              <option key={p._id} value={p._id}>{p.nome}</option>
-            ))}
-          </select>
-
-          <div className="search">
-            <IconeBusca />
-            <input className="input" type="search" value={busca} onChange={(e) => setBusca(e.target.value)} placeholder={tr('Buscar paciente')} aria-label={tr('Buscar paciente')} />
-          </div>
-
-          {!soCancelados && (
-            <button type="button" className="agenda-filtros__toggle" aria-pressed={mostrarCancelados} onClick={() => setMostrarCancelados(!mostrarCancelados)}>
-              {tr('Cancelados')}
-            </button>
-          )}
-          <button type="button" className="agenda-filtros__toggle agenda-filtros__toggle--perigo" aria-pressed={soCancelados} onClick={alternarSoCancelados}>
-            {tr('Só cancelados')}
-          </button>
-        </div>
-
-        {legenda.length > 0 && (
-          <div className="agenda-legenda">
-            <span className="agenda-legenda__titulo">{tr('Cor de cada profissional:')}</span>
-            <ul className="agenda-legenda__lista" aria-label={tr('Legenda de cores dos profissionais')}>
-              {legenda.map(([id, nome]) => (
-                <li key={id} className="agenda-legenda__item" data-cor={corDe(id)}>{nome}</li>
+            <div className="agenda-visoes" role="group" aria-label={tr('Modo de visualização')}>
+              {VISOES.map(([chave, rotulo]) => (
+                <button key={chave} type="button" className="agenda-visao" aria-pressed={visao === chave} onClick={() => setVisao(chave)}>
+                  {rotulo}
+                </button>
               ))}
-            </ul>
-            <span className="agenda-legenda__titulo agenda-legenda__nota">{tr('Nome riscado = cancelado')}</span>
+            </div>
           </div>
-        )}
 
-        {visao === 'mes' ? (
-          <AgendaMes
-            dataReferencia={dataReferencia}
-            dias={dias}
-            porDia={porDia}
-            corDe={corDoAgendamento}
-            hoje={hoje}
-            onAbrir={setAgendaDetalhes}
-            onNovoNoDia={novoAgendamento}
-            onIrParaDia={irParaDia}
-          />
-        ) : (
-          <AgendaGradeTempo
-            dias={dias}
-            porDia={porDia}
-            corDe={corDoAgendamento}
-            hoje={hoje}
-            agora={agora}
-            detalhado={visao === 'dia'}
-            onAbrir={setAgendaDetalhes}
-            onNovoEm={novoAgendamento}
-            onIrParaDia={irParaDia}
-          />
-        )}
+          <div className="agenda-filtros">
+            <select className="input agenda-filtros__prof" value={profissionalId} onChange={(e) => setProfissionalEscolhido(e.target.value)} aria-label={tr('Filtrar por profissional')}>
+              <option value="">{tr('Todos os profissionais')}</option>
+              {profissionais.map((p) => (
+                <option key={p._id} value={p._id}>{p.nome}</option>
+              ))}
+            </select>
 
-        {!loading && soCancelados && agendasFiltradas.length === 0 && (
-          <p className="agenda-vazio">{tr('Nenhum agendamento cancelado {noPeriodo}.', { noPeriodo })}</p>
-        )}
+            <div className="search">
+              <IconeBusca />
+              <input className="input" type="search" value={busca} onChange={(e) => setBusca(e.target.value)} placeholder={tr('Buscar paciente')} aria-label={tr('Buscar paciente')} />
+            </div>
 
-        {!loading && !soCancelados && visao === 'dia' && totalNoPeriodo === 0 && agendasFiltradas.length === 0 && (
-          <p className="agenda-vazio">{tr('Nenhum agendamento neste dia. Clique no horário desejado para agendar.')}</p>
-        )}
-      </section>
+            <button type="button" className="agenda-filtros__toggle agenda-filtros__toggle--perigo" aria-pressed={soCancelados} onClick={alternarSoCancelados}>
+              {tr('Só cancelados')}
+            </button>
+          </div>
+
+          {legenda.length > 0 && (
+            <div className="agenda-legenda">
+              <span className="agenda-legenda__titulo">{tr('Cor de cada profissional:')}</span>
+              <ul className="agenda-legenda__lista" aria-label={tr('Legenda de cores dos profissionais')}>
+                {legenda.map(([id, nome]) => (
+                  <li key={id} className="agenda-legenda__item" data-cor={corDe(id)}>{nome}</li>
+                ))}
+              </ul>
+              <span className="agenda-legenda__titulo agenda-legenda__nota">{tr('Nome riscado = cancelado')}</span>
+            </div>
+          )}
+
+          {visao === 'mes' ? (
+            <AgendaMes
+              dataReferencia={dataReferencia}
+              dias={dias}
+              porDia={porDia}
+              corDe={corDoAgendamento}
+              hoje={hoje}
+              onAbrir={setAgendaDetalhes}
+              onNovoNoDia={novoAgendamento}
+              onIrParaDia={irParaDia}
+            />
+          ) : (
+            <AgendaGradeTempo
+              dias={dias}
+              porDia={porDia}
+              corDe={corDoAgendamento}
+              hoje={hoje}
+              agora={agora}
+              detalhado={visao === 'dia'}
+              onAbrir={setAgendaDetalhes}
+              onNovoEm={novoAgendamento}
+              onIrParaDia={irParaDia}
+            />
+          )}
+
+          {!loading && soCancelados && agendasFiltradas.length === 0 && (
+            <p className="agenda-vazio">{tr('Nenhum agendamento cancelado {noPeriodo}.', { noPeriodo })}</p>
+          )}
+
+          {!loading && !soCancelados && visao === 'dia' && totalNoPeriodo === 0 && agendasFiltradas.length === 0 && (
+            <p className="agenda-vazio">{tr('Nenhum agendamento neste dia. Clique no horário desejado para agendar.')}</p>
+          )}
+        </section>
+
+        <AgendaDeHoje key={versaoHoje} agora={agora} onAbrir={setAgendaDetalhes} onNovo={() => novoAgendamento(hoje)} />
+      </div>
 
       {slotNovo && (
-        <NovoAgendamentoModal slotInicial={slotNovo} erro={error} onSave={addAgenda} onClose={() => setSlotNovo(null)} />
+        <NovoAgendamentoModal slotInicial={slotNovo} erro={error} onSave={avisando(addAgenda)} onClose={() => setSlotNovo(null)} />
       )}
 
       {agendaEditando && (
-        <EditarAgendamentoModal key={agendaEditando._id} agenda={agendaEditando} erro={error} onSave={editAgenda} onClose={() => setAgendaEditando(null)} />
+        <EditarAgendamentoModal key={agendaEditando._id} agenda={agendaEditando} erro={error} onSave={avisando(editAgenda)} onClose={() => setAgendaEditando(null)} />
       )}
 
       {agendaDetalhes && (
@@ -285,11 +311,11 @@ export default function AgendaCalendario() {
           onCancelarAgendamento={async (agenda) => { const cancelado = await handleCancelar(agenda); if (cancelado) setAgendaDetalhes(null); }}
           onImprimirAgendamento={(agenda) => handleImprimir(agenda._id)}
           onMarcarRealizado={podeMarcarRealizado(agendaDetalhes) ? handleRealizado : undefined}
-          onAtendimentoFinalizado={async (agenda) => { const atualizada = await recarregarAgenda(agenda._id); if (atualizada) setAgendaDetalhes(atualizada); }}
+          onAtendimentoFinalizado={async (agenda) => { const atualizada = await recarregarAgenda(agenda._id); if (atualizada) { setAgendaDetalhes(atualizada); mudou(); } }}
           erroAgendamento={error}
           onClose={() => setAgendaDetalhes(null)}
         />
       )}
-    </div>
+    </>
   );
 }

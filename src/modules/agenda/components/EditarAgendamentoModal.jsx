@@ -5,6 +5,7 @@ import PacientePicker from '@/modules/paciente/components/PacientePicker';
 import { useDadosAgendamento } from '../useDadosAgendamento';
 import { formularioDaAgenda, horarioInvalido, montarPayload } from '../agendamento.form';
 import AgendamentoCampos from './AgendamentoCampos';
+import FormaPagamentoCampos from './FormaPagamentoCampos';
 import '../agenda.css';
 import { tr } from '@/i18n';
 
@@ -33,6 +34,11 @@ export default function EditarAgendamentoModal({ agenda, erro, onSave, onClose }
             onSubmit={() => onSave(agenda._id, montarPayload(form, paciente))}
           >
             <AgendamentoCampos form={form} setForm={setForm} paciente={paciente} {...dados} />
+
+            <fieldset className="modal-form__section">
+              <legend>{tr('Forma de pagamento')}</legend>
+              <FormaPagamentoCampos form={form} setForm={setForm} />
+            </fieldset>
           </ModalForm>
         </div>
       )}

@@ -684,3 +684,14 @@
     transition: none;
   }
 }
+
+/* Passo "Anamneses" do Painel Admin */
+.anamneses-adm__aviso {
+  margin: 0;
+  line-height: 1.5;
+}
+
+.anamneses-adm__abrir {
+  justify-self: start;
+  text-decoration: none;
+}

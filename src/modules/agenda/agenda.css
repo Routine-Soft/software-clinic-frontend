@@ -20,6 +20,197 @@
 :where(.agenda-chip, .agenda-ev, .agenda-legenda__item)[data-cor='6'] { --ev: light-dark(#c2410c, #fb923c); }
 :where(.agenda-chip, .agenda-ev, .agenda-legenda__item)[data-cor='7'] { --ev: light-dark(#0369a1, #38bdf8); }
 
+/* ---------- Topo, manual e calendário + "Agenda de hoje" ---------- */
+
+.agenda-topo {
+  margin-bottom: 16px;
+}
+
+.agenda-manual {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  padding: 10px 14px;
+  margin: 0 0 14px;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: var(--text-muted);
+  background: var(--primary-soft);
+  border: 1px solid var(--primary-ring);
+  border-radius: var(--radius-md);
+  animation: fadeInUp 0.5s var(--ease) 0.1s backwards;
+}
+
+.agenda-manual strong {
+  color: var(--text);
+}
+
+.agenda-manual__icone {
+  display: grid;
+  flex: none;
+  color: var(--primary);
+}
+
+.agenda-manual__icone svg {
+  width: 18px;
+  height: 18px;
+  margin-top: 1px;
+}
+
+.agenda-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 240px;
+  gap: 14px;
+  align-items: start;
+}
+
+.agenda-hoje {
+  position: sticky;
+  top: 16px;
+  display: grid;
+  gap: 10px;
+  padding: 14px 10px 10px;
+  animation: fadeInUp 0.6s var(--ease) 0.25s backwards;
+}
+
+.agenda-hoje__titulo {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 6px;
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.agenda-hoje__lista {
+  display: grid;
+  gap: 2px;
+  max-height: min(560px, 70vh);
+  padding: 0;
+  margin: 0;
+  overflow-y: auto;
+  list-style: none;
+}
+
+.agenda-hoje__lista > li {
+  animation: fadeInUp 0.35s var(--ease) calc(var(--i, 0) * 35ms + 300ms) backwards;
+}
+
+.agenda-hoje__lista > li > .skeleton {
+  margin: 8px 6px;
+}
+
+.agenda-hoje__item {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  width: 100%;
+  padding: 7px 6px;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+  background: transparent;
+  border: 0;
+  border-radius: var(--radius-sm, 8px);
+  transition: background-color 0.2s var(--ease);
+}
+
+.agenda-hoje__item:hover {
+  background: var(--surface-2);
+}
+
+.agenda-hoje__item:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 1px;
+}
+
+.agenda-hoje__item.is-agora {
+  background: var(--success-soft);
+}
+
+.agenda-hoje__item.is-passou,
+.agenda-hoje__item.is-cancelado {
+  opacity: 0.6;
+}
+
+.agenda-hoje__item.is-cancelado .agenda-hoje__nome {
+  text-decoration: line-through;
+}
+
+.agenda-hoje__item.is-realizado .agenda-hoje__hora {
+  color: var(--success);
+}
+
+.agenda-hoje__hora {
+  flex: none;
+  min-width: 40px;
+  font-size: 0.82rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--primary);
+}
+
+.agenda-hoje__dados {
+  display: grid;
+  flex: 1;
+  min-width: 0;
+  line-height: 1.3;
+}
+
+.agenda-hoje__nome,
+.agenda-hoje__prof {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.agenda-hoje__nome {
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.agenda-hoje__prof {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.agenda-hoje__vazio {
+  display: grid;
+  gap: 8px;
+  justify-items: center;
+  padding: 16px 8px 12px;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+.agenda-hoje__vazio svg {
+  width: 28px;
+  height: 28px;
+  color: var(--text-subtle);
+}
+
+.agenda-hoje__vazio p {
+  margin: 0;
+}
+
+@media (max-width: 1100px) {
+  .agenda-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .agenda-hoje {
+    position: static;
+  }
+
+  .agenda-hoje__lista {
+    max-height: 320px;
+  }
+}
+
 /* ---------- Cartão e barra de ferramentas ---------- */
 
 .agenda-cal {
@@ -597,18 +788,118 @@
   gap: 16px;
 }
 
-.agendamento-financeiro {
+/* ---------- Forma de pagamento (2ª etapa do agendamento e edição) ---------- */
+
+.pagamento {
   display: grid;
-  grid-template-columns: 1.3fr 1.3fr 0.8fr;
   gap: 16px;
 }
 
-.agendamento-forma {
+.pagamento-etapa {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  align-items: center;
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.pagamento-gratuito {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 14px 16px;
+  cursor: pointer;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  transition:
+    background-color 0.2s var(--ease),
+    border-color 0.2s var(--ease);
+}
+
+.pagamento-gratuito input {
+  width: 18px;
+  height: 18px;
+  margin-top: 2px;
+  accent-color: var(--success);
+}
+
+.pagamento-gratuito span {
   display: grid;
-  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr) auto;
+  gap: 2px;
+  line-height: 1.4;
+}
+
+.pagamento-gratuito small {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+
+.pagamento-gratuito.is-ativo {
+  background: var(--success-soft);
+  border-color: color-mix(in srgb, var(--success) 40%, transparent);
+}
+
+.pagamento-total {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1.2fr) minmax(0, 0.7fr);
+  gap: 16px;
+  align-items: start;
+  animation: fadeInUp 0.3s var(--ease) backwards;
+}
+
+.pagamento-total__input {
+  font-size: 1.15rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.pagamento-formas {
+  display: grid;
+  gap: 10px;
+  padding: 14px 16px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  animation: fadeInUp 0.3s var(--ease) 0.05s backwards;
+}
+
+.pagamento-forma {
+  display: grid;
+  grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr) 44px 36px;
   gap: 8px;
   align-items: center;
-  animation: fadeInUp 0.3s var(--ease) backwards;
+  animation: fadeInUp 0.3s var(--ease) calc(var(--i, 0) * 40ms) backwards;
+}
+
+.pagamento-forma__pct {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--primary);
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.pagamento-formas__rodape {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.pagamento-soma {
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.pagamento-soma.is-ok { color: var(--success); }
+.pagamento-soma.is-erro { color: var(--danger); }
+
+.pagamento-voltar {
+  justify-self: start;
 }
 
 .agendamento-recorrencia {
@@ -634,24 +925,25 @@
     padding: 4px 3px 6px;
   }
 
+  /* Etiqueta fininha só com o nome do paciente; para ver mais, a visão "Dia". */
   .agenda-celula__lista {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 4px;
-    justify-content: center;
+    gap: 2px;
   }
 
   .agenda-chip {
-    width: 10px;
-    height: 10px;
-    padding: 0;
-    background: var(--ev);
-    border: 0;
-    border-radius: 50%;
+    display: block;
+    padding: 1px 3px 1px 4px;
+    border-left-width: 2px;
+    font-size: 0.62rem;
+    line-height: 1.3;
+    border-radius: 4px;
+  }
+
+  .agenda-chip__nome {
+    display: block;
   }
 
   .agenda-chip__hora,
-  .agenda-chip__nome,
   .agenda-chip__prof {
     display: none;
   }
@@ -673,9 +965,16 @@
 
 @media (max-width: 520px) {
   .agendamento-quando,
-  .agendamento-financeiro,
-  .agendamento-forma {
+  .pagamento-total {
     grid-template-columns: minmax(0, 1fr);
+  }
+
+  .pagamento-forma {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) 36px;
+  }
+
+  .pagamento-forma__pct {
+    display: none;
   }
 }
 

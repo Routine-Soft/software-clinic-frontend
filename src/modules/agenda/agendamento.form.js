@@ -37,7 +37,7 @@ export function formularioNovo(slot) {
     especialidadeId: '',
     servicoId: '',
     convenioId: '',
-    financeiro: { valor: '', vencimento: paraISO(new Date()), parcelamento: 1, formasPagamento: [] },
+    financeiro: { valor: '', vencimento: paraISO(new Date()), parcelamento: 1, formasPagamento: [], gratuito: false },
   };
 }
 
@@ -56,6 +56,7 @@ export function formularioDaAgenda(agenda) {
       vencimento: agenda.financeiro?.vencimento ? agenda.financeiro.vencimento.substring(0, 10) : '',
       parcelamento: agenda.financeiro?.parcelamento ?? 1,
       formasPagamento: agenda.financeiro?.formasPagamento ?? [],
+      gratuito: Number(agenda.financeiro?.valor) === 0 && !agenda.financeiro?.formasPagamento?.length,
     },
   };
 }
@@ -65,6 +66,7 @@ export function horarioInvalido(form) {
 }
 
 export function montarPayload(form, paciente) {
+  const { gratuito } = form.financeiro;
   return {
     data: form.data,
     horaInicio: form.horaInicio,
@@ -75,17 +77,43 @@ export function montarPayload(form, paciente) {
     servicoId: form.servicoId,
     convenioId: form.convenioId || null,
     financeiro: {
-      valor: Number(form.financeiro.valor),
+      valor: gratuito ? 0 : Number(form.financeiro.valor),
       vencimento: form.financeiro.vencimento,
-      parcelamento: Number(form.financeiro.parcelamento) || 1,
-      formasPagamento: form.financeiro.formasPagamento.map((f) => ({ ...f, valor: Number(f.valor) })),
+      parcelamento: gratuito ? 1 : Number(form.financeiro.parcelamento) || 1,
+      formasPagamento: gratuito ? [] : form.financeiro.formasPagamento.map((f) => ({ tipo: f.tipo, valor: Number(f.valor) })),
     },
   };
 }
 
-// Preenche o valor pelo serviço + convênio do formulário (tabela do serviço, ou o preço padrão dele).
+// Preenche o valor pelo serviço + convênio do formulário (tabela do serviço, ou o preço padrão dele)
+// e o redistribui entre as formas de pagamento já escolhidas.
 export function comPrecoDaTabela(form, servicos) {
   const servico = servicos.find((s) => s._id === form.servicoId);
   if (!servico) return form;
-  return { ...form, financeiro: { ...form.financeiro, valor: regraDoServico(servico, form.convenioId).preco } };
+  const valor = regraDoServico(servico, form.convenioId).preco;
+  return { ...form, financeiro: { ...form.financeiro, valor, formasPagamento: redistribuir(form.financeiro.formasPagamento, valor) } };
+}
+
+// Divide o total igualmente entre `quantas` formas, em centavos; o que sobra do arredondamento fica na última.
+export function dividirIgual(total, quantas) {
+  const centavos = Math.round((Number(total) || 0) * 100);
+  const parte = Math.floor(centavos / quantas);
+  return Array.from({ length: quantas }, (_, i) => ((i === quantas - 1 ? centavos - parte * (quantas - 1) : parte) / 100).toFixed(2));
+}
+
+// Mesmas formas de pagamento, com o total redistribuído igualmente entre elas.
+export function redistribuir(formasPagamento, total) {
+  const valores = dividirIgual(total, formasPagamento.length || 1);
+  return formasPagamento.map((f, i) => ({ ...f, valor: valores[i] }));
+}
+
+// Ao abrir a etapa de pagamento sem forma escolhida, já vem uma (Pix) com o total.
+export function comFormaInicial(form) {
+  const { financeiro } = form;
+  if (financeiro.gratuito || financeiro.formasPagamento.length) return form;
+  return { ...form, financeiro: { ...financeiro, formasPagamento: redistribuir([{ tipo: 'pix' }], financeiro.valor) } };
+}
+
+export function somaDasFormas(formasPagamento) {
+  return Math.round(formasPagamento.reduce((soma, f) => soma + (Number(f.valor) || 0), 0) * 100) / 100;
 }

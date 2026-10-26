@@ -96,7 +96,7 @@ function Dores() {
   const { t } = useIdioma();
   const cab = t('landing.doresCab');
   return (
-    <section className="lp-secao" id="problemas">
+    <section className="lp-secao lp-secao--destaque" id="problemas">
       <div className="lp-container">
         <header className="lp-secao__cab">
           <span className="lp-selo">{cab.selo}</span>
@@ -128,7 +128,7 @@ function Vitrine() {
   const tela = vitrine.find((v) => v.chave === ativa);
 
   return (
-    <section className="lp-secao lp-secao--destaque" id="vitrine">
+    <section className="lp-secao" id="vitrine">
       <div className="lp-container">
         <header className="lp-secao__cab">
           <span className="lp-selo">{cab.selo}</span>
@@ -503,8 +503,8 @@ export default function Landing() {
       <CabecalhoSite />
       <main>
         <Hero logado={isAuthenticated} />
-        <Dores />
         <Vitrine />
+        <Dores />
         <Funcionalidades />
         <Perfis />
         <ComoFunciona logado={isAuthenticated} />

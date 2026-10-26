@@ -21,8 +21,6 @@ import PainelAfiliado from './modules/afiliado/components/PainelAfiliado';
 import AfiliadosADM from './modules/afiliado/components/AfiliadosADM';
 import TermosPagina from './pages/Termos/TermosPagina';
 import { TERMOS_CLINICA, TERMOS_AFILIADO, PRIVACIDADE, EXCLUSAO_DE_DADOS } from './pages/Termos/termos.dados';
-import ProntuarioADM from './modules/prontuario/components/ProntuarioADM';
-import ProntuarioPacientePage from './modules/prontuario/components/ProntuarioPacientePage';
 import ProntuarioModalPreview from './modules/prontuario/components/ProntuarioModalPreview';
 import ListaEsperaADM from './modules/lista-espera/components/ListaEsperaADM';
 import PlanoADM from './modules/plano/components/PlanoADM';
@@ -336,16 +334,8 @@ function App() {
             }
           />
 
-          <Route
-            path="/prontuario"
-            element={
-              <ProtectedRoute requiredRoles={['admin', 'profissional', 'super_admin']}>
-                <MainLayout>
-                  <ProntuarioADM />
-                </MainLayout>
-              </ProtectedRoute>
-            }
-          />
+          {/* Prontuário agora fica dentro de Pacientes; o endereço antigo leva para lá. */}
+          <Route path="/prontuario" element={<Navigate to="/pacientes" replace />} />
 
           <Route
             path="/prontuario-modal"
@@ -353,17 +343,6 @@ function App() {
               <ProtectedRoute requiredRoles={['admin', 'profissional', 'super_admin']}>
                 <MainLayout>
                   <ProntuarioModalPreview />
-                </MainLayout>
-              </ProtectedRoute>
-            }
-          />
-
-          <Route
-            path="/prontuario/:pacienteId"
-            element={
-              <ProtectedRoute requiredRoles={['admin', 'profissional', 'super_admin']}>
-                <MainLayout>
-                  <ProntuarioPacientePage />
                 </MainLayout>
               </ProtectedRoute>
             }

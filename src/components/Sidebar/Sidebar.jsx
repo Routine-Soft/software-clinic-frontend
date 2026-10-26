@@ -30,7 +30,6 @@ const GRUPOS = [
         titulo: tr('Clínica'),
         itens: [
             { label: tr('Pacientes'), path: '/pacientes', icone: 'pacientes', roles: ['admin', 'profissional', 'recepcao'] },
-            { label: tr('Prontuário'), path: '/prontuario', icone: 'prontuario', roles: ['admin', 'profissional'] },
             { label: tr('Anamneses'), path: '/anamneses', icone: 'anamnese', roles: ['admin', 'profissional', 'recepcao'] },
             { label: tr('Termos (TCLE)'), path: '/termos-consentimento', icone: 'termo', roles: ['admin', 'profissional', 'recepcao'] },
             { label: tr('Avaliações NR-01'), path: '/avaliacoes-nr01', icone: 'nr01', roles: ['admin', 'profissional'], soBrasil: true },

@@ -12,6 +12,7 @@ import { IconeMais, IconeBusca, IconeLapis, IconeLixeira, IconeCheck, IconeX, Ic
 import { RISCOS, riscoDe, ordenarAvaliacoes, contarPorRisco, filtrarAvaliacoes } from '../avaliacao-nr01.utils';
 import '../avaliacao-nr01.css';
 import { tr } from '@/i18n';
+import DicaTela from '@/components/DicaTela/DicaTela';
 
 function hojeISO() {
   const hoje = new Date();
@@ -125,6 +126,10 @@ export default function AvaliacaoNr01ADM() {
           </button>
         </div>
       </header>
+
+      <DicaTela chave="nr01" titulo={tr('Como funciona a NR-01')}>
+        {tr('Cadastre a empresa-cliente e depois crie a avaliação: geral da empresa ou de um funcionário. Anote os fatores de risco psicossocial e a classificação (baixo, médio ou alto), e acompanhe tudo nesta lista.')}
+      </DicaTela>
 
       {(avisoSucesso || (error && !algumModalAberto)) && (
         <div className="alerts">

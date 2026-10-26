@@ -14,6 +14,7 @@ import CompartilharTermo from './CompartilharTermo';
 import '@/components/CrudCard/CrudCard.css';
 import '../termo.css';
 import { tr } from '@/i18n';
+import DicaTela from '@/components/DicaTela/DicaTela';
 
 const IconeTermo = () => (
   <Icone>
@@ -215,6 +216,10 @@ export default function TermosPage() {
           </button>
         </div>
       </header>
+
+      <DicaTela chave="termos" titulo={tr('Como funciona o termo')}>
+        {tr('Clique em “Enviar termo”, escolha o paciente e mande o link pelo WhatsApp. Ele lê e assina pelo celular, e o termo assinado fica guardado aqui. Você também pode criar seus próprios modelos de termo.')}
+      </DicaTela>
 
       {(painel.successMessage || (painel.error && !algumModalAberto)) && (
         <div className="alerts">

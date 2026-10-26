@@ -12,8 +12,9 @@ import { tr } from '@/i18n';
 
 // Atendimento do histórico. Depois de finalizado o texto não muda mais: o autor corrige ou complementa
 // com um adendo, que fica registrado com data e autor abaixo do texto original.
-export default function EvolucaoItem({ prontuario, destaque = false, souAutor = false, especialidades = [], onCompartilhar, onAdendo }) {
-  const [escrevendo, setEscrevendo] = useState(false);
+// `abrirAdendo` já abre o campo do adendo (botão "+ Adendo" do card da jornada).
+export default function EvolucaoItem({ prontuario, destaque = false, souAutor = false, especialidades = [], onCompartilhar, onAdendo, abrirAdendo = false }) {
+  const [escrevendo, setEscrevendo] = useState(abrirAdendo);
   const [texto, setTexto] = useState('');
   const [salvando, setSalvando] = useState(false);
 

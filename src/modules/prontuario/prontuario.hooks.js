@@ -28,7 +28,8 @@ export function useAcessoProntuario() {
   return estado;
 }
 
-export function useTodosProntuarios() {
+// `ativo` falso não busca nada: quem não abre prontuários (recepção) não vê o resumo dos atendimentos.
+export function useTodosProntuarios(ativo = true) {
   const [prontuarios, setProntuarios] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -45,23 +46,16 @@ export function useTodosProntuarios() {
   }, []);
 
   useEffect(() => {
+    if (!ativo) return undefined;
     let ignore = false;
 
-    async function loadProntuarios() {
-      try {
-        const { data } = await getAllProntuarios();
-        if (!ignore) setProntuarios(data);
-      } catch (err) {
-        if (!ignore) setError(err);
-      } finally {
-        if (!ignore) setLoading(false);
-      }
-    }
-
-    loadProntuarios();
+    getAllProntuarios()
+      .then(({ data }) => { if (!ignore) setProntuarios(data); })
+      .catch((err) => { if (!ignore) setError(err); })
+      .finally(() => { if (!ignore) setLoading(false); });
 
     return () => { ignore = true; };
-  }, []);
+  }, [ativo]);
 
   return { prontuarios, loading, error, refresh };
 }

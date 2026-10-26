@@ -22,6 +22,9 @@ export function Modal({ title, onClose, wide = false, className = '', persistent
         alvoInicial?.focus()
 
         function handleKeyDown(e) {
+            // Com uma janela aberta por cima de outra, só a de cima responde ao Esc e ao Tab.
+            const janelas = document.querySelectorAll('.modal')
+            if (janelas[janelas.length - 1] !== painelRef.current) return
             if (e.key === 'Escape') {
                 setClosing(true)
                 return

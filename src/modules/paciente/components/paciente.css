@@ -23,12 +23,12 @@
 }
 
 .paciente-table {
-  min-width: 760px;
+  min-width: 0;
 }
 
 .paciente-table th,
 .paciente-table td {
-  padding-inline: 16px;
+  padding-inline: 12px;
 }
 
 .pessoa {
@@ -158,11 +158,6 @@
   color: var(--text-muted);
 }
 
-.pessoa__acompanha {
-  font-size: 0.8rem;
-  font-weight: 600;
-  color: var(--primary);
-}
 
 .paciente-teste {
   display: flex;
@@ -289,4 +284,128 @@
   gap: 4px 10px;
   justify-content: space-between;
   color: var(--text-muted);
+}
+
+/* Nome do paciente abre o prontuário (só para quem pode abrir). */
+.paciente-nome-link {
+  padding: 0;
+  font: inherit;
+  font-weight: 650;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+  background: none;
+  border: 0;
+  transition: color 0.2s var(--ease);
+}
+
+.paciente-nome-link:hover,
+.paciente-nome-link:focus-visible {
+  color: var(--primary);
+}
+
+.paciente-table .pessoa__sub--corta {
+  max-width: 190px;
+}
+
+.paciente-whats {
+  justify-self: start;
+  margin-top: 4px;
+  font-size: 0.72rem;
+}
+
+.paciente-acompanham {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  margin-top: 8px;
+}
+
+.paciente-acompanham__nomes {
+  font-size: 0.8rem;
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--primary);
+}
+
+.paciente-acompanham .pessoa__sub {
+  font-size: 0.8rem;
+}
+
+.paciente-acompanham .icon-btn {
+  flex: none;
+  width: 30px;
+  height: 30px;
+}
+
+/* Abrir em cima e os ícones embaixo: a coluna fica estreita e tudo cabe sem rolar para o lado. */
+.paciente-acoes {
+  display: inline-grid;
+  grid-template-columns: repeat(3, auto);
+  gap: 6px;
+  justify-content: end;
+}
+
+.paciente-acoes .btn {
+  grid-column: 1 / -1;
+  justify-content: center;
+}
+
+/* Celular e telas estreitas: cada paciente vira um cartão, sem rolagem horizontal. */
+@media (max-width: 860px) {
+  .paciente-table thead {
+    display: none;
+  }
+
+  .paciente-table,
+  .paciente-table tbody,
+  .paciente-table tr,
+  .paciente-table td {
+    display: block;
+    width: 100%;
+  }
+
+  .paciente-table tr {
+    display: grid;
+    gap: 10px;
+    padding: 16px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .paciente-table td,
+  .paciente-table td:last-child {
+    padding: 0;
+    text-align: left;
+    border: 0;
+  }
+
+  .paciente-table .pessoa {
+    min-width: 0;
+  }
+
+  .paciente-table td.table__empty {
+    padding: 32px 16px;
+    text-align: center;
+  }
+
+  .paciente-table .pessoa__sub--corta {
+    max-width: 100%;
+  }
+
+  .paciente-consultas .pessoa__dados {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 10px;
+    align-items: center;
+  }
+
+  .paciente-acoes {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+  }
+
+  .paciente-acoes .btn {
+    flex: 1 1 auto;
+  }
 }

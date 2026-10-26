@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import CamposClinicos from './CamposClinicos';
-import AcessoAtendimento from './AcessoAtendimento';
 import { camposDoProntuario, prepararPayload, formatHoraBR } from '../prontuario.utils';
 import { tr } from '@/i18n';
 
 // Os campos começam do que já está salvo no servidor: quem fechou o prontuário no meio
 // do atendimento retoma de onde parou. O `key` no pai recria o componente a cada atendimento.
-export default function AtendimentoAtivo({ atendimento, especialidades = [], onCompartilhar, onSalvarRascunho, onFinalizar }) {
+// "Quem pode ler" fica no topo do prontuário, junto com o profissional e o convênio.
+export default function AtendimentoAtivo({ atendimento, onSalvarRascunho, onFinalizar }) {
   const [campos, setCampos] = useState(() => camposDoProntuario(atendimento));
   const [acao, setAcao] = useState(null);
 
@@ -25,8 +25,6 @@ export default function AtendimentoAtivo({ atendimento, especialidades = [], onC
           {atendimento.profissionalId?.nome && <> {tr('com')} <strong>{atendimento.profissionalId.nome}</strong></>}
         </span>
       </div>
-
-      <AcessoAtendimento key={(atendimento.compartilhadoCom ?? []).map((e) => e?._id ?? e).join()} prontuario={atendimento} especialidades={especialidades} souAutor onSalvar={onCompartilhar} />
 
       <CamposClinicos valores={campos} onChange={setCampos} />
 

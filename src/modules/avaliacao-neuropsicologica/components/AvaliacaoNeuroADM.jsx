@@ -12,6 +12,7 @@ import { situacaoDa } from '../avaliacao-neuro.utils';
 import NovaAvaliacaoNeuroModal from './NovaAvaliacaoNeuroModal';
 import '../avaliacao-neuro.css';
 import { tr } from '@/i18n';
+import DicaTela from '@/components/DicaTela/DicaTela';
 
 const normalizar = (texto = '') => texto.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
 
@@ -74,6 +75,10 @@ function ListaDeAvaliacoes() {
           </button>
         </div>
       </header>
+
+      <DicaTela chave="neuro" titulo={tr('Como funciona a avaliação')}>
+        {tr('Crie uma avaliação para o paciente e registre na mesma ficha a anamnese, as sessões e os testes. No final, o laudo sai pronto para imprimir no formato da Resolução CFP 06/2019.')}
+      </DicaTela>
 
       {error && (
         <div className="alerts">

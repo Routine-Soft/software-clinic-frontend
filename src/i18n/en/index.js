@@ -7,5 +7,6 @@ import extras from './extras';
 import termos from './termos';
 import acompanhamento from './acompanhamento';
 import anamnese from './anamnese';
+import jornada from './jornada';
 
-export default { ...geral, ...clinica, ...negocio, ...avaliacoes, ...extras, ...termos, ...acompanhamento, ...anamnese };
+export default { ...geral, ...clinica, ...negocio, ...avaliacoes, ...extras, ...termos, ...acompanhamento, ...anamnese, ...jornada };

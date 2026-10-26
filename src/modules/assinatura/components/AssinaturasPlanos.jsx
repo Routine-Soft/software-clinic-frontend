@@ -118,6 +118,10 @@ export default function AssinaturasPlanos() {
   const ativaPorPix = assinaturaAtiva && assinatura.cobranca === 'pix';
   const ativaNoCartao = assinaturaAtiva && !ativaPorPix;
   const aguardandoCartao = assinatura?.status === 'pendente';
+  // Cartão (Mercado Pago ou Stripe) tem cobrança recorrente para cancelar; Pix não renova sozinho.
+  // Sem nada pago ainda (pendente, ou em atraso sem período pago), cancelar é desistir e voltar ao teste grátis.
+  const cancelavel = ['ativa', 'inadimplente', 'pendente'].includes(assinatura?.status) && !ativaPorPix;
+  const desistindo = aguardandoCartao || (assinatura?.status === 'inadimplente' && !assinatura.proximaCobranca);
 
   function escolher(plano) {
     setPlanoEscolhido(plano._id);
@@ -266,12 +270,16 @@ export default function AssinaturasPlanos() {
                   </div>
                 )}
 
-                {podeCancelar && ehAtual && assinatura.status === 'pendente' && (confirmandoDesistencia ? (
-                  <div className="assinatura-card__confirmar" role="alertdialog" aria-label={tr('Confirmar desistência')}>
-                    <p>{tr('Desistir da assinatura? O pagamento pendente é cancelado e você volta ao teste grátis.')}</p>
+                {podeCancelar && ehAtual && cancelavel && (confirmandoDesistencia ? (
+                  <div className="assinatura-card__confirmar" role="alertdialog" aria-label={desistindo ? tr('Confirmar desistência') : tr('Confirmar cancelamento')}>
+                    <p>
+                      {desistindo
+                        ? tr('Desistir da assinatura? O pagamento pendente é cancelado e você volta ao teste grátis.')
+                        : tr('Cancelar a assinatura? {p0}', { p0: assinatura.proximaCobranca ? tr(' Você continua com acesso até {p0}, e nenhuma nova cobrança será feita.', { p0: formatarData(assinatura.proximaCobranca) }) : tr(' Nenhuma nova cobrança será feita.') })}
+                    </p>
                     <div className="assinatura-card__acoes assinatura-card__acoes--linha">
                       <button type="button" className="btn btn--ghost btn--sm" onClick={() => setConfirmandoDesistencia(false)} disabled={cancelando}>
-                        {tr('Continuar aguardando')}
+                        {desistindo ? tr('Continuar aguardando') : tr('Manter assinatura')}
                       </button>
                       <button
                         type="button"
@@ -279,13 +287,13 @@ export default function AssinaturasPlanos() {
                         disabled={cancelando}
                         onClick={async () => { if (await cancelar()) setConfirmandoDesistencia(false); }}
                       >
-                        {cancelando ? tr('Desistindo...') : tr('Sim, desistir')}
+                        {cancelando ? (desistindo ? tr('Desistindo...') : tr('Cancelando...')) : (desistindo ? tr('Sim, desistir') : tr('Sim, cancelar'))}
                       </button>
                     </div>
                   </div>
                 ) : (
                   <button type="button" className="assinatura-card__cancelar" onClick={() => setConfirmandoDesistencia(true)}>
-                    {tr('Desistir e voltar ao teste grátis')}
+                    {desistindo ? tr('Desistir e voltar ao teste grátis') : tr('Cancelar assinatura')}
                   </button>
                 ))}
               </article>

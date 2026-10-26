@@ -1,38 +1,3 @@
-/* ---------- Página do prontuário ---------- */
-
-.pront-pagina {
-  padding: clamp(16px, 3vw, 28px);
-  animation: fadeInUp 0.6s var(--ease) 0.1s backwards;
-}
-
-.pront-voltar {
-  display: inline-flex;
-  gap: 6px;
-  align-items: center;
-  margin-bottom: 6px;
-  font-size: 0.875rem;
-}
-
-.pront-voltar svg {
-  width: 1em;
-  height: 1em;
-  transition: transform 0.25s var(--ease);
-}
-
-.pront-voltar:hover svg {
-  transform: translateX(-3px);
-}
-
-.pront-link-nome {
-  color: inherit;
-  text-decoration: none;
-  transition: color 0.2s var(--ease);
-}
-
-.pront-link-nome:hover {
-  color: var(--primary);
-}
-
 .skeleton--bloco {
   height: 180px;
 }
@@ -40,7 +5,7 @@
 /* ---------- Janela (modal) do prontuário ---------- */
 
 .modal--prontuario {
-  width: min(100%, 900px);
+  width: min(100%, 1280px);
 }
 
 /* ---------- Ficha ---------- */
@@ -103,9 +68,6 @@
   margin-top: 10px;
 }
 
-.pront-head__imprimir {
-  flex: none;
-}
 
 /* ---------- Agendamento ---------- */
 
@@ -295,13 +257,6 @@
   border-radius: 999px;
 }
 
-.pront-aba__ponto {
-  width: 8px;
-  height: 8px;
-  background: var(--success);
-  border-radius: 50%;
-  animation: pulseRing 1.8s ease-out infinite;
-}
 
 /* ---------- Avisos ---------- */
 
@@ -423,25 +378,8 @@
   color: var(--text);
 }
 
-.pront-novo {
-  display: grid;
-  gap: 16px;
-  padding: 18px;
-  background: var(--surface-2);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-}
 
-.pront-novo__intro h4 {
-  margin: 0;
-  font-size: 1.05rem;
-}
 
-.pront-novo__intro p {
-  margin: 4px 0 0;
-  font-size: 0.9rem;
-  color: var(--text-muted);
-}
 
 /* ---------- Histórico (linha do tempo) ---------- */
 
@@ -649,9 +587,6 @@
     flex-wrap: wrap;
   }
 
-  .pront-head__imprimir {
-    order: 3;
-  }
 
   .pront-grid {
     grid-template-columns: minmax(0, 1fr);
@@ -772,18 +707,7 @@
   border-radius: var(--radius-md);
 }
 
-.pront-profissional-fixo {
-  display: grid;
-  gap: 4px;
-}
 
-.pront-profissional-fixo strong {
-  padding: 0.7rem 0.9rem;
-  font-weight: 600;
-  background: var(--surface-2);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-}
 
 .pront-adendos {
   display: grid;
@@ -889,4 +813,436 @@
   height: 16px;
   margin: 0;
   accent-color: var(--primary);
+}
+
+/* ---------- Ficha + jornada lado a lado ---------- */
+
+.pront-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(300px, 360px);
+  gap: 22px;
+  align-items: start;
+}
+
+@media (max-width: 980px) {
+  .pront-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.pront-head__acoes {
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  gap: 8px;
+  align-items: stretch;
+}
+
+@container (max-width: 560px) {
+  .pront-head__acoes {
+    flex-direction: row;
+    flex-wrap: wrap;
+    order: 3;
+    width: 100%;
+  }
+
+  .pront-head__acoes .btn {
+    flex: 1 1 auto;
+  }
+}
+
+/* Faixa pequena do topo: profissional, convênio e quem pode ler o atendimento. */
+.pront-config {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+  align-items: center;
+  padding: 10px 14px;
+  font-size: 0.85rem;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+}
+
+.pront-config__item {
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
+  min-width: 0;
+  color: var(--text-muted);
+}
+
+.pront-config__item strong {
+  font-weight: 650;
+  color: var(--text);
+  overflow-wrap: anywhere;
+}
+
+.pront-config__rotulo {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-subtle);
+}
+
+.pront-config__select {
+  width: auto;
+  max-width: 200px;
+  min-height: 0;
+  padding: 4px 28px 4px 10px;
+  font-size: 0.85rem;
+}
+
+.pront-config .pront-acesso {
+  margin-top: 0;
+  font-size: 0.85rem;
+}
+
+.pront-config .pront-acesso--editando,
+.pront-config__acesso[open] {
+  flex-basis: 100%;
+}
+
+.pront-config__acesso summary {
+  cursor: pointer;
+  list-style: none;
+}
+
+.pront-config__acesso summary::-webkit-details-marker {
+  display: none;
+}
+
+.pront-config__acesso summary::after {
+  content: '▾';
+  font-size: 0.75rem;
+  color: var(--primary);
+  transition: transform 0.2s var(--ease);
+}
+
+.pront-config__acesso[open] summary::after {
+  transform: rotate(180deg);
+}
+
+.pront-config__painel {
+  display: grid;
+  gap: 8px;
+  padding: 12px 0 2px;
+}
+
+/* ---------- Jornada do paciente (histórico gameficado) ---------- */
+
+.pront-jornada {
+  position: sticky;
+  top: 0;
+  display: grid;
+  gap: 14px;
+  max-height: calc(100svh - 120px);
+  padding: 18px;
+  overflow-y: auto;
+  background:
+    radial-gradient(circle at 100% 0, var(--violet-soft), transparent 55%),
+    linear-gradient(180deg, var(--primary-soft), transparent 40%),
+    var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  animation: fadeInUp 0.5s var(--ease) 0.1s backwards;
+}
+
+@media (max-width: 980px) {
+  .pront-jornada {
+    position: static;
+    max-height: none;
+  }
+}
+
+.pront-jornada__topo {
+  display: grid;
+  gap: 2px;
+}
+
+.pront-jornada__titulo {
+  margin: 0;
+  font-size: 1.02rem;
+  font-weight: 750;
+}
+
+.pront-jornada__sub {
+  margin: 2px 0 0;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+
+
+
+
+.pront-jornada__mapa {
+  display: grid;
+  grid-template-columns: 72px minmax(0, 1fr);
+  gap: 0 18px;
+}
+
+/* Trilha: o boneco no alto e uma linha tracejada descendo até a última fase. */
+.pront-jornada__trilha {
+  position: relative;
+}
+
+.pront-jornada__trilha::before {
+  position: absolute;
+  top: 100px;
+  bottom: 18px;
+  left: 50%;
+  content: '';
+  border-left: 2px dashed color-mix(in srgb, var(--primary) 45%, transparent);
+  transform: translateX(-1px);
+}
+
+.jornada-boneco {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  display: grid;
+  gap: 4px;
+  justify-items: center;
+}
+
+.jornada-boneco__figura {
+  width: 56px;
+  height: auto;
+  animation: floatSm 2.6s ease-in-out infinite;
+}
+
+/* Primeiro nome do paciente embaixo do boneco. */
+.jornada-boneco__nome {
+  max-width: 100%;
+  padding: 2px 8px;
+  font-size: 0.74rem;
+  font-weight: 750;
+  line-height: 1.3;
+  color: var(--on-primary);
+  text-align: center;
+  overflow-wrap: anywhere;
+  background: var(--gradient-primary);
+  border-radius: 999px;
+  box-shadow: var(--shadow-primary);
+}
+
+.jornada-boneco__sombra {
+  fill: color-mix(in srgb, var(--text) 14%, transparent);
+}
+
+.jornada-boneco__cabeca {
+  fill: var(--surface);
+  stroke: var(--primary);
+  stroke-width: 2.5;
+}
+
+.jornada-boneco__corpo {
+  fill: var(--primary);
+}
+
+.jornada-boneco__perna,
+.jornada-boneco__braco {
+  fill: none;
+  stroke: var(--primary);
+  stroke-width: 5;
+  stroke-linecap: round;
+}
+
+.jornada-boneco__olho {
+  fill: var(--text);
+}
+
+.jornada-boneco__sorriso {
+  fill: none;
+  stroke: var(--text);
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+
+.pront-jornada__fases {
+  display: grid;
+  gap: 12px;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+/* Cada fase é ligada à trilha por uma seta. */
+.jornada-fase {
+  position: relative;
+  display: grid;
+  gap: 6px;
+  padding: 12px 14px;
+  font-size: 0.84rem;
+  line-height: 1.45;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.2s var(--ease), box-shadow 0.2s var(--ease), border-color 0.2s var(--ease);
+  animation: fadeInUp 0.4s var(--ease) calc(var(--i, 0) * 50ms) backwards;
+}
+
+.jornada-fase::before {
+  position: absolute;
+  top: 22px;
+  left: -54px;
+  width: 44px;
+  content: '';
+  border-top: 2px solid color-mix(in srgb, var(--primary) 55%, transparent);
+}
+
+.jornada-fase::after {
+  position: absolute;
+  top: 17px;
+  left: -10px;
+  content: '';
+  border-top: 6px solid transparent;
+  border-bottom: 6px solid transparent;
+  border-left: 8px solid color-mix(in srgb, var(--primary) 70%, transparent);
+}
+
+.jornada-fase:hover,
+.jornada-fase:focus-within {
+  border-color: var(--primary);
+  box-shadow: var(--shadow-md);
+  transform: translateX(2px);
+}
+
+.jornada-fase--andamento {
+  border-color: color-mix(in srgb, var(--success) 45%, transparent);
+}
+
+.jornada-fase--destaque {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary-ring);
+}
+
+/* Botão invisível que cobre o card: clicar em qualquer ponto abre o atendimento completo. */
+.jornada-fase__abrir {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  cursor: pointer;
+  background: transparent;
+  border: 0;
+  border-radius: inherit;
+}
+
+.jornada-fase__abrir:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+.jornada-fase__adendo {
+  position: relative;
+  z-index: 1;
+  margin-left: auto;
+}
+
+.jornada-fase__topo {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 8px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.jornada-fase__numero {
+  padding: 2px 8px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  color: var(--primary);
+  background: var(--primary-soft);
+  border-radius: 999px;
+}
+
+.jornada-fase__quando {
+  font-weight: 650;
+  color: var(--text);
+}
+
+.jornada-fase__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px 10px;
+  align-items: center;
+  margin: 0;
+  color: var(--text-muted);
+}
+
+.jornada-fase__notas {
+  display: -webkit-box;
+  margin: 0;
+  overflow: hidden;
+  color: var(--text);
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow-wrap: anywhere;
+}
+
+.jornada-fase__notas.is-vazio {
+  font-style: italic;
+  color: var(--text-subtle);
+}
+
+.jornada-fase__rodape {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+
+.pront-jornada__vazio {
+  display: grid;
+  gap: 10px;
+  justify-items: center;
+  padding: 18px 8px;
+  text-align: center;
+  color: var(--text-muted);
+}
+
+.pront-jornada__vazio p {
+  margin: 0;
+}
+
+.pront-jornada__nota {
+  margin: 0;
+  font-size: 0.78rem;
+  line-height: 1.5;
+  color: var(--text-subtle);
+}
+
+/* Janela pequena com o atendimento completo, aberta por cima do prontuário. */
+.modal--fase {
+  width: min(100%, 600px);
+}
+
+.modal--fase .pront-evolucao {
+  padding-left: 0;
+}
+
+.modal--fase .pront-evolucao__ponto {
+  display: none;
+}
+
+@media print {
+  .pront-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .pront-jornada {
+    position: static;
+    max-height: none;
+    overflow: visible;
+    box-shadow: none;
+  }
+
+  .jornada-boneco__figura {
+    animation: none;
+  }
 }

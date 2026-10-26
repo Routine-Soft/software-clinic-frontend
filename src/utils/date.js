@@ -18,3 +18,23 @@ export function calcularIdade(isoString) {
   if (aindaNaoFezAniversario) idade -= 1;
   return idade;
 }
+
+// Idade em anos, meses e dias a partir de uma data-only ISO (ex.: 32 anos, 4 meses e 3 dias).
+export function calcularIdadeCompleta(isoString) {
+  if (!isoString) return null;
+  const [ano, mes, dia] = isoString.substring(0, 10).split('-').map(Number);
+  const hoje = new Date();
+  let anos = hoje.getFullYear() - ano;
+  let meses = hoje.getMonth() + 1 - mes;
+  let dias = hoje.getDate() - dia;
+  if (dias < 0) {
+    meses -= 1;
+    // Empresta os dias do mês anterior ao atual.
+    dias += new Date(hoje.getFullYear(), hoje.getMonth(), 0).getDate();
+  }
+  if (meses < 0) {
+    anos -= 1;
+    meses += 12;
+  }
+  return anos < 0 ? null : { anos, meses, dias };
+}

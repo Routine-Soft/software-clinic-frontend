@@ -1,4 +1,4 @@
-import { calcularIdade } from '@/utils/date';
+import { calcularIdade, calcularIdadeCompleta } from '@/utils/date';
 import { tr } from '@/i18n';
 
 function normalizar(texto = '') {
@@ -106,4 +106,14 @@ export function nomesQueAcompanham(paciente, profissionais = []) {
   return acompanhamentosAtivos(paciente)
     .map((a) => a.profissionalId?.nome ?? profissionais.find((p) => p._id === idDe(a.profissionalId))?.nome)
     .filter(Boolean);
+}
+
+// "32 anos, 4 meses e 3 dias"; null sem data de nascimento.
+export function textoIdadeCompleta(dataNascimento) {
+  const idade = calcularIdadeCompleta(dataNascimento);
+  if (!idade) return null;
+  const anos = idade.anos === 1 ? tr('1 ano') : tr('{n} anos', { n: idade.anos });
+  const meses = idade.meses === 1 ? tr('1 mês') : tr('{n} meses', { n: idade.meses });
+  const dias = idade.dias === 1 ? tr('1 dia') : tr('{n} dias', { n: idade.dias });
+  return tr('{anos}, {meses} e {dias}', { anos, meses, dias });
 }

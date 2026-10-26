@@ -105,7 +105,7 @@ function KpiCancelados({ agora, indice, filtrar }) {
 function KpiEmAtendimento({ indice }) {
     const { prontuarios, loading } = useTodosProntuarios()
     const total = useMemo(() => prontuarios.filter(atendimentoEmAndamento).length, [prontuarios])
-    return <Kpi icone="prontuario" rotulo={tr('Em atendimento')} valor={loading ? null : total} detalhe={total === 1 ? tr('atendimento aberto agora') : tr('atendimentos abertos agora')} tom="success" to="/prontuario" indice={indice} />
+    return <Kpi icone="prontuario" rotulo={tr('Em atendimento')} valor={loading ? null : total} detalhe={total === 1 ? tr('atendimento aberto agora') : tr('atendimentos abertos agora')} tom="success" to="/pacientes" indice={indice} />
 }
 
 function KpiHoje({ agora, filtrar, indice }) {

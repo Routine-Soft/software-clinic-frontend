@@ -5,3 +5,7 @@ export function iniciais(nome = '') {
   const ultima = partes.length > 1 ? partes[partes.length - 1][0] : '';
   return (primeira + ultima).toUpperCase();
 }
+
+export function primeiroNome(nome = '') {
+  return nome.trim().split(/\s+/)[0] ?? '';
+}

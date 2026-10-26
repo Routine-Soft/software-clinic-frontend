@@ -8,7 +8,7 @@ import { useAcessoProntuario } from '../prontuario.hooks';
 import SeloTeste from '@/modules/paciente/components/SeloTeste';
 import { tr } from '@/i18n';
 
-// Prontuário em janela: usado pela Agenda (ao clicar num agendamento) e pela lista de prontuários.
+// Prontuário em janela: usado pela Agenda (ao clicar num agendamento) e pela lista de pacientes.
 // O clique fora não fecha, porque o atendimento em andamento pode ter anotações ainda não salvas.
 // Com `somenteAgendamento`, ou quando o login não pode abrir prontuários (recepção, super admin, login sem
 // cadastro de profissional), mostra apenas o resumo do agendamento, sem nenhum dado clínico.

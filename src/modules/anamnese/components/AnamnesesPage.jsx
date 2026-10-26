@@ -5,6 +5,7 @@ import { useModelosAnamnese } from '../anamnese.hooks';
 import { totalDePerguntas } from '../anamnese.utils';
 import '../anamnese.css';
 import { tr } from '@/i18n';
+import DicaTela from '@/components/DicaTela/DicaTela';
 
 export const IconeAnamnese = () => (
   <Icone>
@@ -47,6 +48,10 @@ export default function AnamnesesPage() {
           </Link>
         </div>
       </header>
+
+      <DicaTela chave="anamneses" titulo={tr('Já tem anamneses prontas')}>
+        {tr('Os modelos prontos já podem ser usados no prontuário. Se quiser, edite um deles ou crie a sua própria anamnese em “Novo modelo”.')}
+      </DicaTela>
 
       {(error || successMessage) && (
         <div className="alerts">

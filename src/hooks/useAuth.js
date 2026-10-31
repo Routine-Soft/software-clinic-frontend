@@ -1,3 +1,4 @@
+import { AVISO_CONFIRMACOES } from '@/modules/agenda/confirmacoes.context'
 import { useState } from 'react'
 import httpClient from '@/services/httpClient'
 import { loginUser, logoutUser, entrarComGoogle as entrarComGoogleApi } from '@/modules/user/user.api'
@@ -67,6 +68,7 @@ export function useAuth() {
         } finally {
             httpClient.tokenManager.clearTokens()
             localStorage.removeItem(CURRENT_USER_KEY)
+            localStorage.removeItem(AVISO_CONFIRMACOES)
             setUser(null)
             setIsAuthenticated(false)
         }

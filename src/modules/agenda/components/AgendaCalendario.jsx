@@ -43,7 +43,7 @@ function visaoInicial(soCancelados) {
 // mostrados acima do calendário; `onMudou` avisa quando um agendamento foi criado ou alterado.
 export default function AgendaCalendario({ cabecalho, resumo, onMudou }) {
   const { user, hasRole } = useAuthContext();
-  const { modo, pendentes, podeConfirmar, versaoJanela, recarregar, abrirJanela } = useConfirmacoes();
+  const { modo, pendentes, podeConfirmar, podeResolver, versaoJanela, recarregar, abrirJanela } = useConfirmacoes();
   const podeVerProntuario = hasRole('admin') || hasRole('profissional') || hasRole('super_admin');
   const { profissionais } = useProfissionais();
   // ?status=cancelado (card "Agendamentos cancelados" ou botão "Só cancelados") mostra só os cancelados.
@@ -226,7 +226,7 @@ export default function AgendaCalendario({ cabecalho, resumo, onMudou }) {
 
       {resumo}
 
-      {podeConfirmar && pendentes.length > 0 && (
+      {podeResolver && pendentes.length > 0 && (
         <button type="button" className="agenda-alerta" onClick={abrirJanela}>
           <Icone><path d="M12 9v4M12 17h.01" /><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z" /></Icone>
           <span className="agenda-alerta__texto">{pendentes.length === 1 ? tr('1 atendimento sem confirmar') : tr('{total} atendimentos sem confirmar', { total: pendentes.length })}</span>

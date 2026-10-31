@@ -68,7 +68,7 @@ const GRUPOS = [
 
 export function Sidebar({ aberto = false, onFechar }) {
     const { user, hasRole, logout } = useAuthContext()
-    const { pendentes, podeConfirmar } = useConfirmacoes()
+    const { pendentes, podeResolver } = useConfirmacoes()
 
     async function handleLogout() {
         await logout()
@@ -101,7 +101,7 @@ export function Sidebar({ aberto = false, onFechar }) {
                                     <NavLink to={item.path} className="sidebar__link" onClick={onFechar}>
                                         <Icone>{ICONES[item.icone]}</Icone>
                                         <span>{item.label}</span>
-                                        {item.path === '/home' && podeConfirmar && pendentes.length > 0 && (
+                                        {item.path === '/home' && podeResolver && pendentes.length > 0 && (
                                             <span className="sidebar__alerta" aria-label={tr('{total} atendimentos sem confirmar', { total: pendentes.length })}>{pendentes.length}</span>
                                         )}
                                     </NavLink>

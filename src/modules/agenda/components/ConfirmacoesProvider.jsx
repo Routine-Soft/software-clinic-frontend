@@ -2,15 +2,19 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useAuthContext } from '@/hooks/useAuthContext';
 import { getConfirmacoes } from '../agenda.api';
-import { ConfirmacoesContext } from '../confirmacoes.context';
+import { AVISO_CONFIRMACOES, ConfirmacoesContext } from '../confirmacoes.context';
 import ConfirmarAtendimentosModal from './ConfirmarAtendimentosModal';
 
 const QUEM_CONFIRMA = ['admin', 'recepcao', 'super_admin'];
-const JA_AVISOU = 'confirmacoes-avisadas';
+const INTERVALO_BUSCA_MS = 10 * 60 * 1000;
+const REAVISO_MS = 4 * 60 * 60 * 1000;
 
-function jaAvisouNestaEntrada() {
+// Quem fica logado também é avisado: no primeiro uso do dia e de novo a cada 4 horas.
+function jaEstaNaHoraDeAvisar() {
   try {
-    return sessionStorage.getItem(JA_AVISOU) === '1';
+    const ultimo = Number(localStorage.getItem(AVISO_CONFIRMACOES));
+    if (!ultimo) return true;
+    return Date.now() - ultimo >= REAVISO_MS || new Date(ultimo).toDateString() !== new Date().toDateString();
   } catch {
     return false;
   }
@@ -18,9 +22,9 @@ function jaAvisouNestaEntrada() {
 
 function lembrarQueAvisou() {
   try {
-    sessionStorage.setItem(JA_AVISOU, '1');
+    localStorage.setItem(AVISO_CONFIRMACOES, String(Date.now()));
   } catch {
-    // Sem armazenamento, a janela só volta a aparecer ao recarregar a tela.
+    // Sem armazenamento, o aviso fica só no topo da agenda e no menu.
   }
 }
 
@@ -29,8 +33,8 @@ function temDiasAnteriores(pendentes) {
   return pendentes.some((a) => String(a.data).slice(0, 10) < hoje);
 }
 
-// Busca o que falta confirmar a cada troca de tela e, uma vez a cada entrada no sistema, abre a janela
-// com os atendimentos de dias anteriores que ficaram em aberto.
+// Busca o que falta confirmar a cada troca de tela, ao voltar para a aba e de tempos em tempos. Na hora de avisar, abre a
+// janela com o que ficou em aberto de dias anteriores, nunca por cima de outra janela (a pessoa pode estar digitando).
 export default function ConfirmacoesProvider({ children }) {
   const { user } = useAuthContext();
   const { pathname } = useLocation();
@@ -46,7 +50,7 @@ export default function ConfirmacoesProvider({ children }) {
       .then(({ data }) => {
         if (ignore) return;
         setDados(data);
-        if (temDiasAnteriores(data.pendentes) && !jaAvisouNestaEntrada()) {
+        if (temDiasAnteriores(data.pendentes) && !document.querySelector('.modal') && jaEstaNaHoraDeAvisar()) {
           lembrarQueAvisou();
           setJanelaAberta(true);
         }
@@ -55,12 +59,23 @@ export default function ConfirmacoesProvider({ children }) {
     return () => { ignore = true; };
   }, [pathname, versaoBusca]);
 
+  useEffect(() => {
+    const buscar = () => { if (!document.hidden) setVersaoBusca((v) => v + 1); };
+    const intervalo = setInterval(buscar, INTERVALO_BUSCA_MS);
+    document.addEventListener('visibilitychange', buscar);
+    return () => {
+      clearInterval(intervalo);
+      document.removeEventListener('visibilitychange', buscar);
+    };
+  }, []);
+
   const recarregar = useCallback(() => setVersaoBusca((v) => v + 1), []);
   const abrirJanela = useCallback(() => setJanelaAberta(true), []);
 
   const valor = useMemo(() => ({
     ...dados,
     podeConfirmar: dados.modo === 'recepcao' && QUEM_CONFIRMA.includes(user?.role),
+    podeResolver: QUEM_CONFIRMA.includes(user?.role),
     versaoJanela,
     recarregar,
     abrirJanela,

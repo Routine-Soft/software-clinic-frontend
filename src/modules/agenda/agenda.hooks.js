@@ -4,6 +4,7 @@ import {
   createAgenda,
   updateAgenda,
   definirRealizadoAgenda,
+  definirFaltaAgenda,
   cancelarAgenda,
   cancelarGrupoRecorrencia,
   deleteAgenda,
@@ -85,7 +86,7 @@ export function useAgendas(filtros = {}) {
   }
 
   // Devolve o agendamento atualizado (para a janela aberta refletir o novo status) ou null se falhar.
-  // Depois de finalizar o atendimento no prontuário (a consulta vira "realizado" no servidor): atualiza a lista
+  // Depois de finalizar o atendimento no prontuário (a consulta pode virar "realizado" no servidor): atualiza a lista
   // e devolve a consulta como está agora.
   async function recarregarAgenda(id) {
     try {
@@ -100,6 +101,19 @@ export function useAgendas(filtros = {}) {
     limparAvisos();
     try {
       const response = await definirRealizadoAgenda(id, realizado);
+      setSuccessMessage(response.message);
+      await refreshAgendas();
+      return response.data;
+    } catch (err) {
+      setError(err);
+      return null;
+    }
+  }
+
+  async function marcarFalta(id, faltou) {
+    limparAvisos();
+    try {
+      const response = await definirFaltaAgenda(id, faltou);
       setSuccessMessage(response.message);
       await refreshAgendas();
       return response.data;
@@ -153,6 +167,7 @@ export function useAgendas(filtros = {}) {
     addAgenda,
     editAgenda,
     marcarRealizado,
+    marcarFalta,
     recarregarAgenda,
     cancelAgenda,
     cancelGrupo,

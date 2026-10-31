@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { Link, Navigate } from 'react-router-dom'
 import { useAuthContext } from '@/hooks/useAuthContext'
 import { useAgendas } from '@/modules/agenda/agenda.hooks'
-import { paraISO, ehDoUsuario } from '@/modules/agenda/agenda.utils'
+import { agendaAtiva, paraISO, ehDoUsuario } from '@/modules/agenda/agenda.utils'
 import AgendaCalendario from '@/modules/agenda/components/AgendaCalendario'
 import { usePacientes } from '@/modules/paciente/paciente.hooks'
 import { useListaEspera } from '@/modules/lista-espera/lista-espera.hooks'
@@ -112,7 +112,7 @@ function KpiHoje({ agora, filtrar, indice }) {
     const hoje = paraISO(agora)
     const hhmm = `${String(agora.getHours()).padStart(2, '0')}:${String(agora.getMinutes()).padStart(2, '0')}`
     const { agendas, loading } = useAgendas({ dataInicio: hoje, dataFim: hoje })
-    const ativas = filtrar(agendas).filter((a) => a.status !== 'cancelado')
+    const ativas = filtrar(agendas).filter(agendaAtiva)
     const restantes = ativas.filter((a) => a.horaFim > hhmm).length
     const realizados = ativas.filter((a) => a.status === 'realizado').length
 

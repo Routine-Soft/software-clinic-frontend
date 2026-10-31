@@ -31,6 +31,16 @@ export async function definirRealizadoAgenda(id, realizado) {
   return response;
 }
 
+export async function definirFaltaAgenda(id, faltou) {
+  const response = await httpClient.patch(`/agendas/${id}/falta`, { faltou });
+  return response;
+}
+
+export async function getConfirmacoes() {
+  const response = await httpClient.get('/agendas/confirmacoes');
+  return response;
+}
+
 export async function cancelarAgenda(id) {
   const response = await httpClient.post(`/agendas/${id}/cancelar`);
   return response;

@@ -145,9 +145,15 @@ export function idDoProfissional(agenda) {
 
 export const STATUS_AGENDA = {
   aguardando: tr('Aguardando'),
-  realizado: tr('Realizado'),
+  realizado: tr('Atendido'),
+  faltou: tr('Não veio'),
   cancelado: tr('Cancelado'),
 };
+
+// Consulta que conta como marcada: cancelada e falta ficam fora dos totais.
+export function agendaAtiva(agenda) {
+  return agenda.status !== 'cancelado' && agenda.status !== 'faltou';
+}
 
 export function tituloDoAgendamento(agenda) {
   return [
@@ -155,13 +161,13 @@ export function tituloDoAgendamento(agenda) {
     agenda.pacienteId?.nome,
     agenda.profissionalId?.nome,
     agenda.servicoId?.nome,
-    agenda.status === 'cancelado' ? tr('Cancelado') : null,
+    agendaAtiva(agenda) ? null : STATUS_AGENDA[agenda.status],
     confirmadoPeloWhatsapp(agenda) ? tr('Confirmado pelo WhatsApp') : null,
   ].filter(Boolean).join(' · ');
 }
 
 export function confirmadoPeloWhatsapp(agenda) {
-  return agenda.lembrete?.resposta === 'confirmado' && agenda.status !== 'cancelado';
+  return agenda.lembrete?.resposta === 'confirmado' && agendaAtiva(agenda);
 }
 
 // Situação do lembrete do WhatsApp para a recepção: a resposta do paciente vale mais que a entrega da mensagem.

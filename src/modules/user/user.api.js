@@ -30,6 +30,11 @@ export async function updateMe(userData) {
   return response;
 }
 
+export async function definirConfirmacaoAtendimento(modo) {
+  const response = await httpClient.patch('/users/clinica/confirmacao-atendimento', { modo });
+  return response;
+}
+
 export async function updateMyPassword(passwordData) {
   const response = await httpClient.post('/users/me/password', passwordData);
   return response;

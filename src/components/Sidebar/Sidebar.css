@@ -267,3 +267,17 @@
     display: grid;
   }
 }
+
+.sidebar__alerta {
+  flex: none;
+  min-width: 20px;
+  padding: 1px 6px;
+  margin-left: auto;
+  font-size: 0.72rem;
+  font-weight: 700;
+  line-height: 1.5;
+  color: #fff;
+  text-align: center;
+  background: var(--warning);
+  border-radius: 999px;
+}

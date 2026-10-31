@@ -131,12 +131,11 @@
   background: var(--success-soft);
 }
 
-.agenda-hoje__item.is-passou,
-.agenda-hoje__item.is-cancelado {
+.agenda-hoje__item.is-passou {
   opacity: 0.6;
 }
 
-.agenda-hoje__item.is-cancelado .agenda-hoje__nome {
+:is(.agenda-hoje__item.is-cancelado, .agenda-hoje__item.is-faltou) .agenda-hoje__nome {
   text-decoration: line-through;
 }
 
@@ -549,12 +548,12 @@
   white-space: nowrap;
 }
 
-:where(.agenda-chip, .agenda-ev)[data-status='cancelado'] {
+:where(.agenda-chip, .agenda-ev):is([data-status='cancelado'], [data-status='faltou']) {
   opacity: 0.55;
 }
 
-:where(.agenda-chip)[data-status='cancelado'] .agenda-chip__nome,
-:where(.agenda-ev)[data-status='cancelado'] .agenda-ev__nome {
+:where(.agenda-chip):is([data-status='cancelado'], [data-status='faltou']) .agenda-chip__nome,
+:where(.agenda-ev):is([data-status='cancelado'], [data-status='faltou']) .agenda-ev__nome {
   text-decoration: line-through;
 }
 
@@ -726,7 +725,7 @@
   box-shadow: var(--shadow-md);
 }
 
-.agenda-ev[data-status='cancelado'] {
+.agenda-ev:is([data-status='cancelado'], [data-status='faltou']) {
   background-image: repeating-linear-gradient(
     45deg,
     transparent 0 6px,
@@ -1025,4 +1024,191 @@
 .agendamento-acompanha__chip:focus-visible {
   outline: 2px solid var(--primary-ring);
   outline-offset: 2px;
+}
+
+/* Confirmação de atendimentos: verde feito, vermelho cancelado, vermelho mais forte faltou, laranja em aberto. */
+@keyframes agenda-pisca {
+  50% {
+    box-shadow: 0 0 0 3px var(--warning-soft);
+    background: color-mix(in srgb, var(--warning) 26%, transparent);
+  }
+}
+
+.agenda-hoje__item.is-realizado {
+  background: var(--success-soft);
+}
+
+.agenda-hoje__item.is-cancelado {
+  background: var(--danger-soft);
+}
+
+.agenda-hoje__item.is-faltou {
+  background: color-mix(in srgb, var(--danger) 26%, transparent);
+}
+
+.agenda-hoje__item.is-cancelado .agenda-hoje__hora,
+.agenda-hoje__item.is-faltou .agenda-hoje__hora {
+  color: var(--danger);
+}
+
+.agenda-hoje__item.is-pendente {
+  background: var(--warning-soft);
+  animation: agenda-pisca 1.6s ease-in-out infinite;
+}
+
+.agenda-hoje__item.is-pendente .agenda-hoje__hora {
+  color: var(--warning);
+}
+
+.agenda-hoje__confirmar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 6px 6px 8px;
+}
+
+.agenda-alerta {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 14px;
+  padding: 12px 16px;
+  font: inherit;
+  font-weight: 600;
+  color: var(--warning);
+  text-align: left;
+  cursor: pointer;
+  background: var(--warning-soft);
+  border: 1px solid var(--warning);
+  border-radius: 12px;
+  animation: agenda-pisca 1.6s ease-in-out infinite;
+}
+
+.agenda-alerta svg {
+  flex: none;
+  width: 20px;
+  height: 20px;
+}
+
+.agenda-alerta__texto {
+  flex: 1;
+  min-width: 0;
+}
+
+.agenda-alerta small {
+  flex: none;
+  font-size: 0.82rem;
+  text-decoration: underline;
+}
+
+.confirmar-acoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+
+.confirmar-acoes__pergunta {
+  font-size: 0.85rem;
+}
+
+.confirmar-acoes__atendido {
+  color: #fff;
+  background: var(--success);
+  border-color: var(--success);
+}
+
+.agenda-hoje__confirmar .confirmar-acoes__atendido,
+.agenda-hoje__confirmar .btn--danger {
+  flex: 1;
+}
+
+.confirmar-janela {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 18px 22px;
+}
+
+.confirmar-janela__intro {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: var(--text-muted);
+}
+
+.confirmar-janela__lista {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 55vh;
+  padding: 0;
+  margin: 0;
+  overflow-y: auto;
+  list-style: none;
+}
+
+.confirmar-janela__item {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px;
+  background: var(--warning-soft);
+  border-radius: 12px;
+}
+
+.confirmar-janela__dados {
+  display: flex;
+  flex: 1 1 220px;
+  flex-direction: column;
+  gap: 3px;
+  align-items: flex-start;
+  min-width: 0;
+}
+
+.confirmar-janela__paciente {
+  font-weight: 600;
+}
+
+.confirmar-janela__sub {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+
+.confirmar-janela__vazio {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+  padding: 24px 0;
+  color: var(--success);
+  text-align: center;
+}
+
+.confirmar-janela__vazio p {
+  margin: 0;
+}
+
+@media (max-width: 640px) {
+  .confirmar-janela {
+    padding: 16px;
+  }
+}
+
+/* Coluna estreita ao lado do calendário: a situação desce para o nome do paciente caber inteiro. */
+@media (min-width: 1101px) {
+  .agenda-hoje__item {
+    flex-wrap: wrap;
+  }
+
+  .agenda-hoje__dados {
+    flex: 1 1 calc(100% - 48px);
+  }
+
+  .agenda-hoje__item .badge {
+    margin-left: 48px;
+  }
 }

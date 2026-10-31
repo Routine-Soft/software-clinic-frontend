@@ -9,6 +9,7 @@ import Marca from './Marca'
 import BotaoInstalar from './BotaoInstalar'
 import { ICONES } from './menuIcones'
 import { clinicaNoBrasil } from '@/i18n/paises'
+import { useConfirmacoes } from '@/modules/agenda/confirmacoes.context'
 import './Sidebar.css'
 import { tr } from '@/i18n';
 
@@ -67,6 +68,7 @@ const GRUPOS = [
 
 export function Sidebar({ aberto = false, onFechar }) {
     const { user, hasRole, logout } = useAuthContext()
+    const { pendentes, podeConfirmar } = useConfirmacoes()
 
     async function handleLogout() {
         await logout()
@@ -99,6 +101,9 @@ export function Sidebar({ aberto = false, onFechar }) {
                                     <NavLink to={item.path} className="sidebar__link" onClick={onFechar}>
                                         <Icone>{ICONES[item.icone]}</Icone>
                                         <span>{item.label}</span>
+                                        {item.path === '/home' && podeConfirmar && pendentes.length > 0 && (
+                                            <span className="sidebar__alerta" aria-label={tr('{total} atendimentos sem confirmar', { total: pendentes.length })}>{pendentes.length}</span>
+                                        )}
                                     </NavLink>
                                 </li>
                             ))}

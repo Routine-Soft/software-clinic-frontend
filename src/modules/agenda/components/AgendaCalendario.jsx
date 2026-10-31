@@ -8,6 +8,7 @@ import { useAuthContext } from '@/hooks/useAuthContext';
 import { printAgendamento } from '@/modules/print/print.api';
 import { Icone, IconeMais, IconeBusca, IconeSetaEsq, IconeSetaDir } from '@/components/CrudCard/icones';
 import {
+  agendaAtiva,
   agruparPorDia,
   diasDoIntervalo,
   idDoProfissional,
@@ -23,6 +24,7 @@ import AgendaGradeTempo from './AgendaGradeTempo';
 import NovoAgendamentoModal from './NovoAgendamentoModal';
 import EditarAgendamentoModal from './EditarAgendamentoModal';
 import AgendaDeHoje from './AgendaDeHoje';
+import { useConfirmacoes } from '../confirmacoes.context';
 import '../agenda.css';
 import { tr } from '@/i18n';
 
@@ -41,6 +43,7 @@ function visaoInicial(soCancelados) {
 // mostrados acima do calendário; `onMudou` avisa quando um agendamento foi criado ou alterado.
 export default function AgendaCalendario({ cabecalho, resumo, onMudou }) {
   const { user, hasRole } = useAuthContext();
+  const { modo, pendentes, podeConfirmar, versaoJanela, recarregar, abrirJanela } = useConfirmacoes();
   const podeVerProntuario = hasRole('admin') || hasRole('profissional') || hasRole('super_admin');
   const { profissionais } = useProfissionais();
   // ?status=cancelado (card "Agendamentos cancelados" ou botão "Só cancelados") mostra só os cancelados.
@@ -71,11 +74,19 @@ export default function AgendaCalendario({ cabecalho, resumo, onMudou }) {
   const intervalo = useMemo(() => intervaloDaVisao(visao, dataReferencia), [visao, dataReferencia]);
   const dias = useMemo(() => diasDoIntervalo(intervalo), [intervalo]);
 
-  const { agendas, loading, error, successMessage, addAgenda, editAgenda, marcarRealizado, recarregarAgenda, cancelAgenda, cancelGrupo } = useAgendas({
+  const { agendas, loading, error, successMessage, addAgenda, editAgenda, marcarRealizado, marcarFalta, recarregarAgenda, cancelAgenda, cancelGrupo, refreshAgendas } = useAgendas({
     profissionalId: profissionalId || undefined,
     dataInicio: paraISO(intervalo.inicio),
     dataFim: paraISO(intervalo.fim),
   });
+
+  // A janela de atendimentos sem confirmar mudou algum agendamento: atualiza o que está na tela.
+  useEffect(() => {
+    if (!versaoJanela) return;
+    refreshAgendas();
+    onMudou?.();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [versaoJanela]);
 
   const idsProfissionais = useMemo(() => profissionais.map((p) => p._id).sort(), [profissionais]);
   const corDe = (id) => indiceDeCor(id, idsProfissionais);
@@ -102,7 +113,7 @@ export default function AgendaCalendario({ cabecalho, resumo, onMudou }) {
     return [...mapa.entries()].sort((a, b) => a[1].localeCompare(b[1], 'pt-BR'));
   }, [agendas]);
 
-  const totalNoPeriodo = agendasFiltradas.filter((a) => a.status !== 'cancelado').length;
+  const totalNoPeriodo = agendasFiltradas.filter(agendaAtiva).length;
   const canceladosNoPeriodo = agendasFiltradas.filter((a) => a.status === 'cancelado').length;
   const noPeriodo = visao === 'dia' ? tr('no dia') : visao === 'semana' ? tr('na semana') : tr('no mês');
 
@@ -112,6 +123,7 @@ export default function AgendaCalendario({ cabecalho, resumo, onMudou }) {
 
   function mudou() {
     setVersaoHoje((v) => v + 1);
+    recarregar();
     onMudou?.();
   }
 
@@ -143,6 +155,7 @@ export default function AgendaCalendario({ cabecalho, resumo, onMudou }) {
 
   // O profissional só marca os próprios atendimentos (o backend confere de novo); admin e recepção marcam qualquer um.
   function podeMarcarRealizado(agenda) {
+    if (modo === 'recepcao') return podeConfirmar;
     if (user?.role !== 'profissional') return true;
     return String(agenda.profissionalId?.usuarioId ?? '') === String(user?._id ?? user?.id ?? '');
   }
@@ -154,6 +167,21 @@ export default function AgendaCalendario({ cabecalho, resumo, onMudou }) {
       mudou();
     }
     return atualizada;
+  }
+
+  async function handleFalta(agenda, faltou) {
+    const atualizada = await marcarFalta(agenda._id, faltou);
+    if (atualizada) {
+      setAgendaDetalhes(atualizada);
+      mudou();
+    }
+    return atualizada;
+  }
+
+  // Confirmação direto na "Agenda de hoje", sem abrir a janela do agendamento.
+  async function handleConfirmarNaBarra(agenda, acao) {
+    const atualizada = acao === 'atendido' ? await marcarRealizado(agenda._id, true) : await marcarFalta(agenda._id, true);
+    if (atualizada) mudou();
   }
 
   async function handleImprimir(agendaId) {
@@ -188,6 +216,14 @@ export default function AgendaCalendario({ cabecalho, resumo, onMudou }) {
       </header>
 
       {resumo}
+
+      {podeConfirmar && pendentes.length > 0 && (
+        <button type="button" className="agenda-alerta" onClick={abrirJanela}>
+          <Icone><path d="M12 9v4M12 17h.01" /><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z" /></Icone>
+          <span className="agenda-alerta__texto">{pendentes.length === 1 ? tr('1 atendimento sem confirmar') : tr('{total} atendimentos sem confirmar', { total: pendentes.length })}</span>
+          <small>{tr('Resolver')}</small>
+        </button>
+      )}
 
       <p className="agenda-manual">
         <span className="agenda-manual__icone" aria-hidden="true"><Icone><circle cx="12" cy="12" r="10" /><path d="M12 16v-4M12 8h.01" /></Icone></span>
@@ -291,7 +327,7 @@ export default function AgendaCalendario({ cabecalho, resumo, onMudou }) {
           )}
         </section>
 
-        <AgendaDeHoje key={versaoHoje} agora={agora} onAbrir={setAgendaDetalhes} onNovo={() => novoAgendamento(hoje)} />
+        <AgendaDeHoje key={`${versaoHoje}-${versaoJanela}`} agora={agora} onAbrir={setAgendaDetalhes} onNovo={() => novoAgendamento(hoje)} onConfirmar={handleConfirmarNaBarra} />
       </div>
 
       {slotNovo && (
@@ -311,6 +347,7 @@ export default function AgendaCalendario({ cabecalho, resumo, onMudou }) {
           onCancelarAgendamento={async (agenda) => { const cancelado = await handleCancelar(agenda); if (cancelado) setAgendaDetalhes(null); }}
           onImprimirAgendamento={(agenda) => handleImprimir(agenda._id)}
           onMarcarRealizado={podeMarcarRealizado(agendaDetalhes) ? handleRealizado : undefined}
+          onMarcarFalta={podeMarcarRealizado(agendaDetalhes) ? handleFalta : undefined}
           onAtendimentoFinalizado={async (agenda) => { const atualizada = await recarregarAgenda(agenda._id); if (atualizada) { setAgendaDetalhes(atualizada); mudou(); } }}
           erroAgendamento={error}
           onClose={() => setAgendaDetalhes(null)}

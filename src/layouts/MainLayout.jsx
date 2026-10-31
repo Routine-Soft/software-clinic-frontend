@@ -4,6 +4,7 @@ import Sidebar from '@/components/Sidebar/Sidebar'
 import Marca from '@/components/Sidebar/Marca'
 import AssinaturaGuard from '@/modules/assinatura/components/AssinaturaGuard'
 import AvisoVencimento from '@/modules/assinatura/components/AvisoVencimento'
+import ConfirmacoesProvider from '@/modules/agenda/components/ConfirmacoesProvider'
 import { useAuthContext } from '@/hooks/useAuthContext'
 import './MainLayout.css'
 import { tr } from '@/i18n';
@@ -30,35 +31,37 @@ export function MainLayout({ children }) {
     }, [menuAberto])
 
     return (
-        <div className="app-shell">
-            <a className="app-pular" href="#conteudo">{tr('Ir para o conteúdo')}</a>
+        <ConfirmacoesProvider>
+            <div className="app-shell">
+                <a className="app-pular" href="#conteudo">{tr('Ir para o conteúdo')}</a>
 
-            <header className="app-topbar">
-                <button
-                    type="button"
-                    className="icon-btn app-topbar__menu"
-                    aria-label={tr('Abrir menu')}
-                    aria-expanded={menuAberto}
-                    aria-controls="menu-principal"
-                    onClick={() => setMenuAberto(true)}
-                >
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
-                        <path d="M4 6h16M4 12h16M4 18h16" />
-                    </svg>
-                </button>
-                <Link to="/home" className="marca-link" aria-label={tr('Ir para o início')}>
-                    <Marca empresa={user?.nomeEmpresa} />
-                </Link>
-            </header>
+                <header className="app-topbar">
+                    <button
+                        type="button"
+                        className="icon-btn app-topbar__menu"
+                        aria-label={tr('Abrir menu')}
+                        aria-expanded={menuAberto}
+                        aria-controls="menu-principal"
+                        onClick={() => setMenuAberto(true)}
+                    >
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+                            <path d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
+                    <Link to="/home" className="marca-link" aria-label={tr('Ir para o início')}>
+                        <Marca empresa={user?.nomeEmpresa} />
+                    </Link>
+                </header>
 
-            <Sidebar aberto={menuAberto} onFechar={() => setMenuAberto(false)} />
-            {menuAberto && <div className="app-overlay" onClick={() => setMenuAberto(false)} aria-hidden="true" />}
+                <Sidebar aberto={menuAberto} onFechar={() => setMenuAberto(false)} />
+                {menuAberto && <div className="app-overlay" onClick={() => setMenuAberto(false)} aria-hidden="true" />}
 
-            <main id="conteudo" className="app-main">
-                <AvisoVencimento />
-                <AssinaturaGuard>{children}</AssinaturaGuard>
-            </main>
-        </div>
+                <main id="conteudo" className="app-main">
+                    <AvisoVencimento />
+                    <AssinaturaGuard>{children}</AssinaturaGuard>
+                </main>
+            </div>
+        </ConfirmacoesProvider>
     )
 }
 

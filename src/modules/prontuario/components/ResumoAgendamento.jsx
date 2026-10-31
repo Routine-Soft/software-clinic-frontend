@@ -8,7 +8,8 @@ import { tr } from '@/i18n';
 
 const STATUS_AGENDA = {
   aguardando: [tr('Aguardando'), 'badge--info'],
-  realizado: [tr('Realizado'), 'badge--success'],
+  realizado: [tr('Atendido'), 'badge--success'],
+  faltou: [tr('Não veio'), 'badge--danger'],
   cancelado: [tr('Cancelado'), 'badge--danger'],
 };
 
@@ -18,25 +19,27 @@ function jaChegouODia(data) {
   return String(data).slice(0, 10) <= hoje;
 }
 
-export default function ResumoAgendamento({ agendamento, erro, onEditar, onCancelar, onImprimir, onMarcarRealizado }) {
+export default function ResumoAgendamento({ agendamento, erro, onEditar, onCancelar, onImprimir, onMarcarRealizado, onMarcarFalta }) {
   const [rotulo, classe] = STATUS_AGENDA[agendamento.status] ?? [agendamento.status, ''];
   const cancelado = agendamento.status === 'cancelado';
   const realizado = agendamento.status === 'realizado';
+  const faltou = agendamento.status === 'faltou';
   const comissaoPaga = !!agendamento.comissao?.pagamentoId;
   const lembrete = situacaoDoLembrete(agendamento);
   const [salvando, setSalvando] = useState(false);
   const [falhou, setFalhou] = useState(false);
 
-  async function alternarRealizado(valor) {
+  async function marcar(acao, valor) {
     setSalvando(true);
     setFalhou(false);
-    const atualizado = await onMarcarRealizado(agendamento, valor);
+    const atualizado = await acao(agendamento, valor);
     setSalvando(false);
     if (!atualizado) setFalhou(true);
   }
 
   const podeMarcar = onMarcarRealizado && agendamento.status === 'aguardando' && jaChegouODia(agendamento.data);
   const podeDesmarcar = onMarcarRealizado && realizado && !comissaoPaga;
+  const podeDesfazerFalta = onMarcarFalta && faltou;
 
   return (
     <section className="pront-agenda" aria-label={tr('Agendamento')}>
@@ -64,6 +67,12 @@ export default function ResumoAgendamento({ agendamento, erro, onEditar, onCance
             </dd>
           </div>
         )}
+        {agendamento.status === 'aguardando' && agendamento.finalizadoEm && (
+          <div>
+            <dt>{tr('Atendimento')}</dt>
+            <dd><span className="badge badge--warning">{tr('Profissional finalizou. Falta confirmar.')}</span></dd>
+          </div>
+        )}
         {realizado && agendamento.comissao?.valor > 0 && (
           <div>
             <dt>{tr('Repasse ao profissional')}</dt>
@@ -74,20 +83,30 @@ export default function ResumoAgendamento({ agendamento, erro, onEditar, onCance
 
       {falhou && erro && <p className="alert alert--error pront-no-print" role="alert">{erro.message}</p>}
 
-      {(onEditar || onCancelar || onImprimir || podeMarcar || podeDesmarcar) && (
+      {(onEditar || onCancelar || onImprimir || podeMarcar || podeDesmarcar || podeDesfazerFalta) && (
         <div className="pront-agenda__acoes pront-no-print">
           {podeMarcar && (
-            <button type="button" className="btn btn--primary btn--sm" disabled={salvando} onClick={() => alternarRealizado(true)}>
+            <button type="button" className="btn btn--primary btn--sm" disabled={salvando} onClick={() => marcar(onMarcarRealizado, true)}>
               <IconeCheck />
-              {salvando ? tr('Salvando...') : tr('Marcar como realizado')}
+              {salvando ? tr('Salvando...') : tr('Atendido')}
+            </button>
+          )}
+          {podeMarcar && onMarcarFalta && (
+            <button type="button" className="btn btn--danger btn--sm" disabled={salvando} onClick={() => marcar(onMarcarFalta, true)}>
+              {tr('Não veio')}
             </button>
           )}
           {podeDesmarcar && (
-            <button type="button" className="btn btn--ghost btn--sm" disabled={salvando} onClick={() => alternarRealizado(false)}>
-              {salvando ? tr('Salvando...') : tr('Desmarcar realizado')}
+            <button type="button" className="btn btn--ghost btn--sm" disabled={salvando} onClick={() => marcar(onMarcarRealizado, false)}>
+              {salvando ? tr('Salvando...') : tr('Desfazer confirmação')}
             </button>
           )}
-          {onEditar && !cancelado && (
+          {podeDesfazerFalta && (
+            <button type="button" className="btn btn--ghost btn--sm" disabled={salvando} onClick={() => marcar(onMarcarFalta, false)}>
+              {salvando ? tr('Salvando...') : tr('Desfazer falta')}
+            </button>
+          )}
+          {onEditar && !cancelado && !faltou && (
             <button type="button" className="btn btn--ghost btn--sm" onClick={() => onEditar(agendamento)}>
               <IconeLapis />
               {tr('Editar agendamento')}
@@ -99,7 +118,7 @@ export default function ResumoAgendamento({ agendamento, erro, onEditar, onCance
               {tr('Comprovante')}
             </button>
           )}
-          {onCancelar && !cancelado && !comissaoPaga && (
+          {onCancelar && !cancelado && !faltou && !comissaoPaga && (
             <button type="button" className="btn btn--danger btn--sm" onClick={() => onCancelar(agendamento)}>
               {tr('Cancelar agendamento')}
             </button>

@@ -25,7 +25,7 @@ const ABAS = [
 // `profissional` é o cadastro de profissional do login (quem abre a ficha já passou pela checagem de acesso).
 // Profissional, convênio e "quem pode ler" ficam numa faixa pequena no topo; o atendimento em andamento
 // aparece logo abaixo dela, e o histórico vai para o card da jornada, ao lado da ficha.
-export default function ProntuarioPaciente({ paciente, profissional, agendamento = null, onEditarAgendamento, onCancelarAgendamento, onImprimirAgendamento, onMarcarRealizado, onAtendimentoFinalizado, erroAgendamento }) {
+export default function ProntuarioPaciente({ paciente, profissional, agendamento = null, onEditarAgendamento, onCancelarAgendamento, onImprimirAgendamento, onMarcarRealizado, onMarcarFalta, onAtendimentoFinalizado, erroAgendamento }) {
   const { convenios } = useConvenios();
   const { especialidades } = useEspecialidades();
   const {
@@ -212,6 +212,7 @@ export default function ProntuarioPaciente({ paciente, profissional, agendamento
             onCancelar={onCancelarAgendamento}
             onImprimir={onImprimirAgendamento}
             onMarcarRealizado={onMarcarRealizado}
+            onMarcarFalta={onMarcarFalta}
             erro={erroAgendamento}
           />
         )}

@@ -5,6 +5,7 @@ import { ROTULO_FUNCAO } from '../user.constants';
 import AssinaturaStatus from '@/modules/assinatura/components/AssinaturaStatus';
 import EditarMinhaContaModal from './EditarMinhaContaModal';
 import AlterarSenhaModal from './AlterarSenhaModal';
+import ConfirmacaoAtendimentoCard from './ConfirmacaoAtendimentoCard';
 import { iniciais } from '@/utils/nome';
 import { formatarDocumento } from '@/utils/documento';
 import httpClient from '@/services/httpClient';
@@ -127,6 +128,8 @@ export default function MinhaConta() {
 
         {ehAdmin && <AssinaturaStatus />}
       </div>
+
+      {ehAdmin && <ConfirmacaoAtendimentoCard />}
 
       {editandoDados && perfil && (
         <EditarMinhaContaModal

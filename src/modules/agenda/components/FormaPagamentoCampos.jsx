@@ -1,12 +1,13 @@
 import { useId } from 'react';
 import { IconeMais, IconeX } from '@/components/CrudCard/icones';
-import { FORMAS_PAGAMENTO, redistribuir, somaDasFormas } from '../agendamento.form';
+import { FORMAS_PAGAMENTO, dividirIgual, redistribuir, somaDasFormas } from '../agendamento.form';
 import { formatarPreco } from '@/modules/servico/servico.utils';
+import { formatDataBR } from '@/utils/date';
 import { tr } from '@/i18n';
 
 // Total, formas de pagamento (divididas igualmente ao incluir ou tirar uma; dá para ajustar à mão) e "gratuito".
-// Usado na 2ª etapa do novo agendamento e na edição.
-export default function FormaPagamentoCampos({ form, setForm }) {
+// Usado na 2ª etapa do novo agendamento e na edição. Com `sessoes` (série), escolhe também como dividir o total.
+export default function FormaPagamentoCampos({ form, setForm, sessoes = null, precoSessao = null, plano = null }) {
   const id = useId();
   const { financeiro } = form;
   const total = Number(financeiro.valor) || 0;
@@ -47,9 +48,29 @@ export default function FormaPagamentoCampos({ form, setForm }) {
     setFinanceiro({ formasPagamento: redistribuir(financeiro.formasPagamento.filter((_, i) => i !== index), financeiro.valor) });
   }
 
+  const parcelas = Math.max(Number(financeiro.parcelamento) || 1, 1);
+  const resumoDoPacote = {
+    avista: tr('Um pagamento de {valor}. Vale para todas as sessões.', { valor: formatarPreco(total) }),
+    sessao: tr('{n}x de {valor}, um pagamento em cada sessão.', { n: sessoes, valor: formatarPreco(dividirIgual(total, sessoes || 1)[0]) }),
+    parcelado: tr('{n}x de {valor}. A primeira vence em {data} e as outras, todo mês.', { n: parcelas, valor: formatarPreco(dividirIgual(total, parcelas)[0]), data: formatDataBR(financeiro.vencimento) ?? '—' }),
+  };
+
   function percentual(valor) {
     if (!total) return '';
     return `${Math.round(((Number(valor) || 0) / total) * 100)}%`;
+  }
+
+  if (plano) {
+    return (
+      <div className="pagamento-plano">
+        <strong>{tr('Pago pelo plano de saúde: {nome}', { nome: plano.nome })}</strong>
+        <p>
+          {plano.coparticipacao > 0
+            ? tr('O paciente paga {valor} de coparticipação em cada atendimento.', { valor: formatarPreco(plano.coparticipacao) })
+            : tr('O paciente não paga nada à clínica.')}
+        </p>
+      </div>
+    );
   }
 
   return (
@@ -76,11 +97,35 @@ export default function FormaPagamentoCampos({ form, setForm }) {
               <input id={`${id}-venc`} className="input" type="date" value={financeiro.vencimento} onChange={(e) => setFinanceiro({ vencimento: e.target.value })} required />
             </div>
 
-            <div className="field">
+            {!sessoes && <div className="field">
               <label className="field__label" htmlFor={`${id}-parcelas`}>{tr('Parcelas')}</label>
               <input id={`${id}-parcelas`} className="input" type="number" min="1" value={financeiro.parcelamento} onChange={(e) => setFinanceiro({ parcelamento: e.target.value })} />
-            </div>
+            </div>}
           </div>
+
+          {sessoes && (
+            <div className="pagamento-modo" role="radiogroup" aria-labelledby={`${id}-modo`}>
+              <span id={`${id}-modo`} className="field__label">{tr('Como pagar as {n} sessões', { n: sessoes })}</span>
+              {Math.round(precoSessao * sessoes * 100) === Math.round(total * 100) && (
+                <p className="pagamento-modo__resumo">{tr('{n} sessões × {preco} = {total}', { n: sessoes, preco: formatarPreco(precoSessao), total: formatarPreco(total) })}</p>
+              )}
+              <div className="pagamento-modo__opcoes">
+                {[['avista', tr('À vista')], ['sessao', tr('Por sessão')], ['parcelado', tr('Parcelado')]].map(([modo, rotulo]) => (
+                  <label key={modo} className={`pagamento-modo__opcao${financeiro.modoPagamento === modo ? ' is-ativa' : ''}`}>
+                    <input type="radio" name={`${id}-modo-pagamento`} checked={financeiro.modoPagamento === modo} onChange={() => setFinanceiro({ modoPagamento: modo })} />
+                    {rotulo}
+                  </label>
+                ))}
+              </div>
+              {financeiro.modoPagamento === 'parcelado' && (
+                <div className="field pagamento-modo__parcelas">
+                  <label className="field__label" htmlFor={`${id}-qtd-parcelas`}>{tr('Quantas parcelas?')}</label>
+                  <input id={`${id}-qtd-parcelas`} className="input" type="number" min="1" max="120" value={financeiro.parcelamento} onChange={(e) => setFinanceiro({ parcelamento: e.target.value })} />
+                </div>
+              )}
+              <p className="pagamento-modo__resumo">{resumoDoPacote[financeiro.modoPagamento]}</p>
+            </div>
+          )}
 
           <div className="pagamento-formas" role="group" aria-labelledby={`${id}-formas`}>
             <span id={`${id}-formas`} className="field__label">{tr('Como o paciente vai pagar')}</span>

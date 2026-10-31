@@ -1,5 +1,5 @@
 import { tr } from '@/i18n';
-// Para que a avaliação ofereça este serviço: null é atendimento comum (consulta ou pacote da agenda).
+// Para que a avaliação ofereça este serviço: null é atendimento comum (consulta ou sessões da agenda).
 export const MODULOS_SERVICO = [
   ['', tr('Atendimento comum')],
   ['neuropsicologica', tr('Avaliação neuropsicológica')],
@@ -14,7 +14,7 @@ export const MODELOS_SERVICO = [
     chave: 'neuropsicologica',
     rotulo: tr('Avaliação neuropsicológica'),
     dados: { nome: tr('Avaliação neuropsicológica'), tipo: 'pacote', qtdDias: 8, modulo: 'neuropsicologica' },
-    dica: tr('Pacote de 8 sessões (anamnese, testagem e devolutiva). Ajuste a quantidade se precisar.'),
+    dica: tr('8 sessões sugeridas (anamnese, testagem e devolutiva). O preço é por sessão.'),
   },
   {
     chave: 'nr01',
@@ -51,7 +51,7 @@ export function montarPayloadServico(form) {
     nome: form.nome,
     tipo: form.tipo,
     modulo: form.modulo || null,
-    qtdDias: form.tipo === 'pacote' ? Number(form.qtdDias) : null,
+    qtdDias: form.tipo === 'pacote' ? Number(form.qtdDias) || null : null,
     preco: Number(form.preco),
     comissaoTipo: form.comissaoTipo,
     comissao: Number(form.comissao) || 0,
@@ -78,21 +78,18 @@ export function problemaDoFormulario(form) {
 const normalizarNome = (nome = '') => nome.normalize('NFD').replace(/[̀-ͯ]/g, '').trim().toLowerCase();
 
 // Serviço já cadastrado com o mesmo nome (sem diferenciar acento e maiúscula), fora o que está sendo editado.
-// O nome é único na clínica: consulta e pacote do mesmo serviço precisam de nomes diferentes.
+// O nome é único na clínica: consulta e sessões do mesmo serviço precisam de nomes diferentes.
 export function servicoComMesmoNome(nome, servicos = [], idAtual = null) {
   const alvo = normalizarNome(nome);
   if (!alvo) return null;
   return servicos.find((s) => s._id !== idAtual && normalizarNome(s.nome) === alvo) ?? null;
 }
 
-// Nome sugerido para não repetir: "Psicologia – pacote 10 sessões" ou "Psicologia – consulta avulsa".
+// Nome sugerido para não repetir: "Psicologia – sessões" ou "Psicologia – consulta avulsa".
 export function sugestaoDeNome(form, servicos = [], idAtual = null) {
   // Usa a grafia do serviço já cadastrado ("Psicologia"), mesmo que a pessoa tenha digitado "psicologia".
   const base = servicoComMesmoNome(form.nome, servicos, idAtual)?.nome.trim() ?? form.nome.trim();
-  const sessoes = Number(form.qtdDias);
-  const complemento = form.tipo === 'pacote'
-    ? (sessoes > 0 ? `pacote ${sessoes} ${sessoes === 1 ? tr('sessão') : tr('sessões')}` : 'pacote')
-    : tr('consulta avulsa');
+  const complemento = form.tipo === 'pacote' ? tr('sessões') : tr('consulta avulsa');
   let sugestao = `${base} – ${complemento}`;
   for (let n = 2; servicoComMesmoNome(sugestao, servicos, idAtual); n += 1) sugestao = `${base} – ${complemento} ${n}`;
   return sugestao;

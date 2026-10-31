@@ -3,6 +3,7 @@ import { useAuthContext } from '@/hooks/useAuthContext';
 import { useAgendas } from '../agenda.hooks';
 import { STATUS_AGENDA, agendaAtiva, ehDoUsuario, paraISO } from '../agenda.utils';
 import { useConfirmacoes } from '../confirmacoes.context';
+import EtiquetaPagamento from './EtiquetaPagamento';
 import { Icone, IconeCheck, IconeMais } from '@/components/CrudCard/icones';
 import { ICONES } from '@/components/Sidebar/menuIcones';
 import { tr } from '@/i18n';
@@ -65,6 +66,7 @@ export default function AgendaDeHoje({ agora, onAbrir, onNovo, onConfirmar }) {
                   <span className="agenda-hoje__dados">
                     <span className="agenda-hoje__nome">{agenda.pacienteId?.nome ?? tr('Paciente')}</span>
                     <span className="agenda-hoje__prof">{emAberto && agenda.finalizadoEm ? tr('Profissional finalizou') : agenda.profissionalId?.nome}</span>
+                    <EtiquetaPagamento agenda={agenda} />
                   </span>
                   {alerta && <span className="badge badge--warning">{tr('Confirmar')}</span>}
                   {emAberto && !podeConfirmar && <span className="badge badge--info">{tr('Aguardando confirmação')}</span>}

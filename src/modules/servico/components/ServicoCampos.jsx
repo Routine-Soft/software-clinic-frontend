@@ -62,8 +62,8 @@ export default function ServicoCampos({ form, setForm, convenios, servicos = [],
   // Nome repetido: avisa enquanto digita e oferece um nome diferente pronto para usar.
   const repetido = servicoComMesmoNome(form.nome, servicos, servicoId);
   const sugestao = repetido ? sugestaoDeNome(form, servicos, servicoId) : '';
-  const tipoDoOutro = repetido?.tipo === 'pacote' ? 'pacote' : 'consulta';
-  const paraEste = form.tipo === 'pacote' ? tr('Para o pacote') : tr('Para a consulta');
+  const tipoDoOutro = repetido?.tipo === 'pacote' ? tr('sessões') : 'consulta';
+  const paraEste = form.tipo === 'pacote' ? tr('Para as sessões') : tr('Para a consulta');
 
   return (
     <>
@@ -97,14 +97,14 @@ export default function ServicoCampos({ form, setForm, convenios, servicos = [],
           <label className="field__label" htmlFor={`${id}-tipo`}>{tr('Tipo')}</label>
           <select id={`${id}-tipo`} className="input" value={form.tipo} onChange={(e) => set('tipo', e.target.value)}>
             <option value="consulta">{tr('Consulta')}</option>
-            <option value="pacote">{tr('Pacote')}</option>
+            <option value="pacote">{tr('Sessões')}</option>
           </select>
         </div>
 
         {form.tipo === 'pacote' && (
           <div className="field field--reveal">
-            <label className="field__label" htmlFor={`${id}-dias`}>{tr('Quantidade de dias')}</label>
-            <input id={`${id}-dias`} className="input" type="number" min="1" value={form.qtdDias} onChange={(e) => set('qtdDias', e.target.value)} required />
+            <label className="field__label" htmlFor={`${id}-dias`}>{tr('Sessões sugeridas (opcional)')}</label>
+            <input id={`${id}-dias`} className="input" type="number" min="1" value={form.qtdDias} onChange={(e) => set('qtdDias', e.target.value)} />
           </div>
         )}
       </div>
@@ -120,13 +120,13 @@ export default function ServicoCampos({ form, setForm, convenios, servicos = [],
       <section className="tabela-preco" aria-label={tr('Preços e repasses')}>
         <h4 className="tabela-preco__titulo">{tr('Preços e repasses')}</h4>
         <p className="field__hint">
-          {tr('{p0} Convênio que não estiver na lista usa o preço e o repasse padrão.', { p0: form.tipo === 'pacote' ? tr('O repasse vale por sessão realizada. ') : '' })}
+          {tr('{p0} Convênio que não estiver na lista usa o preço e o repasse padrão.', { p0: form.tipo === 'pacote' ? tr('O repasse vale por sessão realizada. A quantidade é escolhida ao agendar. ') : '' })}
         </p>
 
         <div className="tabela-preco__linha">
           <span className="tabela-preco__nome">{tr('Preço padrão')}</span>
           <div className="modal-form__row">
-            <CampoPreco id={`${id}-preco`} valor={form.preco} onChange={(v) => set('preco', v)} />
+            <CampoPreco id={`${id}-preco`} valor={form.preco} rotulo={form.tipo === 'pacote' ? tr('Preço por sessão') : undefined} onChange={(v) => set('preco', v)} />
             <CampoComissao
               id={`${id}-comissao`}
               tipo={form.comissaoTipo}

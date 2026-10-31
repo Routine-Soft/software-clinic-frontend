@@ -36,7 +36,7 @@ const IconePacote = () => (
 );
 
 function rotuloDias(qtdDias) {
-  return qtdDias === 1 ? '1 dia' : `${qtdDias} dias`;
+  return tr('sugestão: {n}', { n: qtdDias });
 }
 
 export default function ServicoADM({ className = '' }) {
@@ -82,7 +82,7 @@ export default function ServicoADM({ className = '' }) {
 
         <div className="crud-card__titulos">
           <h3 className="crud-card__titulo">{tr('Serviços')}</h3>
-          <p className="crud-card__subtitulo">{tr('Consultas e pacotes oferecidos pela clínica')}</p>
+          <p className="crud-card__subtitulo">{tr('Consultas e sessões oferecidas pela clínica')}</p>
         </div>
 
         {!loading && (
@@ -133,7 +133,7 @@ export default function ServicoADM({ className = '' }) {
                 <div className="crud-item__info">
                   <span className="crud-item__nome" title={servico.nome}>{servico.nome}</span>
                   <span className="crud-item__meta">
-                    <span className={`badge ${ehPacote ? 'badge--primary' : 'badge--info'}`}>{ehPacote ? tr('Pacote') : tr('Consulta')}</span>
+                    <span className={`badge ${ehPacote ? 'badge--primary' : 'badge--info'}`}>{ehPacote ? tr('Sessões') : tr('Consulta')}</span>
                     {ehPacote && servico.qtdDias ? <span>{rotuloDias(servico.qtdDias)}</span> : null}
                     {ehPacote && temComissao ? <span>{tr('repasse por sessão')}</span> : null}
                     {servico.modulo && <span className="badge badge--success">{ROTULO_MODULO[servico.modulo]}</span>}

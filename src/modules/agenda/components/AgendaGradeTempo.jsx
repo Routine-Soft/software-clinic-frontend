@@ -1,3 +1,4 @@
+import EtiquetaPagamento from './EtiquetaPagamento';
 import { useEffect, useMemo, useRef } from 'react';
 import {
   NOMES_DIAS_CURTOS,
@@ -118,6 +119,7 @@ export default function AgendaGradeTempo({ dias, porDia, corDe, descrever = desc
                         onClick={() => onAbrir(agenda)}
                       >
                         <span className="agenda-ev__nome">{confirmadoPeloWhatsapp(agenda) && <span className="agenda-confirmado" aria-label={tr('Confirmado')}>✓ </span>}{nome}</span>
+                        {altura >= ALTURA_MINIMA_DETALHES && <EtiquetaPagamento agenda={agenda} />}
                         {sub && <span className="agenda-ev__prof">{sub}</span>}
                         <span className="agenda-ev__hora">{agenda.horaInicio} – {agenda.horaFim}</span>
                         {(detalhado || altura >= 70) && extra && <span className="agenda-ev__extra">{extra}</span>}

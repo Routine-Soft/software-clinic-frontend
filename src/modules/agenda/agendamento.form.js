@@ -37,7 +37,7 @@ export function formularioNovo(slot) {
     especialidadeId: '',
     servicoId: '',
     convenioId: '',
-    financeiro: { valor: '', vencimento: paraISO(new Date()), parcelamento: 1, formasPagamento: [], gratuito: false },
+    financeiro: { valor: '', vencimento: paraISO(new Date()), parcelamento: 1, formasPagamento: [], gratuito: false, modoPagamento: 'avista' },
   };
 }
 
@@ -65,8 +65,9 @@ export function horarioInvalido(form) {
   return !!form.horaInicio && !!form.horaFim && form.horaFim <= form.horaInicio;
 }
 
-export function montarPayload(form, paciente) {
-  const { gratuito } = form.financeiro;
+// Pelo plano o paciente não escolhe forma de pagamento: o valor segue só para o repasse do profissional.
+export function montarPayload(form, paciente, peloPlano = false) {
+  const gratuito = form.financeiro.gratuito && !peloPlano;
   return {
     data: form.data,
     horaInicio: form.horaInicio,
@@ -78,9 +79,10 @@ export function montarPayload(form, paciente) {
     convenioId: form.convenioId || null,
     financeiro: {
       valor: gratuito ? 0 : Number(form.financeiro.valor),
-      vencimento: form.financeiro.vencimento,
-      parcelamento: gratuito ? 1 : Number(form.financeiro.parcelamento) || 1,
-      formasPagamento: gratuito ? [] : form.financeiro.formasPagamento.map((f) => ({ tipo: f.tipo, valor: Number(f.valor) })),
+      vencimento: peloPlano ? form.data : form.financeiro.vencimento,
+      parcelamento: gratuito || peloPlano ? 1 : Number(form.financeiro.parcelamento) || 1,
+      modoPagamento: form.financeiro.modoPagamento,
+      formasPagamento: gratuito || peloPlano ? [] : form.financeiro.formasPagamento.map((f) => ({ tipo: f.tipo, valor: Number(f.valor) })),
     },
   };
 }
@@ -92,6 +94,13 @@ export function comPrecoDaTabela(form, servicos) {
   if (!servico) return form;
   const valor = regraDoServico(servico, form.convenioId).preco;
   return { ...form, financeiro: { ...form.financeiro, valor, formasPagamento: redistribuir(form.financeiro.formasPagamento, valor) } };
+}
+
+// Total da série: preço de uma sessão (serviço + convênio) vezes a quantidade.
+export function comTotalDasSessoes(form, servicos, sessoes) {
+  const comPreco = comPrecoDaTabela(form, servicos);
+  const valor = Math.round(Number(comPreco.financeiro.valor) * sessoes * 100) / 100;
+  return { ...comPreco, financeiro: { ...comPreco.financeiro, valor, formasPagamento: redistribuir(comPreco.financeiro.formasPagamento, valor) } };
 }
 
 // Divide o total igualmente entre `quantas` formas, em centavos; o que sobra do arredondamento fica na última.

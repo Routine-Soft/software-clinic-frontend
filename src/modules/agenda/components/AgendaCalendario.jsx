@@ -74,7 +74,7 @@ export default function AgendaCalendario({ cabecalho, resumo, onMudou }) {
   const intervalo = useMemo(() => intervaloDaVisao(visao, dataReferencia), [visao, dataReferencia]);
   const dias = useMemo(() => diasDoIntervalo(intervalo), [intervalo]);
 
-  const { agendas, loading, error, successMessage, addAgenda, editAgenda, marcarRealizado, marcarFalta, recarregarAgenda, cancelAgenda, cancelGrupo, refreshAgendas } = useAgendas({
+  const { agendas, loading, error, successMessage, addAgenda, editAgenda, marcarRealizado, marcarFalta, marcarPagamento, recarregarAgenda, cancelAgenda, cancelGrupo, refreshAgendas } = useAgendas({
     profissionalId: profissionalId || undefined,
     dataInicio: paraISO(intervalo.inicio),
     dataFim: paraISO(intervalo.fim),
@@ -171,6 +171,15 @@ export default function AgendaCalendario({ cabecalho, resumo, onMudou }) {
 
   async function handleFalta(agenda, faltou) {
     const atualizada = await marcarFalta(agenda._id, faltou);
+    if (atualizada) {
+      setAgendaDetalhes(atualizada);
+      mudou();
+    }
+    return atualizada;
+  }
+
+  async function handlePagamento(agenda, pago, parcela) {
+    const atualizada = await marcarPagamento(agenda._id, pago, parcela);
     if (atualizada) {
       setAgendaDetalhes(atualizada);
       mudou();
@@ -348,6 +357,7 @@ export default function AgendaCalendario({ cabecalho, resumo, onMudou }) {
           onImprimirAgendamento={(agenda) => handleImprimir(agenda._id)}
           onMarcarRealizado={podeMarcarRealizado(agendaDetalhes) ? handleRealizado : undefined}
           onMarcarFalta={podeMarcarRealizado(agendaDetalhes) ? handleFalta : undefined}
+          onMarcarPagamento={user?.role === 'profissional' ? undefined : handlePagamento}
           onAtendimentoFinalizado={async (agenda) => { const atualizada = await recarregarAgenda(agenda._id); if (atualizada) { setAgendaDetalhes(atualizada); mudou(); } }}
           erroAgendamento={error}
           onClose={() => setAgendaDetalhes(null)}

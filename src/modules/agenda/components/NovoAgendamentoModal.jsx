@@ -1,9 +1,11 @@
+import { pagaOPlano } from '../agenda.utils';
 import { useState } from 'react';
 import Modal from '@/components/Modal/Modal';
 import ModalForm from '@/components/Modal/ModalForm';
 import PacientePicker from '@/modules/paciente/components/PacientePicker';
 import { useDadosAgendamento } from '../useDadosAgendamento';
-import { DIAS_SEMANA, formularioNovo, horarioInvalido, montarPayload, comPrecoDaTabela, comFormaInicial } from '../agendamento.form';
+import { DIAS_SEMANA, formularioNovo, horarioInvalido, montarPayload, comPrecoDaTabela, comFormaInicial, comTotalDasSessoes } from '../agendamento.form';
+import { regraDoServico } from '@/modules/servico/servico.utils';
 import AgendamentoCampos from './AgendamentoCampos';
 import FormaPagamentoCampos from './FormaPagamentoCampos';
 import AvisoPreRequisito from '@/components/AvisoPreRequisito/AvisoPreRequisito';
@@ -19,6 +21,7 @@ export default function NovoAgendamentoModal({ slotInicial, erro, onSave, onClos
   const [form, setForm] = useState(() => formularioNovo(slotInicial));
   const [paciente, setPaciente] = useState(null);
   const [repetir, setRepetir] = useState(false);
+  const [quantidades, setQuantidades] = useState({});
   const [diasSemana, setDiasSemana] = useState([]);
   const [repetirAte, setRepetirAte] = useState('');
 
@@ -40,15 +43,25 @@ export default function NovoAgendamentoModal({ slotInicial, erro, onSave, onClos
     setDiasSemana((atual) => (atual.includes(valor) ? atual.filter((d) => d !== valor) : [...atual, valor]));
   }
 
+  // Serviço por sessões: a quantidade vem da receita de cada paciente. Mais de uma gera a série sozinha.
+  const servico = dados.servicos.find((s) => s._id === form.servicoId);
+  const porSessoes = servico?.tipo === 'pacote';
+  const quantidade = quantidades[form.servicoId] ?? String(servico?.qtdDias ?? 1);
+  const quantidadeValida = Number.isInteger(Number(quantidade)) && Number(quantidade) >= 1 && Number(quantidade) <= 200;
+  const sessoes = porSessoes && quantidadeValida && Number(quantidade) > 1 ? Number(quantidade) : null;
+  const emSerie = porSessoes ? !!sessoes : repetir;
+  const convenio = dados.convenios.find((c) => c._id === form.convenioId);
+  const plano = pagaOPlano(convenio) ? convenio : null;
+
   function payload() {
-    const base = montarPayload(form, paciente);
-    return repetir ? { ...base, repetir: { diasSemana, dataFim: repetirAte } } : base;
+    const base = montarPayload(form, paciente, !!plano);
+    return emSerie ? { ...base, repetir: { diasSemana, dataFim: repetirAte, sessoes: sessoes ?? undefined } } : base;
   }
 
-  const recorrenciaIncompleta = repetir && (diasSemana.length === 0 || !repetirAte);
+  const recorrenciaIncompleta = (porSessoes && !quantidadeValida) || (emSerie && (diasSemana.length === 0 || (!sessoes && !repetirAte)));
 
   function irParaPagamento() {
-    setForm(comFormaInicial);
+    setForm((atual) => comFormaInicial(sessoes ? comTotalDasSessoes(atual, dados.servicos, sessoes) : atual));
     setEtapa('pagamento');
     return false;
   }
@@ -60,7 +73,7 @@ export default function NovoAgendamentoModal({ slotInicial, erro, onSave, onClos
           <ModalForm
             erro={erro}
             fechar={fechar}
-            submitLabel={repetir ? tr('Confirmar série') : tr('Confirmar agendamento')}
+            submitLabel={emSerie ? tr('Confirmar série') : tr('Confirmar agendamento')}
             loadingLabel={tr('Agendando...')}
             onSubmit={() => onSave(payload())}
           >
@@ -69,7 +82,7 @@ export default function NovoAgendamentoModal({ slotInicial, erro, onSave, onClos
               <span>{[paciente?.nome, form.data && new Date(`${form.data}T12:00:00`).toLocaleDateString(localeAtual()), form.horaInicio].filter(Boolean).join(' · ')}</span>
             </p>
 
-            <FormaPagamentoCampos form={form} setForm={setForm} />
+            <FormaPagamentoCampos form={form} setForm={setForm} sessoes={sessoes} precoSessao={sessoes ? regraDoServico(servico, form.convenioId).preco : null} plano={plano} />
 
             <button type="button" className="btn btn--ghost btn--sm pagamento-voltar" onClick={() => setEtapa('dados')}>
               <IconeSetaEsq />
@@ -109,12 +122,22 @@ export default function NovoAgendamentoModal({ slotInicial, erro, onSave, onClos
             <fieldset className="modal-form__section">
               <legend>{tr('Recorrência')}</legend>
 
-              <label className="check agendamento-repetir">
-                <input type="checkbox" checked={repetir} onChange={(e) => setRepetir(e.target.checked)} />
-                <span>{tr('Repetir este agendamento')}</span>
-              </label>
+              {porSessoes ? (
+                <>
+                  <div className="field pagamento-modo__parcelas">
+                    <label className="field__label" htmlFor="agendamento-sessoes">{tr('Quantas sessões?')}</label>
+                    <input id="agendamento-sessoes" className="input" type="number" min="1" max="200" value={quantidade} onChange={(e) => setQuantidades((atual) => ({ ...atual, [form.servicoId]: e.target.value }))} />
+                  </div>
+                  {sessoes && <p className="modal-form__hint">{tr('Escolha os dias da semana. As {n} sessões serão criadas a partir da data acima.', { n: sessoes })}</p>}
+                </>
+              ) : (
+                <label className="check agendamento-repetir">
+                  <input type="checkbox" checked={repetir} onChange={(e) => setRepetir(e.target.checked)} />
+                  <span>{tr('Repetir este agendamento')}</span>
+                </label>
+              )}
 
-              {repetir && (
+              {emSerie && (
                 <div className="agendamento-recorrencia">
                   <div className="agendamento-dias" role="group" aria-label={tr('Dias da semana')}>
                     {DIAS_SEMANA.map((dia) => (
@@ -125,10 +148,10 @@ export default function NovoAgendamentoModal({ slotInicial, erro, onSave, onClos
                     ))}
                   </div>
 
-                  <div className="field">
+                  {!sessoes && <div className="field">
                     <label className="field__label" htmlFor="agendamento-repetir-ate">{tr('Repetir até')}</label>
                     <input id="agendamento-repetir-ate" className="input" type="date" value={repetirAte} min={form.data} onChange={(e) => setRepetirAte(e.target.value)} required />
-                  </div>
+                  </div>}
                 </div>
               )}
             </fieldset>

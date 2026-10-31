@@ -5,6 +5,7 @@ import {
   updateAgenda,
   definirRealizadoAgenda,
   definirFaltaAgenda,
+  marcarPagamentoAgenda,
   cancelarAgenda,
   cancelarGrupoRecorrencia,
   deleteAgenda,
@@ -123,6 +124,19 @@ export function useAgendas(filtros = {}) {
     }
   }
 
+  async function marcarPagamento(id, pago, parcela) {
+    limparAvisos();
+    try {
+      const response = await marcarPagamentoAgenda(id, pago, parcela);
+      setSuccessMessage(response.message);
+      await refreshAgendas();
+      return response.data;
+    } catch (err) {
+      setError(err);
+      return null;
+    }
+  }
+
   async function cancelAgenda(id) {
     limparAvisos();
     try {
@@ -168,6 +182,7 @@ export function useAgendas(filtros = {}) {
     editAgenda,
     marcarRealizado,
     marcarFalta,
+    marcarPagamento,
     recarregarAgenda,
     cancelAgenda,
     cancelGrupo,

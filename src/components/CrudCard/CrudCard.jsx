@@ -24,6 +24,8 @@ export default function CrudCard({
     onEdit,
     onRemove,
     className = '',
+    ModalItem = null,
+    detalhe = null,
 }) {
     const [criando, setCriando] = useState(false)
     const [itemEditando, setItemEditando] = useState(null)
@@ -94,7 +96,14 @@ export default function CrudCard({
                             style={{ '--i': index }}
                         >
                             <div className="crud-item__icone">{icone}</div>
-                            <span className="crud-item__nome" title={item.nome}>{item.nome}</span>
+                            {detalhe ? (
+                                <div className="crud-item__info">
+                                    <span className="crud-item__nome" title={item.nome}>{item.nome}</span>
+                                    <span className="crud-item__meta">{detalhe(item)}</span>
+                                </div>
+                            ) : (
+                                <span className="crud-item__nome" title={item.nome}>{item.nome}</span>
+                            )}
 
                             {confirmandoId === item._id ? (
                                 <div className="crud-item__confirmar">
@@ -121,7 +130,15 @@ export default function CrudCard({
                 </ul>
             )}
 
-            {itemEditando && (
+            {ModalItem && itemEditando && (
+                <ModalItem key={itemEditando._id} titulo={tituloEdicao} item={itemEditando} placeholder={placeholder} erro={error} onSave={onEdit} onClose={() => setItemEditando(null)} />
+            )}
+
+            {ModalItem && criando && (
+                <ModalItem titulo={labelNovo} placeholder={placeholder} dica={dica} erro={error} onSave={handleSalvarCriacao} onClose={() => setCriando(false)} />
+            )}
+
+            {!ModalItem && itemEditando && (
                 <EditarNomeModal
                     key={itemEditando._id}
                     titulo={tituloEdicao}
@@ -133,7 +150,7 @@ export default function CrudCard({
                 />
             )}
 
-            {criando && (
+            {!ModalItem && criando && (
                 <NovoNomeModal
                     titulo={labelNovo}
                     label={tr('Nome')}

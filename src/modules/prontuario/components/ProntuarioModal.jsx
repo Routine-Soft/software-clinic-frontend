@@ -21,6 +21,7 @@ export default function ProntuarioModal({
   onImprimirAgendamento,
   onMarcarRealizado,
   onMarcarFalta,
+  onMarcarPagamento,
   onAtendimentoFinalizado,
   erroAgendamento,
   onClose,
@@ -62,6 +63,7 @@ export default function ProntuarioModal({
             onImprimir={onImprimirAgendamento}
             onMarcarRealizado={onMarcarRealizado}
             onMarcarFalta={onMarcarFalta}
+            onMarcarPagamento={onMarcarPagamento}
             erro={erroAgendamento}
           />
         </div>
@@ -80,6 +82,7 @@ export default function ProntuarioModal({
         onImprimirAgendamento={onImprimirAgendamento}
         onMarcarRealizado={onMarcarRealizado}
         onMarcarFalta={onMarcarFalta}
+        onMarcarPagamento={onMarcarPagamento}
         onAtendimentoFinalizado={onAtendimentoFinalizado}
         erroAgendamento={erroAgendamento}
       />

@@ -36,6 +36,11 @@ export async function definirFaltaAgenda(id, faltou) {
   return response;
 }
 
+export async function marcarPagamentoAgenda(id, pago, parcela) {
+  const response = await httpClient.patch(`/agendas/${id}/pagamento`, { pago, parcela });
+  return response;
+}
+
 export async function getConfirmacoes() {
   const response = await httpClient.get('/agendas/confirmacoes');
   return response;

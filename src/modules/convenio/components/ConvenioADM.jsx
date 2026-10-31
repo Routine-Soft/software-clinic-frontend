@@ -1,5 +1,8 @@
 import { useConvenios } from '../convenio.hooks';
 import CrudCard from '@/components/CrudCard/CrudCard';
+import { pagaOPlano } from '@/modules/agenda/agenda.utils';
+import { formatarPreco } from '@/modules/servico/servico.utils';
+import ConvenioModal from './ConvenioModal';
 import { tr } from '@/i18n';
 
 const IconeConvenio = () => (
@@ -8,6 +11,12 @@ const IconeConvenio = () => (
     <path d="m9 12 2 2 4-4" />
   </svg>
 );
+
+function quemPaga(convenio) {
+  if (!pagaOPlano(convenio)) return tr('O paciente paga');
+  if (convenio.coparticipacao > 0) return tr('Plano paga · coparticipação de {valor}', { valor: formatarPreco(convenio.coparticipacao) });
+  return tr('Plano paga · sem coparticipação');
+}
 
 export default function ConvenioADM({ className }) {
   const { convenios, loading, error, successMessage, addConvenio, editConvenio, removeConvenio } = useConvenios();
@@ -32,6 +41,8 @@ export default function ConvenioADM({ className }) {
       onAdd={addConvenio}
       onEdit={editConvenio}
       onRemove={removeConvenio}
+      ModalItem={ConvenioModal}
+      detalhe={quemPaga}
     />
   );
 }

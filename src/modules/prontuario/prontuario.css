@@ -1246,3 +1246,29 @@
     animation: none;
   }
 }
+
+.pront-agenda__parcelas {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.pront-agenda__parcelas-titulo {
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.pront-agenda__parcela {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  font-size: 0.86rem;
+  background: var(--surface-2);
+  border-radius: 10px;
+}

@@ -150,6 +150,58 @@ export const STATUS_AGENDA = {
   cancelado: tr('Cancelado'),
 };
 
+export const ROTULO_PAGAMENTO = {
+  pago: tr('Pago'),
+  pendente: tr('Pagamento pendente'),
+  atrasado: tr('Pagamento atrasado'),
+  gratuito: tr('Gratuito'),
+};
+
+const ROTULO_COPARTICIPACAO = {
+  pago: tr('Coparticipação paga'),
+  pendente: tr('Coparticipação pendente'),
+  atrasado: tr('Coparticipação atrasada'),
+};
+
+// Quem paga o atendimento. Convênio antigo, sem a escolha feita: "Particular" é o paciente; os demais, o plano.
+export function pagaOPlano(convenio) {
+  if (!convenio?.nome) return false;
+  return convenio.quemPaga ? convenio.quemPaga === 'plano' : convenio.nome.trim().toLowerCase() !== 'particular';
+}
+
+// Textos da situação: o plano (se for ele quem paga) e o que o paciente deve. Sem nada, devolve lista vazia.
+export function etiquetasDePagamento(agenda) {
+  const peloPlano = pagaOPlano(agenda.convenioId);
+  const situacao = situacaoPagamento(agenda);
+  const etiquetas = peloPlano ? [{ situacao: 'plano', rotulo: tr('Plano: {nome}', { nome: agenda.convenioId.nome }) }] : [];
+  if (situacao && situacao !== 'plano') {
+    etiquetas.push({ situacao, rotulo: (peloPlano ? ROTULO_COPARTICIPACAO : ROTULO_PAGAMENTO)[situacao] });
+  }
+  return etiquetas;
+}
+
+// O controle de pagamento começou neste dia: antes dele ninguém marcava "pago", e tudo apareceria como atrasado.
+const INICIO_CONTROLE_PAGAMENTO = '2026-10-31';
+
+// Pago, pendente, atrasado, gratuito ou plano (nada a pagar pelo paciente); null quando é antigo e não dá para saber.
+export function situacaoPagamento(agenda) {
+  const hoje = new Date().toLocaleDateString('en-CA', { timeZone: 'America/Sao_Paulo' });
+  const parcelas = agenda.cobrancaId?.parcelas;
+  if (parcelas?.length) {
+    if (parcelas.every((p) => p.pagoEm)) return 'pago';
+    return parcelas.some((p) => !p.pagoEm && String(p.vencimento).slice(0, 10) < hoje) ? 'atrasado' : 'pendente';
+  }
+  const peloPlano = pagaOPlano(agenda.convenioId);
+  if (peloPlano && !(agenda.financeiro?.coparticipacao > 0)) return 'plano';
+  if (!peloPlano && Number(agenda.financeiro?.valor) === 0) return 'gratuito';
+  if (agenda.financeiro?.pagoEm) return 'pago';
+  const data = String(agenda.data).slice(0, 10);
+  if (data < INICIO_CONTROLE_PAGAMENTO) return null;
+  // Agendado para o futuro com vencimento "hoje" só atrasa depois do dia da consulta.
+  const vencimento = String(agenda.financeiro?.vencimento ?? '').slice(0, 10);
+  return (vencimento > data ? vencimento : data) < hoje ? 'atrasado' : 'pendente';
+}
+
 // Consulta que conta como marcada: cancelada e falta ficam fora dos totais.
 export function agendaAtiva(agenda) {
   return agenda.status !== 'cancelado' && agenda.status !== 'faltou';
@@ -163,6 +215,7 @@ export function tituloDoAgendamento(agenda) {
     agenda.servicoId?.nome,
     agendaAtiva(agenda) ? null : STATUS_AGENDA[agenda.status],
     confirmadoPeloWhatsapp(agenda) ? tr('Confirmado pelo WhatsApp') : null,
+    ...etiquetasDePagamento(agenda).map((e) => e.rotulo),
   ].filter(Boolean).join(' · ');
 }
 

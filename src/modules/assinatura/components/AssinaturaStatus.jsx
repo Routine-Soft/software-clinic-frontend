@@ -127,10 +127,11 @@ export default function AssinaturaStatus({ className = '' }) {
   const ativaPorPix = assinatura.status === 'ativa' && porPix;
   // Fora do Brasil: assinatura no Stripe, com o portal para trocar o cartão, ver faturas e cancelar.
   const porStripe = assinatura.cobranca === 'stripe' && !!assinatura.stripeCustomerId;
-  const podeCancelar = ['ativa', 'inadimplente', 'pendente'].includes(assinatura.status) && !ativaPorPix;
+  const podeCancelar = ['ativa', 'inadimplente', 'pendente'].includes(assinatura.status) && !porPix;
   const testeVigente = !!assinatura.dataFimTrial && new Date(assinatura.dataFimTrial) > new Date();
   let mensagem = status.mensagem;
   if (ativaPorPix) mensagem = tr('Você paga por Pix, que não renova sozinho. Renove antes de {p0} para não perder o acesso.', { p0: formatarData(assinatura.proximaCobranca) });
+  if (assinatura.status === 'inadimplente' && porPix) mensagem = tr('O período pago por Pix terminou. Renove até {p0} para não perder o acesso.', { p0: formatarData(assinatura.acesso?.ate ?? assinatura.proximaCobranca) });
   if (assinatura.status === 'expirada' && porPix) mensagem = tr('O período pago por Pix terminou. Renove para continuar usando o sistema.');
   const acessoAte = assinatura.status === 'cancelada' && assinatura.acesso?.liberado ? assinatura.acesso.ate : null;
   const emTrial = assinatura.status === 'trial' && assinatura.dataFimTrial;

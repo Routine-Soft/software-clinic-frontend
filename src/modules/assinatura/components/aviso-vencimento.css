@@ -78,3 +78,15 @@
     animation: none;
   }
 }
+
+/* Janela de aviso da mensalidade */
+.modal-vencimento {
+  display: grid;
+  gap: 10px;
+  margin-bottom: 12px;
+  line-height: 1.5;
+}
+
+.modal-vencimento p {
+  margin: 0;
+}

@@ -1,11 +1,13 @@
-import { Navigate } from 'react-router-dom'
+import { Navigate, useLocation } from 'react-router-dom'
 import { useAuthContext } from '@/hooks/useAuthContext'
 
 export function ProtectedRoute({ children, requiredRoles = [] }) {
     const { isAuthenticated, hasRole, user } = useAuthContext()
+    const { pathname } = useLocation()
 
     if (!isAuthenticated) {
-        return <Navigate to="/login" replace />
+        // Depois do login volta para a tela pedida (ex.: link do e-mail de vencimento).
+        return <Navigate to="/login" replace state={{ voltarPara: pathname }} />
     }
 
     // Afiliado não é clínica: qualquer tela que não seja dele (inclusive a página inicial) leva ao painel.

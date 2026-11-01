@@ -120,7 +120,7 @@ export default function AssinaturasPlanos() {
   const aguardandoCartao = assinatura?.status === 'pendente';
   // Cartão (Mercado Pago ou Stripe) tem cobrança recorrente para cancelar; Pix não renova sozinho.
   // Sem nada pago ainda (pendente, ou em atraso sem período pago), cancelar é desistir e voltar ao teste grátis.
-  const cancelavel = ['ativa', 'inadimplente', 'pendente'].includes(assinatura?.status) && !ativaPorPix;
+  const cancelavel = ['ativa', 'inadimplente', 'pendente'].includes(assinatura?.status) && assinatura.cobranca !== 'pix';
   const desistindo = aguardandoCartao || (assinatura?.status === 'inadimplente' && !assinatura.proximaCobranca);
 
   function escolher(plano) {

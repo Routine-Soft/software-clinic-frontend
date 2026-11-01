@@ -2,7 +2,8 @@ import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuthContext } from '@/hooks/useAuthContext';
 import { getAssinaturaAtual } from '../assinatura.api';
-import { avisoDeVencimento } from '../assinatura.utils';
+import { avisoDeVencimento, marcarVistoHoje, vistoHoje } from '../assinatura.utils';
+import ModalVencimento from './ModalVencimento';
 import './aviso-vencimento.css';
 import { tr } from '@/i18n';
 
@@ -10,21 +11,13 @@ import { tr } from '@/i18n';
 // O super_admin também vê a da própria clínica (assim dá para conferir como a barra aparece).
 const PAPEIS_QUE_PAGAM = ['admin', 'recepcao', 'super_admin'];
 
-function hojeEmBrasilia() {
-  return new Date().toLocaleDateString('en-CA', { timeZone: 'America/Sao_Paulo' });
-}
-
 // Fechar no "×" esconde a barra até o fim do dia; no dia seguinte ela volta. Guardado só neste navegador.
 function chaveDoFechamento(tenantId, proximaCobranca) {
   return `aviso-vencimento:${tenantId}:${proximaCobranca}`;
 }
 
 function foiFechadaHoje(chave) {
-  try {
-    return localStorage.getItem(chave) === hojeEmBrasilia();
-  } catch {
-    return false;
-  }
+  return vistoHoje(chave);
 }
 
 // Barra fina no topo, para quem paga por Pix lembrar de renovar (ou quem está no teste, de assinar) antes do acesso acabar.
@@ -57,28 +50,29 @@ export default function AvisoVencimento() {
   if (!aviso) return null;
 
   const chave = chaveDoFechamento(user?.tenantId, assinatura.proximaCobranca);
-  if (fechada || foiFechadaHoje(chave)) return null;
+  const barraVisivel = !fechada && !foiFechadaHoje(chave);
 
   function fechar() {
-    try {
-      localStorage.setItem(chave, hojeEmBrasilia());
-    } catch {
-      // Sem armazenamento (navegação privada): fecha só até recarregar a página.
-    }
+    marcarVistoHoje(chave);
     setFechada(true);
   }
 
   return (
-    <div className="aviso-vencimento" data-tom={aviso.tom} role={aviso.tom === 'danger' ? 'alert' : 'status'}>
-      <span className="aviso-vencimento__texto">{aviso.texto}</span>
-      {pathname !== '/assinaturas' && (
-        <Link to="/assinaturas" className="aviso-vencimento__pagar">{aviso.botao}</Link>
+    <>
+      {barraVisivel && (
+        <div className="aviso-vencimento" data-tom={aviso.tom} role={aviso.tom === 'danger' ? 'alert' : 'status'}>
+          <span className="aviso-vencimento__texto">{aviso.texto}</span>
+          {pathname !== '/assinaturas' && (
+            <Link to="/assinaturas" className="aviso-vencimento__pagar">{aviso.botao}</Link>
+          )}
+          <button type="button" className="aviso-vencimento__fechar" aria-label={tr('Fechar aviso até amanhã')} title={tr('Fechar até amanhã')} onClick={fechar}>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" aria-hidden="true">
+              <path d="M18 6 6 18M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
       )}
-      <button type="button" className="aviso-vencimento__fechar" aria-label={tr('Fechar aviso até amanhã')} title={tr('Fechar até amanhã')} onClick={fechar}>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" aria-hidden="true">
-          <path d="M18 6 6 18M6 6l12 12" />
-        </svg>
-      </button>
-    </div>
+      {aviso.etapa && <ModalVencimento aviso={aviso} chave={`aviso-vencimento-janela:${user?.tenantId}:${aviso.etapa}:${assinatura.proximaCobranca}`} />}
+    </>
   );
 }

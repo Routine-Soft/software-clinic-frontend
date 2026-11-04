@@ -90,6 +90,8 @@ export default {
   'HTTP Error: {status}': 'Error HTTP: {status}',
   'Indique e ganhe': 'Recomienda y gana',
   'Iniciar painel': 'Iniciar panel',
+  'No Safari, toque em Compartilhar e depois em "Adicionar à Tela de Início".': 'En Safari, toca Compartir y luego "Añadir a pantalla de inicio".',
+  'No menu do navegador (⋮), escolha "Instalar aplicativo" ou "Adicionar à tela inicial".': 'En el menú del navegador (⋮), elige "Instalar aplicación" o "Añadir a la pantalla de inicio".',
   'Instalar aplicativo': 'Instalar aplicación',
   'Ir para o conteúdo': 'Ir al contenido',
   'Ir para o início': 'Ir al inicio',

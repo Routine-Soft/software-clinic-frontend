@@ -281,3 +281,14 @@
   background: var(--warning);
   border-radius: 999px;
 }
+
+.sidebar__instalar-dica {
+  margin: 0;
+  padding: 10px 12px;
+  font-size: 0.82rem;
+  line-height: 1.5;
+  color: var(--text-muted, inherit);
+  background: var(--surface-2, transparent);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+}

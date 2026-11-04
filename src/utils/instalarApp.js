@@ -45,3 +45,13 @@ export async function instalarApp() {
   const { outcome } = await pedido.userChoice
   return outcome === 'accepted'
 }
+
+// Já está aberto como aplicativo (janela própria ou tela inicial): não precisa do botão.
+export function jaInstalado() {
+  if (typeof window === 'undefined') return false
+  return window.matchMedia?.('(display-mode: standalone)').matches || window.navigator.standalone === true
+}
+
+export function ehIos() {
+  return /iphone|ipad|ipod/i.test(window.navigator.userAgent)
+}

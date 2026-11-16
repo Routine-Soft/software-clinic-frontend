@@ -966,9 +966,9 @@ a.lp-nav__link {
 
 .lp-planos {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 290px), 1fr));
-  gap: 20px;
-  max-width: 1120px;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+  gap: 18px;
+  max-width: 1240px;
   margin-inline: auto;
 }
 

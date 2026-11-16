@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import Modal from '@/components/Modal/Modal';
 import ModalForm from '@/components/Modal/ModalForm';
-import { recursosDoTexto } from '../plano.utils';
 import { tr } from '@/i18n';
+import { NIVEIS_DO_PLANO } from '../plano.utils';
 
-const FORM_CRIAR_INICIAL = { nome: '', tipo: 'gratis', preco: '', duracaoDiasTrial: '', individual: false, descricao: '', recursos: '', moeda: 'BRL' };
+const FORM_CRIAR_INICIAL = { nome: '', tipo: 'gratis', preco: '', duracaoDiasTrial: '', nivel: 'pro', descricao: '', moeda: 'BRL' };
 
 export default function NovoPlanoModal({ erro, onSave, onClose }) {
   const [formCriar, setFormCriar] = useState(FORM_CRIAR_INICIAL);
@@ -20,9 +20,8 @@ export default function NovoPlanoModal({ erro, onSave, onClose }) {
       moeda: formCriar.tipo === 'pago' ? formCriar.moeda : 'BRL',
       preco: Number(formCriar.preco) || 0,
       duracaoDiasTrial: formCriar.tipo === 'gratis' ? Number(formCriar.duracaoDiasTrial) || null : null,
-      individual: formCriar.tipo === 'pago' && formCriar.individual,
+      nivel: formCriar.nivel,
       descricao: formCriar.descricao.trim(),
-      recursos: recursosDoTexto(formCriar.recursos),
     };
   }
 
@@ -108,30 +107,17 @@ export default function NovoPlanoModal({ erro, onSave, onClose }) {
                   onChange={(e) => handleChangeCriar('descricao', e.target.value)}
                 />
               </div>
-              <div className="field">
-                <label className="field__label" htmlFor="novo-plano-recursos">{tr('O que o plano inclui (um por linha)')}</label>
-                <textarea
-                  id="novo-plano-recursos"
-                  className="input textarea"
-                  rows={7}
-                  placeholder={tr('Agenda\nProntuário eletrônico\nConvênios')}
-                  value={formCriar.recursos}
-                  onChange={(e) => handleChangeCriar('recursos', e.target.value)}
-                />
-                <p className="field__hint">{tr('O que um plano tem e o outro não aparece em destaque na landing.')}</p>
-              </div>
             </>
           )}
 
           {formCriar.tipo === 'pago' && (
-            <label className="check">
-              <input
-                type="checkbox"
-                checked={formCriar.individual}
-                onChange={(e) => handleChangeCriar('individual', e.target.checked)}
-              />
-              <span>{tr('Basic: até 5 profissionais, sem recepção nem repasses')}</span>
-            </label>
+            <div className="field">
+              <label className="field__label" htmlFor="novo-plano-nivel">{tr('Nível do plano')}</label>
+              <select id="novo-plano-nivel" className="input" value={formCriar.nivel} onChange={(e) => handleChangeCriar('nivel', e.target.value)}>
+                {NIVEIS_DO_PLANO.map(([valor, rotulo]) => <option key={valor} value={valor}>{rotulo}</option>)}
+              </select>
+              <p className="field__hint">{tr('Define os limites e os recursos (ver a página de preços).')}</p>
+            </div>
           )}
         </ModalForm>
       )}

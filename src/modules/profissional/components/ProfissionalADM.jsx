@@ -9,6 +9,8 @@ import { Icone, IconeMais, IconeLapis, IconeLixeira, IconeCheck, IconeX } from '
 import { iniciais } from '@/utils/nome';
 import '@/components/CrudCard/CrudCard.css';
 import { tr } from '@/i18n';
+import { planoQueLibera, usePlano } from '@/modules/plano/plano.contexto';
+import SeloPago from '@/modules/plano/components/SeloPago';
 
 const IconeProfissionais = () => (
   <Icone>
@@ -20,6 +22,9 @@ const IconeProfissionais = () => (
 
 export default function ProfissionalADM({ className = '' }) {
   const { profissionais, loading, error, successMessage, addProfissional, editProfissional, removeProfissional } = useProfissionais();
+  // Limite de profissionais do plano (Grátis 1, Basic 2, Pro 25): no limite, "Adicionar" já abre a janela do plano.
+  const { limites, nivel, abrirBloqueio } = usePlano();
+  const noLimite = !!limites.profissionais && !loading && profissionais.length >= limites.profissionais;
   const { especialidades, loading: carregandoEspecialidades } = useEspecialidades();
   const { usuarios, loading: loadingUsuarios } = useUsuariosDaClinica();
 
@@ -65,13 +70,16 @@ export default function ProfissionalADM({ className = '' }) {
         </div>
 
         {!loading && (
-          <span className="badge badge--primary">
-            {profissionais.length} {profissionais.length === 1 ? tr('profissional') : tr('profissionais')}
+          <span className={`badge ${noLimite ? 'badge--warning' : 'badge--primary'}`}>
+            {limites.profissionais
+              ? tr('{n} de {limite} profissionais do seu plano', { n: profissionais.length, limite: limites.profissionais })
+              : <>{profissionais.length} {profissionais.length === 1 ? tr('profissional') : tr('profissionais')}</>}
           </span>
         )}
-        <button type="button" className="btn btn--primary btn--sm crud-card__novo-btn" onClick={() => setCriandoProfissional(true)} aria-label={tr('Adicionar profissional')}>
+        <button type="button" className="btn btn--primary btn--sm crud-card__novo-btn" onClick={() => (noLimite ? abrirBloqueio('profissionais', 'profissionais-novo') : setCriandoProfissional(true))} aria-label={tr('Adicionar profissional')}>
           <IconeMais />
           <span className="crud-card__rotulo">{tr('Adicionar')}</span>
+          {noLimite && nivel !== 'rede' && <SeloPago plano={planoQueLibera('profissionais', nivel)} />}
         </button>
       </header>
 

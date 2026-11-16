@@ -2,7 +2,7 @@ import { createContext, useContext } from 'react';
 
 // O que a clínica pode usar agora, vindo de /assinaturas/atual (`acesso`): nível "gratis", "basic" ou "pro",
 // os recursos liberados e os limites. Mesmas regras de plano.limites.js no backend (lá é quem barra de verdade).
-//  - pro: plano Pro e o período de teste, tudo liberado;
+//  - rede e pro: planos Rede e Pro e o período de teste, tudo liberado (só muda o limite de profissionais);
 //  - basic: até 5 profissionais, sem recepção nem repasses;
 //  - gratis: agenda, até 10 pacientes e um profissional.
 export const PlanoContext = createContext({
@@ -32,8 +32,10 @@ const PLANO_DO_RECURSO = {
   profissionais: 'basic',
 };
 
-// Nome do plano que libera o recurso para esta clínica (no Basic, o que falta é sempre do Pro).
+// Nome do plano que libera o recurso para esta clínica: no Basic, o que falta é do Pro; no Pro (só limites de
+// profissionais), do Rede. No Rede não há plano acima (a janela só avisa do limite).
 export function planoQueLibera(recurso, nivel) {
+  if (nivel === 'pro' || nivel === 'rede') return 'Rede';
   return nivel === 'basic' || PLANO_DO_RECURSO[recurso] === 'pro' ? 'Pro' : 'Basic';
 }
 

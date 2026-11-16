@@ -20,13 +20,13 @@ import './paciente.css';
 import '@/modules/prontuario/prontuario.css';
 import SeloTeste from './SeloTeste';
 import { tr } from '@/i18n';
-import { usePlano } from '@/modules/plano/plano.contexto';
+import { planoQueLibera, usePlano } from '@/modules/plano/plano.contexto';
 import SeloPago from '@/modules/plano/components/SeloPago';
 
 // Pacientes e prontuários na mesma tela. Consultas e o botão do prontuário só aparecem para quem
 // pode abrir prontuários (profissional de saúde); a recepção vê o cadastro, sem nada clínico.
 export default function PacienteADM() {
-  const { limites, abrirBloqueio } = usePlano();
+  const { limites, nivel, abrirBloqueio } = usePlano();
   const { pacientes, loading, error, successMessage, addPaciente, editPaciente, removePaciente, incluirAcompanhamento, finalizarAcompanhamento, refreshPacientes } = usePacientes();
   const { profissionais } = useProfissionais();
   const { convenios } = useConvenios();
@@ -86,7 +86,7 @@ export default function PacienteADM() {
   const larguras = veProntuarios ? [70, 55, 50, 40, 30] : [70, 55, 50, 30];
   const algumModalAberto = criandoPaciente || !!pacienteEditando || !!pacienteAcompanhamento;
 
-  // Plano Grátis: até 10 pacientes. No limite, "Novo paciente" já abre a janela de assinar (o backend também barra).
+  // Grátis: até 10 pacientes; Basic: até 100. No limite, "Novo paciente" já abre a janela de assinar (o backend também barra).
   const limitePacientes = limites.pacientes ?? null;
   const noLimite = !!limitePacientes && !loading && pacientes.length >= limitePacientes;
 
@@ -107,7 +107,7 @@ export default function PacienteADM() {
           )}
           {!loading && (limitePacientes ? (
             <span className={`badge ${noLimite ? 'badge--warning' : 'badge--primary'}`}>
-              {tr('{n} de {limite} pacientes do plano Grátis', { n: pacientes.length, limite: limitePacientes })}
+              {tr('{n} de {limite} pacientes do seu plano', { n: pacientes.length, limite: limitePacientes })}
             </span>
           ) : (
             <span className="badge badge--primary">
@@ -121,7 +121,7 @@ export default function PacienteADM() {
           >
             <IconeMais />
             {tr('Novo paciente')}
-            {noLimite && <SeloPago plano="Basic" />}
+            {noLimite && <SeloPago plano={planoQueLibera('pacientes', nivel)} />}
           </button>
         </div>
       </header>

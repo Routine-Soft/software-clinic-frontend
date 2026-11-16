@@ -1,23 +1,11 @@
 import PLANOS_ES from '@/i18n/es/planos';
+import { tr } from '@/i18n';
 
-// Recursos digitados um por linha no cadastro do plano.
-export function recursosDoTexto(texto) {
-  return String(texto ?? '').split('\n').map((r) => r.trim()).filter(Boolean);
-}
-
-// Descrição e recursos do plano no idioma da tela (o inglês é cadastrado à parte; sem ele, vale o português).
-// No espanhol, os textos conhecidos passam pela tabela de es/planos.js.
+// Descrição do plano no idioma da tela. Os planos em real são cadastrados em português e os em dólar em inglês;
+// no espanhol, as frases conhecidas passam pela tabela de es/planos.js.
 export function planoNoIdioma(plano, idioma) {
-  if (idioma === 'es') {
-    const es = (texto) => PLANOS_ES[texto] ?? texto;
-    return { ...plano, descricao: plano.descricao && es(plano.descricao), recursos: (plano.recursos ?? []).map(es) };
-  }
-  if (idioma !== 'en') return plano;
-  return {
-    ...plano,
-    descricao: plano.descricaoEn || plano.descricao,
-    recursos: plano.recursosEn?.length ? plano.recursosEn : plano.recursos,
-  };
+  if (idioma !== 'es' || !plano.descricao) return plano;
+  return { ...plano, descricao: PLANOS_ES[plano.descricao] ?? plano.descricao };
 }
 
 // Planos do Brasil em reais; os de fora do Brasil em dólar (preço próprio, não convertido).
@@ -25,3 +13,11 @@ export function formatarPrecoPlano(preco, locale, moeda = 'BRL') {
   const casas = Number.isInteger(Number(preco)) ? 0 : 2;
   return Number(preco).toLocaleString(locale, { style: 'currency', currency: moeda === 'USD' ? 'USD' : 'BRL', minimumFractionDigits: casas, maximumFractionDigits: casas });
 }
+
+// Níveis do plano pago (mesmos do backend, plano.limites.js): definem limites e recursos.
+export const NOME_DO_NIVEL = { basic: 'Basic', pro: 'Pro', rede: 'Rede' };
+export const NIVEIS_DO_PLANO = [
+  ['basic', tr('Basic: até 2 profissionais e 100 pacientes, sem recepção nem repasses')],
+  ['pro', tr('Pro: até 25 profissionais')],
+  ['rede', tr('Rede: até 100 profissionais')],
+];

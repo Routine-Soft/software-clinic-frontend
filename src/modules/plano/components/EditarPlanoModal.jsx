@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import Modal from '@/components/Modal/Modal';
 import ModalForm from '@/components/Modal/ModalForm';
-import { recursosDoTexto } from '../plano.utils';
 import { tr } from '@/i18n';
+import { NIVEIS_DO_PLANO } from '../plano.utils';
 
 export default function EditarPlanoModal({ plano, erro, onSave, onClose }) {
   const [formEdicao, setFormEdicao] = useState({
@@ -10,9 +10,8 @@ export default function EditarPlanoModal({ plano, erro, onSave, onClose }) {
     tipo: plano.tipo,
     preco: plano.preco,
     duracaoDiasTrial: plano.duracaoDiasTrial ?? '',
-    individual: plano.individual === true,
+    nivel: plano.nivel ?? 'pro',
     descricao: plano.descricao ?? '',
-    recursos: (plano.recursos ?? []).join('\n'),
   });
 
   function handleChangeEdicao(field, value) {
@@ -25,9 +24,8 @@ export default function EditarPlanoModal({ plano, erro, onSave, onClose }) {
       tipo: formEdicao.tipo,
       preco: Number(formEdicao.preco) || 0,
       duracaoDiasTrial: formEdicao.tipo === 'gratis' ? Number(formEdicao.duracaoDiasTrial) || null : null,
-      individual: formEdicao.tipo === 'pago' && formEdicao.individual,
+      nivel: formEdicao.nivel,
       descricao: formEdicao.descricao.trim(),
-      recursos: recursosDoTexto(formEdicao.recursos),
     };
   }
 
@@ -103,30 +101,17 @@ export default function EditarPlanoModal({ plano, erro, onSave, onClose }) {
                   onChange={(e) => handleChangeEdicao('descricao', e.target.value)}
                 />
               </div>
-              <div className="field">
-                <label className="field__label" htmlFor="editar-plano-recursos">{tr('O que o plano inclui (um por linha)')}</label>
-                <textarea
-                  id="editar-plano-recursos"
-                  className="input textarea"
-                  rows={7}
-                  placeholder={tr('Agenda\nProntuário eletrônico\nConvênios')}
-                  value={formEdicao.recursos}
-                  onChange={(e) => handleChangeEdicao('recursos', e.target.value)}
-                />
-                <p className="field__hint">{tr('O que um plano tem e o outro não aparece em destaque na landing.')}</p>
-              </div>
             </>
           )}
 
           {formEdicao.tipo === 'pago' && (
-            <label className="check">
-              <input
-                type="checkbox"
-                checked={formEdicao.individual}
-                onChange={(e) => handleChangeEdicao('individual', e.target.checked)}
-              />
-              <span>{tr('Basic: até 5 profissionais, sem recepção nem repasses')}</span>
-            </label>
+            <div className="field">
+              <label className="field__label" htmlFor="editar-plano-nivel">{tr('Nível do plano')}</label>
+              <select id="editar-plano-nivel" className="input" value={formEdicao.nivel} onChange={(e) => handleChangeEdicao('nivel', e.target.value)}>
+                {NIVEIS_DO_PLANO.map(([valor, rotulo]) => <option key={valor} value={valor}>{rotulo}</option>)}
+              </select>
+              <p className="field__hint">{tr('Define os limites e os recursos (ver a página de preços).')}</p>
+            </div>
           )}
         </ModalForm>
       )}

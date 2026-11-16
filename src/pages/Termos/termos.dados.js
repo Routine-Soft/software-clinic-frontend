@@ -29,7 +29,7 @@ export const TERMOS_CLINICA = {
     ['3. Teste grátis, planos e pagamento', [
       'A conta começa com um período de teste grátis, sem cartão de crédito, com todos os recursos. Depois dele, a clínica continua no plano Grátis, que inclui a agenda, até 10 pacientes e um profissional. Os demais recursos dependem de um plano pago, no Pix ou no cartão de crédito, pelo Mercado Pago. Os registros já feitos, como os prontuários, continuam disponíveis para leitura em qualquer plano.',
       'No cartão, a assinatura renova sozinha todo mês até ser cancelada. No Pix, cada pagamento libera um período de acesso e não há renovação automática.',
-      'O plano Basic vai até 5 profissionais, cada um com o próprio login, e não inclui recepção nem repasses. Para ter recepção, repasses ou mais profissionais, é preciso o plano Pro.',
+      'O plano Basic vai até 2 profissionais, cada um com o próprio login, e 100 pacientes, e não inclui recepção nem repasses. Para ter recepção, repasses, mais profissionais ou mais pacientes, é preciso o plano Pro, que vai até 25 profissionais. O plano Rede vai até 100 profissionais.',
       'Os preços dos planos podem mudar. Uma mudança de preço não afeta o período já pago e será avisada com antecedência.',
     ]],
     ['4. Desistência e cancelamento', [
@@ -74,7 +74,7 @@ export const TERMOS_AFILIADO = {
       'Cada clínica gera uma única comissão, mesmo que continue pagando nos meses seguintes.',
     ]],
     ['3. Valor da comissão e prazo', [
-      'A comissão é de 50% do valor da primeira mensalidade do plano assinado pela clínica indicada (por exemplo: R$ 49,50 no plano Basic, de R$ 99,00, e R$ 100,00 no plano Pro, de R$ 200,00). Descontos de indicação que a clínica tiver não diminuem a comissão.',
+      'A comissão é de 50% do valor da primeira mensalidade do plano assinado pela clínica indicada (por exemplo: R$ 64,50 no plano Basic, de R$ 129,00, e R$ 124,50 no plano Pro, de R$ 249,00). Descontos de indicação que a clínica tiver não diminuem a comissão.',
       'O cliente tem 7 dias, pelo Código de Defesa do Consumidor, para desistir e receber o dinheiro de volta. Por isso, a comissão fica em carência e só pode ser paga a partir do 8º dia depois do pagamento da clínica.',
       'Se o pagamento da clínica for devolvido ou contestado antes de a comissão ser paga, ela é cancelada. Ela volta a valer se a clínica pagar de novo.',
     ]],

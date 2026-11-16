@@ -75,7 +75,7 @@ function IconeNaoTem() {
 // O que o plano inclui: os mesmos tópicos, na mesma ordem, da página de preços (`landing.precos.comparacao`;
 // coluna 1 = Basic, 2 = Pro), para os planos ficarem lado a lado. Depois, como o pagamento funciona.
 function BeneficiosDoPlano({ plano, stripe }) {
-  const coluna = plano.individual ? 2 : 3;
+  const coluna = { basic: 2, pro: 3, rede: 4 }[plano.nivel] ?? 3;
   const pagamento = stripe
     ? [tr('Cartão de crédito internacional, em dólar'), tr('No cartão, renova sozinho todo mês'), tr('Cancele quando quiser, sem multa')]
     : [tr('No cartão, renova sozinho todo mês'), tr('No Pix, cada pagamento vale 30 dias'), tr('Cancele quando quiser, sem multa')];

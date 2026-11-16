@@ -5,7 +5,7 @@ import { useAuthContext } from '@/hooks/useAuthContext';
 import { idiomaAtual, localeAtual, tr } from '@/i18n';
 import { getPlanosPublicos } from '../plano.api';
 import { planoQueLibera } from '../plano.contexto';
-import { formatarPrecoPlano } from '../plano.utils';
+import { formatarPrecoPlano, NOME_DO_NIVEL } from '../plano.utils';
 import './recurso-bloqueado.css';
 
 // O que cada recurso traz, com uma captura do sistema desfocada atrás do cadeado (as de public/landing).
@@ -18,7 +18,7 @@ const RECURSOS = {
   empresas: { titulo: tr('Empresas clientes'), texto: tr('Cadastre as empresas atendidas e os funcionários de cada uma.'), imagem: 'painel-admin.jpg' },
   reunioes: { titulo: tr('Agenda de reuniões'), texto: tr('Uma agenda à parte para conversas com clientes e parceiros.'), imagem: 'reunioes.jpg' },
   equipe: { titulo: tr('Equipe da clínica'), texto: tr('Cada profissional com o próprio login, a própria agenda e os próprios prontuários.'), imagem: 'agenda-semana.jpg' },
-  pacientes: { titulo: tr('Pacientes sem limite'), texto: tr('O plano Grátis vai até 10 pacientes. Nos planos pagos, o cadastro não tem limite.'), imagem: 'pacientes.jpg' },
+  pacientes: { titulo: tr('Pacientes sem limite'), texto: tr('O Grátis vai até 10 pacientes, o Basic até 100 e o Pro não tem limite.'), imagem: 'pacientes.jpg' },
   profissionais: { titulo: tr('Mais profissionais'), texto: tr('Cadastre a equipe toda, cada profissional com a sua cor na agenda.'), imagem: 'agenda-semana.jpg' },
   repasse: { titulo: tr('Repasses'), texto: tr('Quanto cada profissional tem a receber, calculado sozinho a cada atendimento.'), imagem: 'repasses.jpg' },
   recepcao: { titulo: tr('Recepção'), texto: tr('A recepção agenda, cadastra e chama os pacientes, sem ver o conteúdo clínico.'), imagem: 'agenda-semana.jpg' },
@@ -40,7 +40,7 @@ export default function RecursoBloqueadoModal({ recurso, mensagem, rota, nivel, 
   const { user } = useAuthContext();
   const [planos, setPlanos] = useState(null);
   const info = RECURSOS[recurso] ?? { titulo: tr('Recurso dos planos pagos'), texto: mensagem ?? '', imagem: 'inicio.jpg' };
-  const alvo = planoQueLibera(recurso, nivel) === 'Pro' ? 'pro' : 'basic';
+  const alvo = planoQueLibera(recurso, nivel).toLowerCase();
   const podePagar = ['admin', 'recepcao'].includes(user?.role);
   const pasta = idiomaAtual() === 'pt' ? '/landing' : '/landing/en';
 
@@ -52,9 +52,25 @@ export default function RecursoBloqueadoModal({ recurso, mensagem, rota, nivel, 
     return () => { cancelado = true; };
   }, [user?.paisClinica]);
 
-  const plano = planos?.find((p) => (alvo === 'basic' ? p.individual : !p.individual));
-  const nomePlano = plano?.nome ?? (alvo === 'basic' ? 'Basic' : 'Pro');
+  const plano = planos?.find((p) => (p.nivel ?? 'pro') === alvo);
+  const nomePlano = plano?.nome ?? NOME_DO_NIVEL[alvo];
   const porDia = plano ? formatarPrecoPlano(Math.ceil((plano.preco / 30) * 100) / 100, localeAtual(), plano.moeda ?? moeda) : null;
+
+  // Limite do plano mais completo (ex.: o 101º profissional no Rede): não há o que assinar, só o aviso.
+  if (nivel === 'rede') {
+    return (
+      <Modal title={tr('Limite do plano')} onClose={onClose} className="recurso-bloqueado">
+        {(fechar) => (
+          <div className="recurso-bloqueado__corpo">
+            <p className="recurso-bloqueado__texto">{mensagem ?? info.texto}</p>
+            <div className="recurso-bloqueado__acoes">
+              <button type="button" className="btn btn--primary btn--block" onClick={fechar} data-autofocus>{tr('Entendi')}</button>
+            </div>
+          </div>
+        )}
+      </Modal>
+    );
+  }
 
   return (
     <Modal title={info.titulo} onClose={onClose} className="recurso-bloqueado">

@@ -345,13 +345,14 @@ function Precos({ logado }) {
   const P = t('landing.precos');
   const { planos, carregando, falhou } = usePlanosPublicos();
   const pagos = (falhou || (planos && !planos.length) ? t('landing.planosPadrao') : planos ?? []).map((p) => planoNoIdioma(p, idioma));
-  const basic = pagos.find((p) => p.individual);
-  const pro = pagos.find((p) => !p.individual);
+  const doNivel = (nivel) => pagos.find((p) => (p.nivel ?? 'pro') === nivel);
+  const [basic, pro, rede] = ['basic', 'pro', 'rede'].map(doNivel);
   const moeda = pagos[0]?.moeda;
   const cartoes = [
     { _id: 'gratis', coluna: 0, nome: P.gratis.nome, descricao: P.gratis.descricao, preco: 0, moeda, nota: P.gratis.semCartao, botao: P.gratis.botao },
     basic && { ...basic, coluna: 1, nota: P.teste, botao: P.testar },
     pro && { ...pro, coluna: 2, nota: P.teste, botao: P.testar, destaque: true },
+    rede && { ...rede, coluna: 3, nota: P.teste, botao: P.testar },
   ].filter(Boolean);
 
   return (
@@ -365,7 +366,7 @@ function Precos({ logado }) {
 
         <div className="lp-planos" style={{ '--topicos': P.comparacao.length, '--linhas-cartao': P.comparacao.length + 4 }}>
           {carregando
-            ? [0, 1, 2].map((i) => (
+            ? [0, 1, 2, 3].map((i) => (
                 <article key={i} className="lp-plano" aria-busy="true">
                   <div className="skeleton skeleton--line" style={{ width: '40%', height: 26 }} />
                   <div className="skeleton skeleton--line" style={{ width: '60%', height: 48 }} />

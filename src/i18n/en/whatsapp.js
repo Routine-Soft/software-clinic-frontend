@@ -40,4 +40,5 @@ export default {
   'Dia da consulta': 'Appointment day',
   'terça-feira, 18/11': 'Tuesday, 11/18',
   'Horário': 'Time',
+  'Desconectando... isso leva alguns segundos.': 'Disconnecting... this takes a few seconds.',
 };

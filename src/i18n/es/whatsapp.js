@@ -40,4 +40,5 @@ export default {
   'Dia da consulta': 'Día de la cita',
   'terça-feira, 18/11': 'martes, 18/11',
   'Horário': 'Horario',
+  'Desconectando... isso leva alguns segundos.': 'Desconectando... esto tarda unos segundos.',
 };

@@ -39,7 +39,9 @@ function CartaoConexao({ situacao, conectando, ocupado, onConectar, onCancelar, 
           </div>
         </div>
         <p className="whats-card__texto">{tr('Os lembretes saem deste número. As respostas dos pacientes chegam normalmente no WhatsApp da clínica.')}</p>
-        {confirmando ? (
+        {ocupado === 'desconectar' ? (
+          <p className="whats-card__dica" role="status">{tr('Desconectando... isso leva alguns segundos.')}</p>
+        ) : confirmando ? (
           <div className="whats-confirmar" role="group" aria-label={tr('Confirmar desconexão')}>
             <span>{tr('Desconectar?')}</span>
             <button type="button" className="btn btn--danger btn--sm" disabled={ocupado === 'desconectar'} onClick={async () => { await onDesconectar(); setConfirmando(false); }} aria-label={tr('Sim, desconectar')}>✓</button>

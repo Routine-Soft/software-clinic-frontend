@@ -351,6 +351,69 @@
   justify-content: center;
 }
 
+/* Seleção em massa (lembretes no WhatsApp). */
+.paciente-selecionar-todos {
+  margin-left: auto;
+  font-size: 0.85rem;
+}
+
+.paciente-col-marcar {
+  width: 44px;
+  padding-right: 0 !important;
+}
+
+.paciente-marcar {
+  display: block;
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  cursor: pointer;
+  accent-color: var(--primary);
+}
+
+.table tr.is-selected {
+  background: var(--primary-soft);
+}
+
+.paciente-massa {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 16px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 20px;
+  background: var(--primary-soft);
+  border-bottom: 1px solid var(--primary-ring);
+  animation: fadeInUp 0.25s var(--ease) backwards;
+}
+
+.paciente-massa__texto {
+  display: grid;
+  gap: 2px;
+  line-height: 1.5;
+}
+
+.paciente-massa__texto strong {
+  color: var(--primary);
+}
+
+.paciente-massa__texto span {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+
+.paciente-massa__acoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .paciente-massa {
+    animation: none;
+  }
+}
+
 /* Celular e telas estreitas: cada paciente vira um cartão, sem rolagem horizontal. */
 @media (max-width: 860px) {
   .paciente-table thead {
@@ -366,10 +429,30 @@
   }
 
   .paciente-table tr {
+    position: relative;
     display: grid;
     gap: 10px;
     padding: 16px;
     border-bottom: 1px solid var(--border);
+  }
+
+  .paciente-table td.paciente-col-marcar {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    width: auto;
+  }
+
+  .paciente-table .pessoa {
+    padding-right: 32px;
+  }
+
+  .paciente-selecionar-todos {
+    margin-left: 0;
+  }
+
+  .paciente-massa {
+    padding: 14px 16px;
   }
 
   .paciente-table td,

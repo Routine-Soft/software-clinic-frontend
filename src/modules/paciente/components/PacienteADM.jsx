@@ -27,7 +27,7 @@ import SeloPago from '@/modules/plano/components/SeloPago';
 // pode abrir prontuários (profissional de saúde); a recepção vê o cadastro, sem nada clínico.
 export default function PacienteADM() {
   const { limites, nivel, abrirBloqueio } = usePlano();
-  const { pacientes, loading, error, successMessage, addPaciente, editPaciente, removePaciente, incluirAcompanhamento, finalizarAcompanhamento, refreshPacientes } = usePacientes();
+  const { pacientes, loading, error, successMessage, addPaciente, editPaciente, removePaciente, marcarLembretesWhatsapp, incluirAcompanhamento, finalizarAcompanhamento, refreshPacientes } = usePacientes();
   const { profissionais } = useProfissionais();
   const { convenios } = useConvenios();
   const { empresas } = useEmpresas();
@@ -42,11 +42,40 @@ export default function PacienteADM() {
   const [pacienteAcompanhamento, setPacienteAcompanhamento] = useState(null);
   const [pacienteEmJanela, setPacienteEmJanela] = useState(null);
   const [confirmandoId, setConfirmandoId] = useState(null);
+  // Seleção para ligar/desligar os lembretes no WhatsApp de vários pacientes de uma vez.
+  const [selecionados, setSelecionados] = useState([]);
+  const [salvandoLembretes, setSalvandoLembretes] = useState(false);
 
   const pacientesFiltrados = useMemo(
     () => filtrarPacientes(ordenarPacientes(pacientes), busca),
     [pacientes, busca]
   );
+
+  // Só conta quem ainda está na lista (um paciente excluído sai da seleção sozinho).
+  const selecaoValida = useMemo(() => {
+    const existentes = new Set(pacientes.map((p) => p._id));
+    return selecionados.filter((id) => existentes.has(id));
+  }, [pacientes, selecionados]);
+  const marcadosNaBusca = pacientesFiltrados.filter((p) => selecaoValida.includes(p._id)).length;
+  const todosDaBusca = pacientesFiltrados.length > 0 && marcadosNaBusca === pacientesFiltrados.length;
+
+  function alternarPaciente(id) {
+    setSelecionados((atual) => (atual.includes(id) ? atual.filter((x) => x !== id) : [...atual, id]));
+  }
+
+  function alternarTodos() {
+    const idsDaBusca = pacientesFiltrados.map((p) => p._id);
+    setSelecionados((atual) => (todosDaBusca
+      ? atual.filter((id) => !idsDaBusca.includes(id))
+      : [...new Set([...atual, ...idsDaBusca])]));
+  }
+
+  async function aplicarLembretes(aceita) {
+    setSalvandoLembretes(true);
+    const ok = await marcarLembretesWhatsapp(selecaoValida, aceita);
+    setSalvandoLembretes(false);
+    if (ok) setSelecionados([]);
+  }
 
   const resumoPorPaciente = useMemo(() => {
     const mapa = new Map();
@@ -83,7 +112,7 @@ export default function PacienteADM() {
   }
 
   const carregando = loading || acesso.carregando || (veProntuarios && carregandoProntuarios);
-  const larguras = veProntuarios ? [70, 55, 50, 40, 30] : [70, 55, 50, 30];
+  const larguras = veProntuarios ? [40, 70, 55, 50, 40, 30] : [40, 70, 55, 50, 30];
   const algumModalAberto = criandoPaciente || !!pacienteEditando || !!pacienteAcompanhamento;
 
   // Grátis: até 10 pacientes; Basic: até 100. No limite, "Novo paciente" já abre a janela de assinar (o backend também barra).
@@ -151,12 +180,48 @@ export default function PacienteADM() {
               {pacientesFiltrados.length} de {pacientes.length}
             </span>
           )}
+          {!loading && pacientesFiltrados.length > 0 && (
+            <label className="check paciente-selecionar-todos">
+              <input
+                type="checkbox"
+                checked={todosDaBusca}
+                ref={(el) => { if (el) el.indeterminate = marcadosNaBusca > 0 && !todosDaBusca; }}
+                onChange={alternarTodos}
+              />
+              <span>{busca ? tr('Selecionar os {n} da busca', { n: pacientesFiltrados.length }) : tr('Selecionar todos')}</span>
+            </label>
+          )}
         </div>
+
+        {selecaoValida.length > 0 && (
+          <div className="paciente-massa" role="region" aria-label={tr('Pacientes selecionados')}>
+            <div className="paciente-massa__texto">
+              <strong>
+                {selecaoValida.length === 1 ? tr('1 paciente selecionado') : tr('{n} pacientes selecionados', { n: selecaoValida.length })}
+              </strong>
+              <span>{tr('Ative só para quem aceitou receber lembretes de consulta pelo WhatsApp.')}</span>
+            </div>
+            <div className="paciente-massa__acoes">
+              <button type="button" className="btn btn--primary btn--sm" disabled={salvandoLembretes} onClick={() => aplicarLembretes(true)}>
+                <Icone>{ICONES.whatsapp}</Icone>
+                {salvandoLembretes ? tr('Salvando...') : tr('Ativar lembretes no WhatsApp')}
+              </button>
+              <button type="button" className="btn btn--ghost btn--sm" disabled={salvandoLembretes} onClick={() => aplicarLembretes(false)}>
+                {tr('Desativar lembretes')}
+              </button>
+              <button type="button" className="btn btn--ghost btn--sm" disabled={salvandoLembretes} onClick={() => setSelecionados([])}>
+                <IconeX />
+                {tr('Limpar seleção')}
+              </button>
+            </div>
+          </div>
+        )}
 
         <div className="table-wrap">
           <table className="table paciente-table" aria-busy={carregando}>
             <thead>
               <tr>
+                <th className="paciente-col-marcar" aria-label={tr('Selecionar')} />
                 <th>{tr('Paciente')}</th>
                 <th>{tr('Contato')}</th>
                 <th>{tr('Convênio e acompanhamento')}</th>
@@ -192,8 +257,17 @@ export default function PacienteADM() {
                     <tr
                       key={paciente._id}
                       style={{ '--i': Math.min(index, 12) }}
-                      className={pacienteEditando?._id === paciente._id ? 'is-editing' : undefined}
+                      className={[pacienteEditando?._id === paciente._id && 'is-editing', selecaoValida.includes(paciente._id) && 'is-selected'].filter(Boolean).join(' ') || undefined}
                     >
+                      <td className="paciente-col-marcar">
+                        <input
+                          type="checkbox"
+                          className="paciente-marcar"
+                          checked={selecaoValida.includes(paciente._id)}
+                          onChange={() => alternarPaciente(paciente._id)}
+                          aria-label={tr('Selecionar {nome}', { nome: paciente.nome })}
+                        />
+                      </td>
                       <td>
                         <div className="pessoa">
                           <div className="pessoa__avatar" aria-hidden="true">{iniciais(paciente.nome)}</div>

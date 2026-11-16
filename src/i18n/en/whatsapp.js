@@ -41,4 +41,16 @@ export default {
   'terça-feira, 18/11': 'Tuesday, 11/18',
   'Horário': 'Time',
   'Desconectando... isso leva alguns segundos.': 'Disconnecting... this takes a few seconds.',
+  // Pacientes: lembretes em massa
+  'Selecionar todos': 'Select all',
+  'Selecionar os {n} da busca': 'Select the {n} in the search',
+  'Pacientes selecionados': 'Selected patients',
+  '1 paciente selecionado': '1 patient selected',
+  '{n} pacientes selecionados': '{n} patients selected',
+  'Ative só para quem aceitou receber lembretes de consulta pelo WhatsApp.': 'Turn on only for patients who agreed to receive appointment reminders on WhatsApp.',
+  'Ativar lembretes no WhatsApp': 'Turn on WhatsApp reminders',
+  'Desativar lembretes': 'Turn off reminders',
+  'Limpar seleção': 'Clear selection',
+  'Selecionar': 'Select',
+  'Selecionar {nome}': 'Select {nome}',
 };

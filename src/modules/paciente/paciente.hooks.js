@@ -6,6 +6,7 @@ import {
   deletePaciente,
   adicionarAcompanhamento,
   encerrarAcompanhamento,
+  lembretesWhatsappEmMassa,
 } from './paciente.api';
 
 export function usePacientes() {
@@ -97,6 +98,21 @@ export function usePacientes() {
     }
   }
 
+  // Devolve true quando deu certo (a tela limpa a seleção).
+  async function marcarLembretesWhatsapp(ids, aceita) {
+    setError(null);
+    setSuccessMessage(null);
+    try {
+      const response = await lembretesWhatsappEmMassa(ids, aceita);
+      setSuccessMessage(response.message);
+      await refreshPacientes();
+      return true;
+    } catch (err) {
+      setError(err);
+      return false;
+    }
+  }
+
   async function removePaciente(id) {
     setError(null);
     setSuccessMessage(null);
@@ -117,6 +133,7 @@ export function usePacientes() {
     addPaciente,
     editPaciente,
     removePaciente,
+    marcarLembretesWhatsapp,
     refreshPacientes,
     incluirAcompanhamento,
     finalizarAcompanhamento,

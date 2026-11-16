@@ -41,4 +41,16 @@ export default {
   'terça-feira, 18/11': 'martes, 18/11',
   'Horário': 'Horario',
   'Desconectando... isso leva alguns segundos.': 'Desconectando... esto tarda unos segundos.',
+  // Pacientes: recordatorios en masa
+  'Selecionar todos': 'Seleccionar todos',
+  'Selecionar os {n} da busca': 'Seleccionar los {n} de la búsqueda',
+  'Pacientes selecionados': 'Pacientes seleccionados',
+  '1 paciente selecionado': '1 paciente seleccionado',
+  '{n} pacientes selecionados': '{n} pacientes seleccionados',
+  'Ative só para quem aceitou receber lembretes de consulta pelo WhatsApp.': 'Actívelo solo para quien aceptó recibir recordatorios de consulta por WhatsApp.',
+  'Ativar lembretes no WhatsApp': 'Activar recordatorios por WhatsApp',
+  'Desativar lembretes': 'Desactivar recordatorios',
+  'Limpar seleção': 'Limpiar selección',
+  'Selecionar': 'Seleccionar',
+  'Selecionar {nome}': 'Seleccionar a {nome}',
 };

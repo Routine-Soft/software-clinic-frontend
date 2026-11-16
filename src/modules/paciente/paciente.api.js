@@ -33,3 +33,8 @@ export async function adicionarAcompanhamento(id, profissionalId) {
 export async function encerrarAcompanhamento(id, acompanhamentoId) {
   return await httpClient.post(`/pacientes/${id}/acompanhamentos/${acompanhamentoId}/encerrar`, {});
 }
+
+// Liga ou desliga os lembretes de consulta no WhatsApp de vários pacientes de uma vez.
+export async function lembretesWhatsappEmMassa(ids, aceita) {
+  return await httpClient.post('/pacientes/lembretes-whatsapp', { ids, aceita });
+}

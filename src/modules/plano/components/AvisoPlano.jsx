@@ -11,6 +11,7 @@ const RECURSO_DA_ROTA = [
   ['/avaliacoes-neuropsicologicas', 'avaliacoes'],
   ['/empresas', 'empresas'],
   ['/reunioes', 'reunioes'],
+  ['/whatsapp', 'whatsapp'],
   ['/repasses', 'repasse'],
   ['/meus-repasses', 'repasse'],
   ['/usuarios', 'equipe'],

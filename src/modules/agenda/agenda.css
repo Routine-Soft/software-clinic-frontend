@@ -977,12 +977,6 @@
   }
 }
 
-/* Paciente confirmou pelo lembrete do WhatsApp. */
-.agenda-confirmado {
-  font-weight: 800;
-  color: var(--success);
-}
-
 /* Atalhos para os profissionais que acompanham o paciente (formulário do agendamento). */
 .agendamento-acompanha {
   display: flex;

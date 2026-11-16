@@ -46,6 +46,7 @@ const NOME_DO_RECURSO = {
   avaliacoes: tr('Avaliações'),
   empresas: tr('Empresas clientes'),
   reunioes: tr('Reuniões'),
+  whatsapp: tr('Lembretes pelo WhatsApp'),
   repasse: tr('Repasses'),
   recepcao: tr('Recepção'),
   equipe: tr('Equipe da clínica'),

@@ -214,24 +214,15 @@ export function tituloDoAgendamento(agenda) {
     agenda.profissionalId?.nome,
     agenda.servicoId?.nome,
     agendaAtiva(agenda) ? null : STATUS_AGENDA[agenda.status],
-    confirmadoPeloWhatsapp(agenda) ? tr('Confirmado pelo WhatsApp') : null,
     ...etiquetasDePagamento(agenda).map((e) => e.rotulo),
   ].filter(Boolean).join(' · ');
 }
 
-export function confirmadoPeloWhatsapp(agenda) {
-  return agenda.lembrete?.resposta === 'confirmado' && agendaAtiva(agenda);
-}
-
-// Situação do lembrete do WhatsApp para a recepção: a resposta do paciente vale mais que a entrega da mensagem.
+// Situação do lembrete do WhatsApp (enviado pelo número da clínica, 24 horas antes) para a recepção.
 export function situacaoDoLembrete(agenda) {
   const lembrete = agenda.lembrete;
   if (!lembrete?.situacao) return null;
-  if (lembrete.resposta === 'confirmado') return { rotulo: tr('Confirmado pelo paciente'), tom: 'success' };
-  if (lembrete.resposta === 'desmarcado') return { rotulo: tr('Desmarcado pelo paciente'), tom: 'danger' };
   if (lembrete.situacao === 'falhou') return { rotulo: tr('Não enviado'), tom: 'danger', detalhe: lembrete.erro };
-  if (lembrete.situacao === 'lido') return { rotulo: tr('Lido, sem resposta'), tom: 'info' };
-  if (lembrete.situacao === 'entregue') return { rotulo: tr('Entregue, sem resposta'), tom: 'info' };
   return { rotulo: tr('Enviado'), tom: 'info' };
 }
 

@@ -6,9 +6,7 @@ import {
   horarioDosMinutos,
   paraISO,
   posicionarEventos,
-  confirmadoPeloWhatsapp,
 } from '../agenda.utils';
-import { tr } from '@/i18n';
 
 export const HORA_PX = 56;
 const INICIO_PADRAO = 7;
@@ -118,7 +116,7 @@ export default function AgendaGradeTempo({ dias, porDia, corDe, descrever = desc
                         }}
                         onClick={() => onAbrir(agenda)}
                       >
-                        <span className="agenda-ev__nome">{confirmadoPeloWhatsapp(agenda) && <span className="agenda-confirmado" aria-label={tr('Confirmado')}>✓ </span>}{nome}</span>
+                        <span className="agenda-ev__nome">{nome}</span>
                         {altura >= ALTURA_MINIMA_DETALHES && <EtiquetaPagamento agenda={agenda} />}
                         {sub && <span className="agenda-ev__prof">{sub}</span>}
                         <span className="agenda-ev__hora">{agenda.horaInicio} – {agenda.horaFim}</span>

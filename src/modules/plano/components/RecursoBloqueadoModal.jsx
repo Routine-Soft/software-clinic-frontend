@@ -16,6 +16,7 @@ const RECURSOS = {
   convenio: { titulo: tr('Convênios'), texto: tr('Preço e repasse diferentes para cada convênio, que já aparecem certos ao agendar.'), imagem: 'painel-admin.jpg' },
   avaliacoes: { titulo: tr('Avaliações'), texto: tr('Avaliação neuropsicológica e NR-01 com registro estruturado, do jeito que o laudo pede.'), imagem: 'prontuario.jpg' },
   empresas: { titulo: tr('Empresas clientes'), texto: tr('Cadastre as empresas atendidas e os funcionários de cada uma.'), imagem: 'painel-admin.jpg' },
+  whatsapp: { titulo: tr('Lembretes pelo WhatsApp'), texto: tr('O lembrete da consulta sai do WhatsApp da clínica 24 horas antes, e menos pacientes faltam.'), imagem: 'agenda-semana.jpg' },
   reunioes: { titulo: tr('Agenda de reuniões'), texto: tr('Uma agenda à parte para conversas com clientes e parceiros.'), imagem: 'reunioes.jpg' },
   equipe: { titulo: tr('Equipe da clínica'), texto: tr('Cada profissional com o próprio login, a própria agenda e os próprios prontuários.'), imagem: 'agenda-semana.jpg' },
   pacientes: { titulo: tr('Pacientes sem limite'), texto: tr('O Grátis vai até 10 pacientes, o Basic até 100 e o Pro não tem limite.'), imagem: 'pacientes.jpg' },

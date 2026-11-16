@@ -53,10 +53,6 @@ export async function definirRevogacaoAdmin(id, revogado) {
   return response;
 }
 
-export async function definirLembretesWhatsappAdmin(id, ativo) {
-  const response = await httpClient.patch(`/users/admins/${id}/whatsapp`, { ativo });
-  return response;
-}
 
 export async function getHistoricoPagamentosAdmin(id) {
   const response = await httpClient.get(`/users/admins/${id}/pagamentos`);

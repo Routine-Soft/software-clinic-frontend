@@ -50,6 +50,7 @@ import AnamnesesPage from '@/modules/anamnese/components/AnamnesesPage'
 import ModeloAnamneseEditor from '@/modules/anamnese/components/ModeloAnamneseEditor'
 import AnamneseImpressao from '@/modules/anamnese/components/AnamneseImpressao'
 import ProtectedRoute from '@/components/ProtectedRoute'
+import WhatsappPage from '@/modules/whatsapp/components/WhatsappPage'
 import { HashRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
 
 function App() {
@@ -343,6 +344,17 @@ function App() {
               <ProtectedRoute requiredRoles={['admin', 'profissional', 'super_admin']}>
                 <MainLayout>
                   <ProntuarioModalPreview />
+                </MainLayout>
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/whatsapp"
+            element={
+              <ProtectedRoute requiredRoles={['admin', 'recepcao']}>
+                <MainLayout>
+                  <WhatsappPage />
                 </MainLayout>
               </ProtectedRoute>
             }

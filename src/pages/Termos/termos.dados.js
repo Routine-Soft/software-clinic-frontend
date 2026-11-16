@@ -29,6 +29,7 @@ export const TERMOS_CLINICA = {
     ['3. Teste grátis, planos e pagamento', [
       'A conta começa com um período de teste grátis, sem cartão de crédito, com todos os recursos. Depois dele, a clínica continua no plano Grátis, que inclui a agenda, até 10 pacientes e um profissional. Os demais recursos dependem de um plano pago, no Pix ou no cartão de crédito, pelo Mercado Pago. Os registros já feitos, como os prontuários, continuam disponíveis para leitura em qualquer plano.',
       'No cartão, a assinatura renova sozinha todo mês até ser cancelada. No Pix, cada pagamento libera um período de acesso e não há renovação automática.',
+      'Os lembretes pelo WhatsApp saem do número da própria clínica, conectado por QR Code. O WhatsApp não é da Sonelia e pode limitar ou bloquear números conforme as regras dele. A clínica é responsável pelo número, pelo texto enviado e por só marcar para receber lembretes os pacientes que concordaram com isso.',
       'O plano Basic vai até 2 profissionais, cada um com o próprio login, e 100 pacientes, e não inclui recepção nem repasses. Para ter recepção, repasses, mais profissionais ou mais pacientes, é preciso o plano Pro, que vai até 25 profissionais. O plano Rede vai até 100 profissionais.',
       'Os preços dos planos podem mudar. Uma mudança de preço não afeta o período já pago e será avisada com antecedência.',
     ]],

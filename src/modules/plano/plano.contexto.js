@@ -25,6 +25,7 @@ const PLANO_DO_RECURSO = {
   avaliacoes: 'basic',
   empresas: 'basic',
   reunioes: 'basic',
+  whatsapp: 'basic',
   equipe: 'basic',
   pacientes: 'basic',
   repasse: 'pro',

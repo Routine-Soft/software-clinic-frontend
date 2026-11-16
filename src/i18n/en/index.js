@@ -9,5 +9,6 @@ import acompanhamento from './acompanhamento';
 import anamnese from './anamnese';
 import jornada from './jornada';
 import freemium from './freemium';
+import whatsapp from './whatsapp';
 
-export default { ...geral, ...clinica, ...negocio, ...avaliacoes, ...extras, ...termos, ...acompanhamento, ...anamnese, ...jornada, ...freemium };
+export default { ...geral, ...clinica, ...negocio, ...avaliacoes, ...extras, ...termos, ...acompanhamento, ...anamnese, ...jornada, ...freemium, ...whatsapp };

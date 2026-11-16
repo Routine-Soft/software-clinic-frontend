@@ -1,0 +1,235 @@
+/* Tela do WhatsApp da clínica (WhatsappPage). */
+.whats-grade {
+  display: grid;
+  gap: 18px;
+}
+
+.whats-card {
+  display: grid;
+  gap: 14px;
+  padding: 22px;
+  line-height: 1.5;
+  animation: fadeInUp 0.45s var(--ease) backwards;
+}
+
+.whats-card--vazio {
+  justify-items: center;
+  text-align: center;
+  padding: 32px 22px;
+}
+
+.whats-card--conectado {
+  background: linear-gradient(135deg, var(--success-soft), var(--surface) 60%);
+}
+
+.whats-card__cab {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.whats-card__titulo {
+  margin: 0;
+  font-size: 1.05rem;
+}
+
+.whats-card__texto,
+.whats-card__dica {
+  margin: 0;
+  color: var(--text-muted);
+}
+
+.whats-card__dica {
+  font-size: 0.88rem;
+}
+
+.whats-card__acao {
+  justify-self: start;
+}
+
+.whats-card--vazio .whats-card__acao {
+  justify-self: center;
+}
+
+.whats-conexao {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+}
+
+.whats-conexao__icone {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 52px;
+  height: 52px;
+  border-radius: 16px;
+  background: var(--success);
+  color: var(--on-primary);
+  box-shadow: var(--shadow-sm);
+}
+
+.whats-conexao__icone--apagado {
+  background: var(--surface-2);
+  color: var(--text-muted);
+}
+
+.whats-conexao__icone svg {
+  width: 28px;
+  height: 28px;
+}
+
+.whats-conexao__dados {
+  display: grid;
+  gap: 2px;
+  justify-items: start;
+  min-width: 0;
+}
+
+.whats-conexao__dados strong {
+  font-size: 1.15rem;
+}
+
+.whats-conexao__perfil {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+.whats-confirmar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  font-weight: 600;
+}
+
+.whats-qr {
+  display: grid;
+  grid-template-columns: minmax(0, 220px) 1fr;
+  gap: 20px;
+  align-items: center;
+}
+
+.whats-qr__imagem {
+  aspect-ratio: 1;
+  padding: 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: #fff;
+}
+
+.whats-qr__imagem img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.whats-qr__carregando {
+  width: 100%;
+  height: 100%;
+}
+
+.whats-qr__passos {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding-left: 20px;
+}
+
+.whats-variaveis {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.whats-variavel {
+  padding: 4px 10px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface-2);
+  color: var(--text);
+  font: inherit;
+  font-size: 0.82rem;
+  cursor: pointer;
+  transition: border-color 0.2s var(--ease), color 0.2s var(--ease);
+}
+
+.whats-variavel:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.whats-variavel--padrao {
+  border-style: dashed;
+  color: var(--text-muted);
+}
+
+.whats-previa {
+  display: grid;
+  gap: 6px;
+  padding: 16px;
+  border-radius: var(--radius-lg);
+  background: var(--surface-2);
+}
+
+.whats-previa__rotulo {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.whats-previa__balao {
+  justify-self: start;
+  max-width: 100%;
+  margin: 0;
+  padding: 10px 14px;
+  border-radius: 14px 14px 14px 4px;
+  background: var(--success-soft);
+  color: var(--text);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.whats-teste {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.whats-teste .input {
+  flex: 1 1 200px;
+}
+
+.whats-aviso {
+  margin: 0;
+  padding: 0 4px;
+  color: var(--text-subtle);
+  font-size: 0.85rem;
+}
+
+@media (max-width: 640px) {
+  .whats-card {
+    padding: 16px;
+  }
+
+  .whats-qr {
+    grid-template-columns: 1fr;
+    justify-items: center;
+  }
+
+  .whats-qr__imagem {
+    width: min(240px, 100%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .whats-card {
+    animation: none;
+  }
+}

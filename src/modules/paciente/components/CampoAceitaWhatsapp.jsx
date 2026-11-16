@@ -1,5 +1,5 @@
 import { tr } from '@/i18n';
-// Consentimento do paciente para receber o lembrete da consulta no WhatsApp (exigido pela Meta e pela LGPD).
+// Consentimento do paciente para receber o lembrete da consulta no WhatsApp da clínica (LGPD). Sem ele, não há lembrete.
 export default function CampoAceitaWhatsapp({ valor, onChange }) {
   return (
     <div className="field field--full">

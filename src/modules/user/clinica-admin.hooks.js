@@ -9,7 +9,6 @@ import {
   trocarPlanoAdmin,
   estenderTesteAdmin,
   definirRevogacaoAdmin,
-  definirLembretesWhatsappAdmin,
   redefinirSenhaAdmin,
 } from "./clinica-admin.api";
 
@@ -209,19 +208,6 @@ export function useAdmins(busca = '') {
     }
   }
 
-  async function definirLembretesWhatsapp(id, ativo) {
-    setError(null);
-    setSuccessMessage(null);
-    try {
-      const response = await definirLembretesWhatsappAdmin(id, ativo);
-      setSuccessMessage(response.message);
-      await refreshAdmins();
-      return true;
-    } catch (err) {
-      setError(err);
-      return false;
-    }
-  }
 
   return {
     admins,
@@ -235,7 +221,6 @@ export function useAdmins(busca = '') {
     estenderTeste,
     redefinirSenha,
     definirRevogacao,
-    definirLembretesWhatsapp,
     refreshAdmins,
   };
 }

@@ -43,6 +43,7 @@ const GRUPOS = [
         itens: [
             { label: tr('Painel Admin'), path: '/dashboard-admin', icone: 'painel', roles: ['admin', 'recepcao'] },
             { label: tr('Reuniões'), path: '/reunioes', icone: 'reunioes', roles: ['admin', 'recepcao'], recurso: 'reunioes' },
+            { label: tr('WhatsApp'), path: '/whatsapp', icone: 'whatsapp', roles: ['admin', 'recepcao'], recurso: 'whatsapp' },
             { label: tr('Repasses'), path: '/repasses', icone: 'receita', roles: ['admin'], recurso: 'repasse' },
             { label: tr('Meus repasses'), path: '/meus-repasses', icone: 'receita', roles: ['profissional'], recurso: 'repasse' },
             { label: tr('Usuários'), path: '/usuarios', icone: 'usuarios', roles: ['admin', 'recepcao'], recurso: 'equipe' },

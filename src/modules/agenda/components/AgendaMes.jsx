@@ -1,5 +1,5 @@
 import EtiquetaPagamento from './EtiquetaPagamento';
-import { NOMES_DIAS_CURTOS, descreverAgendamento, paraISO, confirmadoPeloWhatsapp } from '../agenda.utils';
+import { NOMES_DIAS_CURTOS, descreverAgendamento, paraISO } from '../agenda.utils';
 import { localeAtual, tr } from '@/i18n';
 
 const MAXIMO_POR_DIA = 3;
@@ -50,7 +50,7 @@ export default function AgendaMes({ dataReferencia, dias, porDia, corDe, descrev
                       onClick={(e) => { e.stopPropagation(); onAbrir(agenda); }}
                     >
                       <span className="agenda-chip__hora">{agenda.horaInicio}</span>
-                      <span className="agenda-chip__nome">{confirmadoPeloWhatsapp(agenda) && <span className="agenda-confirmado" aria-label={tr('Confirmado')}>✓ </span>}{nome}</span>
+                      <span className="agenda-chip__nome">{nome}</span>
                       {sub && <span className="agenda-chip__prof">{sub}</span>}
                       <EtiquetaPagamento agenda={agenda} />
                     </button>

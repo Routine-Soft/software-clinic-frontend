@@ -104,7 +104,7 @@ export default function PlanoADM() {
                       <span className={`badge ${plano.tipo === 'pago' ? 'badge--primary' : 'badge--info'}`}>
                         {plano.tipo === 'pago' ? tr('Pago') : tr('Teste grátis do cadastro')}
                       </span>
-                      {plano.individual && <span className="badge badge--info">{tr('Individual')}</span>}
+                      {plano.individual && <span className="badge badge--info">{tr('Basic')}</span>}
                       {plano.moeda === 'USD' && (
                         <span className={`badge ${plano.stripePriceId ? 'badge--success' : 'badge--warning'}`} title={plano.stripePriceId ?? tr('Ainda sem preço no Stripe: confira as chaves do Stripe e salve o plano de novo')}>
                           {plano.stripePriceId ? tr('Dólar · Stripe') : tr('Dólar · sem preço no Stripe')}

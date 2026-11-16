@@ -15,9 +15,9 @@ const TERMOS_CLINICA_EN = {
       'Each user must have their own login. The password is personal and must not be shared. Contact support if you suspect misuse of your account.',
     ]],
     ['3. Free trial, plans and payment', [
-      'The account starts with a free trial, with no credit card. After it, access continues only with a paid plan, by Pix or credit card, through Mercado Pago.',
+      'The account starts with a free trial, with no credit card and all features. After it, the clinic stays on the Free plan, which includes the schedule, up to 10 patients and one practitioner. The other features require a paid plan, by Pix or credit card, through Mercado Pago. Records already made, such as health records, remain available to read on any plan.',
       'On a card, the subscription renews every month until cancelled. With Pix, each payment grants a period of access and there is no automatic renewal.',
-      'The Individual plan is for solo practitioners: only the account holder uses the system, as the only practitioner, with no front desk or other users. To have a team, a team plan such as Pro is required.',
+      'The Basic plan allows up to 5 practitioners, each with their own login, and does not include a front desk or payouts. For a front desk, payouts or more practitioners, the Pro plan is required.',
       'Plan prices may change. A price change does not affect the period already paid and will be announced in advance.',
     ]],
     ['4. Withdrawal and cancellation', [
@@ -62,7 +62,7 @@ const TERMOS_AFILIADO_EN = {
       'Each clinic generates a single commission, even if it keeps paying in the following months.',
     ]],
     ['3. Commission amount and timing', [
-      'The commission is 50% of the first month of the plan the referred clinic subscribes to (for example: R$ 50.00 on the R$ 100.00 Individual plan, and R$ 100.00 on the R$ 200.00 Pro plan). Referral discounts the clinic may have do not reduce the commission.',
+      'The commission is 50% of the first month of the plan the referred clinic subscribes to (for example: R$ 49.50 on the R$ 99.00 Basic plan, and R$ 100.00 on the R$ 200.00 Pro plan). Referral discounts the clinic may have do not reduce the commission.',
       'Under the Brazilian Consumer Protection Code, customers have 7 days to cancel and get a refund. That is why the commission is on hold and can only be paid from the 8th day after the clinic’s payment.',
       'If the clinic’s payment is refunded or disputed before the commission is paid, the commission is cancelled. It becomes valid again if the clinic pays again.',
     ]],

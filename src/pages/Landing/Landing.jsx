@@ -1,5 +1,5 @@
 import { usePlanosPublicos } from '@/modules/plano/plano.hooks';
-import { recursosExclusivos } from '@/modules/plano/plano.utils';
+import { formatarPrecoPlano } from '@/modules/plano/plano.utils';
 import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuthContext } from '@/hooks/useAuthContext';
@@ -310,19 +310,49 @@ function Seguranca() {
   );
 }
 
-// Planos do Brasil em reais; os de fora do Brasil em dólar (preço próprio, não convertido).
-function formatarPrecoPlano(preco, locale, moeda = 'BRL') {
-  const casas = Number.isInteger(Number(preco)) ? 0 : 2;
-  return Number(preco).toLocaleString(locale, { style: 'currency', currency: moeda === 'USD' ? 'USD' : 'BRL', minimumFractionDigits: casas, maximumFractionDigits: casas });
+function IconeNaoTem() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" aria-hidden="true">
+      <path d="M7 12h10" />
+    </svg>
+  );
 }
 
-// Os planos vêm do cadastro de Planos do super admin. O que um plano tem e o outro não aparece em destaque.
+// Os três cartões têm os mesmos tópicos, na mesma ordem (`precos.comparacao`): olhando a mesma linha nos três,
+// dá para ver qual plano tem e qual não tem. Nome, preço e descrição dos pagos vêm do cadastro de Planos do super admin;
+// o Grátis vem dos textos da landing (não é um plano à venda).
+function ListaDoPlano({ coluna, P }) {
+  return (
+    <ul className="lp-lista-check lp-lista-check--comparacao">
+      {P.comparacao.map(([topico, ...valores]) => {
+        const valor = valores[coluna];
+        const tem = valor !== false;
+        return (
+          <li key={topico} className={tem ? undefined : 'lp-lista-check__fora'}>
+            {tem ? <IconeCheck /> : <IconeNaoTem />}
+            <span>{topico}</span>
+            {typeof valor === 'string' && <strong className="lp-lista-check__valor">{valor}</strong>}
+            {!tem && <span className="lp-oculto">{P.naoIncluido}</span>}
+          </li>
+        );
+      })}
+    </ul>
+  );
+}
+
 function Precos({ logado }) {
   const { t, idioma, locale } = useIdioma();
   const P = t('landing.precos');
   const { planos, carregando, falhou } = usePlanosPublicos();
-  const lista = (falhou || (planos && !planos.length) ? t('landing.planosPadrao') : planos ?? []).map((p) => planoNoIdioma(p, idioma));
-  const maisCaro = lista.length > 1 ? lista[lista.length - 1]._id : null;
+  const pagos = (falhou || (planos && !planos.length) ? t('landing.planosPadrao') : planos ?? []).map((p) => planoNoIdioma(p, idioma));
+  const basic = pagos.find((p) => p.individual);
+  const pro = pagos.find((p) => !p.individual);
+  const moeda = pagos[0]?.moeda;
+  const cartoes = [
+    { _id: 'gratis', coluna: 0, nome: P.gratis.nome, descricao: P.gratis.descricao, preco: 0, moeda, nota: P.gratis.semCartao, botao: P.gratis.botao },
+    basic && { ...basic, coluna: 1, nota: P.teste, botao: P.testar },
+    pro && { ...pro, coluna: 2, nota: P.teste, botao: P.testar, destaque: true },
+  ].filter(Boolean);
 
   return (
     <section className="lp-secao lp-secao--destaque" id="precos">
@@ -333,46 +363,32 @@ function Precos({ logado }) {
           <p>{P.texto}</p>
         </header>
 
-        <div className="lp-planos">
+        <div className="lp-planos" style={{ '--topicos': P.comparacao.length, '--linhas-cartao': P.comparacao.length + 4 }}>
           {carregando
-            ? [0, 1].map((i) => (
+            ? [0, 1, 2].map((i) => (
                 <article key={i} className="lp-plano" aria-busy="true">
                   <div className="skeleton skeleton--line" style={{ width: '40%', height: 26 }} />
                   <div className="skeleton skeleton--line" style={{ width: '60%', height: 48 }} />
                   <div className="skeleton skeleton--line" style={{ height: 160 }} />
                 </article>
               ))
-            : lista.map((plano, i) => {
-                const exclusivos = recursosExclusivos(plano, lista);
-                const destaque = plano._id === maisCaro;
-                return (
-                  <article key={plano._id} className={`lp-plano lp-revelar${destaque ? ' lp-plano--pro' : ''}`} style={{ '--i': i }}>
-                    {destaque && <span className="lp-plano__selo">{P.maisCompleto}</span>}
-                    <div className="lp-plano__cab">
-                      <h3>{plano.nome}</h3>
-                      {plano.descricao && <p className="lp-plano__descricao">{plano.descricao}</p>}
-                    </div>
-                    <p className="lp-plano__preco"><span className="lp-degrade">{formatarPrecoPlano(plano.preco, locale, plano.moeda)}</span><small>{P.porMes}</small></p>
-                    <p className="lp-plano__teste">{P.teste}</p>
-                    <ul className="lp-lista-check">
-                      {(plano.recursos ?? []).map((item) => (
-                        <li key={item} className={exclusivos.has(item) ? 'lp-lista-check__exclusivo' : undefined}>
-                          <IconeCheck />
-                          <span>
-                            {item}
-                            {exclusivos.has(item) && <span className="lp-plano__so">{t('landing.precos.soNo', { plano: plano.nome })}</span>}
-                          </span>
-                        </li>
-                      ))}
-                    </ul>
-                    <Link to={logado ? '/assinaturas' : '/registro'} className={`btn ${destaque ? 'btn--primary' : 'btn--ghost'} btn--block`}>
-                      {logado ? P.verAssinatura : P.testar}
-                    </Link>
-                  </article>
-                );
-              })}
+            : cartoes.map((plano, i) => (
+                <article key={plano._id} className={`lp-plano lp-plano--comparado lp-revelar${plano.destaque ? ' lp-plano--pro' : ''}`} style={{ '--i': i }}>
+                  {plano.destaque && <span className="lp-plano__selo">{P.maisCompleto}</span>}
+                  <div className="lp-plano__cab">
+                    <h3>{plano.nome}</h3>
+                    {plano.descricao && <p className="lp-plano__descricao">{plano.descricao}</p>}
+                  </div>
+                  <p className="lp-plano__preco"><span className="lp-degrade">{formatarPrecoPlano(plano.preco, locale, plano.moeda)}</span><small>{P.porMes}</small></p>
+                  <p className="lp-plano__teste">{plano.nota}</p>
+                  <ListaDoPlano coluna={plano.coluna} P={P} />
+                  <Link to={logado ? '/assinaturas' : '/registro'} className={`btn ${plano.destaque ? 'btn--primary' : 'btn--ghost'} btn--block`}>
+                    {logado ? P.verAssinatura : plano.botao}
+                  </Link>
+                </article>
+              ))}
         </div>
-        <p className="lp-planos__nota">{lista[0]?.moeda === 'USD' ? P.notaDolar : P.nota}</p>
+        <p className="lp-planos__nota">{moeda === 'USD' ? P.notaDolar : P.nota}</p>
       </div>
     </section>
   );

@@ -15,9 +15,9 @@ const TERMOS_CLINICA_ES = {
       'Cada usuario debe tener su propio acceso. La contraseña es personal y no debe compartirse. Avisa al soporte si sospechas un uso indebido de tu cuenta.',
     ]],
     ['3. Prueba gratis, planes y pago', [
-      'La cuenta empieza con una prueba gratis, sin tarjeta. Después, el acceso continúa solo con un plan pago: en Brasil, por Pix o tarjeta de crédito, mediante Mercado Pago; en los demás países, con tarjeta de crédito internacional, mediante Stripe.',
+      'La cuenta empieza con una prueba gratis, sin tarjeta y con todas las funciones. Después, la clínica sigue en el plan Gratis, que incluye la agenda, hasta 10 pacientes y un profesional. Las demás funciones requieren un plan pago: en Brasil, por Pix o tarjeta de crédito, mediante Mercado Pago; en los demás países, con tarjeta de crédito internacional, mediante Stripe. Los registros ya hechos, como las historias clínicas, siguen disponibles para lectura en cualquier plan.',
       'Con tarjeta, la suscripción se renueva cada mes hasta que se cancele. Con Pix, cada pago da derecho a un período de acceso y no hay renovación automática.',
-      'El plan Individual es para quien atiende solo: solo el titular de la cuenta usa el sistema, como único profesional, sin recepción ni otros usuarios. Para tener un equipo, se necesita un plan de equipo, como el Pro.',
+      'El plan Basic permite hasta 5 profesionales, cada uno con su propio acceso, y no incluye recepción ni pagos a profesionales. Para tener recepción, pagos a profesionales o más profesionales, se necesita el plan Pro.',
       'Los precios de los planes pueden cambiar. Un cambio de precio no afecta el período ya pagado y se avisará con anticipación.',
     ]],
     ['4. Desistimiento y cancelación', [
@@ -62,7 +62,7 @@ const TERMOS_AFILIADO_ES = {
       'Cada clínica genera una sola comisión, aunque siga pagando en los meses siguientes.',
     ]],
     ['3. Monto y plazo de la comisión', [
-      'La comisión es el 50% de la primera mensualidad del plan que contrate la clínica recomendada (por ejemplo: R$ 50,00 en el plan Individual de R$ 100,00, y R$ 100,00 en el plan Pro de R$ 200,00). Los descuentos por recomendación que tenga la clínica no reducen la comisión.',
+      'La comisión es el 50% de la primera mensualidad del plan que contrate la clínica recomendada (por ejemplo: R$ 49,50 en el plan Basic de R$ 99,00, y R$ 100,00 en el plan Pro de R$ 200,00). Los descuentos por recomendación que tenga la clínica no reducen la comisión.',
       'Por el Código de Defensa del Consumidor de Brasil, el cliente tiene 7 días para desistir y pedir el reembolso. Por eso la comisión queda en espera y solo puede pagarse a partir del 8.º día después del pago de la clínica.',
       'Si el pago de la clínica se reembolsa o se impugna antes de que se pague la comisión, esta se cancela. Vuelve a valer si la clínica paga de nuevo.',
     ]],

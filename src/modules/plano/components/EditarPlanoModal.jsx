@@ -125,7 +125,7 @@ export default function EditarPlanoModal({ plano, erro, onSave, onClose }) {
                 checked={formEdicao.individual}
                 onChange={(e) => handleChangeEdicao('individual', e.target.checked)}
               />
-              <span>{tr('Individual: só o dono da conta usa o sistema (um profissional, sem recepção)')}</span>
+              <span>{tr('Basic: até 5 profissionais, sem recepção nem repasses')}</span>
             </label>
           )}
         </ModalForm>

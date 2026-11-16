@@ -4,11 +4,11 @@ import { usePlanos } from '@/modules/plano/plano.hooks';
 import { useAssinatura } from '../assinatura.hooks';
 import { formatarData, formatarPreco, avisarAssinaturaAtualizada } from '../assinatura.utils';
 import PixModal from './PixModal';
-import { recursosExclusivos, planoNoIdioma } from '@/modules/plano/plano.utils';
+import { planoNoIdioma } from '@/modules/plano/plano.utils';
 import AvisoDescontoIndicacao from '@/modules/indicacao/components/AvisoDescontoIndicacao';
 import './assinatura.css';
 import './assinaturas-planos.css';
-import { tr, idiomaAtual } from '@/i18n';
+import { t, tr, idiomaAtual } from '@/i18n';
 
 // O rótulo diz o que o plano é para a clínica (o plano da assinatura atual ganha um selo com o estado dela).
 const SELO_DO_PLANO_ATUAL = {
@@ -64,28 +64,42 @@ function IconeCheck() {
   );
 }
 
-// O que o plano inclui vem do cadastro de Planos (o que só ele tem fica em destaque), mais como o pagamento funciona.
-function BeneficiosDoPlano({ plano, planos, stripe }) {
-  const exclusivos = recursosExclusivos(plano, planos);
-  const recursos = plano.recursos?.length
-    ? plano.recursos
-    : [tr('Acesso completo ao sistema'), plano.individual ? tr('Para quem atende sozinho: só você usa o sistema') : tr('Profissionais, recepção e usuários sem limite')];
-  const itens = [
-    ...recursos.map((texto) => ({ texto, destaque: exclusivos.has(texto) })),
-    ...(stripe
-      ? [tr('Cartão de crédito internacional, em dólar'), tr('No cartão, renova sozinho todo mês'), tr('Cancele quando quiser, sem multa')]
-      : [tr('No cartão, renova sozinho todo mês'), tr('No Pix, cada pagamento vale 30 dias'), tr('Cancele quando quiser, sem multa')]
-    ).map((texto) => ({ texto, pagamento: true })),
-  ];
+function IconeNaoTem() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" aria-hidden="true">
+      <path d="M7 12h10" />
+    </svg>
+  );
+}
+
+// O que o plano inclui: os mesmos tópicos, na mesma ordem, da página de preços (`landing.precos.comparacao`;
+// coluna 1 = Basic, 2 = Pro), para os planos ficarem lado a lado. Depois, como o pagamento funciona.
+function BeneficiosDoPlano({ plano, stripe }) {
+  const coluna = plano.individual ? 2 : 3;
+  const pagamento = stripe
+    ? [tr('Cartão de crédito internacional, em dólar'), tr('No cartão, renova sozinho todo mês'), tr('Cancele quando quiser, sem multa')]
+    : [tr('No cartão, renova sozinho todo mês'), tr('No Pix, cada pagamento vale 30 dias'), tr('Cancele quando quiser, sem multa')];
 
   return (
     <>
       {plano.descricao && <p className="plano-opcao__descricao">{plano.descricao}</p>}
       <ul className="plano-opcao__lista">
-        {itens.map((item) => (
-          <li key={item.texto} className={item.destaque ? 'plano-opcao__exclusivo' : item.pagamento ? 'plano-opcao__pagamento' : undefined}>
+        {t('landing.precos.comparacao').map((linha) => {
+          const valor = linha[coluna];
+          const tem = valor !== false;
+          return (
+            <li key={linha[0]} className={tem ? undefined : 'plano-opcao__fora'}>
+              {tem ? <IconeCheck /> : <IconeNaoTem />}
+              <span>{linha[0]}</span>
+              {typeof valor === 'string' && <strong className="plano-opcao__valor">{valor}</strong>}
+              {!tem && <span className="sr-oculto">{t('landing.precos.naoIncluido')}</span>}
+            </li>
+          );
+        })}
+        {pagamento.map((texto) => (
+          <li key={texto} className="plano-opcao__pagamento">
             <IconeCheck />
-            {item.texto}
+            {texto}
           </li>
         ))}
       </ul>
@@ -106,7 +120,7 @@ export default function AssinaturasPlanos() {
   // Admin e recepção (secretaria) pagam; só o admin desiste ou cancela. O backend exige o mesmo.
   const podeContratar = ['admin', 'super_admin', 'recepcao'].includes(user?.role);
   const podeCancelar = user?.role === 'admin' || user?.role === 'super_admin';
-  // O plano gratuito é só o teste de 7 dias do cadastro: não aparece para escolher, só os pagos.
+  // O plano gratuito (o teste do cadastro, que depois vira o plano Grátis) não aparece para escolher, só os pagos.
   // Só os planos da moeda da clínica: Brasil em reais (Mercado Pago), fora do Brasil em dólar (Stripe).
   const moedaDaClinica = assinatura?.moeda ?? 'BRL';
   const pagaPeloStripe = assinatura?.gateway === 'stripe';
@@ -154,6 +168,12 @@ export default function AssinaturasPlanos() {
         </p>
       )}
 
+      {assinatura?.acesso?.nivel === 'gratis' && (
+        <p className="alert alert--warning" role="status">
+          {tr('Sua clínica está no plano Grátis: agenda, até 10 pacientes e um profissional. Prontuário, anamnese, TCLE, convênios e a equipe voltam assim que você assinar. Nada do que foi registrado se perdeu.')}
+        </p>
+      )}
+
       {!podeContratar && !carregando && (
         <p className="alert alert--info" role="status">{tr('Só o administrador e a recepção da clínica podem pagar ou trocar de plano.')}</p>
       )}
@@ -181,8 +201,8 @@ export default function AssinaturasPlanos() {
       {podeContratar && emTeste && (
         <p className="alert alert--info" role="status">
           {pagaPeloStripe
-            ? tr('Você está no teste grátis, com tudo liberado e sem cartão{p0}. Para continuar depois, escolha um dos planos e pague no cartão de crédito.', { p0: assinatura.dataFimTrial && tr(' até {p0}', { p0: formatarData(assinatura.dataFimTrial) }) })
-            : tr('Você está no teste grátis, com tudo liberado e sem cartão{p0}. Para continuar depois, escolha um dos planos e pague no cartão ou no Pix.', { p0: assinatura.dataFimTrial && tr(' até {p0}', { p0: formatarData(assinatura.dataFimTrial) }) })}
+            ? tr('Você está no teste grátis, com tudo liberado e sem cartão{p0}. Depois, a clínica continua no plano Grátis; para manter tudo, escolha um dos planos e pague no cartão de crédito.', { p0: assinatura.dataFimTrial && tr(' até {p0}', { p0: formatarData(assinatura.dataFimTrial) }) })
+            : tr('Você está no teste grátis, com tudo liberado e sem cartão{p0}. Depois, a clínica continua no plano Grátis; para manter tudo, escolha um dos planos e pague no cartão ou no Pix.', { p0: assinatura.dataFimTrial && tr(' até {p0}', { p0: formatarData(assinatura.dataFimTrial) }) })}
         </p>
       )}
 
@@ -244,7 +264,7 @@ export default function AssinaturasPlanos() {
                   )}
                 </p>
 
-                <BeneficiosDoPlano plano={plano} planos={planosAtivos} stripe={pagaPeloStripe} />
+                <BeneficiosDoPlano plano={plano} stripe={pagaPeloStripe} />
 
                 {!gratuito && podeContratar && (
                   <div className="plano-opcao__acoes">

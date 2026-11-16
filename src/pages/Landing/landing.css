@@ -966,9 +966,9 @@ a.lp-nav__link {
 
 .lp-planos {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 290px), 1fr));
   gap: 20px;
-  max-width: 820px;
+  max-width: 1120px;
   margin-inline: auto;
 }
 
@@ -1010,21 +1010,60 @@ a.lp-nav__link {
   color: var(--text-muted);
 }
 
-.lp-lista-check__exclusivo {
-  font-weight: 700;
+/* Lista de comparação: mesmos tópicos nos três cartões, uma linha por tópico, com a mesma altura,
+   para a mesma linha ficar alinhada lado a lado. O limite ("Até 10", "Sem limite") fica à direita. */
+.lp-lista-check--comparacao {
+  gap: 0;
 }
 
-.lp-plano__so {
-  display: inline-block;
-  margin-left: 6px;
-  vertical-align: 1px;
-  padding: 1px 8px;
-  font-size: 0.72rem;
-  font-weight: 700;
-  line-height: 1.6;
-  color: var(--primary);
-  background: var(--primary-soft);
+.lp-lista-check--comparacao li {
+  align-items: center;
+  min-height: 2.6em;
+  padding: 6px 0;
+  border-bottom: 1px dashed var(--border);
+}
+
+.lp-lista-check--comparacao li:last-child {
+  border-bottom: 0;
+}
+
+.lp-lista-check--comparacao svg {
+  margin-top: 0;
+}
+
+.lp-lista-check__valor {
+  margin-left: auto;
+  padding: 1px 9px;
   border-radius: 999px;
+  background: var(--primary-soft);
+  color: var(--primary);
+  font-size: 0.8rem;
+  white-space: nowrap;
+}
+
+/* Com subgrid, cada linha da lista tem a mesma altura nos três cartões, mesmo quando um texto quebra.
+   Linhas do cartão: cabeçalho, preço, nota, os tópicos (--topicos) e o botão. */
+@supports (grid-template-rows: subgrid) {
+  .lp-plano--comparado {
+    grid-row: span var(--linhas-cartao);
+    grid-template-rows: subgrid;
+    row-gap: 18px;
+  }
+
+  .lp-plano--comparado .lp-lista-check--comparacao {
+    grid-row: span var(--topicos);
+    grid-template-rows: subgrid;
+    row-gap: 0;
+  }
+}
+
+.lp-oculto {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
 }
 
 .lp-planos__nota {
@@ -1432,4 +1471,14 @@ a.lp-nav__link {
     width: 13px;
     height: 13px;
   }
+}
+
+/* Plano Grátis: o que fica de fora aparece com cadeado, apagado. */
+.lp-lista-check__fora {
+  color: var(--text-subtle);
+}
+
+.lp-lista-check .lp-lista-check__fora svg {
+  color: var(--text-muted);
+  background: var(--surface-2);
 }

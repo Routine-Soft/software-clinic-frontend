@@ -121,3 +121,47 @@
 .painel-sa__card--acao .btn {
   grid-column: 1 / -1;
 }
+
+/* Cliques nos cadeados: uma barra por recurso, do mais clicado ao menos. */
+.painel-sa__card--cadeados {
+  grid-column: span 2;
+}
+
+@media (max-width: 560px) {
+  .painel-sa__card--cadeados {
+    grid-column: span 1;
+  }
+}
+
+.painel-sa__cadeados {
+  display: grid;
+  gap: 10px;
+  margin: 4px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.painel-sa__cadeados li {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 4px 12px;
+  align-items: center;
+  line-height: 1.4;
+}
+
+.painel-sa__cadeado-nome {
+  font-weight: 600;
+}
+
+.painel-sa__cadeado-numeros {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+
+.painel-sa__cadeado-barra {
+  grid-column: 1 / -1;
+  height: 6px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--tom) var(--parte), var(--surface-2) var(--parte));
+}

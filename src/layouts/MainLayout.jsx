@@ -5,6 +5,7 @@ import Marca from '@/components/Sidebar/Marca'
 import AssinaturaGuard from '@/modules/assinatura/components/AssinaturaGuard'
 import AvisoVencimento from '@/modules/assinatura/components/AvisoVencimento'
 import ConfirmacoesProvider from '@/modules/agenda/components/ConfirmacoesProvider'
+import PlanoProvider from '@/modules/plano/components/PlanoProvider'
 import { useAuthContext } from '@/hooks/useAuthContext'
 import './MainLayout.css'
 import { tr } from '@/i18n';
@@ -31,6 +32,7 @@ export function MainLayout({ children }) {
     }, [menuAberto])
 
     return (
+        <PlanoProvider>
         <ConfirmacoesProvider>
             <div className="app-shell">
                 <a className="app-pular" href="#conteudo">{tr('Ir para o conteúdo')}</a>
@@ -62,6 +64,7 @@ export function MainLayout({ children }) {
                 </main>
             </div>
         </ConfirmacoesProvider>
+        </PlanoProvider>
     )
 }
 

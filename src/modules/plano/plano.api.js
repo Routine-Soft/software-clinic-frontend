@@ -30,3 +30,13 @@ export async function getPlanosPublicos(pais) {
   const response = await httpClient.get(`/planos/publicos?pais=${encodeURIComponent(pais ?? 'BR')}`);
   return response;
 }
+
+// Clique num recurso com cadeado (estatística para o super admin). Falhar aqui não atrapalha a tela.
+export async function registrarBloqueio(recurso, origem) {
+  return httpClient.post('/planos/bloqueios', { recurso, origem });
+}
+
+// Super admin: cliques nos cadeados por recurso (últimos 90 dias).
+export async function getResumoBloqueios() {
+  return httpClient.get('/planos/bloqueios/resumo');
+}

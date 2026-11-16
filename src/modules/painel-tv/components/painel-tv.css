@@ -377,3 +377,26 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* Plano Grátis: marca discreta no canto inferior da TV. */
+.tv-feito-com {
+  position: fixed;
+  right: 2vw;
+  bottom: 1.6vh;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6vw;
+  margin: 0;
+  padding: 0.6vh 1.1vw;
+  border-radius: 999px;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  color: var(--text-muted);
+  font-size: clamp(12px, 1.1vw, 22px);
+  backdrop-filter: blur(8px);
+}
+
+.tv-feito-com svg {
+  width: 1.4em;
+  height: 1.4em;
+}

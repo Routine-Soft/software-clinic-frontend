@@ -108,7 +108,7 @@ export default function NovoAdminModal({ erro, onSave, onClose }) {
             <p className="field__hint">{tr('Brasil paga pelo Mercado Pago, em reais. Outros países pagam pelo Stripe, em dólar.')}</p>
           </div>
 
-          <p className="modal-form__hint">{tr('A clínica entra com este e-mail e senha e começa no teste grátis de 7 dias, sem cartão.')}</p>
+          <p className="modal-form__hint">{tr('A clínica entra com este e-mail e senha e começa no teste grátis de 14 dias, sem cartão.')}</p>
         </ModalForm>
       )}
     </Modal>

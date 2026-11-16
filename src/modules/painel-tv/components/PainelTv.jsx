@@ -100,6 +100,14 @@ export default function PainelTv() {
         </main>
       )}
 
+      {/* Plano Grátis: a TV mostra de onde vem o sistema (divulgação na sala de espera). */}
+      {tela?.marcaSonelia && (
+        <p className="tv-feito-com">
+          <SimboloMarca />
+          {tr('Feito com Sonelia')} · sonelia.com.br
+        </p>
+      )}
+
       {semConexao && <p className="tv-aviso" role="status">{tr('Sem conexão com a internet. Tentando de novo...')}</p>}
 
       {!somAtivo && (

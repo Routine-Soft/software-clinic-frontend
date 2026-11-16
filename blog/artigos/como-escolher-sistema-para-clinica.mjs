@@ -88,7 +88,7 @@ export default {
 <p>Se a equipe sentir que ficou mais fácil, é um bom sinal.</p>
 
 <h2 id="sonelia">E a Sonelia?</h2>
-<p>A Sonelia foi feita para clínicas multiprofissionais: agenda com cores, salas e recorrência, prontuário com adendos e registro de acesso, lista de espera, convênios com preço e repasse por serviço, repasses automáticos e acesso por papel (gestão, recepção e profissional). Funciona no navegador e pode ser instalada como aplicativo. O teste é grátis por 7 dias, sem cartão: use este checklist nele.</p>
+<p>A Sonelia foi feita para clínicas multiprofissionais: agenda com cores, salas e recorrência, prontuário com adendos e registro de acesso, lista de espera, convênios com preço e repasse por serviço, repasses automáticos e acesso por papel (gestão, recepção e profissional). Funciona no navegador e pode ser instalada como aplicativo. Dá para começar grátis e testar tudo por 14 dias, sem cartão: use este checklist no teste.</p>
 `,
   duvidas: [
     ['O que um sistema para clínica precisa ter?', 'Agenda com vários profissionais, prontuário eletrônico com sigilo, cadastro de pacientes, controle de convênios e repasses, login por pessoa e acesso pelo celular.'],

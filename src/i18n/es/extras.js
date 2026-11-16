@@ -46,7 +46,6 @@ export default {
   // Stripe e país da clínica
   'Cartão de crédito internacional, em dólar': 'Tarjeta de crédito internacional, en dólares',
   'Para trocar de plano ou de cartão, use "Gerenciar assinatura" em Minha assinatura.': 'Para cambiar de plan o de tarjeta, usa "Administrar suscripción" en Mi suscripción.',
-  'Você está no teste grátis, com tudo liberado e sem cartão{p0}. Para continuar depois, escolha um dos planos e pague no cartão de crédito.': 'Estás en la prueba gratis, con todo habilitado y sin tarjeta{p0}. Para continuar después, elige uno de los planes y paga con tarjeta de crédito.',
   'Cartão internacional (Stripe)': 'Tarjeta internacional (Stripe)',
   'Gerenciar assinatura (cartão e faturas)': 'Administrar suscripción (tarjeta y facturas)',
   '. O período de teste já terminou, então será preciso assinar um plano para continuar usando o sistema.': '. El período de prueba ya terminó, así que tendrás que suscribirte a un plan para seguir usando el sistema.',

@@ -1,7 +1,7 @@
-import { useEffect, useRef, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuthContext } from '@/hooks/useAuthContext';
-import { getAssinaturaAtual } from '../assinatura.api';
+import { usePlano } from '@/modules/plano/plano.contexto';
+import AvisoPlano from '@/modules/plano/components/AvisoPlano';
 import './assinatura.css';
 import { tr } from '@/i18n';
 
@@ -34,53 +34,23 @@ function AcessoBloqueado({ motivo, podePagar }) {
   );
 }
 
-// Coloca a tela de "acesso bloqueado" no lugar do sistema quando a assinatura da clínica não dá mais acesso.
-// O backend é quem barra de verdade (402 nas rotas); aqui só se evita mostrar telas quebradas.
+// Sem plano pago valendo, a clínica continua no plano Grátis (os recursos pagos ficam com cadeado, ver AvisoPlano).
+// O sistema só fica bloqueado de vez quando o suporte revoga o acesso; o backend barra com 402 nesse caso.
 export default function AssinaturaGuard({ children }) {
   const { user } = useAuthContext();
   const { pathname } = useLocation();
-  const [motivoDoBloqueio, setMotivoDoBloqueio] = useState(null);
-  const jaVerificou = useRef(false);
-  const bloqueado = useRef(false);
-
-  // Super admin e afiliado não dependem da assinatura de uma clínica.
-  const ehSuperAdmin = user?.role === 'super_admin' || user?.role === 'afiliado';
-
-  // Confere no primeiro acesso e, enquanto estiver bloqueado, a cada navegação (o cliente pode ter acabado de pagar).
-  useEffect(() => {
-    if (ehSuperAdmin || (jaVerificou.current && !bloqueado.current)) return undefined;
-
-    let cancelado = false;
-
-    getAssinaturaAtual()
-      .then(({ data }) => {
-        if (cancelado) return;
-        jaVerificou.current = true;
-        const motivo = data.acesso?.liberado === false ? data.acesso.motivo : null;
-        bloqueado.current = !!motivo;
-        setMotivoDoBloqueio(motivo);
-      })
-      .catch(() => { jaVerificou.current = true; });
-
-    return () => { cancelado = true; };
-  }, [pathname, ehSuperAdmin]);
-
-  // O teste pode vencer com o sistema aberto: qualquer resposta 402 do backend bloqueia na hora.
-  useEffect(() => {
-    function aoBloquear(e) {
-      bloqueado.current = true;
-      setMotivoDoBloqueio(e.detail?.motivo ?? tr('A assinatura da clínica está inativa.'));
-    }
-
-    window.addEventListener('assinatura:inativa', aoBloquear);
-    return () => window.removeEventListener('assinatura:inativa', aoBloquear);
-  }, []);
+  const { bloqueado, motivo } = usePlano();
 
   const rotaLivre = ROTAS_LIVRES.some((rota) => pathname === rota || pathname.startsWith(`${rota}/`));
 
-  if (motivoDoBloqueio && !ehSuperAdmin && !rotaLivre) {
-    return <AcessoBloqueado motivo={motivoDoBloqueio} podePagar={['admin', 'recepcao'].includes(user?.role)} />;
+  if (bloqueado && !rotaLivre) {
+    return <AcessoBloqueado motivo={motivo ?? tr('A assinatura da clínica está inativa.')} podePagar={['admin', 'recepcao'].includes(user?.role)} />;
   }
 
-  return children;
+  return (
+    <>
+      <AvisoPlano />
+      {children}
+    </>
+  );
 }

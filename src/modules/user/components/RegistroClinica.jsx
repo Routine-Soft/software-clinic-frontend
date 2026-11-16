@@ -10,6 +10,7 @@ import { codigoIndicacaoGuardado, esquecerCodigoIndicacao, normalizarCodigo } fr
 import CampoSenha from '@/components/CampoSenha/CampoSenha';
 import SeletorPais from '@/components/SeletorPais/SeletorPais';
 import { adivinharPais } from '@/i18n/paises';
+import { AREAS_CLINICA } from '../user.constants';
 import { useIdioma } from '@/i18n/useIdioma';
 
 export default function RegistroClinica() {
@@ -30,6 +31,7 @@ export default function RegistroClinica() {
     codigoIndicacao: codigoIndicacaoGuardado(),
     aceitouTermos: false,
     pais: adivinharPais(),
+    area: '',
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -66,8 +68,8 @@ export default function RegistroClinica() {
 
     try {
       if (google) {
-        const { nomeCompleto, telefone, nomeEmpresa, cnpj, codigoIndicacao, aceitouTermos, pais } = form;
-        await entrarComGoogle(google.credential, { nomeCompleto, telefone, nomeEmpresa, cnpj, codigoIndicacao, aceitouTermos, pais });
+        const { nomeCompleto, telefone, nomeEmpresa, cnpj, codigoIndicacao, aceitouTermos, pais, area } = form;
+        await entrarComGoogle(google.credential, { nomeCompleto, telefone, nomeEmpresa, cnpj, codigoIndicacao, aceitouTermos, pais, area });
         esquecerCodigoIndicacao();
         navigate('/home');
       } else {
@@ -134,6 +136,22 @@ export default function RegistroClinica() {
             onChange={(e) => handleChange('nomeEmpresa', e.target.value)}
             required
           />
+        </div>
+
+        <div className="field">
+          <label className="field__label" htmlFor="registro-area">{t('auth.campos.area')}</label>
+          <select
+            id="registro-area"
+            className="input"
+            value={form.area}
+            onChange={(e) => handleChange('area', e.target.value)}
+            aria-describedby="registro-area-dica"
+            required
+          >
+            <option value="" disabled>{t('auth.campos.areaEscolha')}</option>
+            {AREAS_CLINICA.map(([valor, rotulo]) => <option key={valor} value={valor}>{rotulo}</option>)}
+          </select>
+          <span className="field__hint" id="registro-area-dica">{t('auth.campos.areaDica')}</span>
         </div>
 
         <div className="field">

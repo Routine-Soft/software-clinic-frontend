@@ -8,6 +8,7 @@ import FiltroPeriodo from '@/components/FiltroPeriodo/FiltroPeriodo';
 import { ICONES } from '@/components/Sidebar/menuIcones';
 import './PainelSuperAdmin.css';
 import { tr } from '@/i18n';
+import { useResumoBloqueios } from '@/modules/plano/plano.hooks';
 
 function CardResumo({ icone, tom, rotulo, valor, loading, detalhe }) {
   return (
@@ -33,6 +34,53 @@ function CardReceita({ periodo, onPeriodoChange, receita, loading }) {
       {receita?.desde && (
         <span className="painel-sa__detalhe">{tr('Desde {p0} · pagamentos aprovados no Pix e no cartão', { p0: formatarData(receita.desde) })}</span>
       )}
+    </article>
+  );
+}
+
+const NOME_DO_RECURSO = {
+  prontuario: tr('Prontuário'),
+  anamnese: tr('Anamneses'),
+  termo: tr('Termos (TCLE)'),
+  convenio: tr('Convênios'),
+  avaliacoes: tr('Avaliações'),
+  empresas: tr('Empresas clientes'),
+  reunioes: tr('Reuniões'),
+  repasse: tr('Repasses'),
+  recepcao: tr('Recepção'),
+  equipe: tr('Equipe da clínica'),
+  pacientes: tr('Pacientes sem limite'),
+  profissionais: tr('Mais profissionais'),
+};
+
+// Cliques nos cadeados (planos Grátis e Basic) nos últimos 90 dias: mostra o que faz as clínicas quererem assinar.
+function CardCadeados() {
+  const { resumo, carregando } = useResumoBloqueios();
+  const linhas = resumo?.recursos ?? [];
+  const maximo = Math.max(1, ...linhas.map((l) => l.cliques));
+
+  return (
+    <article className="card painel-sa__card painel-sa__card--cadeados" data-tom="warning">
+      <span className="painel-sa__icone"><Icone>{ICONES.planos}</Icone></span>
+      <span className="painel-sa__rotulo">{tr('Cliques nos cadeados')}</span>
+      {carregando ? (
+        <span className="skeleton skeleton--line painel-sa__skeleton" />
+      ) : linhas.length === 0 ? (
+        <span className="painel-sa__detalhe">{tr('Nenhum clique ainda. Eles aparecem quando uma clínica no plano Grátis ou Basic toca num recurso com cadeado.')}</span>
+      ) : (
+        <ul className="painel-sa__cadeados">
+          {linhas.map((l) => (
+            <li key={l.recurso}>
+              <span className="painel-sa__cadeado-nome">{NOME_DO_RECURSO[l.recurso] ?? l.recurso}</span>
+              <span className="painel-sa__cadeado-barra" style={{ '--parte': `${(l.cliques / maximo) * 100}%` }} aria-hidden="true" />
+              <span className="painel-sa__cadeado-numeros">
+                {tr('{cliques} cliques · {clinicas} clínicas', { cliques: l.cliques, clinicas: l.clinicas })}
+              </span>
+            </li>
+          ))}
+        </ul>
+      )}
+      <span className="painel-sa__detalhe">{tr('Últimos 90 dias')}</span>
     </article>
   );
 }
@@ -74,6 +122,8 @@ export default function PainelSuperAdmin() {
         <CardResumo icone="assinatura" tom="success" rotulo={tr('Usuários pagantes')} valor={resumo?.pagantes} loading={loading} detalhe={tr('Assinatura ativa agora')} />
         <CardResumo icone="espera" tom="warning" rotulo={tr('Usuários não pagantes')} valor={resumo?.naoPagantes} loading={loading} detalhe={tr('Teste, pendente, atraso ou sem assinatura')} />
         <CardReceita periodo={periodoReceita} onPeriodoChange={setPeriodoReceita} receita={receita} loading={loadingReceita} />
+
+        <CardCadeados />
 
         <article className="card painel-sa__card painel-sa__card--acao">
           <span className="painel-sa__icone"><IconeMais /></span>

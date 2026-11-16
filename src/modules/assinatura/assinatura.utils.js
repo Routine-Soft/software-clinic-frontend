@@ -98,6 +98,8 @@ export function avisoDeVencimento(assinatura, agora = new Date()) {
   const etapa = !porPix || dias > DIAS_DA_JANELA ? null : dias <= 0 ? 'hoje' : 'antes';
   const base = { tom, dias, botao, etapa, data: diaCompleto(vencimento) };
 
+  // O teste acabando não tira o sistema: a clínica segue no plano Grátis, sem os recursos pagos.
+  if (dias <= 0 && emTeste) return { ...base, texto: tr('Seu teste grátis termina hoje. Depois, a clínica segue no plano Grátis: assine para manter o prontuário, a equipe e o resto.') };
   if (dias <= 0) return { ...base, texto: tr('{oQue} {verbo} hoje. {acao} para não perder o acesso.', { oQue, verbo, acao }) };
   if (dias === 1) return { ...base, texto: tr('{oQue} {verbo} amanhã ({data}).', { oQue, verbo, data }) };
   return { ...base, texto: tr('{oQue} {verbo} em {dias} dias ({data}).', { oQue, verbo, dias, data }) };

@@ -16,6 +16,8 @@ import SeloTeste from '@/modules/paciente/components/SeloTeste';
 import { useAnamnesesDoPaciente } from '@/modules/anamnese/anamnese.hooks';
 import AnamnesesDoPaciente from '@/modules/anamnese/components/AnamnesesDoPaciente';
 import { tr } from '@/i18n';
+import { planoQueLibera, usePlano } from '@/modules/plano/plano.contexto';
+import SeloPago from '@/modules/plano/components/SeloPago';
 
 const ABAS = [
   ['anamnese', tr('Anamnese')],
@@ -63,7 +65,15 @@ export default function ProntuarioPaciente({ paciente, profissional, agendamento
   // Com alergia registrada ela sobe para o banner de aviso; sem, aparece no resumo como qualquer outro campo.
   const camposResumo = perfilSalvo?.alergias ? CAMPOS_PERFIL_CLINICO.filter(([campo]) => campo !== 'alergias') : CAMPOS_PERFIL_CLINICO;
 
+  // Sem o prontuário no plano (plano Grátis), o histórico continua legível, mas iniciar abre a janela de assinar.
+  const { tem, nivel, abrirBloqueio } = usePlano();
+  const escreveNoProntuario = tem('prontuario');
+
   async function handleIniciar() {
+    if (!escreveNoProntuario) {
+      abrirBloqueio('prontuario', 'prontuario-iniciar');
+      return;
+    }
     setIniciando(true);
     await addProntuario({
       pacienteId: paciente._id,
@@ -143,6 +153,7 @@ export default function ProntuarioPaciente({ paciente, profissional, agendamento
               >
                 <IconeMais />
                 {iniciando ? tr('Iniciando...') : tr('Iniciar atendimento')}
+                {!escreveNoProntuario && <SeloPago plano={planoQueLibera('prontuario', nivel)} />}
               </button>
             )}
           </div>

@@ -144,7 +144,9 @@ export default function ClinicasADM() {
                 const assinatura = admin.assinatura;
                 const status = assinatura ? (STATUS_INFO[assinatura.status] ?? { rotulo: assinatura.status, tom: '' }) : null;
                 const revogado = !!assinatura?.acessoRevogado;
-                const bloqueado = assinatura && !assinatura.acesso?.liberado;
+                // Sem plano pago valendo, a clínica não fica bloqueada: cai no plano Grátis.
+                const noGratis = assinatura && assinatura.acesso?.nivel === 'gratis' && !revogado;
+                const noBasic = assinatura?.acesso?.nivel === 'basic';
                 const podeEstenderTeste = assinatura && assinatura.status !== 'ativa'
                   && !(assinatura.status === 'cancelada' && assinatura.acesso?.liberado);
 
@@ -217,7 +219,8 @@ export default function ClinicasADM() {
                       <div className="clinica-situacao">
                         <span className="badge-linha">
                           {revogado && <span className="badge badge--danger">{tr('Acesso revogado')}</span>}
-                          {!revogado && bloqueado && <span className="badge badge--danger">{tr('Bloqueada')}</span>}
+                          {noGratis && <span className="badge badge--warning">{tr('Plano Grátis')}</span>}
+                          {noBasic && <span className="badge badge--info">Basic</span>}
                           {status && (!revogado) && (
                             <span className={`badge${status.tom ? ` badge--${status.tom}` : ''}`}>{status.rotulo}</span>
                           )}

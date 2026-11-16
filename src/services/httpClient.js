@@ -117,6 +117,10 @@ async function makeRequest(url, options = {}) {
       if (response.status === 402 && errorData.code === 'ASSINATURA_INATIVA') {
         window.dispatchEvent(new CustomEvent('assinatura:inativa', { detail: { motivo: errorData.message } }))
       }
+      // Recurso que o plano da clínica não tem (plano Grátis ou Basic): abre a janela de assinar (PlanoProvider).
+      if (response.status === 402 && errorData.code === 'RECURSO_DO_PLANO') {
+        window.dispatchEvent(new CustomEvent('plano:recurso', { detail: { recurso: errorData.recurso, mensagem: errorData.message } }))
+      }
 
       throw {
         status: response.status,

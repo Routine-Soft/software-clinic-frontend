@@ -99,7 +99,7 @@ function convite(titulo = 'Organize a agenda da sua clínica com a Sonelia') {
 <aside class="b-cta">
   <div>
     <strong>${titulo}</strong>
-    <p>Agenda com uma cor por profissional, lista de espera, prontuário eletrônico e repasses automáticos. Teste grátis por 7 dias, sem cartão de crédito.</p>
+    <p>Agenda com uma cor por profissional, lista de espera, prontuário eletrônico e repasses automáticos. Comece grátis, com 14 dias de tudo liberado e sem cartão de crédito.</p>
   </div>
   <a class="b-btn b-btn--grande" href="/#/registro">Testar grátis</a>
 </aside>`;

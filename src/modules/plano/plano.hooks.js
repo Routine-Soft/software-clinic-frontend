@@ -5,6 +5,7 @@ import {
   updatePlano,
   deletePlano,
   getPlanosPublicos,
+  getResumoBloqueios,
 } from "./plano.api";
 import { adivinharPais } from "@/i18n/paises";
 
@@ -102,4 +103,20 @@ export function usePlanosPublicos() {
   }, []);
 
   return { planos, carregando: planos === null && !falhou, falhou };
+}
+
+// Super admin: cliques nos cadeados por recurso (qual recurso faz as clínicas quererem assinar).
+export function useResumoBloqueios() {
+  const [resumo, setResumo] = useState(null);
+  const [erro, setErro] = useState(null);
+
+  useEffect(() => {
+    let ignore = false;
+    getResumoBloqueios()
+      .then((r) => { if (!ignore) setResumo(r.data); })
+      .catch((e) => { if (!ignore) setErro(e); });
+    return () => { ignore = true; };
+  }, []);
+
+  return { resumo, carregando: resumo === null && !erro, erro };
 }

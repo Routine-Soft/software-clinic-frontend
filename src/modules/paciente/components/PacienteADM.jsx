@@ -20,10 +20,13 @@ import './paciente.css';
 import '@/modules/prontuario/prontuario.css';
 import SeloTeste from './SeloTeste';
 import { tr } from '@/i18n';
+import { usePlano } from '@/modules/plano/plano.contexto';
+import SeloPago from '@/modules/plano/components/SeloPago';
 
 // Pacientes e prontuários na mesma tela. Consultas e o botão do prontuário só aparecem para quem
 // pode abrir prontuários (profissional de saúde); a recepção vê o cadastro, sem nada clínico.
 export default function PacienteADM() {
+  const { limites, abrirBloqueio } = usePlano();
   const { pacientes, loading, error, successMessage, addPaciente, editPaciente, removePaciente, incluirAcompanhamento, finalizarAcompanhamento, refreshPacientes } = usePacientes();
   const { profissionais } = useProfissionais();
   const { convenios } = useConvenios();
@@ -83,6 +86,10 @@ export default function PacienteADM() {
   const larguras = veProntuarios ? [70, 55, 50, 40, 30] : [70, 55, 50, 30];
   const algumModalAberto = criandoPaciente || !!pacienteEditando || !!pacienteAcompanhamento;
 
+  // Plano Grátis: até 10 pacientes. No limite, "Novo paciente" já abre a janela de assinar (o backend também barra).
+  const limitePacientes = limites.pacientes ?? null;
+  const noLimite = !!limitePacientes && !loading && pacientes.length >= limitePacientes;
+
   return (
     <div className="page">
       <header className="page-header">
@@ -98,14 +105,23 @@ export default function PacienteADM() {
           {!carregando && emAtendimento > 0 && (
             <span className="badge badge--live">{tr('{emAtendimento} em atendimento', { emAtendimento })}</span>
           )}
-          {!loading && (
+          {!loading && (limitePacientes ? (
+            <span className={`badge ${noLimite ? 'badge--warning' : 'badge--primary'}`}>
+              {tr('{n} de {limite} pacientes do plano Grátis', { n: pacientes.length, limite: limitePacientes })}
+            </span>
+          ) : (
             <span className="badge badge--primary">
               {pacientes.length} {pacientes.length === 1 ? tr('paciente') : tr('pacientes')}
             </span>
-          )}
-          <button type="button" className="btn btn--primary" onClick={() => setCriandoPaciente(true)}>
+          ))}
+          <button
+            type="button"
+            className="btn btn--primary"
+            onClick={() => (noLimite ? abrirBloqueio('pacientes', 'pacientes-novo') : setCriandoPaciente(true))}
+          >
             <IconeMais />
             {tr('Novo paciente')}
+            {noLimite && <SeloPago plano="Basic" />}
           </button>
         </div>
       </header>

@@ -292,3 +292,8 @@
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
 }
+
+/* Recurso que o plano da clínica não tem: um pouco apagado, com o selo do plano à direita. */
+.sidebar__link--travado > span:not(.selo-pago) {
+  opacity: 0.75;
+}

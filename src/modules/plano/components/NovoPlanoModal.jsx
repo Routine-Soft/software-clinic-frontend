@@ -130,7 +130,7 @@ export default function NovoPlanoModal({ erro, onSave, onClose }) {
                 checked={formCriar.individual}
                 onChange={(e) => handleChangeCriar('individual', e.target.checked)}
               />
-              <span>{tr('Individual: só o dono da conta usa o sistema (um profissional, sem recepção)')}</span>
+              <span>{tr('Basic: até 5 profissionais, sem recepção nem repasses')}</span>
             </label>
           )}
         </ModalForm>

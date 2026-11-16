@@ -3,41 +3,49 @@ import { useAuthContext } from '@/hooks/useAuthContext'
 import ThemeToggle from '@/components/ThemeToggle/ThemeToggle'
 import IdiomaToggle from '@/components/IdiomaToggle/IdiomaToggle'
 import { Icone, IconeX } from '@/components/CrudCard/icones'
-import { ROTULO_FUNCAO } from '@/modules/user/user.constants'
+import { ROTULO_FUNCAO, clinicaVeAvaliacoes } from '@/modules/user/user.constants'
 import { iniciais } from '@/utils/nome'
 import Marca from './Marca'
 import BotaoInstalar from './BotaoInstalar'
 import { ICONES } from './menuIcones'
 import { clinicaNoBrasil } from '@/i18n/paises'
 import { useConfirmacoes } from '@/modules/agenda/confirmacoes.context'
+import { planoQueLibera, usePlano } from '@/modules/plano/plano.contexto'
+import SeloPago from '@/modules/plano/components/SeloPago'
 import './Sidebar.css'
 import { tr } from '@/i18n';
 
 const TODOS = ['super_admin', 'admin', 'profissional', 'recepcao']
 
-// soBrasil: só aparece para clínica do Brasil (ver clinicaNoBrasil).
+// soBrasil: só aparece para clínica do Brasil (ver clinicaNoBrasil). avaliacao: só nas áreas que usam (clinicaVeAvaliacoes).
+// recurso: depende do plano; sem ele, o item mostra um cadeado e abre a janela de assinar (o backend barra de verdade).
 // Os cadastros (profissionais, serviços, salas...) ficam no Painel Admin; o menu tem só o dia a dia.
 const GRUPOS = [
     {
-        titulo: tr('Principal'),
+        titulo: tr('Atendimento'),
         itens: [
             { label: tr('Página inicial'), path: '/home', icone: 'inicio', roles: TODOS },
-            { label: tr('Painel Admin'), path: '/dashboard-admin', icone: 'painel', roles: ['admin', 'recepcao'] },
+            { label: tr('Pacientes'), path: '/pacientes', icone: 'pacientes', roles: ['admin', 'profissional', 'recepcao'] },
             { label: tr('Sala de espera'), path: '/sala-de-espera', icone: 'tv', roles: ['admin', 'profissional', 'recepcao'] },
-            { label: tr('Reuniões'), path: '/reunioes', icone: 'reunioes', roles: ['admin', 'recepcao'] },
         ],
     },
     {
-        titulo: tr('Clínica'),
+        titulo: tr('Clínico'),
         itens: [
-            { label: tr('Pacientes'), path: '/pacientes', icone: 'pacientes', roles: ['admin', 'profissional', 'recepcao'] },
-            { label: tr('Anamneses'), path: '/anamneses', icone: 'anamnese', roles: ['admin', 'profissional', 'recepcao'] },
-            { label: tr('Termos (TCLE)'), path: '/termos-consentimento', icone: 'termo', roles: ['admin', 'profissional', 'recepcao'] },
-            { label: tr('Avaliações NR-01'), path: '/avaliacoes-nr01', icone: 'nr01', roles: ['admin', 'profissional'], soBrasil: true },
-            { label: tr('Avaliação neuropsicológica'), path: '/avaliacoes-neuropsicologicas', icone: 'neuro', roles: ['admin', 'profissional'] },
-            { label: tr('Repasses'), path: '/repasses', icone: 'receita', roles: ['admin'] },
-            { label: tr('Usuários'), path: '/usuarios', icone: 'usuarios', roles: ['admin', 'recepcao'] },
-            { label: tr('Meus repasses'), path: '/meus-repasses', icone: 'receita', roles: ['profissional'] },
+            { label: tr('Anamneses'), path: '/anamneses', icone: 'anamnese', roles: ['admin', 'profissional', 'recepcao'], recurso: 'anamnese' },
+            { label: tr('Termos (TCLE)'), path: '/termos-consentimento', icone: 'termo', roles: ['admin', 'profissional', 'recepcao'], recurso: 'termo' },
+            { label: tr('Avaliações NR-01'), path: '/avaliacoes-nr01', icone: 'nr01', roles: ['admin', 'profissional'], soBrasil: true, avaliacao: true, recurso: 'avaliacoes' },
+            { label: tr('Avaliação neuropsicológica'), path: '/avaliacoes-neuropsicologicas', icone: 'neuro', roles: ['admin', 'profissional'], avaliacao: true, recurso: 'avaliacoes' },
+        ],
+    },
+    {
+        titulo: tr('Gestão'),
+        itens: [
+            { label: tr('Painel Admin'), path: '/dashboard-admin', icone: 'painel', roles: ['admin', 'recepcao'] },
+            { label: tr('Reuniões'), path: '/reunioes', icone: 'reunioes', roles: ['admin', 'recepcao'], recurso: 'reunioes' },
+            { label: tr('Repasses'), path: '/repasses', icone: 'receita', roles: ['admin'], recurso: 'repasse' },
+            { label: tr('Meus repasses'), path: '/meus-repasses', icone: 'receita', roles: ['profissional'], recurso: 'repasse' },
+            { label: tr('Usuários'), path: '/usuarios', icone: 'usuarios', roles: ['admin', 'recepcao'], recurso: 'equipe' },
         ],
     },
     {
@@ -69,15 +77,17 @@ const GRUPOS = [
 export function Sidebar({ aberto = false, onFechar }) {
     const { user, hasRole, logout } = useAuthContext()
     const { pendentes, podeResolver } = useConfirmacoes()
+    const { tem, nivel, abrirBloqueio } = usePlano()
 
     async function handleLogout() {
         await logout()
     }
 
     const noBrasil = clinicaNoBrasil(user)
+    const veAvaliacoes = clinicaVeAvaliacoes(user)
     const podeVer = (item) => (item.soAfiliado ? !!user?.afiliadoDesde : item.roles.some((role) => hasRole(role)))
     const grupos = GRUPOS
-        .map((grupo) => ({ ...grupo, itens: grupo.itens.filter((item) => podeVer(item) && (noBrasil || !item.soBrasil)) }))
+        .map((grupo) => ({ ...grupo, itens: grupo.itens.filter((item) => podeVer(item) && (noBrasil || !item.soBrasil) && (veAvaliacoes || !item.avaliacao)) }))
         .filter((grupo) => grupo.itens.length > 0)
 
     return (
@@ -96,17 +106,27 @@ export function Sidebar({ aberto = false, onFechar }) {
                     <div className="sidebar__grupo" key={grupo.titulo}>
                         <span className="sidebar__titulo">{grupo.titulo}</span>
                         <ul>
-                            {grupo.itens.map((item) => (
+                            {grupo.itens.map((item) => {
+                                const travado = !!item.recurso && !tem(item.recurso)
+                                function aoClicar(e) {
+                                    onFechar?.()
+                                    if (!travado) return
+                                    e.preventDefault()
+                                    abrirBloqueio(item.recurso, 'menu', null, item.path)
+                                }
+                                return (
                                 <li key={item.path}>
-                                    <NavLink to={item.path} className="sidebar__link" onClick={onFechar}>
+                                    <NavLink to={item.path} className={`sidebar__link${travado ? ' sidebar__link--travado' : ''}`} onClick={aoClicar}>
                                         <Icone>{ICONES[item.icone]}</Icone>
                                         <span>{item.label}</span>
+                                        {travado && <SeloPago plano={planoQueLibera(item.recurso, nivel)} />}
                                         {item.path === '/home' && podeResolver && pendentes.length > 0 && (
                                             <span className="sidebar__alerta" aria-label={tr('{total} atendimentos sem confirmar', { total: pendentes.length })}>{pendentes.length}</span>
                                         )}
                                     </NavLink>
                                 </li>
-                            ))}
+                                )
+                            })}
                         </ul>
                     </div>
                 ))}

@@ -233,3 +233,52 @@
     animation: none;
   }
 }
+
+/* Plano Grátis: lembretes usados no mês */
+.whats-uso {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--primary) 5%, transparent);
+}
+
+.whats-uso__linha {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 4px 12px;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.whats-uso__linha strong {
+  color: var(--text);
+}
+
+.whats-uso__barra {
+  height: 6px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--text-muted) 18%, transparent);
+  overflow: hidden;
+}
+
+.whats-uso__barra span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--primary);
+  transition: width 0.4s var(--ease);
+}
+
+.whats-uso--esgotado .whats-uso__barra span {
+  background: var(--warning);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .whats-uso__barra span {
+    transition: none;
+  }
+}

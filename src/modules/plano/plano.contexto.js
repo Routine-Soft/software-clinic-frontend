@@ -3,8 +3,8 @@ import { createContext, useContext } from 'react';
 // O que a clínica pode usar agora, vindo de /assinaturas/atual (`acesso`): nível "gratis", "basic" ou "pro",
 // os recursos liberados e os limites. Mesmas regras de plano.limites.js no backend (lá é quem barra de verdade).
 //  - rede e pro: planos Rede e Pro e o período de teste, tudo liberado (só muda o limite de profissionais);
-//  - basic: até 5 profissionais, sem recepção nem repasses;
-//  - gratis: agenda, até 10 pacientes e um profissional.
+//  - basic: até 2 profissionais e pacientes sem limite, sem recepção nem repasses;
+//  - gratis: agenda, até 20 pacientes, um profissional, avaliações e até 10 lembretes pelo WhatsApp por mês.
 export const PlanoContext = createContext({
   carregando: true,
   nivel: null,

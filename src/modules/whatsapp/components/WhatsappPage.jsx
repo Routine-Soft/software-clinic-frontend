@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useAuthContext } from '@/hooks/useAuthContext';
 import { tr } from '@/i18n';
 import { useWhatsapp } from '../whatsapp.hooks';
@@ -84,7 +85,29 @@ function CartaoConexao({ situacao, conectando, ocupado, onConectar, onCancelar, 
   );
 }
 
-function CartaoLembretes({ situacao, ocupado, nomeClinica, onSalvar }) {
+// Plano Grátis: quantos lembretes do mês já saíram (os pagos não têm limite e não mostram nada).
+function UsoDoMes({ enviados, limite, podeAssinar }) {
+  const esgotado = enviados >= limite;
+  return (
+    <div className={`whats-uso${esgotado ? ' whats-uso--esgotado' : ''}`}>
+      <div className="whats-uso__linha">
+        <span>{tr('Plano Grátis: até {limite} lembretes por mês', { limite })}</span>
+        <strong>{tr('{n} de {limite}', { n: Math.min(enviados, limite), limite })}</strong>
+      </div>
+      <div className="whats-uso__barra" role="progressbar" aria-valuemin={0} aria-valuemax={limite} aria-valuenow={Math.min(enviados, limite)} aria-label={tr('Lembretes usados neste mês')}>
+        <span style={{ width: `${Math.min(100, (enviados / limite) * 100)}%` }} />
+      </div>
+      {esgotado && (
+        <p className="alert alert--warning" role="status">
+          {tr('Os lembretes deste mês acabaram. As próximas consultas ficam sem lembrete até o mês virar.')}{' '}
+          {podeAssinar && <Link to="/assinaturas">{tr('Assine um plano para enviar sem limite.')}</Link>}
+        </p>
+      )}
+    </div>
+  );
+}
+
+function CartaoLembretes({ situacao, ocupado, nomeClinica, podeAssinar, onSalvar }) {
   const [texto, setTexto] = useState(situacao.texto);
   const [ativo, setAtivo] = useState(situacao.ativo);
   const alterado = texto !== situacao.texto || ativo !== situacao.ativo;
@@ -103,6 +126,7 @@ function CartaoLembretes({ situacao, ocupado, nomeClinica, onSalvar }) {
         </button>
       </div>
       <p className="whats-card__texto">{tr('Enviado 24 horas antes da consulta, entre 8h e 20h, para os pacientes marcados com "Aceita receber lembretes de consulta pelo WhatsApp" no cadastro.')}</p>
+      {situacao.limiteMes != null && <UsoDoMes enviados={situacao.enviadosMes ?? 0} limite={situacao.limiteMes} podeAssinar={podeAssinar} />}
 
       <div className="field">
         <label className="field__label" htmlFor="whats-texto">{tr('Texto do lembrete')}</label>
@@ -175,7 +199,7 @@ export default function WhatsappPage() {
       ) : situacao && (
         <div className="whats-grade">
           <CartaoConexao situacao={situacao} conectando={conectando} ocupado={ocupado} onConectar={conectar} onCancelar={cancelarConexao} onDesconectar={desconectar} />
-          <CartaoLembretes key={`${situacao.texto}|${situacao.ativo}`} situacao={situacao} ocupado={ocupado} nomeClinica={user?.nomeEmpresa} onSalvar={salvar} />
+          <CartaoLembretes key={`${situacao.texto}|${situacao.ativo}`} situacao={situacao} ocupado={ocupado} nomeClinica={user?.nomeEmpresa} podeAssinar={user?.role === 'admin'} onSalvar={salvar} />
           <CartaoTeste conectado={situacao.conectado} ocupado={ocupado} onEnviar={enviarTeste} />
           <p className="whats-aviso">{tr('Use um número de WhatsApp da clínica. O WhatsApp pode bloquear números que mandam muitas mensagens; a Sonelia espaça os envios para diminuir esse risco.')}</p>
         </div>

@@ -115,7 +115,7 @@ export default function PacienteADM() {
   const larguras = veProntuarios ? [40, 70, 55, 50, 40, 30] : [40, 70, 55, 50, 30];
   const algumModalAberto = criandoPaciente || !!pacienteEditando || !!pacienteAcompanhamento;
 
-  // Grátis: até 10 pacientes; Basic: até 100. No limite, "Novo paciente" já abre a janela de assinar (o backend também barra).
+  // Só o Grátis tem limite (até 20 pacientes). No limite, "Novo paciente" já abre a janela de assinar (o backend também barra).
   const limitePacientes = limites.pacientes ?? null;
   const noLimite = !!limitePacientes && !loading && pacientes.length >= limitePacientes;
 

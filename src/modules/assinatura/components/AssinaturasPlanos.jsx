@@ -170,7 +170,7 @@ export default function AssinaturasPlanos() {
 
       {assinatura?.acesso?.nivel === 'gratis' && (
         <p className="alert alert--warning" role="status">
-          {tr('Sua clínica está no plano Grátis: agenda, até 10 pacientes e um profissional. Prontuário, anamnese, TCLE, convênios e a equipe voltam assim que você assinar. Nada do que foi registrado se perdeu.')}
+          {tr('Sua clínica está no plano Grátis: agenda, até 20 pacientes, um profissional, avaliações e até 10 lembretes pelo WhatsApp por mês. Prontuário, anamnese, TCLE, convênios e a equipe voltam assim que você assinar. Nada do que foi registrado se perdeu.')}
         </p>
       )}
 

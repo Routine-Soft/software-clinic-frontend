@@ -53,4 +53,9 @@ export default {
   'Limpar seleção': 'Limpiar selección',
   'Selecionar': 'Seleccionar',
   'Selecionar {nome}': 'Seleccionar a {nome}',
+  'Plano Grátis: até {limite} lembretes por mês': 'Plan Gratis: hasta {limite} recordatorios por mes',
+  '{n} de {limite}': '{n} de {limite}',
+  'Lembretes usados neste mês': 'Recordatorios usados este mes',
+  'Os lembretes deste mês acabaram. As próximas consultas ficam sem lembrete até o mês virar.': 'Los recordatorios de este mes se agotaron. Las próximas citas no tendrán recordatorio hasta el mes que viene.',
+  'Assine um plano para enviar sem limite.': 'Suscríbete a un plan para enviar sin límite.',
 };

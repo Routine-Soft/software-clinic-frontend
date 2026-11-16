@@ -19,7 +19,7 @@ const RECURSOS = {
   whatsapp: { titulo: tr('Lembretes pelo WhatsApp'), texto: tr('O lembrete da consulta sai do WhatsApp da clínica 24 horas antes, e menos pacientes faltam.'), imagem: 'agenda-semana.jpg' },
   reunioes: { titulo: tr('Agenda de reuniões'), texto: tr('Uma agenda à parte para conversas com clientes e parceiros.'), imagem: 'reunioes.jpg' },
   equipe: { titulo: tr('Equipe da clínica'), texto: tr('Cada profissional com o próprio login, a própria agenda e os próprios prontuários.'), imagem: 'agenda-semana.jpg' },
-  pacientes: { titulo: tr('Pacientes sem limite'), texto: tr('O Grátis vai até 10 pacientes, o Basic até 100 e o Pro não tem limite.'), imagem: 'pacientes.jpg' },
+  pacientes: { titulo: tr('Pacientes sem limite'), texto: tr('O Grátis vai até 20 pacientes; nos planos pagos, não há limite.'), imagem: 'pacientes.jpg' },
   profissionais: { titulo: tr('Mais profissionais'), texto: tr('Cadastre a equipe toda, cada profissional com a sua cor na agenda.'), imagem: 'agenda-semana.jpg' },
   repasse: { titulo: tr('Repasses'), texto: tr('Quanto cada profissional tem a receber, calculado sozinho a cada atendimento.'), imagem: 'repasses.jpg' },
   recepcao: { titulo: tr('Recepção'), texto: tr('A recepção agenda, cadastra e chama os pacientes, sem ver o conteúdo clínico.'), imagem: 'agenda-semana.jpg' },

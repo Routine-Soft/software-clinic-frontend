@@ -53,4 +53,9 @@ export default {
   'Limpar seleção': 'Clear selection',
   'Selecionar': 'Select',
   'Selecionar {nome}': 'Select {nome}',
+  'Plano Grátis: até {limite} lembretes por mês': 'Free plan: up to {limite} reminders per month',
+  '{n} de {limite}': '{n} of {limite}',
+  'Lembretes usados neste mês': 'Reminders used this month',
+  'Os lembretes deste mês acabaram. As próximas consultas ficam sem lembrete até o mês virar.': "This month's reminders are used up. Upcoming appointments won't get a reminder until next month.",
+  'Assine um plano para enviar sem limite.': 'Subscribe to a plan to send without limits.',
 };

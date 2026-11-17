@@ -7,6 +7,10 @@ import textos from '../src/pages/Landing/landing.textos.js';
 
 const L = textos.pt;
 
+// Só destas páginas por área (saíram da página inicial em 17/11/2026).
+const GARANTIAS = ['Plano grátis para sempre', '14 dias com tudo liberado', 'Sem cartão de crédito'];
+const DORES_CAB = { selo: 'O dia a dia sem dor de cabeça', titulo: 'Reconhece alguma dessas situações?' };
+
 const ICONE_CHECK = '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" d="m5 12.5 4.5 4.5L19 7.5"/></svg>';
 const ICONE_X = '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" d="M7 7l10 10M17 7 7 17"/></svg>';
 const ICONE_CADEADO = '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M6 11h12v9H6zM8.5 11V8a3.5 3.5 0 0 1 7 0v3"/></svg>';
@@ -79,7 +83,7 @@ ${cabecalho(simbolo)}
           <a class="b-btn b-btn--grande" href="/#/registro">Começar teste grátis</a>
           <a class="b-btn b-btn--ghost b-btn--grande n-btn-whats" href="${LINK_WHATSAPP}" target="_blank" rel="noopener noreferrer">${ICONE_WHATSAPP} Tirar dúvidas</a>
         </div>
-        ${lista(L.hero.garantias).replace('n-checks', 'n-checks n-checks--linha')}
+        ${lista(GARANTIAS).replace('n-checks', 'n-checks n-checks--linha')}
       </div>
       <div class="n-hero__visual">${janela(nicho.imagem, nicho.imagemAlt, 'eager')}</div>
     </div>
@@ -87,7 +91,7 @@ ${cabecalho(simbolo)}
 
   <section class="n-secao">
     <div class="b-container">
-      ${cabSecao(L.doresCab.selo, L.doresCab.titulo, `Os problemas mais comuns em ${nicho.nome.toLowerCase()}, e como a ${NOME} resolve cada um.`)}
+      ${cabSecao(DORES_CAB.selo, DORES_CAB.titulo, `Os problemas mais comuns em ${nicho.nome.toLowerCase()}, e como a ${NOME} resolve cada um.`)}
       <ul class="n-dores">
         ${nicho.dores.map(([dor, solucao]) => `<li class="n-cartao n-dor">
           <p class="n-dor__problema">${ICONE_X}<span>${esc(dor)}</span></p>

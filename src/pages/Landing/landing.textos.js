@@ -10,7 +10,6 @@ export default {
     secoes: [
       ['funcionalidades', 'Funcionalidades'],
       ['como-funciona', 'Como funciona'],
-      ['para-quem', 'Para quem'],
       ['precos', 'Preços'],
       ['duvidas', 'Dúvidas'],
     ],
@@ -35,7 +34,6 @@ export default {
       subIa: { antes: 'E com', sigla: 'IA', depois: 'Inteligência Artificial pra atendimento no WhatsApp' },
       comecar: 'Começar grátis',
       falarAtendente: 'Falar com atendente',
-      garantias: ['Plano grátis para sempre', '14 dias com tudo liberado', 'Sem cartão de crédito'],
       altInicio: 'Página inicial da Sonelia com os agendamentos do dia',
       altCelular: 'Agenda do dia no celular',
       emAtendimento: 'Em atendimento',
@@ -52,19 +50,6 @@ export default {
       ['Neuropsicologia', null],
       ['Saúde do trabalho (NR-01)', null],
       ['E muitas outras áreas', null],
-    ],
-    doresCab: {
-      selo: 'O dia a dia sem dor de cabeça',
-      titulo: 'Reconhece alguma dessas situações?',
-      texto: 'Os problemas mais comuns de quem administra uma clínica, e como a Sonelia resolve cada um.',
-    },
-    dores: [
-      { icone: 'agenda', dor: 'Agenda no caderno, na planilha e no WhatsApp', solucao: 'Uma agenda só para a clínica inteira, com uma cor para cada profissional, visão de dia, semana e mês, salas e consultas que se repetem.' },
-      { icone: 'prontuario', dor: 'Prontuário em papel, difícil de achar e sem sigilo', solucao: 'Prontuário eletrônico com histórico em linha do tempo, CID-10, alergias em destaque e leitura liberada só para quem pode ver.' },
-      { icone: 'receita', dor: 'Fim do mês perdido calculando repasse na planilha', solucao: 'O repasse de cada profissional é calculado sozinho a cada atendimento realizado, por percentual ou valor fixo, e fica tudo registrado.' },
-      { icone: 'convenios', dor: 'Cada convênio tem um preço e ninguém lembra qual', solucao: 'Tabela de preço e de repasse por convênio dentro de cada serviço: ao agendar, o valor certo já aparece.' },
-      { icone: 'espera', dor: 'O paciente desmarcou e o horário ficou vazio', solucao: 'Lista de espera por especialidade e profissional: quando abre uma vaga, você já sabe quem chamar.' },
-      { icone: 'inicio', dor: 'Ninguém sabe ao certo como está o dia', solucao: 'A página inicial mostra a agenda de hoje, quem está em atendimento agora, a lista de espera e os cancelamentos do mês.' },
     ],
     vitrineCab: {
       selo: 'Veja por dentro',
@@ -102,16 +87,6 @@ export default {
       { icone: 'empresas', titulo: 'Empresas clientes', texto: 'Empresas atendidas pela clínica e seus funcionários.' },
       { icone: 'usuarios', titulo: 'Usuários e permissões', texto: 'Gestão, recepção e profissionais, cada um com seu acesso.' },
       { icone: 'painel', titulo: 'Painel guiado', texto: 'Passo a passo para deixar a clínica pronta para atender.' },
-    ],
-    perfisCab: {
-      selo: 'Para quem',
-      titulo: 'Cada pessoa da clínica vê o que precisa',
-      texto: 'Gestão, recepção e profissionais usam o mesmo sistema, cada um com o próprio login e o acesso certo.',
-    },
-    perfis: [
-      { icone: 'painel', papel: 'Gestão da clínica', texto: 'Enxerga a clínica inteira e decide quem acessa o quê.', itens: ['Agenda de todos os profissionais', 'Repasses e pagamentos', 'Cadastros, usuários e assinatura'] },
-      { icone: 'agenda', papel: 'Recepção', texto: 'Cuida da agenda e dos pacientes sem ver o conteúdo clínico.', itens: ['Agendar, remarcar e cancelar', 'Cadastrar pacientes e responsáveis', 'Chamar pacientes na TV da sala de espera'] },
-      { icone: 'profissionais', papel: 'Profissional', texto: 'Abre o sistema já na própria agenda e foca no atendimento.', itens: ['A própria agenda do dia', 'Chamar o paciente na TV', 'Prontuário dos seus pacientes'] },
     ],
     passosCab: { selo: 'Como funciona', titulo: 'Comece hoje, em três passos', criar: 'Criar minha conta grátis' },
     passos: [
@@ -219,7 +194,6 @@ export default {
     secoes: [
       ['funcionalidades', 'Features'],
       ['como-funciona', 'How it works'],
-      ['para-quem', 'Who it’s for'],
       ['precos', 'Pricing'],
       ['duvidas', 'FAQ'],
     ],
@@ -243,7 +217,6 @@ export default {
       subIa: { antes: 'Plus', sigla: 'AI', depois: 'Artificial Intelligence for customer service on WhatsApp' },
       comecar: 'Start free',
       falarAtendente: 'Talk to our team',
-      garantias: ['Free plan forever', '14 days fully unlocked', 'No credit card'],
       altInicio: 'Sonelia home screen with today’s appointments',
       altCelular: 'Today’s schedule on a phone',
       emAtendimento: 'In session',
@@ -260,19 +233,6 @@ export default {
       ['Neuropsychology', null],
       ['Occupational health', null],
       ['And many other fields', null],
-    ],
-    doresCab: {
-      selo: 'Day-to-day without headaches',
-      titulo: 'Sound familiar?',
-      texto: 'The most common problems of running a clinic, and how Sonelia solves each one.',
-    },
-    dores: [
-      { icone: 'agenda', dor: 'Appointments in a notebook, a spreadsheet and WhatsApp', solucao: 'One schedule for the whole clinic, with a color for each practitioner, day, week and month views, rooms and recurring appointments.' },
-      { icone: 'prontuario', dor: 'Paper records that are hard to find and not confidential', solucao: 'Electronic health records with a timeline, ICD-10, highlighted allergies and access only for those allowed to read them.' },
-      { icone: 'receita', dor: 'End of the month lost calculating payouts in a spreadsheet', solucao: 'Each practitioner’s payout is calculated automatically for every completed session, as a percentage or a fixed amount, and everything is recorded.' },
-      { icone: 'convenios', dor: 'Each insurance plan has its own price and nobody remembers which', solucao: 'Price and payout table per insurance plan inside each service: when booking, the right amount shows up.' },
-      { icone: 'espera', dor: 'A patient cancelled and the slot was left empty', solucao: 'Waiting list by specialty and practitioner: when a slot opens, you already know who to call.' },
-      { icone: 'inicio', dor: 'Nobody really knows how the day is going', solucao: 'The home screen shows today’s schedule, who is in session right now, the waiting list and this month’s cancellations.' },
     ],
     vitrineCab: {
       selo: 'Take a look inside',
@@ -309,16 +269,6 @@ export default {
       { icone: 'reunioes', titulo: 'Meetings', texto: 'A separate calendar for talks with clients and partners.' },
       { icone: 'usuarios', titulo: 'Users and permissions', texto: 'Management, front desk and practitioners, each with their own access.' },
       { icone: 'painel', titulo: 'Guided panel', texto: 'Step by step to get the clinic ready to see patients.' },
-    ],
-    perfisCab: {
-      selo: 'Who it’s for',
-      titulo: 'Everyone at the clinic sees what they need',
-      texto: 'Management, front desk and practitioners use the same system, each with their own login and the right access.',
-    },
-    perfis: [
-      { icone: 'painel', papel: 'Clinic management', texto: 'Sees the whole clinic and decides who can access what.', itens: ['Every practitioner’s schedule', 'Payouts and payments', 'Setup, users and subscription'] },
-      { icone: 'agenda', papel: 'Front desk', texto: 'Handles the schedule and patients without seeing clinical content.', itens: ['Book, reschedule and cancel', 'Register patients and guardians', 'Call patients on the waiting room TV'] },
-      { icone: 'profissionais', papel: 'Practitioner', texto: 'Opens straight to their own schedule and focuses on patients.', itens: ['Their own schedule for the day', 'Call the patient on the TV', 'Health records of their patients'] },
     ],
     passosCab: { selo: 'How it works', titulo: 'Get started today in three steps', criar: 'Create my free account' },
     passos: [
@@ -423,7 +373,6 @@ export default {
     secoes: [
       ['funcionalidades', 'Funciones'],
       ['como-funciona', 'Cómo funciona'],
-      ['para-quem', 'Para quién es'],
       ['precos', 'Precios'],
       ['duvidas', 'Preguntas'],
     ],
@@ -447,7 +396,6 @@ export default {
       subIa: { antes: 'Y con', sigla: 'IA', depois: 'Inteligencia Artificial para la atención por WhatsApp' },
       comecar: 'Empieza gratis',
       falarAtendente: 'Hablar con un asesor',
-      garantias: ['Plan gratis para siempre', '14 días con todo habilitado', 'Sin tarjeta'],
       altInicio: 'Pantalla de inicio de Sonelia con las citas del día',
       altCelular: 'Agenda del día en el celular',
       emAtendimento: 'En atención',
@@ -464,19 +412,6 @@ export default {
       ['Neuropsicología', null],
       ['Salud laboral', null],
       ['Y muchas otras áreas', null],
-    ],
-    doresCab: {
-      selo: 'Un día a día sin dolores de cabeza',
-      titulo: '¿Te suena familiar?',
-      texto: 'Los problemas más comunes de administrar una clínica y cómo Sonelia resuelve cada uno.',
-    },
-    dores: [
-      { icone: 'agenda', dor: 'Citas en el cuaderno, en la planilla y en WhatsApp', solucao: 'Una sola agenda para toda la clínica, con un color por profesional, vista por día, semana y mes, salas y citas recurrentes.' },
-      { icone: 'prontuario', dor: 'Historias en papel, difíciles de encontrar y sin confidencialidad', solucao: 'Historia clínica electrónica con línea de tiempo, CIE-10, alergias destacadas y acceso solo para quien puede leer.' },
-      { icone: 'receita', dor: 'Fin de mes perdido calculando pagos en una planilla', solucao: 'El pago de cada profesional se calcula solo en cada atención realizada, en porcentaje o monto fijo, y todo queda registrado.' },
-      { icone: 'convenios', dor: 'Cada seguro médico tiene su precio y nadie recuerda cuál', solucao: 'Tabla de precio y pago por seguro médico dentro de cada servicio: al agendar, aparece el valor correcto.' },
-      { icone: 'espera', dor: 'Un paciente canceló y el horario quedó vacío', solucao: 'Lista de espera por especialidad y profesional: cuando se libera un horario, ya sabes a quién llamar.' },
-      { icone: 'inicio', dor: 'Nadie sabe bien cómo va el día', solucao: 'La pantalla de inicio muestra la agenda de hoy, quién está en atención ahora, la lista de espera y las cancelaciones del mes.' },
     ],
     vitrineCab: {
       selo: 'Mira por dentro',
@@ -513,16 +448,6 @@ export default {
       { icone: 'reunioes', titulo: 'Reuniones', texto: 'Agenda aparte para conversaciones con clientes y socios.' },
       { icone: 'usuarios', titulo: 'Usuarios y permisos', texto: 'Dirección, recepción y profesionales, cada uno con su acceso.' },
       { icone: 'painel', titulo: 'Panel guiado', texto: 'Paso a paso para dejar la clínica lista para atender.' },
-    ],
-    perfisCab: {
-      selo: 'Para quién es',
-      titulo: 'Cada persona de la clínica ve lo que necesita',
-      texto: 'Dirección, recepción y profesionales usan el mismo sistema, cada uno con su usuario y el acceso correcto.',
-    },
-    perfis: [
-      { icone: 'painel', papel: 'Dirección de la clínica', texto: 'Ve toda la clínica y decide quién accede a qué.', itens: ['Agenda de todos los profesionales', 'Pagos y cobros', 'Registros, usuarios y suscripción'] },
-      { icone: 'agenda', papel: 'Recepción', texto: 'Maneja la agenda y los pacientes sin ver el contenido clínico.', itens: ['Agendar, reprogramar y cancelar', 'Registrar pacientes y responsables', 'Llamar al paciente en la TV de la sala de espera'] },
-      { icone: 'profissionais', papel: 'Profesional', texto: 'Entra directo en su agenda y se concentra en el paciente.', itens: ['Su propia agenda del día', 'Llamar al paciente en la TV', 'Historia clínica de sus pacientes'] },
     ],
     passosCab: { selo: 'Cómo funciona', titulo: 'Empieza hoy en tres pasos', criar: 'Crear mi cuenta gratis' },
     passos: [

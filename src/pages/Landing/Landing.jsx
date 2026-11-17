@@ -3,7 +3,7 @@ import { formatarPrecoPlano } from '@/modules/plano/plano.utils';
 import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuthContext } from '@/hooks/useAuthContext';
-import { Icone, IconeCheck, IconeX } from '@/components/CrudCard/icones';
+import { Icone, IconeCheck } from '@/components/CrudCard/icones';
 import { ICONES } from '@/components/Sidebar/menuIcones';
 import { useIdioma } from '@/i18n/useIdioma';
 import { planoNoIdioma } from '@/modules/plano/plano.utils';
@@ -67,9 +67,6 @@ function Hero({ logado }) {
               <span className="lp-hero__btn-whats"><IconeWhatsapp /></span> {L.falarAtendente}
             </a>
           </div>
-          <ul className="lp-hero__garantias">
-            {L.garantias.map((g) => <li key={g}><IconeCheck /> {g}</li>)}
-          </ul>
         </div>
 
         <div className="lp-hero__visual">
@@ -84,43 +81,6 @@ function Hero({ logado }) {
             <div><strong>{tr('R$ 3.090,00')}</strong><small>{L.repasses}</small></div>
           </div>
         </div>
-      </div>
-
-      <div className="lp-container">
-        <div className="lp-faixa">
-          <span>{L.feitoPara}</span>
-          <ul>
-            {t('landing.especialidades').map(([nome, href]) => <li key={nome}>{href ? <a href={href}>{nome}</a> : nome}</li>)}
-          </ul>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function Dores() {
-  const { t } = useIdioma();
-  const cab = t('landing.doresCab');
-  return (
-    <section className="lp-secao lp-secao--destaque" id="problemas">
-      <div className="lp-container">
-        <header className="lp-secao__cab">
-          <span className="lp-selo">{cab.selo}</span>
-          <h2>{cab.titulo}</h2>
-          <p>{cab.texto}</p>
-        </header>
-
-        <ul className="lp-dores">
-          {t('landing.dores').map((item, i) => (
-            <li key={item.dor} className="lp-dor lp-revelar" style={{ '--i': i }}>
-              <p className="lp-dor__problema"><IconeX /> {item.dor}</p>
-              <div className="lp-dor__solucao">
-                <span className="lp-dor__icone"><IconeMenu nome={item.icone} /></span>
-                <p>{item.solucao}</p>
-              </div>
-            </li>
-          ))}
-        </ul>
       </div>
     </section>
   );
@@ -177,7 +137,7 @@ function Funcionalidades() {
   const { t } = useIdioma();
   const cab = t('landing.funcionalidadesCab');
   return (
-    <section className="lp-secao" id="funcionalidades">
+    <section className="lp-secao lp-secao--destaque" id="funcionalidades">
       <div className="lp-container">
         <header className="lp-secao__cab">
           <span className="lp-selo">{cab.selo}</span>
@@ -191,35 +151,6 @@ function Funcionalidades() {
               <span className="lp-recurso__icone"><IconeMenu nome={f.icone} /></span>
               <h3>{f.titulo}</h3>
               <p>{f.texto}</p>
-            </li>
-          ))}
-        </ul>
-      </div>
-    </section>
-  );
-}
-
-function Perfis() {
-  const { t } = useIdioma();
-  const cab = t('landing.perfisCab');
-  return (
-    <section className="lp-secao lp-secao--destaque" id="para-quem">
-      <div className="lp-container">
-        <header className="lp-secao__cab">
-          <span className="lp-selo">{cab.selo}</span>
-          <h2>{cab.titulo}</h2>
-          <p>{cab.texto}</p>
-        </header>
-
-        <ul className="lp-perfis">
-          {t('landing.perfis').map((p, i) => (
-            <li key={p.papel} className="lp-perfil lp-revelar" style={{ '--i': i }}>
-              <span className="lp-perfil__icone"><IconeMenu nome={p.icone} /></span>
-              <h3>{p.papel}</h3>
-              <p>{p.texto}</p>
-              <ul className="lp-lista-check">
-                {p.itens.map((item) => <li key={item}><IconeCheck /> {item}</li>)}
-              </ul>
             </li>
           ))}
         </ul>
@@ -529,9 +460,7 @@ export default function Landing() {
       <main>
         <Hero logado={isAuthenticated} />
         <Vitrine />
-        <Dores />
         <Funcionalidades />
-        <Perfis />
         <ComoFunciona logado={isAuthenticated} />
         <EmQualquerLugar />
         <Seguranca />

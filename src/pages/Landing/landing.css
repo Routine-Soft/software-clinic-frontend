@@ -372,30 +372,6 @@ a.lp-nav__link {
   justify-content: center;
 }
 
-.lp-hero__garantias {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px 20px;
-  padding: 0;
-  margin: 0;
-  list-style: none;
-  font-size: 0.92rem;
-  font-weight: 600;
-  color: var(--text-muted);
-}
-
-.lp-hero__garantias li {
-  display: inline-flex;
-  gap: 6px;
-  align-items: center;
-}
-
-.lp-hero__garantias svg {
-  width: 16px;
-  height: 16px;
-  color: var(--success);
-}
-
 .lp-hero__visual {
   position: relative;
   padding: 0 40px 56px 0;
@@ -476,56 +452,6 @@ a.lp-nav__link {
 .lp-flutuante__icone svg {
   width: 18px;
   height: 18px;
-}
-
-.lp-faixa {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px 18px;
-  align-items: center;
-  justify-content: center;
-  margin-top: 48px;
-  padding: 18px 22px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-sm);
-}
-
-.lp-faixa > span {
-  font-size: 0.82rem;
-  font-weight: 700;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  color: var(--text-subtle);
-}
-
-.lp-faixa ul {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  justify-content: center;
-  padding: 0;
-  margin: 0;
-  list-style: none;
-}
-
-.lp-faixa a {
-  color: inherit;
-  text-decoration: none;
-}
-
-.lp-faixa a:hover {
-  color: var(--primary);
-}
-
-.lp-faixa li {
-  padding: 0.35rem 0.8rem;
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: var(--text-muted);
-  background: var(--surface-2);
-  border-radius: 999px;
 }
 
 /* ---------- Molduras (navegador e celular) ---------- */
@@ -659,62 +585,7 @@ a.lp-nav__link {
   font-size: 1.05rem;
 }
 
-/* ---------- Dores ---------- */
-
-.lp-dores {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr));
-  gap: 18px;
-  padding: 0;
-  margin: 0;
-  list-style: none;
-}
-
-.lp-dor {
-  display: grid;
-  overflow: hidden;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-sm);
-  transition: transform 0.3s var(--ease), box-shadow 0.3s var(--ease);
-}
-
-.lp-dor:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-md);
-}
-
-.lp-dor__problema {
-  display: flex;
-  gap: 10px;
-  align-items: flex-start;
-  padding: 16px 20px;
-  font-weight: 700;
-  line-height: 1.4;
-  color: var(--danger);
-  background: var(--danger-soft);
-}
-
-.lp-dor__problema svg {
-  flex: none;
-  width: 18px;
-  height: 18px;
-  margin-top: 1px;
-}
-
-.lp-dor__solucao {
-  display: flex;
-  gap: 14px;
-  align-items: flex-start;
-  padding: 18px 20px 22px;
-  line-height: 1.55;
-  color: var(--text-muted);
-}
-
-.lp-dor__icone,
-.lp-recurso__icone,
-.lp-perfil__icone {
+.lp-recurso__icone {
   display: grid;
   flex: none;
   place-items: center;
@@ -725,9 +596,7 @@ a.lp-nav__link {
   border-radius: 12px;
 }
 
-.lp-dor__icone svg,
-.lp-recurso__icone svg,
-.lp-perfil__icone svg {
+.lp-recurso__icone svg {
   width: 21px;
   height: 21px;
 }
@@ -831,42 +700,6 @@ a.lp-nav__link {
   font-size: 0.95rem;
   line-height: 1.5;
   color: var(--text-muted);
-}
-
-/* ---------- Perfis ---------- */
-
-.lp-perfis {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
-  gap: 18px;
-  padding: 0;
-  margin: 0;
-  list-style: none;
-}
-
-.lp-perfil {
-  display: grid;
-  gap: 12px;
-  align-content: start;
-  padding: 28px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-xl);
-  box-shadow: var(--shadow-sm);
-}
-
-.lp-perfil h3 {
-  font-size: 1.3rem;
-}
-
-.lp-perfil > p {
-  line-height: 1.55;
-  color: var(--text-muted);
-}
-
-.lp-perfil .lp-lista-check {
-  padding-top: 12px;
-  border-top: 1px dashed var(--border);
 }
 
 /* ---------- Passos ---------- */
@@ -1491,7 +1324,6 @@ a.lp-nav__link {
   }
 
   .lp-plano,
-  .lp-perfil,
   .lp-passo {
     padding: 24px;
   }

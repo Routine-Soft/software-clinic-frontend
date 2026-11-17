@@ -379,8 +379,9 @@ function Precos({ logado }) {
                   {plano.destaque && <span className="lp-plano__selo">{P.maisCompleto}</span>}
                   <div className="lp-plano__cab">
                     <h3>{plano.nome}</h3>
-                    {plano.descricao && <p className="lp-plano__descricao">{plano.descricao}</p>}
-                    {plano.nivel === 'rede' && <SeloIA textos={P.ia} />}
+                    {plano.nivel === 'rede'
+                      ? <SeloIA textos={P.ia} />
+                      : plano.descricao && <p className="lp-plano__descricao">{plano.descricao}</p>}
                   </div>
                   <p className="lp-plano__preco"><span className="lp-degrade">{formatarPrecoPlano(plano.preco, locale, plano.moeda)}</span><small>{P.porMes}</small></p>
                   <p className="lp-plano__teste">{plano.nota}</p>

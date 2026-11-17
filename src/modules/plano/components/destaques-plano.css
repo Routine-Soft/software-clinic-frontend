@@ -10,9 +10,9 @@
   display: inline-grid;
   flex: none;
   place-items: center;
-  width: 26px;
-  height: 26px;
-  border-radius: 8px;
+  width: 24px;
+  height: 24px;
+  border-radius: 7px;
   background: var(--primary-soft);
   color: var(--primary);
 }
@@ -38,60 +38,74 @@
 
 .selo-ia {
   display: grid;
-  gap: 10px;
-  padding: 12px 14px;
+  gap: 4px;
+  padding: 8px 10px;
   border: 1px solid var(--primary-soft);
-  border-radius: 14px;
+  border-radius: 12px;
   background: linear-gradient(135deg, var(--primary-soft), var(--success-soft));
-  line-height: 1.45;
+  line-height: 1.3;
 }
 
 .selo-ia__texto {
   margin: 0;
+  font-size: 0.92rem;
   font-weight: 700;
   color: var(--text);
 }
 
 .selo-ia__sigla {
   display: inline-block;
-  padding: 0 7px;
+  padding: 0 6px;
   border-radius: 6px;
   background: var(--primary);
   color: var(--on-primary);
   letter-spacing: 0.04em;
 }
 
+.selo-ia__rodape {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 10px;
+  align-items: center;
+  justify-content: space-between;
+}
+
 .selo-ia__explicacao {
-  font-size: 0.85em;
-  font-weight: 500;
+  font-size: 0.8rem;
   color: var(--text-muted);
 }
 
 .selo-ia__logos {
   display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
+  gap: 6px;
   padding: 0;
   margin: 0;
   list-style: none;
 }
 
 .selo-ia__logo {
-  display: inline-flex;
-  gap: 5px;
-  align-items: center;
-  padding: 3px 9px 3px 6px;
-  border-radius: 999px;
+  display: inline-grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
   background: var(--surface);
   color: var(--text);
-  font-size: 0.78rem;
-  font-weight: 600;
 }
 
 .selo-ia__logo svg {
-  width: 16px;
-  height: 16px;
+  width: 14px;
+  height: 14px;
   margin: 0;
+}
+
+.selo-ia__nome {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
 }
 
 /* Piscar: só para quem não pediu para reduzir o movimento. */

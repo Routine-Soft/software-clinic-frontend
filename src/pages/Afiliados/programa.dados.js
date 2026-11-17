@@ -7,7 +7,7 @@ export const DIAS_CARENCIA = 7;
 
 // Planos à venda e quanto o afiliado ganha em cada um (a porcentagem da primeira mensalidade).
 export const PLANOS = [
-  { nome: 'Rede', preco: 690 },
+  { nome: 'Rede', preco: 2990 },
   { nome: tr('Pro'), preco: 249 },
   { nome: 'Basic', preco: 99 },
 ].map((plano) => ({ ...plano, comissao: (plano.preco * COMISSAO_PERCENTUAL) / 100 }));

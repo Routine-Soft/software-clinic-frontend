@@ -83,8 +83,9 @@ function BeneficiosDoPlano({ plano, stripe }) {
 
   return (
     <>
-      {plano.nivel === 'rede' && <SeloIA textos={t('landing.precos.ia')} />}
-      {plano.descricao && <p className="plano-opcao__descricao">{plano.descricao}</p>}
+      {plano.nivel === 'rede'
+        ? <SeloIA textos={t('landing.precos.ia')} />
+        : plano.descricao && <p className="plano-opcao__descricao">{plano.descricao}</p>}
       <ul className="plano-opcao__lista">
         {t('landing.precos.comparacao').map((linha) => {
           const valor = linha[coluna];

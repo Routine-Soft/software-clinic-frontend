@@ -61,20 +61,23 @@ function LogoGemini() {
   );
 }
 
-// Destaque do plano Rede, logo abaixo do nome: atendimento no WhatsApp com IA, com "IA" e os logos piscando.
+// Destaque do plano Rede, logo abaixo do nome (no lugar da descrição): atendimento no WhatsApp com IA, com "IA" e os logos piscando.
+// Compacto de propósito: na página de preços, a linha do título é dividida pelos quatro cartões.
 // `textos` = `landing.precos.ia` ({ antes, sigla, explicacao, com }).
 export function SeloIA({ textos }) {
   return (
     <div className="selo-ia">
       <p className="selo-ia__texto">
-        {textos.antes} <strong className="selo-ia__sigla">{textos.sigla}</strong>{' '}
-        <span className="selo-ia__explicacao">{textos.explicacao}</span>
+        {textos.antes} <strong className="selo-ia__sigla">{textos.sigla}</strong>
       </p>
-      <ul className="selo-ia__logos" aria-label={textos.com}>
-        <li className="selo-ia__logo" title="Claude"><LogoClaude /><span>Claude</span></li>
-        <li className="selo-ia__logo" title="ChatGPT"><LogoChatGPT /><span>ChatGPT</span></li>
-        <li className="selo-ia__logo" title="Gemini"><LogoGemini /><span>Gemini</span></li>
-      </ul>
+      <div className="selo-ia__rodape">
+        <span className="selo-ia__explicacao">{textos.explicacao}</span>
+        <ul className="selo-ia__logos" aria-label={textos.com}>
+          <li className="selo-ia__logo" title="Claude"><LogoClaude /><span className="selo-ia__nome">Claude</span></li>
+          <li className="selo-ia__logo" title="ChatGPT"><LogoChatGPT /><span className="selo-ia__nome">ChatGPT</span></li>
+          <li className="selo-ia__logo" title="Gemini"><LogoGemini /><span className="selo-ia__nome">Gemini</span></li>
+        </ul>
+      </div>
     </div>
   );
 }

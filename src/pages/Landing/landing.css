@@ -975,9 +975,11 @@ a.lp-nav__link {
 .lp-plano {
   position: relative;
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 18px;
   align-content: start;
-  padding: 32px;
+  min-width: 0;
+  padding: 24px;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-xl);
@@ -989,7 +991,7 @@ a.lp-nav__link {
 }
 
 .lp-plano__preco {
-  font-size: 2.6rem;
+  font-size: clamp(2rem, 2.4vw, 2.5rem);
   font-weight: 800;
   letter-spacing: -0.03em;
 }
@@ -1017,10 +1019,17 @@ a.lp-nav__link {
 }
 
 .lp-lista-check--comparacao li {
+  flex-wrap: wrap;
+  row-gap: 4px;
   align-items: center;
   min-height: 2.6em;
   padding: 6px 0;
   border-bottom: 1px dashed var(--border);
+}
+
+/* O texto do tópico ocupa o espaço que sobra e quebra a linha dentro dele; o limite só desce quando nem a maior palavra cabe ao lado. */
+.lp-lista-check--comparacao li > span:not(.lp-oculto) {
+  flex: 1 1 0;
 }
 
 .lp-lista-check--comparacao li:last-child {

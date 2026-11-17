@@ -321,6 +321,47 @@ a.lp-nav__link {
   color: var(--text-muted);
 }
 
+/* "IA" e o ícone do WhatsApp na sub do topo: em destaque, piscando (se a pessoa não pediu menos movimento). */
+.lp-hero__ia {
+  display: inline-block;
+  padding: 0 7px;
+  border-radius: 6px;
+  background: var(--gradient-primary);
+  color: var(--on-primary);
+  font-weight: 800;
+  letter-spacing: 0.04em;
+}
+
+.lp-hero__whats,
+.lp-hero__btn-whats {
+  display: inline-grid;
+  place-items: center;
+  vertical-align: -0.3em;
+  color: #25d366;
+}
+
+.lp-hero__whats svg {
+  width: 1.4em;
+  height: 1.4em;
+}
+
+.lp-hero__btn-whats svg {
+  width: 1.2em;
+  height: 1.2em;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .lp-hero__ia,
+  .lp-hero__whats {
+    animation: lp-hero-piscar 1.6s ease-in-out infinite;
+  }
+}
+
+@keyframes lp-hero-piscar {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.45; transform: scale(0.9); }
+}
+
 .lp-hero__acoes {
   display: flex;
   flex-wrap: wrap;

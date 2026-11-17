@@ -53,14 +53,19 @@ function Hero({ logado }) {
           <h1 className="lp-hero__titulo">
             {L.titulo} <span className="lp-degrade">{L.destaque}</span>
           </h1>
-          <p className="lp-hero__sub">{L.sub}</p>
+          <p className="lp-hero__sub">
+            {L.sub} {L.subIa.antes} <strong className="lp-hero__ia">{L.subIa.sigla}</strong> {L.subIa.depois}{' '}
+            <span className="lp-hero__whats"><IconeWhatsapp /></span>
+          </p>
           <div className="lp-hero__acoes">
             {logado ? (
               <Link to="/home" className="btn btn--primary lp-btn-grande">{t('landing.menu.painel')}</Link>
             ) : (
               <Link to="/registro" className="btn btn--primary lp-btn-grande">{L.comecar}</Link>
             )}
-            <button type="button" className="btn btn--ghost lp-btn-grande" onClick={() => irPara('vitrine')}>{L.verSistema}</button>
+            <a href={LINK_WHATSAPP} target="_blank" rel="noopener noreferrer" className="btn btn--ghost lp-btn-grande">
+              <span className="lp-hero__btn-whats"><IconeWhatsapp /></span> {L.falarAtendente}
+            </a>
           </div>
           <ul className="lp-hero__garantias">
             {L.garantias.map((g) => <li key={g}><IconeCheck /> {g}</li>)}

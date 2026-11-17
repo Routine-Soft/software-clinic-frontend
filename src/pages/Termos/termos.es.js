@@ -18,7 +18,7 @@ const TERMOS_CLINICA_ES = {
       'La cuenta empieza con una prueba gratis, sin tarjeta y con todas las funciones. Después, la clínica sigue en el plan Gratis, que incluye la agenda, hasta 20 pacientes, un profesional, las evaluaciones y hasta 10 recordatorios por WhatsApp al mes. Las demás funciones requieren un plan pago: en Brasil, por Pix o tarjeta de crédito, mediante Mercado Pago; en los demás países, con tarjeta de crédito internacional, mediante Stripe. Los registros ya hechos, como las historias clínicas, siguen disponibles para lectura en cualquier plan.',
       'Con tarjeta, la suscripción se renueva cada mes hasta que se cancele. Con Pix, cada pago da derecho a un período de acceso y no hay renovación automática.',
       'Los recordatorios por WhatsApp salen del número de la propia clínica, conectado por código QR. WhatsApp no pertenece a Sonelia y puede limitar o bloquear números según sus propias reglas. La clínica es responsable del número, del texto enviado y de habilitar los recordatorios solo para los pacientes que aceptaron recibirlos.',
-      'El plan Basic permite hasta 2 profesionales, cada uno con su propio acceso, con pacientes sin límite, y no incluye recepción ni pagos a profesionales. Para tener recepción, pagos a profesionales o más profesionales, se necesita el plan Pro, que permite hasta 25 profesionales. El plan Rede permite hasta 100 profesionales.',
+      'El plan Basic permite hasta 2 profesionales, cada uno con su propio acceso, con pacientes sin límite y recepción con su propio acceso, y no incluye pagos a profesionales. Para tener pagos a profesionales o más profesionales, se necesita el plan Pro, que permite hasta 20 profesionales. El plan Rede permite hasta 100 profesionales.',
       'Los precios de los planes pueden cambiar. Un cambio de precio no afecta el período ya pagado y se avisará con anticipación.',
     ]],
     ['4. Desistimiento y cancelación', [
@@ -63,7 +63,7 @@ const TERMOS_AFILIADO_ES = {
       'Cada clínica genera una sola comisión, aunque siga pagando en los meses siguientes.',
     ]],
     ['3. Monto y plazo de la comisión', [
-      'La comisión es el 50% de la primera mensualidad del plan que contrate la clínica recomendada (por ejemplo: R$ 64,50 en el plan Basic de R$ 129,00, y R$ 124,50 en el plan Pro de R$ 249,00). Los descuentos por recomendación que tenga la clínica no reducen la comisión.',
+      'La comisión es el 50% de la primera mensualidad del plan que contrate la clínica recomendada (por ejemplo: R$ 49,50 en el plan Basic de R$ 99,00, y R$ 124,50 en el plan Pro de R$ 249,00). Los descuentos por recomendación que tenga la clínica no reducen la comisión.',
       'Por el Código de Defensa del Consumidor de Brasil, el cliente tiene 7 días para desistir y pedir el reembolso. Por eso la comisión queda en espera y solo puede pagarse a partir del 8.º día después del pago de la clínica.',
       'Si el pago de la clínica se reembolsa o se impugna antes de que se pague la comisión, esta se cancela. Vuelve a valer si la clínica paga de nuevo.',
     ]],

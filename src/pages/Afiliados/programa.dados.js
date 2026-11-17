@@ -9,7 +9,7 @@ export const DIAS_CARENCIA = 7;
 export const PLANOS = [
   { nome: 'Rede', preco: 690 },
   { nome: tr('Pro'), preco: 249 },
-  { nome: 'Basic', preco: 129 },
+  { nome: 'Basic', preco: 99 },
 ].map((plano) => ({ ...plano, comissao: (plano.preco * COMISSAO_PERCENTUAL) / 100 }));
 
 const reais = (valor) => tr('R$ {p0}', { p0: valor.toLocaleString(localeAtual(), { minimumFractionDigits: 2 }) });

@@ -6,6 +6,7 @@ import { formatarData, formatarPreco, avisarAssinaturaAtualizada } from '../assi
 import PixModal from './PixModal';
 import { planoNoIdioma } from '@/modules/plano/plano.utils';
 import AvisoDescontoIndicacao from '@/modules/indicacao/components/AvisoDescontoIndicacao';
+import { SeloIA, TopicoDoPlano } from '@/modules/plano/components/DestaquesDoPlano';
 import './assinatura.css';
 import './assinaturas-planos.css';
 import { t, tr, idiomaAtual } from '@/i18n';
@@ -73,7 +74,7 @@ function IconeNaoTem() {
 }
 
 // O que o plano inclui: os mesmos tópicos, na mesma ordem, da página de preços (`landing.precos.comparacao`;
-// coluna 1 = Basic, 2 = Pro), para os planos ficarem lado a lado. Depois, como o pagamento funciona.
+// coluna 2 = Basic, 3 = Pro, 4 = Rede; a 5 é o ícone do tópico em destaque), para os planos ficarem lado a lado. Depois, como o pagamento funciona.
 function BeneficiosDoPlano({ plano, stripe }) {
   const coluna = { basic: 2, pro: 3, rede: 4 }[plano.nivel] ?? 3;
   const pagamento = stripe
@@ -82,6 +83,7 @@ function BeneficiosDoPlano({ plano, stripe }) {
 
   return (
     <>
+      {plano.nivel === 'rede' && <SeloIA textos={t('landing.precos.ia')} />}
       {plano.descricao && <p className="plano-opcao__descricao">{plano.descricao}</p>}
       <ul className="plano-opcao__lista">
         {t('landing.precos.comparacao').map((linha) => {
@@ -90,7 +92,7 @@ function BeneficiosDoPlano({ plano, stripe }) {
           return (
             <li key={linha[0]} className={tem ? undefined : 'plano-opcao__fora'}>
               {tem ? <IconeCheck /> : <IconeNaoTem />}
-              <span>{linha[0]}</span>
+              <TopicoDoPlano topico={linha[0]} icone={linha[5]} />
               {typeof valor === 'string' && <strong className="plano-opcao__valor">{valor}</strong>}
               {!tem && <span className="sr-oculto">{t('landing.precos.naoIncluido')}</span>}
             </li>

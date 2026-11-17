@@ -3,6 +3,7 @@
 export default {
   'Para quem atende sozinho ou com uma equipe pequena': 'Para quien atiende solo o con un equipo pequeño',
   'For solo practitioners and small teams': 'Para quien atiende solo o con un equipo pequeño',
-  'Para clínicas com recepção e equipe': 'Para clínicas con recepción y equipo',
-  'For clinics with a front desk and a team': 'Para clínicas con recepción y equipo',
+  'Para clínicas com equipe maior, com implantação assistida': 'Para equipos más grandes, con implementación asistida',
+  'For larger teams, with assisted onboarding': 'Para equipos más grandes, con implementación asistida',
+  'Para redes e clínicas grandes, com atendimento no WhatsApp com IA': 'Para redes y clínicas grandes, con atención por WhatsApp con IA',
 };

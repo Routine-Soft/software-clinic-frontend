@@ -22,7 +22,7 @@ const IconeProfissionais = () => (
 
 export default function ProfissionalADM({ className = '' }) {
   const { profissionais, loading, error, successMessage, addProfissional, editProfissional, removeProfissional } = useProfissionais();
-  // Limite de profissionais do plano (Grátis 1, Basic 2, Pro 25): no limite, "Adicionar" já abre a janela do plano.
+  // Limite de profissionais do plano (Grátis 1, Basic 2, Pro 20, Rede 100): no limite, "Adicionar" já abre a janela do plano.
   const { limites, nivel, abrirBloqueio } = usePlano();
   const noLimite = !!limites.profissionais && !loading && profissionais.length >= limites.profissionais;
   const { especialidades, loading: carregandoEspecialidades } = useEspecialidades();

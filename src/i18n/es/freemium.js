@@ -64,7 +64,7 @@ export default {
   '{n} de {limite} profissionais do seu plano': '{n} de {limite} profesionales de tu plan',
   'Nível do plano': 'Nivel del plan',
   'Define os limites e os recursos (ver a página de preços).': 'Define los límites y las funciones (ver la página de precios).',
-  'Basic: até 2 profissionais e pacientes sem limite, sem recepção nem repasses': 'Basic: hasta 2 profesionales y pacientes sin límite, sin recepción ni pagos a profesionales',
-  'Pro: até 25 profissionais': 'Pro: hasta 25 profesionales',
+  'Basic: até 2 profissionais, pacientes sem limite e recepção, sem repasses': 'Basic: hasta 2 profesionales, pacientes sin límite y recepción, sin pagos a profesionales',
+  'Pro: até 20 profissionais': 'Pro: hasta 20 profesionales',
   'Rede: até 100 profissionais': 'Rede: hasta 100 profesionales',
 };

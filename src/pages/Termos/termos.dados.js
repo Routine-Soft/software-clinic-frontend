@@ -13,7 +13,7 @@ export const EMPRESA = {
   cidadeForo: '',
 };
 
-export const VERSAO = '16/11/2026';
+export const VERSAO = '17/11/2026';
 
 export const TERMOS_CLINICA = {
   titulo: 'Termos de uso',
@@ -30,7 +30,7 @@ export const TERMOS_CLINICA = {
       'A conta começa com um período de teste grátis, sem cartão de crédito, com todos os recursos. Depois dele, a clínica continua no plano Grátis, que inclui a agenda, até 20 pacientes, um profissional, as avaliações e até 10 lembretes pelo WhatsApp por mês. Os demais recursos dependem de um plano pago, no Pix ou no cartão de crédito, pelo Mercado Pago. Os registros já feitos, como os prontuários, continuam disponíveis para leitura em qualquer plano.',
       'No cartão, a assinatura renova sozinha todo mês até ser cancelada. No Pix, cada pagamento libera um período de acesso e não há renovação automática.',
       'Os lembretes pelo WhatsApp saem do número da própria clínica, conectado por QR Code. O WhatsApp não é da Sonelia e pode limitar ou bloquear números conforme as regras dele. A clínica é responsável pelo número, pelo texto enviado e por só marcar para receber lembretes os pacientes que concordaram com isso.',
-      'O plano Basic vai até 2 profissionais, cada um com o próprio login, com pacientes sem limite, e não inclui recepção nem repasses. Para ter recepção, repasses ou mais profissionais, é preciso o plano Pro, que vai até 25 profissionais. O plano Rede vai até 100 profissionais.',
+      'O plano Basic vai até 2 profissionais, cada um com o próprio login, com pacientes sem limite e recepção com login próprio, e não inclui repasses. Para ter repasses ou mais profissionais, é preciso o plano Pro, que vai até 20 profissionais. O plano Rede vai até 100 profissionais.',
       'Os preços dos planos podem mudar. Uma mudança de preço não afeta o período já pago e será avisada com antecedência.',
     ]],
     ['4. Desistência e cancelamento', [
@@ -75,7 +75,7 @@ export const TERMOS_AFILIADO = {
       'Cada clínica gera uma única comissão, mesmo que continue pagando nos meses seguintes.',
     ]],
     ['3. Valor da comissão e prazo', [
-      'A comissão é de 50% do valor da primeira mensalidade do plano assinado pela clínica indicada (por exemplo: R$ 64,50 no plano Basic, de R$ 129,00, e R$ 124,50 no plano Pro, de R$ 249,00). Descontos de indicação que a clínica tiver não diminuem a comissão.',
+      'A comissão é de 50% do valor da primeira mensalidade do plano assinado pela clínica indicada (por exemplo: R$ 49,50 no plano Basic, de R$ 99,00, e R$ 124,50 no plano Pro, de R$ 249,00). Descontos de indicação que a clínica tiver não diminuem a comissão.',
       'O cliente tem 7 dias, pelo Código de Defesa do Consumidor, para desistir e receber o dinheiro de volta. Por isso, a comissão fica em carência e só pode ser paga a partir do 8º dia depois do pagamento da clínica.',
       'Se o pagamento da clínica for devolvido ou contestado antes de a comissão ser paga, ela é cancelada. Ela volta a valer se a clínica pagar de novo.',
     ]],

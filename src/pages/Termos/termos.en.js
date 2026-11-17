@@ -18,7 +18,7 @@ const TERMOS_CLINICA_EN = {
       'The account starts with a free trial, with no credit card and all features. After it, the clinic stays on the Free plan, which includes the schedule, up to 20 patients, one practitioner, assessments and up to 10 WhatsApp reminders per month. The other features require a paid plan, by Pix or credit card, through Mercado Pago. Records already made, such as health records, remain available to read on any plan.',
       'On a card, the subscription renews every month until cancelled. With Pix, each payment grants a period of access and there is no automatic renewal.',
       'WhatsApp reminders are sent from the clinic’s own number, connected by QR code. WhatsApp does not belong to Sonelia and may limit or block numbers under its own rules. The clinic is responsible for the number, for the text sent and for only enabling reminders for patients who agreed to receive them.',
-      'The Basic plan allows up to 2 practitioners, each with their own login, with unlimited patients, and does not include a front desk or payouts. For a front desk, payouts or more practitioners, the Pro plan is required, which allows up to 25 practitioners. The Rede plan allows up to 100 practitioners.',
+      'The Basic plan allows up to 2 practitioners, each with their own login, with unlimited patients and a front desk with its own login, and does not include payouts. For payouts or more practitioners, the Pro plan is required, which allows up to 20 practitioners. The Rede plan allows up to 100 practitioners.',
       'Plan prices may change. A price change does not affect the period already paid and will be announced in advance.',
     ]],
     ['4. Withdrawal and cancellation', [
@@ -63,7 +63,7 @@ const TERMOS_AFILIADO_EN = {
       'Each clinic generates a single commission, even if it keeps paying in the following months.',
     ]],
     ['3. Commission amount and timing', [
-      'The commission is 50% of the first month of the plan the referred clinic subscribes to (for example: R$ 64.50 on the R$ 129.00 Basic plan, and R$ 124.50 on the R$ 249.00 Pro plan). Referral discounts the clinic may have do not reduce the commission.',
+      'The commission is 50% of the first month of the plan the referred clinic subscribes to (for example: R$ 49.50 on the R$ 99.00 Basic plan, and R$ 124.50 on the R$ 249.00 Pro plan). Referral discounts the clinic may have do not reduce the commission.',
       'Under the Brazilian Consumer Protection Code, customers have 7 days to cancel and get a refund. That is why the commission is on hold and can only be paid from the 8th day after the clinic’s payment.',
       'If the clinic’s payment is refunded or disputed before the commission is paid, the commission is cancelled. It becomes valid again if the clinic pays again.',
     ]],

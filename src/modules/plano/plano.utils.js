@@ -17,7 +17,7 @@ export function formatarPrecoPlano(preco, locale, moeda = 'BRL') {
 // Níveis do plano pago (mesmos do backend, plano.limites.js): definem limites e recursos.
 export const NOME_DO_NIVEL = { basic: 'Basic', pro: 'Pro', rede: 'Rede' };
 export const NIVEIS_DO_PLANO = [
-  ['basic', tr('Basic: até 2 profissionais e pacientes sem limite, sem recepção nem repasses')],
-  ['pro', tr('Pro: até 25 profissionais')],
+  ['basic', tr('Basic: até 2 profissionais, pacientes sem limite e recepção, sem repasses')],
+  ['pro', tr('Pro: até 20 profissionais')],
   ['rede', tr('Rede: até 100 profissionais')],
 ];

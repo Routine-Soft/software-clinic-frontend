@@ -11,6 +11,7 @@ import BotaoWhatsapp, { IconeWhatsapp } from './BotaoWhatsapp';
 import { WHATSAPP_EXIBICAO } from '@/utils/contato';
 import { LINK_WHATSAPP_SITE as LINK_WHATSAPP } from '@/utils/whatsappSite';
 import CabecalhoSite from './CabecalhoSite';
+import { SeloIA, TopicoDoPlano } from '@/modules/plano/components/DestaquesDoPlano';
 import LogoSite from './LogoSite';
 import { irPara } from './landing.navegacao';
 import './landing.css';
@@ -330,7 +331,7 @@ function ListaDoPlano({ coluna, P }) {
         return (
           <li key={topico} className={tem ? undefined : 'lp-lista-check__fora'}>
             {tem ? <IconeCheck /> : <IconeNaoTem />}
-            <span>{topico}</span>
+            <TopicoDoPlano topico={topico} icone={valores[4]} />
             {typeof valor === 'string' && <strong className="lp-lista-check__valor">{valor}</strong>}
             {!tem && <span className="lp-oculto">{P.naoIncluido}</span>}
           </li>
@@ -379,6 +380,7 @@ function Precos({ logado }) {
                   <div className="lp-plano__cab">
                     <h3>{plano.nome}</h3>
                     {plano.descricao && <p className="lp-plano__descricao">{plano.descricao}</p>}
+                    {plano.nivel === 'rede' && <SeloIA textos={P.ia} />}
                   </div>
                   <p className="lp-plano__preco"><span className="lp-degrade">{formatarPrecoPlano(plano.preco, locale, plano.moeda)}</span><small>{P.porMes}</small></p>
                   <p className="lp-plano__teste">{plano.nota}</p>

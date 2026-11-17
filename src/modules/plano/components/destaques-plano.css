@@ -1,0 +1,126 @@
+/* Tópicos em destaque na lista dos planos (lembretes no WhatsApp, agenda e TV) e o selo de IA do plano Rede. */
+.topico-destaque {
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+  font-weight: 700;
+}
+
+.topico-destaque__icone {
+  display: inline-grid;
+  flex: none;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 8px;
+  background: var(--primary-soft);
+  color: var(--primary);
+}
+
+.topico-destaque .topico-destaque__icone svg {
+  width: 16px;
+  height: 16px;
+  padding: 0;
+  margin: 0;
+  border-radius: 0;
+  background: none;
+  color: currentColor;
+}
+
+.topico-destaque--whatsapp .topico-destaque__icone {
+  background: var(--success-soft);
+  color: var(--success);
+}
+
+.topico-destaque--whatsapp .topico-destaque__nome {
+  color: var(--success);
+}
+
+.selo-ia {
+  display: grid;
+  gap: 10px;
+  padding: 12px 14px;
+  border: 1px solid var(--primary-soft);
+  border-radius: 14px;
+  background: linear-gradient(135deg, var(--primary-soft), var(--success-soft));
+  line-height: 1.45;
+}
+
+.selo-ia__texto {
+  margin: 0;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.selo-ia__sigla {
+  display: inline-block;
+  padding: 0 7px;
+  border-radius: 6px;
+  background: var(--primary);
+  color: var(--on-primary);
+  letter-spacing: 0.04em;
+}
+
+.selo-ia__explicacao {
+  font-size: 0.85em;
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+.selo-ia__logos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.selo-ia__logo {
+  display: inline-flex;
+  gap: 5px;
+  align-items: center;
+  padding: 3px 9px 3px 6px;
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--text);
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.selo-ia__logo svg {
+  width: 16px;
+  height: 16px;
+  margin: 0;
+}
+
+/* Piscar: só para quem não pediu para reduzir o movimento. */
+@media (prefers-reduced-motion: no-preference) {
+  .topico-destaque__icone,
+  .selo-ia__sigla,
+  .selo-ia__logo svg {
+    animation: destaque-piscar 1.6s ease-in-out infinite;
+  }
+
+  .topico-destaque--whatsapp .topico-destaque__nome {
+    animation: destaque-piscar-texto 1.6s ease-in-out infinite;
+  }
+
+  .selo-ia__logo:nth-child(2) svg {
+    animation-delay: 0.3s;
+  }
+
+  .selo-ia__logo:nth-child(3) svg {
+    animation-delay: 0.6s;
+  }
+}
+
+@keyframes destaque-piscar {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.45; transform: scale(0.9); }
+}
+
+@keyframes destaque-piscar-texto {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}

@@ -64,7 +64,7 @@ export default {
   '{n} de {limite} profissionais do seu plano': '{n} of {limite} practitioners on your plan',
   'Nível do plano': 'Plan level',
   'Define os limites e os recursos (ver a página de preços).': 'Sets the limits and features (see the pricing page).',
-  'Basic: até 2 profissionais e pacientes sem limite, sem recepção nem repasses': 'Basic: up to 2 practitioners and unlimited patients, no front desk or payouts',
-  'Pro: até 25 profissionais': 'Pro: up to 25 practitioners',
+  'Basic: até 2 profissionais, pacientes sem limite e recepção, sem repasses': 'Basic: up to 2 practitioners, unlimited patients and a front desk, no payouts',
+  'Pro: até 20 profissionais': 'Pro: up to 20 practitioners',
   'Rede: até 100 profissionais': 'Rede: up to 100 practitioners',
 };

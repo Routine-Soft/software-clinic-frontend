@@ -1,4 +1,4 @@
-// Landing page de uma área de atuação (dados em nichos.mjs). Recursos, segurança e passos vêm da landing
+// Landing page de uma área de atuação (dados em nichos.mjs). Recursos e passos vêm da landing
 // principal (src/pages/Landing/landing.textos.js), para os textos não ficarem diferentes entre as páginas.
 import { SITE, NOME } from './config.mjs';
 import { esc, head, cabecalho, rodape, jsonLd, cartao, ICONE_WHATSAPP } from './modelo.mjs';
@@ -10,6 +10,15 @@ const L = textos.pt;
 // Só destas páginas por área (saíram da página inicial em 17/11/2026).
 const GARANTIAS = ['Plano grátis para sempre', '14 dias com tudo liberado', 'Sem cartão de crédito'];
 const DORES_CAB = { selo: 'O dia a dia sem dor de cabeça', titulo: 'Reconhece alguma dessas situações?' };
+const SEGURANCA_TITULO = 'Dados de saúde tratados com o cuidado que merecem';
+const SEGURANCA = [
+  'Cada clínica vê somente os próprios dados',
+  'Prontuário lido só pelo autor e por quem ele liberar',
+  'A recepção não vê o conteúdo clínico',
+  'Registro de quem abriu cada prontuário',
+  'Prontuários guardados por 20 anos, como pede a Lei 13.787/2018',
+  'Conexão criptografada (HTTPS) e login com senha ou Google',
+];
 
 const ICONE_CHECK = '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" d="m5 12.5 4.5 4.5L19 7.5"/></svg>';
 const ICONE_X = '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" d="M7 7l10 10M17 7 7 17"/></svg>';
@@ -135,8 +144,8 @@ ${cabecalho(simbolo)}
   <section class="n-secao">
     <div class="b-container n-dupla">
       <div class="n-cartao n-seguranca">
-        <h2>${ICONE_CADEADO} ${esc(L.segurancaCab.titulo)}</h2>
-        ${lista(L.seguranca)}
+        <h2>${ICONE_CADEADO} ${esc(SEGURANCA_TITULO)}</h2>
+        ${lista(SEGURANCA)}
       </div>
       <div class="n-cartao n-passos">
         <h2>${esc(L.passosCab.titulo)}</h2>

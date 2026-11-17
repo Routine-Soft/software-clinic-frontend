@@ -190,63 +190,6 @@ function ComoFunciona({ logado }) {
   );
 }
 
-function EmQualquerLugar() {
-  const { t } = useIdioma();
-  const L = t('landing.lugar');
-  const [tema, setTema] = useState('claro');
-
-  return (
-    <section className="lp-secao lp-secao--destaque">
-      <div className="lp-container lp-duas-colunas">
-        <div className="lp-revelar">
-          <span className="lp-selo">{L.selo}</span>
-          <h2>{L.titulo}</h2>
-          <p className="lp-paragrafo">{L.texto}</p>
-          <ul className="lp-lista-check">
-            {L.itens.map((item) => <li key={item}><IconeCheck /> {item}</li>)}
-          </ul>
-
-          <div className="lp-tema" role="group" aria-label={L.temaGrupo}>
-            <button type="button" aria-pressed={tema === 'claro'} onClick={() => setTema('claro')}>{L.temaClaro}</button>
-            <button type="button" aria-pressed={tema === 'escuro'} onClick={() => setTema('escuro')}>{L.temaEscuro}</button>
-          </div>
-        </div>
-
-        <div className="lp-dispositivos">
-          <Janela
-            key={tema}
-            src={`${t('landing.imagens')}/${tema === 'claro' ? 'inicio' : 'inicio-escuro'}.jpg`}
-            alt={t('landing.lugar.altInicio', { tema: tema === 'claro' ? L.claro : L.escuro })}
-            className="lp-dispositivos__janela"
-          />
-          <Celular src={`${t('landing.imagens')}/celular-agenda.jpg`} alt={L.altCelular} className="lp-dispositivos__celular" />
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function Seguranca() {
-  const { t } = useIdioma();
-  const cab = t('landing.segurancaCab');
-  return (
-    <section className="lp-secao">
-      <div className="lp-container lp-duas-colunas lp-duas-colunas--invertida">
-        <div className="lp-seguranca__selo lp-revelar" aria-hidden="true">
-          <IconeMenu nome="nr01" />
-        </div>
-        <div className="lp-revelar">
-          <span className="lp-selo">{cab.selo}</span>
-          <h2>{cab.titulo}</h2>
-          <ul className="lp-lista-check lp-lista-check--grande">
-            {t('landing.seguranca').map((item) => <li key={item}><IconeCheck /> {item}</li>)}
-          </ul>
-        </div>
-      </div>
-    </section>
-  );
-}
-
 function IconeNaoTem() {
   return (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" aria-hidden="true">
@@ -457,8 +400,6 @@ export default function Landing() {
         <Vitrine />
         <Funcionalidades />
         <ComoFunciona logado={isAuthenticated} />
-        <EmQualquerLugar />
-        <Seguranca />
         <Precos logado={isAuthenticated} />
         <Duvidas />
         <ChamadaFinal logado={isAuthenticated} />

@@ -541,7 +541,6 @@ a.lp-nav__link {
 }
 
 .lp-secao__cab h2,
-.lp-duas-colunas h2,
 .lp-chamada h2 {
   font-size: clamp(1.7rem, 3.4vw, 2.5rem);
   font-weight: 800;
@@ -579,10 +578,6 @@ a.lp-nav__link {
   color: var(--on-primary);
   background: var(--gradient-primary);
   border-radius: 50%;
-}
-
-.lp-lista-check--grande li {
-  font-size: 1.05rem;
 }
 
 .lp-recurso__icone {
@@ -744,96 +739,6 @@ a.lp-nav__link {
 .lp-passo p {
   line-height: 1.55;
   color: var(--text-muted);
-}
-
-/* ---------- Duas colunas (celular e segurança) ---------- */
-
-.lp-duas-colunas {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
-  gap: 56px;
-  align-items: center;
-}
-
-.lp-duas-colunas > div:first-child {
-  display: grid;
-  gap: 18px;
-  justify-items: start;
-}
-
-.lp-duas-colunas--invertida {
-  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
-}
-
-.lp-duas-colunas--invertida > div:last-child {
-  display: grid;
-  gap: 18px;
-  justify-items: start;
-}
-
-.lp-tema {
-  display: inline-flex;
-  gap: 4px;
-  padding: 4px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 999px;
-}
-
-.lp-tema button {
-  padding: 0.5rem 1rem;
-  font: inherit;
-  font-size: 0.9rem;
-  font-weight: 700;
-  color: var(--text-muted);
-  cursor: pointer;
-  background: none;
-  border: 0;
-  border-radius: 999px;
-}
-
-.lp-tema button[aria-pressed='true'] {
-  color: var(--on-primary);
-  background: var(--gradient-primary);
-}
-
-.lp-dispositivos {
-  position: relative;
-  padding: 0 0 48px 48px;
-}
-
-.lp-dispositivos__janela {
-  animation: fadeIn 0.4s var(--ease);
-}
-
-.lp-dispositivos__celular {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 30%;
-}
-
-.lp-seguranca__selo {
-  display: grid;
-  place-items: center;
-  aspect-ratio: 1;
-  width: min(100%, 320px);
-  margin-inline: auto;
-  color: var(--on-primary);
-  background: var(--gradient-primary);
-  border-radius: 40% 60% 55% 45% / 45% 45% 55% 55%;
-  box-shadow: var(--shadow-primary), var(--shadow-glow);
-  animation: floatSm 7s ease-in-out infinite;
-}
-
-.lp-duas-colunas > div.lp-seguranca__selo {
-  place-items: center;
-}
-
-.lp-seguranca__selo svg {
-  width: 42%;
-  height: 42%;
-  stroke-width: 1.4;
 }
 
 /* ---------- Preços ---------- */
@@ -1245,9 +1150,7 @@ a.lp-nav__link {
   }
 
   .lp-hero__grade,
-  .lp-vitrine,
-  .lp-duas-colunas,
-  .lp-duas-colunas--invertida {
+  .lp-vitrine {
     grid-template-columns: minmax(0, 1fr);
     gap: 36px;
   }
@@ -1256,10 +1159,6 @@ a.lp-nav__link {
     justify-content: flex-start;
     width: 100%;
     border-radius: var(--radius-lg);
-  }
-
-  .lp-seguranca__selo {
-    width: min(60%, 220px);
   }
 
   .lp-rodape__grade {
@@ -1317,10 +1216,6 @@ a.lp-nav__link {
 
   .lp-flutuante--2 {
     display: none;
-  }
-
-  .lp-dispositivos {
-    padding: 0 0 36px 28px;
   }
 
   .lp-plano,

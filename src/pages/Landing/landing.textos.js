@@ -1,7 +1,6 @@
 // Textos da landing page em português e inglês. Os ícones são chaves de ICONES (components/Sidebar/menuIcones.jsx)
 // e as imagens ficam em public/landing/ (capturas de uma clínica de demonstração com dados fictícios).
 // O preço fica em reais nos dois idiomas: a cobrança é sempre em BRL.
-// Em `especialidades`, o segundo item é o endereço da landing page da área (blog/nichos.mjs, só em português).
 
 export default {
   pt: {
@@ -38,19 +37,7 @@ export default {
       altCelular: 'Agenda do dia no celular',
       emAtendimento: 'Em atendimento',
       repasses: 'repasses calculados',
-      feitoPara: 'Feito para',
     },
-    especialidades: [
-      ['Clínica médica', '/sistema-para-clinica-medica/'],
-      ['Fisioterapia', '/sistema-para-fisioterapia/'],
-      ['Psicologia', '/sistema-para-psicologia/'],
-      ['Psiquiatria', '/sistema-para-psiquiatria/'],
-      ['Fonoaudiologia', '/sistema-para-fonoaudiologia/'],
-      ['Estética', '/sistema-para-clinica-de-estetica/'],
-      ['Neuropsicologia', null],
-      ['Saúde do trabalho (NR-01)', null],
-      ['E muitas outras áreas', null],
-    ],
     vitrineCab: {
       selo: 'Veja por dentro',
       titulo: 'Telas pensadas para quem não é técnico',
@@ -221,19 +208,7 @@ export default {
       altCelular: 'Today’s schedule on a phone',
       emAtendimento: 'In session',
       repasses: 'payouts calculated',
-      feitoPara: 'Built for',
     },
-    especialidades: [
-      ['General medicine', '/sistema-para-clinica-medica/'],
-      ['Physiotherapy', '/sistema-para-fisioterapia/'],
-      ['Psychology', '/sistema-para-psicologia/'],
-      ['Psychiatry', '/sistema-para-psiquiatria/'],
-      ['Speech therapy', '/sistema-para-fonoaudiologia/'],
-      ['Aesthetics', '/sistema-para-clinica-de-estetica/'],
-      ['Neuropsychology', null],
-      ['Occupational health', null],
-      ['And many other fields', null],
-    ],
     vitrineCab: {
       selo: 'Take a look inside',
       titulo: 'Screens designed for non-technical people',
@@ -400,19 +375,7 @@ export default {
       altCelular: 'Agenda del día en el celular',
       emAtendimento: 'En atención',
       repasses: 'pagos calculados',
-      feitoPara: 'Hecho para',
     },
-    especialidades: [
-      ['Clínica médica', '/sistema-para-clinica-medica/'],
-      ['Fisioterapia', '/sistema-para-fisioterapia/'],
-      ['Psicología', '/sistema-para-psicologia/'],
-      ['Psiquiatría', '/sistema-para-psiquiatria/'],
-      ['Fonoaudiología', '/sistema-para-fonoaudiologia/'],
-      ['Estética', '/sistema-para-clinica-de-estetica/'],
-      ['Neuropsicología', null],
-      ['Salud laboral', null],
-      ['Y muchas otras áreas', null],
-    ],
     vitrineCab: {
       selo: 'Mira por dentro',
       titulo: 'Pantallas pensadas para quien no es experto en tecnología',

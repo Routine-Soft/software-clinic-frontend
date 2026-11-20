@@ -15,6 +15,7 @@ import AvaliacaoNeuroADM from './modules/avaliacao-neuropsicologica/components/A
 import AvaliacaoNeuroPage from './modules/avaliacao-neuropsicologica/components/AvaliacaoNeuroPage';
 import ServicoADM from './modules/servico/components/ServicoADM';
 import ReunioesCalendario from './modules/reuniao/components/ReunioesCalendario';
+import ImportacaoPagina from './modules/importacao/components/ImportacaoPagina';
 import IndiqueGanhe from './modules/indicacao/components/IndiqueGanhe';
 import ProgramaAfiliados from './pages/Afiliados/ProgramaAfiliados';
 import PainelAfiliado from './modules/afiliado/components/PainelAfiliado';
@@ -323,6 +324,17 @@ function App() {
 
           {/* A agenda agora fica na Página inicial; o endereço antigo continua funcionando. */}
           <Route path="/agenda" element={<Navigate to="/home" replace />} />
+
+          <Route
+            path="/importar"
+            element={
+              <ProtectedRoute requiredRoles={['admin', 'profissional', 'recepcao', 'super_admin']}>
+                <MainLayout>
+                  <ImportacaoPagina />
+                </MainLayout>
+              </ProtectedRoute>
+            }
+          />
 
           <Route
             path="/reunioes"

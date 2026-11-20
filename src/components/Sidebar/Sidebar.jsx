@@ -47,6 +47,7 @@ const GRUPOS = [
             { label: tr('Repasses'), path: '/repasses', icone: 'receita', roles: ['admin'], recurso: 'repasse' },
             { label: tr('Meus repasses'), path: '/meus-repasses', icone: 'receita', roles: ['profissional'], recurso: 'repasse' },
             { label: tr('Usuários'), path: '/usuarios', icone: 'usuarios', roles: ['admin', 'recepcao'], recurso: 'equipe' },
+            { label: tr('Importar dados'), path: '/importar', icone: 'importar', roles: ['admin', 'profissional', 'recepcao'] },
         ],
     },
     {

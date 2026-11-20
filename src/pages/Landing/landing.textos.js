@@ -8,6 +8,7 @@ export default {
     imagens: '/landing',
     secoes: [
       ['funcionalidades', 'Funcionalidades'],
+      ['troca-de-sistema', 'Migração'],
       ['como-funciona', 'Como funciona'],
       ['precos', 'Preços'],
       ['duvidas', 'Dúvidas'],
@@ -74,11 +75,26 @@ export default {
       { icone: 'empresas', titulo: 'Empresas clientes', texto: 'Empresas atendidas pela clínica e seus funcionários.' },
       { icone: 'usuarios', titulo: 'Usuários e permissões', texto: 'Gestão, recepção e profissionais, cada um com seu acesso.' },
       { icone: 'painel', titulo: 'Painel guiado', texto: 'Passo a passo para deixar a clínica pronta para atender.' },
+      { icone: 'importar', titulo: 'Importação de outro sistema', texto: 'Pacientes, consultas, prontuários e cadastros por planilha do Excel ou CSV.' },
     ],
+    troca: {
+      selo: 'Vem de outro sistema?',
+      titulo: 'Troque de sistema sem perder nada',
+      texto: 'Exporte os dados do sistema que você usa hoje em Excel ou CSV e importe na Sonelia em poucos minutos, sem digitar tudo de novo.',
+      listaTitulo: 'O que você traz',
+      itens: ['Pacientes, com CPF, contato, convênio e responsável', 'Profissionais e logins da equipe', 'Histórico de consultas, com valor e situação', 'Prontuários e evoluções, com o profissional como autor', 'Serviços, salas, especialidades e convênios'],
+      pontos: [
+        { titulo: 'Do jeito que o sistema antigo exporta', texto: 'As colunas são reconhecidas pelo nome: você só confere e ajusta.' },
+        { titulo: 'Sem duplicar nada', texto: 'Importou de novo? O que já entrou é ignorado.' },
+        { titulo: 'Você vê o que não entrou', texto: 'Cada linha com problema aparece com o motivo, para corrigir e enviar de novo.' },
+        { titulo: 'O prontuário continua sigiloso', texto: 'Cada atendimento fica com o profissional que o escreveu e a importação vai para a auditoria.' },
+      ],
+      comecar: 'Começar grátis e importar',
+    },
     passosCab: { selo: 'Como funciona', titulo: 'Comece hoje, em três passos', criar: 'Criar minha conta grátis' },
     passos: [
       { titulo: 'Crie sua conta', texto: 'Leva dois minutos e não pede cartão de crédito. Dá para entrar com o Google.' },
-      { titulo: 'Configure com o passo a passo', texto: 'O Painel Admin mostra o que cadastrar: especialidades, profissionais, convênios, serviços e salas.' },
+      { titulo: 'Configure com o passo a passo', texto: 'O Painel Admin mostra o que cadastrar: especialidades, profissionais, convênios, serviços e salas. Vem de outro sistema? Importe tudo por planilha.' },
       { titulo: 'Comece a agendar e atender', texto: 'Convide a recepção e os profissionais. Cada um entra com o próprio login.' },
     ],
     precos: {
@@ -126,6 +142,7 @@ export default {
     duvidasCab: { selo: 'Dúvidas', titulo: 'Perguntas frequentes' },
     duvidas: [
       ['Preciso instalar alguma coisa?', 'Não. A Sonelia funciona no navegador do computador, do tablet e do celular. Se quiser, dá para instalar como aplicativo, com ícone na área de trabalho ou na tela inicial.'],
+      ['Já uso outro sistema. Consigo trazer os meus dados?', 'Sim. Exporte do sistema antigo em Excel (.xlsx) ou CSV e use "Importar dados" no menu da Sonelia: pacientes, profissionais, usuários, histórico de consultas, prontuários, serviços, salas e convênios. As colunas são reconhecidas pelo nome, cada linha com problema aparece com o motivo e importar de novo não duplica nada.'],
       ['Como funciona o teste grátis?', 'Você usa tudo liberado por 14 dias, sem cadastrar cartão. Depois, se não assinar, a clínica continua no plano Grátis, com a agenda e até 20 pacientes, e nada do que você registrou é perdido. Para continuar com o prontuário e o resto, é só assinar o Basic ou o Pro, no Pix ou no cartão.'],
       ['Quantos profissionais posso cadastrar?', 'No plano Grátis, só você usa o sistema, com até 20 pacientes. O Basic tem até 2 profissionais, cada um com o próprio login, pacientes sem limite e a recepção com login próprio. O Pro vai até 20 profissionais, com repasses, implantação assistida e suporte prioritário. O Rede vai até 100 profissionais e tem atendimento no WhatsApp com IA (Inteligência Artificial).'],
       ['Como funciona a chamada na TV?', 'Na TV da sala de espera, abra o navegador em sonelia.com.br/#/tv e conecte com o código que aparece na tela. Quando a recepção ou o profissional clica em "Chamar", o nome do paciente e a sala aparecem na TV, com aviso sonoro e voz. Funciona em qualquer Smart TV com navegador ou num aparelho como Fire TV Stick ou TV box.'],
@@ -158,6 +175,7 @@ export default {
     imagens: '/landing/en',
     secoes: [
       ['funcionalidades', 'Features'],
+      ['troca-de-sistema', 'Switching'],
       ['como-funciona', 'How it works'],
       ['precos', 'Pricing'],
       ['duvidas', 'FAQ'],
@@ -222,11 +240,26 @@ export default {
       { icone: 'reunioes', titulo: 'Meetings', texto: 'A separate calendar for talks with clients and partners.' },
       { icone: 'usuarios', titulo: 'Users and permissions', texto: 'Management, front desk and practitioners, each with their own access.' },
       { icone: 'painel', titulo: 'Guided panel', texto: 'Step by step to get the clinic ready to see patients.' },
+      { icone: 'importar', titulo: 'Import from another system', texto: 'Patients, appointments, health records and settings from an Excel or CSV spreadsheet.' },
     ],
+    troca: {
+      selo: 'Coming from another system?',
+      titulo: 'Switch systems without losing anything',
+      texto: 'Export your data from the system you use today as Excel or CSV and import it into Sonelia in a few minutes, without typing everything again.',
+      listaTitulo: 'What you bring',
+      itens: ['Patients, with ID number, contact, insurance plan and guardian', 'Practitioners and team logins', 'Appointment history, with price and status', 'Health records and progress notes, with the practitioner as author', 'Services, rooms, specialties and insurance plans'],
+      pontos: [
+        { titulo: 'The way your old system exports it', texto: 'Columns are recognized by name: you just check and adjust.' },
+        { titulo: 'No duplicates', texto: 'Imported again? What is already there is skipped.' },
+        { titulo: 'You see what did not go in', texto: 'Every row with a problem is listed with the reason, so you can fix it and send it again.' },
+        { titulo: 'Health records stay confidential', texto: 'Each session stays with the practitioner who wrote it and the import is recorded in the audit log.' },
+      ],
+      comecar: 'Start free and import',
+    },
     passosCab: { selo: 'How it works', titulo: 'Get started today in three steps', criar: 'Create my free account' },
     passos: [
       { titulo: 'Create your account', texto: 'It takes two minutes and no credit card. You can sign in with Google.' },
-      { titulo: 'Follow the setup guide', texto: 'The Admin Panel shows what to set up: specialties, practitioners, insurance plans, services and rooms.' },
+      { titulo: 'Follow the setup guide', texto: 'The Admin Panel shows what to set up: specialties, practitioners, insurance plans, services and rooms. Coming from another system? Import everything from a spreadsheet.' },
       { titulo: 'Start booking and seeing patients', texto: 'Invite the front desk and practitioners. Each one logs in with their own account.' },
     ],
     precos: {
@@ -271,6 +304,7 @@ export default {
     duvidasCab: { selo: 'FAQ', titulo: 'Frequently asked questions' },
     duvidas: [
       ['Do I need to install anything?', 'No. Sonelia runs in the browser on computers, tablets and phones. If you want, you can install it as an app, with an icon on your desktop or home screen.'],
+      ['I already use another system. Can I bring my data?', 'Yes. Export it from your old system as Excel (.xlsx) or CSV and use "Import data" in the Sonelia menu: patients, practitioners, users, appointment history, health records, services, rooms and insurance plans. Columns are recognized by name, every row with a problem is listed with the reason, and importing again never creates duplicates.'],
       ['How does the free trial work?', 'You get everything unlocked for 14 days, without a credit card. After that, if you don’t subscribe, your clinic stays on the Free plan, with the schedule and up to 20 patients, and nothing you recorded is lost. To keep using health records and the rest, just subscribe to Basic or Pro.'],
       ['How many practitioners can I add?', 'On the Free plan, only you use the system, with up to 20 patients. Basic allows up to 2 practitioners, each with their own login, unlimited patients and a front desk with its own login. Pro allows up to 20 practitioners, with payouts, assisted onboarding and priority support. Rede allows up to 100 practitioners and includes WhatsApp customer service with AI (Artificial Intelligence).'],
       ['How does TV calling work?', 'On the waiting room TV, open the browser at sonelia.com.br/#/tv and connect with the code shown on the screen. When the front desk or the practitioner clicks "Call", the patient’s name and room appear on the TV, with a chime and voice. It works on any Smart TV with a browser or on a device like a Fire TV Stick or TV box.'],
@@ -303,6 +337,7 @@ export default {
     imagens: '/landing/en',
     secoes: [
       ['funcionalidades', 'Funciones'],
+      ['troca-de-sistema', 'Migración'],
       ['como-funciona', 'Cómo funciona'],
       ['precos', 'Precios'],
       ['duvidas', 'Preguntas'],
@@ -367,11 +402,26 @@ export default {
       { icone: 'reunioes', titulo: 'Reuniones', texto: 'Agenda aparte para conversaciones con clientes y socios.' },
       { icone: 'usuarios', titulo: 'Usuarios y permisos', texto: 'Dirección, recepción y profesionales, cada uno con su acceso.' },
       { icone: 'painel', titulo: 'Panel guiado', texto: 'Paso a paso para dejar la clínica lista para atender.' },
+      { icone: 'importar', titulo: 'Importación desde otro sistema', texto: 'Pacientes, citas, historias clínicas y registros desde una planilla de Excel o CSV.' },
     ],
+    troca: {
+      selo: '¿Vienes de otro sistema?',
+      titulo: 'Cambia de sistema sin perder nada',
+      texto: 'Exporta los datos del sistema que usas hoy en Excel o CSV e impórtalos en Sonelia en pocos minutos, sin volver a escribir todo.',
+      listaTitulo: 'Lo que traes',
+      itens: ['Pacientes, con documento, contacto, seguro médico y responsable', 'Profesionales y accesos del equipo', 'Historial de citas, con valor y estado', 'Historias clínicas y evoluciones, con el profesional como autor', 'Servicios, salas, especialidades y seguros médicos'],
+      pontos: [
+        { titulo: 'Tal como lo exporta tu sistema anterior', texto: 'Las columnas se reconocen por el nombre: solo revisas y ajustas.' },
+        { titulo: 'Sin duplicar nada', texto: '¿Importaste de nuevo? Lo que ya estaba se omite.' },
+        { titulo: 'Ves lo que no entró', texto: 'Cada fila con problema aparece con el motivo, para corregirla y enviarla de nuevo.' },
+        { titulo: 'La historia clínica sigue siendo confidencial', texto: 'Cada atención queda con el profesional que la escribió y la importación queda en la auditoría.' },
+      ],
+      comecar: 'Empezar gratis e importar',
+    },
     passosCab: { selo: 'Cómo funciona', titulo: 'Empieza hoy en tres pasos', criar: 'Crear mi cuenta gratis' },
     passos: [
       { titulo: 'Crea tu cuenta', texto: 'Toma dos minutos y no pide tarjeta. Puedes entrar con Google.' },
-      { titulo: 'Sigue el paso a paso', texto: 'El Panel de administración muestra qué registrar: especialidades, profesionales, seguros médicos, servicios y salas.' },
+      { titulo: 'Sigue el paso a paso', texto: 'El Panel de administración muestra qué registrar: especialidades, profesionales, seguros médicos, servicios y salas. ¿Vienes de otro sistema? Importa todo desde una planilla.' },
       { titulo: 'Empieza a agendar y atender', texto: 'Invita a la recepción y a los profesionales. Cada uno entra con su propio usuario.' },
     ],
     precos: {
@@ -416,6 +466,7 @@ export default {
     duvidasCab: { selo: 'Preguntas', titulo: 'Preguntas frecuentes' },
     duvidas: [
       ['¿Necesito instalar algo?', 'No. Sonelia funciona en el navegador, en computadora, tablet y celular. Si quieres, puedes instalarlo como aplicación, con ícono en el escritorio o en la pantalla del celular.'],
+      ['Ya uso otro sistema. ¿Puedo traer mis datos?', 'Sí. Exporta los datos del sistema anterior en Excel (.xlsx) o CSV y usa "Importar datos" en el menú de Sonelia: pacientes, profesionales, usuarios, historial de citas, historias clínicas, servicios, salas y seguros médicos. Las columnas se reconocen por el nombre, cada fila con problema aparece con el motivo y volver a importar no duplica nada.'],
       ['¿Cómo funciona la prueba gratis?', 'Tienes todo habilitado por 14 días, sin tarjeta. Después, si no te suscribes, tu clínica sigue en el plan Gratis, con la agenda y hasta 20 pacientes, y no pierdes nada de lo que registraste. Para seguir con la historia clínica y lo demás, solo tienes que suscribirte al Basic o al Pro, con tarjeta de crédito.'],
       ['¿Cuántos profesionales puedo registrar?', 'En el plan Gratis, solo tú usas el sistema, con hasta 20 pacientes. El Basic tiene hasta 2 profesionales, cada uno con su propio acceso, pacientes sin límite y la recepción con su propio acceso. El Pro permite hasta 20 profesionales, con pagos a profesionales, implementación asistida y soporte prioritario. El Rede permite hasta 100 profesionales e incluye atención por WhatsApp con IA (Inteligencia Artificial).'],
       ['¿Cómo funciona el llamado en la TV?', 'En la TV de la sala de espera, abre el navegador en sonelia.com.br/#/tv y conecta con el código que aparece en la pantalla. Cuando la recepción o el profesional hace clic en "Llamar", el nombre del paciente y la sala aparecen en la TV, con sonido y voz. Funciona en cualquier Smart TV con navegador o en un aparato como Fire TV Stick o TV box.'],

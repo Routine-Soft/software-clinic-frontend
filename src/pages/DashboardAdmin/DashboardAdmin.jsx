@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { useAuthContext } from '@/hooks/useAuthContext'
 import ProfissionalADM from '@/modules/profissional/components/ProfissionalADM'
 import PacienteCard from '@/modules/paciente/components/PacienteCard'
@@ -83,6 +84,14 @@ export function DashboardAdmin() {
             </header>
 
             <Jornada />
+
+            <section className="card dash-importar" aria-labelledby="dash-importar-titulo">
+                <div>
+                    <h3 id="dash-importar-titulo">{tr('Vem de outro sistema?')}</h3>
+                    <p>{tr('Importe pacientes, profissionais, consultas, prontuários e cadastros a partir de uma planilha (Excel ou CSV).')}</p>
+                </div>
+                <Link to="/importar" className="btn btn--primary">{tr('Importar dados')}</Link>
+            </section>
 
             <div className="dash-admin__colunas">
                 {[PASSOS.slice(0, metade), PASSOS.slice(metade)].map((coluna, indiceColuna) => (

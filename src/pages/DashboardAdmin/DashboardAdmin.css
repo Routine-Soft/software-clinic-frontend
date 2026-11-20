@@ -197,3 +197,36 @@
     animation: none;
   }
 }
+
+/* Atalho para quem vem de outro sistema trazer os dados por planilha. */
+.dash-importar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding: 18px 22px;
+  margin-bottom: 20px;
+  background: linear-gradient(135deg, var(--primary-soft), transparent 70%), var(--surface);
+}
+
+.dash-importar h3 {
+  margin: 0 0 4px;
+  font-size: 1rem;
+}
+
+.dash-importar p {
+  margin: 0;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+@media (max-width: 640px) {
+  .dash-importar {
+    padding: 16px;
+  }
+
+  .dash-importar .btn {
+    width: 100%;
+  }
+}

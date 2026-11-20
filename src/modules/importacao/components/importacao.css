@@ -1,0 +1,340 @@
+.importacao {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.importacao__passo {
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  animation: importacao-entrar 0.28s ease-out both;
+}
+
+.importacao__titulo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  font-size: 1.05rem;
+}
+
+.importacao__numero {
+  display: inline-grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  border-radius: 999px;
+  background: var(--gradient-primary);
+  color: var(--on-primary);
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.importacao__dica {
+  margin: 0;
+  color: var(--text-muted);
+  line-height: 1.5;
+  font-size: 0.92rem;
+}
+
+/* Tipos de dado */
+.importacao__tipos {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 10px;
+}
+
+.importacao__tipo {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 16px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--surface);
+  color: var(--text);
+  text-align: left;
+  cursor: pointer;
+  font: inherit;
+  transition: border-color 0.15s, box-shadow 0.15s, transform 0.15s;
+}
+
+.importacao__tipo:hover {
+  border-color: var(--border-strong);
+  box-shadow: var(--shadow-sm);
+  transform: translateY(-1px);
+}
+
+.importacao__tipo:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--primary-ring);
+}
+
+.importacao__tipo.is-ativo {
+  border-color: var(--primary);
+  background: var(--primary-soft);
+}
+
+.importacao__tipo-icone {
+  display: inline-grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  border-radius: 10px;
+  background: var(--primary-soft);
+  color: var(--primary);
+}
+
+.importacao__tipo-icone svg {
+  width: 20px;
+  height: 20px;
+}
+
+.importacao__tipo-textos {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  line-height: 1.4;
+}
+
+.importacao__tipo-textos span {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+/* Arquivo */
+.importacao__arquivo {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 28px 16px;
+  border: 2px dashed var(--border-strong);
+  border-radius: 16px;
+  background: var(--surface-2);
+  text-align: center;
+  cursor: pointer;
+  line-height: 1.5;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.importacao__arquivo:hover,
+.importacao__arquivo.is-arrastando,
+.importacao__arquivo:focus-within {
+  border-color: var(--primary);
+  background: var(--primary-soft);
+}
+
+.importacao__arquivo span {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  overflow-wrap: anywhere;
+}
+
+.importacao__arquivo strong {
+  overflow-wrap: anywhere;
+}
+
+.importacao__arquivo-icone {
+  color: var(--primary);
+}
+
+.importacao__arquivo-icone svg {
+  width: 30px;
+  height: 30px;
+}
+
+.importacao__input-arquivo {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.importacao__modelo {
+  align-self: flex-start;
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  font: inherit;
+}
+
+/* Colunas */
+.importacao__colunas {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 14px 16px;
+}
+
+.importacao__coluna .field__label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.importacao__obrigatorio {
+  font-size: 0.7rem;
+}
+
+.importacao__exemplo {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.importacao__acoes {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.importacao__pendencias {
+  margin: 0;
+  padding: 12px 16px 12px 32px;
+  border-radius: 12px;
+  background: var(--warning-soft);
+  color: var(--warning);
+  line-height: 1.5;
+  font-size: 0.9rem;
+}
+
+.importacao__progresso {
+  height: 8px;
+  border-radius: 999px;
+  background: var(--surface-2);
+  overflow: hidden;
+}
+
+.importacao__progresso span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--gradient-primary);
+  transition: width 0.3s ease;
+}
+
+/* Resultado */
+.importacao__numeros {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.importacao__numero-card {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: var(--surface-2);
+}
+
+.importacao__numero-card strong {
+  font-size: 1.5rem;
+  line-height: 1.2;
+}
+
+.importacao__numero-card span {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+.importacao__numero-card[data-tom='sucesso'] {
+  background: var(--success-soft);
+}
+
+.importacao__numero-card[data-tom='sucesso'] strong {
+  color: var(--success);
+}
+
+.importacao__numero-card[data-tom='erro'] {
+  background: var(--danger-soft);
+}
+
+.importacao__numero-card[data-tom='erro'] strong {
+  color: var(--danger);
+}
+
+.importacao__lista {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.importacao__lista h4 {
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+.importacao__lista-topo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.importacao__lista ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 320px;
+  overflow-y: auto;
+}
+
+.importacao__lista li {
+  display: flex;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: var(--surface-2);
+  line-height: 1.5;
+  font-size: 0.9rem;
+  overflow-wrap: anywhere;
+}
+
+.importacao__linha {
+  flex-shrink: 0;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+@keyframes importacao-entrar {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: none; }
+}
+
+@media (max-width: 640px) {
+  .importacao__passo {
+    padding: 16px;
+  }
+
+  .importacao__numeros {
+    grid-template-columns: 1fr;
+  }
+
+  .importacao__lista li {
+    flex-direction: column;
+    gap: 2px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .importacao__passo,
+  .importacao__tipo,
+  .importacao__progresso span {
+    animation: none;
+    transition: none;
+  }
+}

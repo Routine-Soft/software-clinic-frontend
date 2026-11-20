@@ -159,6 +159,40 @@ function Funcionalidades() {
   );
 }
 
+function TrocaDeSistema({ logado }) {
+  const { t } = useIdioma();
+  const T = t('landing.troca');
+  return (
+    <section className="lp-secao" id="troca-de-sistema">
+      <div className="lp-container">
+        <div className="lp-troca lp-revelar">
+          <div className="lp-troca__texto">
+            <span className="lp-selo">{T.selo}</span>
+            <h2>{T.titulo}</h2>
+            <p>{T.texto}</p>
+            <h3 className="lp-troca__lista-titulo">{T.listaTitulo}</h3>
+            <ul className="lp-lista-check">
+              {T.itens.map((item) => <li key={item}><IconeCheck /> {item}</li>)}
+            </ul>
+            {!logado && <Link to="/registro" className="btn btn--primary lp-btn-grande lp-troca__botao">{T.comecar}</Link>}
+          </div>
+          <ul className="lp-troca__pontos">
+            {T.pontos.map((ponto, i) => (
+              <li key={ponto.titulo} className="lp-troca__ponto lp-revelar" style={{ '--i': i }}>
+                <span className="lp-recurso__icone"><IconeMenu nome={['importar', 'convenios', 'termo', 'prontuario'][i]} /></span>
+                <div>
+                  <h3>{ponto.titulo}</h3>
+                  <p>{ponto.texto}</p>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function ComoFunciona({ logado }) {
   const { t } = useIdioma();
   const cab = t('landing.passosCab');
@@ -399,6 +433,7 @@ export default function Landing() {
         <Hero logado={isAuthenticated} />
         <Vitrine />
         <Funcionalidades />
+        <TrocaDeSistema logado={isAuthenticated} />
         <ComoFunciona logado={isAuthenticated} />
         <Precos logado={isAuthenticated} />
         <Duvidas />

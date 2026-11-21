@@ -32,7 +32,7 @@ import AssinaturaRetorno from './modules/assinatura/components/AssinaturaRetorno
 import AssinaturasPlanos from './modules/assinatura/components/AssinaturasPlanos';
 import PacienteCard from './modules/paciente/components/PacienteCard';
 import DashboardAdmin from './pages/DashboardAdmin/DashboardAdmin';
-import ComissoesADM from './modules/comissao/components/ComissoesADM';
+import FinanceiroADM from './modules/financeiro/components/FinanceiroADM';
 import MinhasComissoes from './modules/comissao/components/MinhasComissoes';
 
 
@@ -386,11 +386,11 @@ function App() {
           />
 
           <Route
-            path="/repasses"
+            path="/financeiro"
             element={
               <ProtectedRoute requiredRoles={['admin', 'super_admin']}>
                 <MainLayout>
-                  <ComissoesADM />
+                  <FinanceiroADM />
                 </MainLayout>
               </ProtectedRoute>
             }
@@ -509,7 +509,8 @@ function App() {
           />
 
           {/* Endereços antigos, de quando o repasse se chamava comissão (favoritos e links salvos). */}
-          <Route path="/comissoes" element={<Navigate to="/repasses" replace />} />
+          <Route path="/comissoes" element={<Navigate to="/financeiro" replace />} />
+          <Route path="/repasses" element={<Navigate to="/financeiro" replace />} />
           <Route path="/minhas-comissoes" element={<Navigate to="/meus-repasses" replace />} />
 
           <Route path="/" element={<Landing />} />

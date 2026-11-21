@@ -63,7 +63,7 @@ const TERMOS_AFILIADO_EN = {
       'Each clinic generates a single commission, even if it keeps paying in the following months.',
     ]],
     ['3. Commission amount and timing', [
-      'The commission is 50% of the first month of the plan the referred clinic subscribes to (for example: R$ 49.50 on the R$ 99.00 Basic plan, and R$ 124.50 on the R$ 249.00 Pro plan). Referral discounts the clinic may have do not reduce the commission.',
+      'The commission is 50% of the first month of the plan the referred clinic subscribes to (for example: R$ 49.50 on the R$ 99.00 Basic plan, and R$ 100.00 on the R$ 200.00 Pro plan). Referral discounts the clinic may have do not reduce the commission.',
       'Under the Brazilian Consumer Protection Code, customers have 7 days to cancel and get a refund. That is why the commission is on hold and can only be paid from the 8th day after the clinic’s payment.',
       'If the clinic’s payment is refunded or disputed before the commission is paid, the commission is cancelled. It becomes valid again if the clinic pays again.',
     ]],

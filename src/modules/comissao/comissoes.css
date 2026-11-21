@@ -91,62 +91,17 @@
   color: var(--text-muted);
 }
 
-/* ---------- Tabela por profissional ---------- */
+/* ---------- Valores e tabelas ---------- */
 
-.comissao-pessoa {
-  display: flex;
-  gap: 12px;
-  align-items: center;
-  min-width: 0;
-}
-
-.comissao-pessoa__avatar {
-  display: grid;
-  flex-shrink: 0;
-  place-items: center;
-  width: 38px;
-  height: 38px;
-  font-size: 0.8rem;
-  font-weight: 700;
-  color: var(--primary);
-  background: var(--primary-soft);
-  border-radius: 50%;
-}
-
-.comissao-pessoa__dados,
 .comissao-valor {
   display: grid;
   gap: 2px;
   min-width: 0;
 }
 
-.comissao-pessoa__nome {
-  font-weight: 650;
-}
-
 .comissao-pessoa__sub {
   font-size: 0.8rem;
   color: var(--text-muted);
-}
-
-.comissao-confirmar {
-  display: inline-flex;
-  gap: 6px;
-  align-items: center;
-  font-size: 0.85rem;
-  font-weight: 600;
-  white-space: nowrap;
-}
-
-.comissao-confirmar__ok {
-  color: var(--on-primary);
-  background: var(--gradient-primary);
-  border-color: transparent;
-}
-
-.comissao-nota {
-  margin: 0;
-  font-size: 0.85rem;
 }
 
 .comissao-total td {

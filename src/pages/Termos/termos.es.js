@@ -63,7 +63,7 @@ const TERMOS_AFILIADO_ES = {
       'Cada clínica genera una sola comisión, aunque siga pagando en los meses siguientes.',
     ]],
     ['3. Monto y plazo de la comisión', [
-      'La comisión es el 50% de la primera mensualidad del plan que contrate la clínica recomendada (por ejemplo: R$ 49,50 en el plan Basic de R$ 99,00, y R$ 124,50 en el plan Pro de R$ 249,00). Los descuentos por recomendación que tenga la clínica no reducen la comisión.',
+      'La comisión es el 50% de la primera mensualidad del plan que contrate la clínica recomendada (por ejemplo: R$ 49,50 en el plan Basic de R$ 99,00, y R$ 100,00 en el plan Pro de R$ 200,00). Los descuentos por recomendación que tenga la clínica no reducen la comisión.',
       'Por el Código de Defensa del Consumidor de Brasil, el cliente tiene 7 días para desistir y pedir el reembolso. Por eso la comisión queda en espera y solo puede pagarse a partir del 8.º día después del pago de la clínica.',
       'Si el pago de la clínica se reembolsa o se impugna antes de que se pague la comisión, esta se cancela. Vuelve a valer si la clínica paga de nuevo.',
     ]],

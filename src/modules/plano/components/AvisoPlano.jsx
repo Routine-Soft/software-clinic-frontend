@@ -12,7 +12,6 @@ const RECURSO_DA_ROTA = [
   ['/empresas', 'empresas'],
   ['/reunioes', 'reunioes'],
   ['/whatsapp', 'whatsapp'],
-  ['/repasses', 'repasse'],
   ['/meus-repasses', 'repasse'],
   ['/usuarios', 'equipe'],
 ];

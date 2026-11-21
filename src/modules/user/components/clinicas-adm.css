@@ -394,3 +394,70 @@
 .relatorio-tabela__nome {
   font-weight: 650;
 }
+
+/* Faturamento por período: título com o filtro ao lado (embaixo no celular) e as formas de pagamento. */
+.relatorio__cabecalho {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 12px;
+}
+
+.relatorio__cabecalho .clinica-detalhes__titulo {
+  margin: 0;
+}
+
+.relatorio__subtitulo {
+  margin: 4px 0 0;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+
+.relatorio-formas {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.relatorio-formas__item {
+  --forma: var(--primary);
+  display: grid;
+  grid-template-columns: minmax(6.5rem, auto) minmax(40px, 1fr) auto;
+  gap: 10px;
+  align-items: center;
+  font-size: 0.85rem;
+}
+
+.relatorio-formas__item[data-forma='pix'] { --forma: var(--success); }
+.relatorio-formas__item[data-forma='dinheiro'] { --forma: var(--warning); }
+.relatorio-formas__item[data-forma='cartao_credito'] { --forma: var(--primary); }
+.relatorio-formas__item[data-forma='cartao_debito'] { --forma: var(--info); }
+.relatorio-formas__item[data-forma='outras'],
+.relatorio-formas__item[data-forma='semForma'] { --forma: var(--text-subtle); }
+
+.relatorio-formas__nome {
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.relatorio-formas__barra {
+  display: block;
+  width: var(--parte);
+  height: 100%;
+  background: var(--forma);
+  border-radius: 999px;
+  transition: width 0.3s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .relatorio-formas__barra { transition: none; }
+}
+
+@media (max-width: 480px) {
+  .relatorio-formas__item { grid-template-columns: 1fr auto; }
+  .relatorio-formas__item .relatorio-meses__trilho { grid-column: 1 / -1; grid-row: 2; }
+}

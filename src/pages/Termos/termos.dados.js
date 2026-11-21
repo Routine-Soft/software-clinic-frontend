@@ -75,7 +75,7 @@ export const TERMOS_AFILIADO = {
       'Cada clínica gera uma única comissão, mesmo que continue pagando nos meses seguintes.',
     ]],
     ['3. Valor da comissão e prazo', [
-      'A comissão é de 50% do valor da primeira mensalidade do plano assinado pela clínica indicada (por exemplo: R$ 49,50 no plano Basic, de R$ 99,00, e R$ 124,50 no plano Pro, de R$ 249,00). Descontos de indicação que a clínica tiver não diminuem a comissão.',
+      'A comissão é de 50% do valor da primeira mensalidade do plano assinado pela clínica indicada (por exemplo: R$ 49,50 no plano Basic, de R$ 99,00, e R$ 100,00 no plano Pro, de R$ 200,00). Descontos de indicação que a clínica tiver não diminuem a comissão.',
       'O cliente tem 7 dias, pelo Código de Defesa do Consumidor, para desistir e receber o dinheiro de volta. Por isso, a comissão fica em carência e só pode ser paga a partir do 8º dia depois do pagamento da clínica.',
       'Se o pagamento da clínica for devolvido ou contestado antes de a comissão ser paga, ela é cancelada. Ela volta a valer se a clínica pagar de novo.',
     ]],

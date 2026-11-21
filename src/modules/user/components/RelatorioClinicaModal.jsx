@@ -1,10 +1,21 @@
 import { useEffect, useState } from 'react';
 import Modal from '@/components/Modal/Modal';
+import FiltroPeriodo from '@/components/FiltroPeriodo/FiltroPeriodo';
 import { formatarPreco } from '@/modules/assinatura/assinatura.utils';
 import { getMetricasAdmin } from '../clinica-admin.api';
 import { localeAtual, tr } from '@/i18n';
 
 const TIPO_SERVICO = { consulta: tr('Consulta'), pacote: tr('Pacote') };
+
+// Ordem das formas de pagamento no relatório. As duas últimas só aparecem quando têm valor.
+const FORMAS = [
+  ['pix', tr('Pix')],
+  ['dinheiro', tr('Dinheiro')],
+  ['cartao_credito', tr('Cartão de crédito')],
+  ['cartao_debito', tr('Cartão de débito')],
+  ['outras', tr('Outras formas')],
+  ['semForma', tr('Sem forma registrada')],
+];
 
 function numero(valor) {
   return Number(valor ?? 0).toLocaleString(localeAtual());
@@ -51,10 +62,38 @@ function GraficoMeses({ meses }) {
   );
 }
 
+// Quanto entrou em cada forma de pagamento no período, em barras deitadas.
+function FormasPagamento({ formas, faturamento }) {
+  const linhas = FORMAS.filter(([chave], i) => i < 4 || (formas?.[chave] ?? 0) > 0);
+  const total = Math.max(1, faturamento ?? 0);
+  return (
+    <>
+      <ul className="relatorio-formas">
+        {linhas.map(([chave, rotulo]) => {
+          const valor = formas?.[chave] ?? 0;
+          return (
+            <li key={chave} className="relatorio-formas__item" data-forma={chave}>
+              <span className="relatorio-formas__nome">{rotulo}</span>
+              <span className="relatorio-meses__trilho" aria-hidden="true">
+                <span className="relatorio-formas__barra" style={{ '--parte': `${Math.min(100, (valor / total) * 100)}%` }} />
+              </span>
+              <strong className="relatorio-meses__valor">{formatarPreco(valor)}</strong>
+            </li>
+          );
+        })}
+      </ul>
+      {(formas?.semForma ?? 0) > 0 && (
+        <p className="relatorio__detalhe">{tr('Sem forma registrada: convênio pago pelo plano, pacote com cobrança à parte ou consulta importada.')}</p>
+      )}
+    </>
+  );
+}
+
 // Relatório da clínica para o super admin: quanto fatura, quanto repassa, quem mais atende e os preços dos serviços.
 export default function RelatorioClinicaModal({ admin, onClose }) {
   const [dados, setDados] = useState(null);
   const [erro, setErro] = useState(null);
+  const [periodo, setPeriodo] = useState('mensal');
 
   useEffect(() => {
     let ignore = false;
@@ -68,6 +107,7 @@ export default function RelatorioClinicaModal({ admin, onClose }) {
   const profissoes = dados?.profissoes ?? [];
   const servicos = dados?.servicos ?? [];
   const meses = fat?.meses ?? [];
+  const doPeriodo = fat?.periodos?.[periodo];
   const repasse = profissoes.reduce(
     (soma, p) => ({ total: soma.total + (p.repasse ?? 0), pago: soma.pago + (p.repassePago ?? 0), pendente: soma.pendente + (p.repassePendente ?? 0) }),
     { total: 0, pago: 0, pendente: 0 },
@@ -87,13 +127,22 @@ export default function RelatorioClinicaModal({ admin, onClose }) {
             </div>
           ) : (
             <>
-              <section aria-label={tr('Resumo')}>
-                <div className="clinica-numeros">
-                  <Numero rotulo={tr('Faturamento do mês')} valor={formatarPreco(fat?.mesAtual?.faturamento)} detalhe={textoAtendimentos(fat?.mesAtual?.atendimentos ?? 0)} tom="success" />
-                  <Numero rotulo={tr('Faturamento do ano')} valor={formatarPreco(fat?.anoAtual?.faturamento)} detalhe={textoAtendimentos(fat?.anoAtual?.atendimentos ?? 0)} tom="success" />
-                  <Numero rotulo={tr('Ticket médio')} valor={formatarPreco(fat?.ticketMedio)} detalhe={tr('por atendimento')} tom="info" />
-                  <Numero rotulo={tr('Repasse do mês')} valor={formatarPreco(fat?.mesAtual?.repasse)} detalhe={tr('para os profissionais')} />
+              <section aria-label={tr('Faturamento')}>
+                <div className="relatorio__cabecalho">
+                  <h4 className="clinica-detalhes__titulo">{tr('Faturamento')}</h4>
+                  <FiltroPeriodo valor={periodo} onChange={setPeriodo} rotulo={tr('Período do faturamento')} />
                 </div>
+                <div className="clinica-numeros">
+                  <Numero rotulo={tr('Faturamento')} valor={formatarPreco(doPeriodo?.faturamento)} detalhe={textoAtendimentos(doPeriodo?.atendimentos ?? 0)} tom="success" />
+                  <Numero rotulo={tr('Ticket médio')} valor={formatarPreco(doPeriodo?.ticketMedio)} detalhe={tr('por atendimento')} tom="info" />
+                  <Numero rotulo={tr('Repasse')} valor={formatarPreco(doPeriodo?.repasse)} detalhe={tr('para os profissionais')} />
+                </div>
+                <h5 className="relatorio__subtitulo">{tr('Como foi pago')}</h5>
+                {(doPeriodo?.atendimentos ?? 0) === 0 ? (
+                  <p className="clinica-detalhes__vazio">{tr('Nenhum atendimento realizado neste período.')}</p>
+                ) : (
+                  <FormasPagamento formas={doPeriodo?.formasPagamento} faturamento={doPeriodo?.faturamento} />
+                )}
                 <p className="clinica-detalhes__vazio">
                   {tr('Desde o início: {p0} em {p1}, com {p2} de repasse.', { p0: formatarPreco(fat?.total?.faturamento), p1: textoAtendimentos(fat?.total?.atendimentos ?? 0), p2: formatarPreco(fat?.total?.repasse) })}
                 </p>

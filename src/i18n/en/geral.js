@@ -85,7 +85,7 @@ export default {
   'Excluir': 'Delete',
   'Excluir?': 'Delete?',
   'Fechar menu': 'Close menu',
-  'Financeiro': 'Billing',
+  'Financeiro': 'Finances',
   'Fechar': 'Close',
   'HTTP Error: {status}': 'HTTP Error: {status}',
   'Indique e ganhe': 'Refer and earn',

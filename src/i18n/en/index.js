@@ -11,5 +11,6 @@ import jornada from './jornada';
 import freemium from './freemium';
 import whatsapp from './whatsapp';
 import importacao from './importacao';
+import financeiro from './financeiro';
 
-export default { ...importacao, ...geral, ...clinica, ...negocio, ...avaliacoes, ...extras, ...termos, ...acompanhamento, ...anamnese, ...jornada, ...freemium, ...whatsapp };
+export default { ...financeiro, ...importacao, ...geral, ...clinica, ...negocio, ...avaliacoes, ...extras, ...termos, ...acompanhamento, ...anamnese, ...jornada, ...freemium, ...whatsapp };

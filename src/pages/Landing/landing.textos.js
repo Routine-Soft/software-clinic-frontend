@@ -136,7 +136,7 @@ export default {
     // Só se a API não responder (nome, preço e descrição vêm do cadastro de Planos do super admin; o que cada um tem, de `comparacao`).
     planosPadrao: [
       { _id: 'basic', nome: 'Basic', nivel: 'basic', preco: 99, descricao: 'Para quem atende sozinho ou com uma equipe pequena' },
-      { _id: 'pro', nome: 'Pro', nivel: 'pro', preco: 249, descricao: 'Para clínicas com equipe maior, com implantação assistida' },
+      { _id: 'pro', nome: 'Pro', nivel: 'pro', preco: 200, descricao: 'Para clínicas com equipe maior, com implantação assistida' },
       { _id: 'rede', nome: 'Rede', nivel: 'rede', preco: 2990, descricao: 'Para redes e clínicas grandes, com atendimento no WhatsApp com IA' },
     ],
     duvidasCab: { selo: 'Dúvidas', titulo: 'Perguntas frequentes' },

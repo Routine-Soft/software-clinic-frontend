@@ -58,3 +58,9 @@ export async function getHistoricoPagamentosAdmin(id) {
   const response = await httpClient.get(`/users/admins/${id}/pagamentos`);
   return response;
 }
+
+// Relatório da clínica: faturamento, últimos 12 meses, números por profissão e preços dos serviços.
+export async function getMetricasAdmin(id) {
+  const response = await httpClient.get(`/users/admins/${id}/metricas`);
+  return response;
+}

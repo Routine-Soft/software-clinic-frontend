@@ -257,3 +257,140 @@
 .clinica-pagamentos {
   min-width: 420px;
 }
+
+/* Profissões da clínica na linha da lista ("9 Psicologia · 3 Fonoaudiologia"). */
+.clinica-uso__profissoes {
+  flex-basis: 100%;
+  color: var(--text);
+}
+
+.clinica-relatorio {
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
+  justify-self: start;
+  margin-top: 8px;
+}
+
+.clinica-relatorio svg {
+  width: 15px;
+  height: 15px;
+}
+
+/* ---------- Relatório da clínica ---------- */
+
+.relatorio__carregando {
+  display: grid;
+  gap: 12px;
+}
+
+.relatorio__detalhe {
+  font-size: 0.75rem;
+  color: var(--text-subtle);
+}
+
+.relatorio-meses,
+.relatorio-repasse {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.relatorio-meses__item {
+  display: grid;
+  grid-template-columns: 3.4rem minmax(40px, 1fr) auto;
+  gap: 2px 10px;
+  align-items: center;
+  font-size: 0.85rem;
+}
+
+.relatorio-meses__mes {
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.relatorio-meses__trilho,
+.relatorio-repasse__trilho {
+  height: 10px;
+  overflow: hidden;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+}
+
+.relatorio-meses__barra,
+.relatorio-repasse__pago {
+  display: block;
+  width: var(--parte);
+  height: 100%;
+  border-radius: 999px;
+}
+
+.relatorio-meses__barra {
+  background: var(--gradient-primary);
+}
+
+.relatorio-meses__valor {
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.relatorio-meses__info {
+  grid-column: 2 / -1;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+/* Valores em reais nos cards do relatório: sem quebrar no meio do número. */
+.relatorio .clinica-numero {
+  align-content: start;
+}
+
+.relatorio .clinica-numero strong {
+  font-size: clamp(1rem, 4.4vw, 1.3rem);
+  white-space: nowrap;
+  overflow-wrap: normal;
+}
+
+.relatorio-repasse__trilho {
+  background: var(--danger-soft);
+}
+
+.relatorio-repasse__pago {
+  background: var(--success);
+}
+
+.relatorio-repasse__item {
+  display: grid;
+  grid-template-columns: minmax(7rem, 1fr) minmax(80px, 2fr);
+  gap: 4px 12px;
+  align-items: center;
+  font-size: 0.85rem;
+}
+
+.relatorio-repasse__nome {
+  font-weight: 650;
+}
+
+.relatorio-repasse__valores {
+  grid-column: 1 / -1;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.relatorio-tabela {
+  min-width: 640px;
+}
+
+.relatorio-tabela th,
+.relatorio-tabela td {
+  padding: 10px 12px;
+}
+
+.relatorio-tabela__nome {
+  font-weight: 650;
+}

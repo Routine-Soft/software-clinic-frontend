@@ -24,6 +24,7 @@ import EditarAdminModal from './EditarAdminModal';
 import TrocarPlanoModal from './TrocarPlanoModal';
 import RedefinirSenhaAdminModal from './RedefinirSenhaAdminModal';
 import DetalhesClinicaModal from './DetalhesClinicaModal';
+import RelatorioClinicaModal from './RelatorioClinicaModal';
 import { tempoDeCasa } from '../clinica-admin.utils';
 import { linkWhatsapp } from '@/utils/whatsapp';
 import './clinicas-adm.css';
@@ -50,6 +51,7 @@ export default function ClinicasADM() {
   const [trocandoPlanoDe, setTrocandoPlanoDe] = useState(null);
   const [redefinindoSenhaDe, setRedefinindoSenhaDe] = useState(null);
   const [detalhesDe, setDetalhesDe] = useState(null);
+  const [relatorioDe, setRelatorioDe] = useState(null);
   const [confirmando, setConfirmando] = useState(null); // { id, acao: 'excluir' | 'revogar' }
 
   const resumoContagem = useMemo(() => `${admins.length} ${admins.length === 1 ? tr('clínica') : tr('clínicas')}`, [admins.length]);
@@ -174,6 +176,11 @@ export default function ClinicasADM() {
                               ].map(([campo, singular, plural]) => (
                                 <span key={campo}><strong>{admin.estatisticas[campo]}</strong> {admin.estatisticas[campo] === 1 ? singular : plural}</span>
                               ))}
+                              {admin.estatisticas.profissoes?.length > 0 && (
+                                <span className="clinica-uso__profissoes">
+                                  {admin.estatisticas.profissoes.map((p) => `${p.profissionais} ${tr(p.profissao)}`).join(' · ')}
+                                </span>
+                              )}
                               <span>
                                 {tr('Agenda:')} <strong>{admin.estatisticas.agendamentos.abertos}</strong> {tr('em aberto,')}{' '}
                                 <strong>{admin.estatisticas.agendamentos.realizados}</strong> {admin.estatisticas.agendamentos.realizados === 1 ? tr('realizado') : tr('realizados')},{' '}
@@ -181,6 +188,15 @@ export default function ClinicasADM() {
                               </span>
                             </span>
                           )}
+                          <button
+                            type="button"
+                            className="btn btn--ghost btn--sm clinica-relatorio"
+                            aria-label={tr('Relatório de {nomeEmpresa}', { nomeEmpresa: admin.nomeEmpresa })}
+                            onClick={() => setRelatorioDe(admin)}
+                          >
+                            <IconeGrafico />
+                            {tr('Relatório')}
+                          </button>
                         </div>
                       </div>
                     </td>
@@ -344,6 +360,10 @@ export default function ClinicasADM() {
 
       {detalhesDe && (
         <DetalhesClinicaModal key={detalhesDe._id} admin={detalhesDe} onClose={() => setDetalhesDe(null)} />
+      )}
+
+      {relatorioDe && (
+        <RelatorioClinicaModal key={relatorioDe._id} admin={relatorioDe} onClose={() => setRelatorioDe(null)} />
       )}
 
       {trocandoPlanoDe && (

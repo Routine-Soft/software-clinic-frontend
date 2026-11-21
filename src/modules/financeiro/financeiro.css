@@ -505,6 +505,75 @@
 
 /* ---------- Extrato ---------- */
 
+.financeiro-bloco__botoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.extrato-acoes {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 6px;
+  align-items: center;
+  justify-content: flex-end;
+  padding-top: 4px;
+}
+
+.extrato-acoes--confirmar span {
+  font-size: 0.8rem;
+  font-weight: 650;
+  line-height: 1.35;
+}
+
+@media (min-width: 1100px) {
+  .extrato-acoes.extrato-acoes--confirmar {
+    flex-wrap: wrap;
+  }
+}
+
+/* ---------- Janelas de lançamento e de atendimento ---------- */
+
+.lancamento-tipo {
+  width: 100%;
+}
+
+.lancamento-tipo .filtro-periodo__btn {
+  flex: 1;
+}
+
+.atendimento-resumo {
+  display: grid;
+  gap: 2px;
+  margin: 0;
+  padding: 12px 14px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+}
+
+.atendimento-resumo span {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.atendimento-formas {
+  display: grid;
+  gap: 8px;
+}
+
+.atendimento-formas__linha {
+  display: grid;
+  grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr) auto;
+  gap: 8px;
+  align-items: center;
+}
+
+.atendimento-formas__mais {
+  justify-self: start;
+}
+
 .extrato-ferramentas {
   display: flex;
   flex-wrap: wrap;
@@ -639,7 +708,7 @@
 @media (min-width: 1100px) {
   .extrato-cabecalho,
   .extrato-linha {
-    grid-template-columns: 5.5rem minmax(0, 2fr) minmax(0, 1.2fr) minmax(0, 1fr) minmax(0, 1.2fr) minmax(0, 1.2fr) 8.5rem;
+    grid-template-columns: 5.2rem minmax(0, 2fr) minmax(0, 1.1fr) minmax(0, 1fr) minmax(0, 1.2fr) minmax(0, 1.1fr) 8rem 10.5rem;
     align-items: center;
   }
 
@@ -676,6 +745,13 @@
   .extrato-linha__valor {
     grid-column: 7;
     grid-row: 1;
+  }
+
+  .extrato-acoes {
+    grid-column: 8;
+    grid-row: 1;
+    flex-wrap: nowrap;
+    padding-top: 0;
   }
 }
 

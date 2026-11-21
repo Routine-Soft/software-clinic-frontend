@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
-import { atualizarDespesa, criarDespesa, excluirDespesa, getFinanceiro, pagarDespesa } from './financeiro.api';
+import {
+  atualizarLancamento, criarLancamento, desfazerRepasse, editarAtendimento, excluirAtendimento, excluirLancamento, getFinanceiro, pagarLancamento,
+} from './financeiro.api';
 
 // Dados do Financeiro no período escolhido. Ao trocar de período mostra o skeleton; ao recarregar (depois de lançar
 // uma despesa ou pagar um repasse) mantém os números na tela até os novos chegarem.
@@ -31,8 +33,8 @@ export function useFinanceiro(periodo, data) {
   };
 }
 
-// Lançar, editar, pagar e excluir despesas, com a mensagem de sucesso ou erro da API.
-export function useDespesas(aoMudar) {
+// Tudo o que a dona muda pelo Financeiro (lançamentos, atendimentos e repasses), com a mensagem da API.
+export function useAcoesFinanceiro(aoMudar) {
   const [erro, setErro] = useState(null);
   const [sucesso, setSucesso] = useState(null);
 
@@ -54,8 +56,11 @@ export function useDespesas(aoMudar) {
     erro,
     sucesso,
     limparErro: () => setErro(null),
-    salvar: (despesa, id) => executar(() => (id ? atualizarDespesa(id, despesa) : criarDespesa(despesa))),
-    pagar: (id, pago, formaPagamento) => executar(() => pagarDespesa(id, pago, formaPagamento)),
-    excluir: (id, futuras) => executar(() => excluirDespesa(id, futuras)),
+    salvarLancamento: (lancamento, id) => executar(() => (id ? atualizarLancamento(id, lancamento) : criarLancamento(lancamento))),
+    pagarLancamento: (id, pago) => executar(() => pagarLancamento(id, pago)),
+    excluirLancamento: (id, futuras) => executar(() => excluirLancamento(id, futuras)),
+    editarAtendimento: (id, dados) => executar(() => editarAtendimento(id, dados)),
+    excluirAtendimento: (id) => executar(() => excluirAtendimento(id)),
+    desfazerRepasse: (id) => executar(() => desfazerRepasse(id)),
   };
 }

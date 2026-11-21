@@ -36,7 +36,8 @@ export default function ResumoFinanceiro({ resumo, periodo, loading }) {
       <Kpi
         i={0} icone="receita" tom="primary" rotulo={tr('Faturamento')} loading={loading}
         valor={dinheiro(r.faturamento)}
-        detalhe={tr('{p0} · ticket médio {p1}', { p0: plural(r.atendimentos ?? 0, tr('1 atendimento'), tr('{n} atendimentos')), p1: dinheiro(r.ticketMedio) })}
+        detalhe={tr('{p0} · ticket médio {p1}', { p0: plural(r.atendimentos ?? 0, tr('1 atendimento'), tr('{n} atendimentos')), p1: dinheiro(r.ticketMedio) })
+          + (r.receitasAvulsas?.total ? tr(' · {p0} de outras receitas', { p0: dinheiro(r.receitasAvulsas.total) }) : '')}
         variacao={textoVariacao(r.faturamento ?? 0, r.anterior?.faturamento, periodo)}
       />
       <Kpi

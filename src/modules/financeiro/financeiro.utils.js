@@ -1,7 +1,7 @@
 import { localeAtual, tr } from '@/i18n';
 import { formatarPreco } from '@/modules/servico/servico.utils';
 
-// Mesmas categorias do backend (despesa.model.js).
+// Mesmas categorias do backend (lancamento.model.js).
 export const CATEGORIAS_DESPESA = [
   ['aluguel', tr('Aluguel e condomínio')],
   ['pessoal', tr('Salários e encargos')],
@@ -16,9 +16,19 @@ export const CATEGORIAS_DESPESA = [
   ['outros', tr('Outros')],
 ];
 
-export const ROTULO_CATEGORIA = Object.fromEntries(CATEGORIAS_DESPESA);
+export const CATEGORIAS_RECEITA = [
+  ['convenio', tr('Pagamento de convênio')],
+  ['produtos', tr('Venda de produtos')],
+  ['servicos', tr('Serviço avulso')],
+  ['sublocacao', tr('Sublocação de sala')],
+  ['outros', tr('Outros')],
+];
 
-// Formas de pagamento: as do atendimento e as que só aparecem nas despesas (boleto, transferência).
+export const CATEGORIAS = { despesa: CATEGORIAS_DESPESA, receita: CATEGORIAS_RECEITA };
+
+export const ROTULO_CATEGORIA = Object.fromEntries([...CATEGORIAS_DESPESA, ...CATEGORIAS_RECEITA]);
+
+// Formas de pagamento: as do atendimento e as que só aparecem nos lançamentos (boleto, transferência).
 export const ROTULO_FORMA = {
   pix: tr('Pix'),
   dinheiro: tr('Dinheiro'),
@@ -28,7 +38,13 @@ export const ROTULO_FORMA = {
   transferencia: tr('Transferência'),
 };
 
-export const FORMAS_DESPESA = ['pix', 'dinheiro', 'cartao_credito', 'cartao_debito', 'boleto', 'transferencia'];
+export const FORMAS_LANCAMENTO = ['pix', 'dinheiro', 'cartao_credito', 'cartao_debito', 'boleto', 'transferencia'];
+export const FORMAS_ATENDIMENTO = ['pix', 'dinheiro', 'cartao_credito', 'cartao_debito'];
+
+// Despesa ou receita avulsa (lançadas à mão no Financeiro).
+export function ehLancamento(linha) {
+  return linha.origem === 'despesa' || linha.origem === 'receita';
+}
 
 export const ROTULO_PAPEL = { admin: tr('Administração'), recepcao: tr('Recepção'), super_admin: tr('Suporte'), profissional: tr('Profissional') };
 
@@ -85,7 +101,7 @@ export function textoVariacao(atual, anterior, periodo) {
 
 // Texto das formas de pagamento de um lançamento do extrato.
 export function textoDaForma(linha) {
-  if (linha.origem === 'despesa') return linha.formaPagamento ? ROTULO_FORMA[linha.formaPagamento] ?? linha.formaPagamento : '—';
+  if (ehLancamento(linha)) return linha.formaPagamento ? ROTULO_FORMA[linha.formaPagamento] ?? linha.formaPagamento : '—';
   if (linha.origem === 'repasse') return '—';
   if (linha.formas?.length) return linha.formas.map((f) => ROTULO_FORMA[f.tipo] ?? f.tipo).join(' + ');
   if (linha.situacao === 'convenio') return tr('Convênio');
@@ -96,7 +112,7 @@ export function textoDaForma(linha) {
 // Situação do lançamento: texto e cor do selo.
 export function situacaoDaLinha(linha) {
   switch (linha.situacao) {
-    case 'pago': return { texto: linha.origem === 'atendimento' ? tr('Recebido') : tr('Pago'), tom: 'success' };
+    case 'pago': return { texto: linha.tipo === 'entrada' ? tr('Recebido') : tr('Pago'), tom: 'success' };
     case 'a_receber': return { texto: tr('A receber'), tom: 'warning' };
     case 'a_pagar': return { texto: tr('A pagar'), tom: 'warning' };
     case 'vencida': return { texto: tr('Vencida'), tom: 'danger' };

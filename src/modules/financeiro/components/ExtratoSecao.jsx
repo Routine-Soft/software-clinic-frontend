@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
-import { IconeBusca } from '@/components/CrudCard/icones';
+import { IconeBusca, IconeCheck, IconeLapis, IconeLixeira, IconeMais, IconeX } from '@/components/CrudCard/icones';
 import {
-  baixarExtratoCsv, descricaoDaLinha, dinheiro, formatarDia, responsavelDaLinha, ROTULO_CATEGORIA, situacaoDaLinha, textoDaForma,
+  baixarExtratoCsv, descricaoDaLinha, dinheiro, ehLancamento, formatarDia, responsavelDaLinha, ROTULO_CATEGORIA, situacaoDaLinha, textoDaForma,
 } from '../financeiro.utils';
 import { tr } from '@/i18n';
 
@@ -16,12 +16,55 @@ function detalheDaLinha(l) {
   if (l.origem === 'atendimento') {
     return [l.servico, l.convenio && l.convenio.toLowerCase() !== 'particular' ? tr('Convênio {p0}', { p0: l.convenio }) : null, l.importado ? tr('importado') : null].filter(Boolean).join(' · ');
   }
-  if (l.origem === 'despesa') return [ROTULO_CATEGORIA[l.categoria] ?? l.categoria, l.fornecedor].filter(Boolean).join(' · ');
+  if (ehLancamento(l)) return [ROTULO_CATEGORIA[l.categoria] ?? l.categoria, l.fornecedor, l.recorrente ? tr('mensal') : null].filter(Boolean).join(' · ');
   return l.quantidade === 1 ? tr('1 atendimento') : tr('{n} atendimentos', { n: l.quantidade });
 }
 
+const PERGUNTA_EXCLUIR = {
+  atendimento: tr('Excluir o atendimento? Ele sai da agenda também.'),
+  repasse: tr('Desfazer este pagamento? Os atendimentos voltam a ficar pendentes.'),
+};
+
+// Editar, pagar/receber e excluir, com a confirmação no próprio lugar.
+function AcoesDaLinha({ linha, ocupado, onEditar, onPagar, onExcluir }) {
+  const [confirmando, setConfirmando] = useState(false);
+  const nome = descricaoDaLinha(linha);
+
+  if (confirmando) {
+    return (
+      <div className="extrato-acoes extrato-acoes--confirmar">
+        <span>{PERGUNTA_EXCLUIR[linha.origem] ?? tr('Excluir?')}</span>
+        <button type="button" className="icon-btn icon-btn--danger" disabled={ocupado} aria-label={tr('Confirmar exclusão de {p0}', { p0: nome })} onClick={() => onExcluir(linha, false)}>
+          <IconeCheck />
+        </button>
+        {linha.recorrente && (
+          <button type="button" className="btn btn--ghost btn--sm" disabled={ocupado} onClick={() => onExcluir(linha, true)}>{tr('E as próximas')}</button>
+        )}
+        <button type="button" className="icon-btn" aria-label={tr('Cancelar')} onClick={() => setConfirmando(false)}><IconeX /></button>
+      </div>
+    );
+  }
+
+  const pago = linha.situacao === 'pago';
+  return (
+    <div className="extrato-acoes">
+      {ehLancamento(linha) && (
+        <button type="button" className={`btn btn--sm ${pago ? 'btn--ghost' : 'btn--primary'}`} disabled={ocupado} onClick={() => onPagar(linha, !pago)}>
+          {pago ? tr('Desfazer') : linha.tipo === 'entrada' ? tr('Receber') : tr('Pagar')}
+        </button>
+      )}
+      {linha.origem !== 'repasse' && (
+        <button type="button" className="icon-btn" aria-label={tr('Editar {p0}', { p0: nome })} onClick={() => onEditar(linha)}><IconeLapis /></button>
+      )}
+      <button type="button" className="icon-btn" aria-label={linha.origem === 'repasse' ? tr('Desfazer pagamento de {p0}', { p0: nome }) : tr('Excluir {p0}', { p0: nome })} onClick={() => setConfirmando(true)}>
+        <IconeLixeira />
+      </button>
+    </div>
+  );
+}
+
 // Todos os lançamentos do período: atendimentos (entradas), despesas e repasses pagos (saídas).
-export default function ExtratoSecao({ extrato, cortado, loading, nomeArquivo }) {
+export default function ExtratoSecao({ extrato, cortado, loading, nomeArquivo, ocupadoId, onNovo, onEditar, onPagar, onExcluir }) {
   const [filtro, setFiltro] = useState('tudo');
   const [busca, setBusca] = useState('');
   const [visiveis, setVisiveis] = useState(POR_PAGINA);
@@ -47,9 +90,14 @@ export default function ExtratoSecao({ extrato, cortado, loading, nomeArquivo })
     <section className="card financeiro-bloco financeiro-extrato" aria-labelledby="fin-extrato">
       <header className="financeiro-bloco__cab">
         <h3 id="fin-extrato" className="financeiro-bloco__titulo">{tr('Extrato')}</h3>
-        <button type="button" className="btn btn--ghost btn--sm" disabled={loading || linhas.length === 0} onClick={() => baixarExtratoCsv(linhas, nomeArquivo)}>
-          {tr('Baixar planilha')}
-        </button>
+        <div className="financeiro-bloco__botoes">
+          <button type="button" className="btn btn--ghost btn--sm" disabled={loading || linhas.length === 0} onClick={() => baixarExtratoCsv(linhas, nomeArquivo)}>
+            {tr('Baixar planilha')}
+          </button>
+          <button type="button" className="btn btn--primary btn--sm" onClick={onNovo}>
+            <IconeMais /> {tr('Novo lançamento')}
+          </button>
+        </div>
       </header>
 
       <div className="extrato-ferramentas">
@@ -90,6 +138,7 @@ export default function ExtratoSecao({ extrato, cortado, loading, nomeArquivo })
             <span>{tr('Situação')}</span>
             <span>{tr('Recebido/pago por')}</span>
             <span className="extrato-cabecalho__valor">{tr('Valor')}</span>
+            <span className="extrato-cabecalho__valor">{tr('Ações')}</span>
           </div>
           <ul className="extrato-lista">
             {linhas.slice(0, visiveis).map((l) => {
@@ -105,7 +154,7 @@ export default function ExtratoSecao({ extrato, cortado, loading, nomeArquivo })
                     <strong>{descricaoDaLinha(l)}</strong>
                     <span className="extrato-linha__sub">{detalheDaLinha(l)}</span>
                   </span>
-                  <span className="extrato-linha__campo" data-rotulo={tr('Profissional')} data-vazio={l.origem !== 'atendimento'}>{l.origem === 'atendimento' ? l.profissional ?? '—' : '—'}</span>
+                  <span className="extrato-linha__campo" data-rotulo={tr('Profissional')} data-vazio={ehLancamento(l)}>{ehLancamento(l) ? '—' : l.profissional ?? '—'}</span>
                   <span className="extrato-linha__campo" data-rotulo={tr('Forma')} data-vazio={textoDaForma(l) === '—'}>{textoDaForma(l)}</span>
                   <span className="extrato-linha__campo" data-rotulo={tr('Situação')}><span className={`badge badge--${situacao.tom}`}>{situacao.texto}</span></span>
                   <span className="extrato-linha__campo" data-rotulo={tr('Recebido/pago por')} data-vazio={!responsavel}>
@@ -120,6 +169,7 @@ export default function ExtratoSecao({ extrato, cortado, loading, nomeArquivo })
                     <strong className="extrato-valor" data-tipo={l.tipo}>{l.tipo === 'saida' ? '−' : '+'} {dinheiro(l.valor)}</strong>
                     {l.origem === 'atendimento' && l.repasse > 0 && <span className="extrato-linha__sub">{tr('repasse {p0}', { p0: dinheiro(l.repasse) })}</span>}
                   </span>
+                  <AcoesDaLinha linha={l} ocupado={ocupadoId === l._id} onEditar={onEditar} onPagar={onPagar} onExcluir={onExcluir} />
                 </li>
               );
             })}

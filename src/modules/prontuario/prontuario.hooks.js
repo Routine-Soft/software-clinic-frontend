@@ -8,6 +8,7 @@ import {
   salvarPerfilClinico,
   compartilharProntuario,
   getAcessoProntuario,
+  getProntuarioImpressao,
 } from "./prontuario.api";
 
 // Se o login pode abrir prontuários: só profissionais de saúde vinculados a um cadastro de profissional.
@@ -207,4 +208,20 @@ export function useProntuarios(pacienteId) {
     finalizarProntuario,
     refreshProntuarios,
   };
+}
+// Um atendimento para a página de impressão (#/prontuarios/:id/imprimir).
+export function useProntuarioImpressao(id) {
+  const [prontuario, setProntuario] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    let ignore = false;
+    getProntuarioImpressao(id)
+      .then(({ data }) => { if (!ignore) { setProntuario(data); setLoading(false); } })
+      .catch((err) => { if (!ignore) { setError(err); setLoading(false); } });
+    return () => { ignore = true; };
+  }, [id]);
+
+  return { prontuario, loading, error };
 }

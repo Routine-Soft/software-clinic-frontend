@@ -50,6 +50,7 @@ import AssinarTermo from '@/modules/termo/components/AssinarTermo'
 import AnamnesesPage from '@/modules/anamnese/components/AnamnesesPage'
 import ModeloAnamneseEditor from '@/modules/anamnese/components/ModeloAnamneseEditor'
 import AnamneseImpressao from '@/modules/anamnese/components/AnamneseImpressao'
+import ProntuarioImpressao from '@/modules/prontuario/components/ProntuarioImpressao'
 import ProtectedRoute from '@/components/ProtectedRoute'
 import WhatsappPage from '@/modules/whatsapp/components/WhatsappPage'
 import { HashRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
@@ -156,6 +157,15 @@ function App() {
                 <MainLayout>
                   <ModeloAnamneseEditor />
                 </MainLayout>
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/prontuarios/:id/imprimir"
+            element={
+              <ProtectedRoute requiredRoles={['admin', 'profissional', 'super_admin']}>
+                <ProntuarioImpressao />
               </ProtectedRoute>
             }
           />

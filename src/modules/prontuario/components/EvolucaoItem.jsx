@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { IconeMais } from '@/components/CrudCard/icones';
+import { Link } from 'react-router-dom';
+import { IconeMais, IconeImpressora } from '@/components/CrudCard/icones';
 import { formatDataBR } from '@/utils/date';
 import AcessoAtendimento from './AcessoAtendimento';
 import {
@@ -55,12 +56,19 @@ export default function EvolucaoItem({ prontuario, destaque = false, souAutor = 
             )}
           </div>
 
-          {souAutor && finalizado && !escrevendo && (
+          {finalizado && (
             <div className="pront-evolucao__acoes pront-no-print">
-              <button type="button" className="btn btn--ghost btn--sm" onClick={() => setEscrevendo(true)}>
-                <IconeMais />
-                {tr('Adendo')}
-              </button>
+              {/* Sem assinatura ICP-Brasil ainda: o profissional imprime a folha para assinar e carimbar. */}
+              <Link to={`/prontuarios/${prontuario._id}/imprimir`} target="_blank" className="btn btn--ghost btn--sm">
+                <IconeImpressora />
+                {tr('Imprimir')}
+              </Link>
+              {souAutor && !escrevendo && (
+                <button type="button" className="btn btn--ghost btn--sm" onClick={() => setEscrevendo(true)}>
+                  <IconeMais />
+                  {tr('Adendo')}
+                </button>
+              )}
             </div>
           )}
         </header>

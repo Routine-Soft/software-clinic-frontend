@@ -1272,3 +1272,134 @@
   background: var(--surface-2);
   border-radius: 10px;
 }
+
+/* ---------- Folha de impressão de um atendimento (#/prontuarios/:id/imprimir) ---------- */
+.pront-impressao {
+  display: grid;
+  gap: 16px;
+  max-width: 920px;
+  margin: 0 auto;
+  padding: 20px 16px 40px;
+}
+
+.pront-impressao__barra {
+  display: flex;
+  gap: 10px;
+  justify-content: space-between;
+}
+
+.pront-impressao__folha {
+  display: grid;
+  gap: 18px;
+  padding: clamp(18px, 4vw, 40px);
+}
+
+.pront-impressao__cab {
+  display: grid;
+  gap: 4px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--border);
+}
+
+.pront-impressao__cab h1 {
+  margin: 0 0 4px;
+  font-size: clamp(1.2rem, 3.5vw, 1.5rem);
+}
+
+.pront-impressao__cab p {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
+
+.pront-impressao__cab .pront-impressao__clinica {
+  color: var(--text);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.pront-impressao__conteudo {
+  display: grid;
+  gap: 14px;
+}
+
+.pront-impressao__conteudo .pront-texto p {
+  white-space: pre-wrap;
+  line-height: 1.5;
+}
+
+.pront-impressao__assinatura {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 24px;
+  align-items: end;
+  margin-top: 48px;
+  break-inside: avoid;
+}
+
+/* Espaço reservado para o carimbo. */
+.pront-impressao__carimbo {
+  width: 150px;
+  height: 90px;
+  border: 1px dashed var(--border);
+  border-radius: 10px;
+}
+
+.pront-impressao__linha {
+  display: grid;
+  gap: 2px;
+  padding-top: 6px;
+  border-top: 1px solid var(--text-muted);
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  text-align: center;
+}
+
+.pront-impressao__linha strong {
+  color: var(--text);
+  font-size: 0.9rem;
+}
+
+.pront-impressao__impresso {
+  grid-column: 1 / -1;
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  text-align: right;
+}
+
+@media (max-width: 560px) {
+  .pront-impressao__assinatura {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .pront-impressao__carimbo {
+    justify-self: center;
+  }
+}
+
+@media print {
+  body:has(.pront-impressao) {
+    background: #fff !important;
+  }
+
+  .pront-impressao,
+  .pront-impressao__folha {
+    max-width: none;
+    padding: 0;
+    border: 0;
+    background: #fff;
+    box-shadow: none;
+  }
+
+  .pront-impressao__folha,
+  .pront-impressao__cab p,
+  .pront-impressao__cab h1,
+  .pront-impressao__linha,
+  .pront-impressao__linha strong,
+  .pront-impressao__impresso {
+    color: #111;
+  }
+}

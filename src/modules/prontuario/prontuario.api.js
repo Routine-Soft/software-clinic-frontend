@@ -13,6 +13,12 @@ export async function getProntuarioById(id) {
   return response;
 }
 
+// Atendimento finalizado com o registro do profissional e o nome da clínica, para imprimir e carimbar.
+export async function getProntuarioImpressao(id) {
+  const response = await httpClient.get(`/prontuarios/${id}/impressao`);
+  return response;
+}
+
 export async function createProntuario(newProntuario) {
   const response = await httpClient.post('/prontuarios', newProntuario);
   return response;

@@ -455,4 +455,11 @@ export default {
   'Para as sessões': 'Para las sesiones',
   'Consultas e sessões oferecidas pela clínica': 'Consultas y sesiones ofrecidas por la clínica',
   'sugestão: {n}': 'sugerido: {n}',
+  'Registro de atendimento': 'Registro de atención',
+  'CPF: {cpf}': 'CPF: {cpf}',
+  'Atendimento: {data}': 'Atención: {data}',
+  'Duração: {tempo}': 'Duración: {tempo}',
+  'Convênio: {nome}': 'Convenio: {nome}',
+  'Assinatura e carimbo do(a) profissional': 'Firma y sello del/de la profesional',
+  'Impresso em {data}': 'Impreso el {data}',
 };

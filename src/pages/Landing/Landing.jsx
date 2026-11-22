@@ -54,8 +54,7 @@ function Hero({ logado }) {
             {L.titulo} <span className="lp-degrade">{L.destaque}</span>
           </h1>
           <p className="lp-hero__sub">
-            {L.sub} {L.subIa.antes} <strong className="lp-hero__ia">{L.subIa.sigla}</strong> {L.subIa.depois}{' '}
-            <span className="lp-hero__whats"><IconeWhatsapp /></span>
+            {L.sub}
           </p>
           <div className="lp-hero__acoes">
             {logado ? (
@@ -146,12 +145,8 @@ function Funcionalidades() {
         </header>
 
         <ul className="lp-recursos">
-          {t('landing.funcionalidades').map((f, i) => (
-            <li key={f.titulo} className="lp-recurso lp-revelar" style={{ '--i': i % 4 }}>
-              <span className="lp-recurso__icone"><IconeMenu nome={f.icone} /></span>
-              <h3>{f.titulo}</h3>
-              <p>{f.texto}</p>
-            </li>
+          {t('landing.funcionalidades').map((f) => (
+            <li key={f}><IconeCheck /> {f}</li>
           ))}
         </ul>
       </div>

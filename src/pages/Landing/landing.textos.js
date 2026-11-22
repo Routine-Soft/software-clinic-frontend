@@ -8,7 +8,6 @@ export default {
     imagens: '/landing',
     secoes: [
       ['funcionalidades', 'Funcionalidades'],
-      ['troca-de-sistema', 'Migração'],
       ['como-funciona', 'Como funciona'],
       ['precos', 'Preços'],
       ['duvidas', 'Dúvidas'],
@@ -74,20 +73,6 @@ export default {
       'Usuários e permissões',
       'Painel guiado',
     ],
-    troca: {
-      selo: 'Vem de outro sistema?',
-      titulo: 'Troque de sistema sem perder nada',
-      texto: 'Exporte os dados do sistema que você usa hoje em Excel ou CSV e importe na Sonelia em poucos minutos, sem digitar tudo de novo.',
-      listaTitulo: 'O que você traz',
-      itens: ['Pacientes, com CPF, contato, convênio e responsável', 'Profissionais e logins da equipe', 'Histórico de consultas, com valor e situação', 'Prontuários e evoluções, com o profissional como autor', 'Serviços, salas, especialidades e convênios'],
-      pontos: [
-        { titulo: 'Do jeito que o sistema antigo exporta', texto: 'As colunas são reconhecidas pelo nome: você só confere e ajusta.' },
-        { titulo: 'Sem duplicar nada', texto: 'Importou de novo? O que já entrou é ignorado.' },
-        { titulo: 'Você vê o que não entrou', texto: 'Cada linha com problema aparece com o motivo, para corrigir e enviar de novo.' },
-        { titulo: 'O prontuário continua sigiloso', texto: 'Cada atendimento fica com o profissional que o escreveu e a importação vai para a auditoria.' },
-      ],
-      comecar: 'Começar grátis e importar',
-    },
     passosCab: { selo: 'Como funciona', titulo: 'Comece hoje, em três passos', criar: 'Criar minha conta grátis' },
     passos: [
       { titulo: 'Crie sua conta', texto: 'Leva dois minutos e não pede cartão de crédito. Dá para entrar com o Google.' },
@@ -172,7 +157,6 @@ export default {
     imagens: '/landing/en',
     secoes: [
       ['funcionalidades', 'Features'],
-      ['troca-de-sistema', 'Switching'],
       ['como-funciona', 'How it works'],
       ['precos', 'Pricing'],
       ['duvidas', 'FAQ'],
@@ -237,20 +221,6 @@ export default {
       'Users and permissions',
       'Guided panel',
     ],
-    troca: {
-      selo: 'Coming from another system?',
-      titulo: 'Switch systems without losing anything',
-      texto: 'Export your data from the system you use today as Excel or CSV and import it into Sonelia in a few minutes, without typing everything again.',
-      listaTitulo: 'What you bring',
-      itens: ['Patients, with ID number, contact, insurance plan and guardian', 'Practitioners and team logins', 'Appointment history, with price and status', 'Health records and progress notes, with the practitioner as author', 'Services, rooms, specialties and insurance plans'],
-      pontos: [
-        { titulo: 'The way your old system exports it', texto: 'Columns are recognized by name: you just check and adjust.' },
-        { titulo: 'No duplicates', texto: 'Imported again? What is already there is skipped.' },
-        { titulo: 'You see what did not go in', texto: 'Every row with a problem is listed with the reason, so you can fix it and send it again.' },
-        { titulo: 'Health records stay confidential', texto: 'Each session stays with the practitioner who wrote it and the import is recorded in the audit log.' },
-      ],
-      comecar: 'Start free and import',
-    },
     passosCab: { selo: 'How it works', titulo: 'Get started today in three steps', criar: 'Create my free account' },
     passos: [
       { titulo: 'Create your account', texto: 'It takes two minutes and no credit card. You can sign in with Google.' },
@@ -332,7 +302,6 @@ export default {
     imagens: '/landing/en',
     secoes: [
       ['funcionalidades', 'Funciones'],
-      ['troca-de-sistema', 'Migración'],
       ['como-funciona', 'Cómo funciona'],
       ['precos', 'Precios'],
       ['duvidas', 'Preguntas'],
@@ -397,20 +366,6 @@ export default {
       'Usuarios y permisos',
       'Panel guiado',
     ],
-    troca: {
-      selo: '¿Vienes de otro sistema?',
-      titulo: 'Cambia de sistema sin perder nada',
-      texto: 'Exporta los datos del sistema que usas hoy en Excel o CSV e impórtalos en Sonelia en pocos minutos, sin volver a escribir todo.',
-      listaTitulo: 'Lo que traes',
-      itens: ['Pacientes, con documento, contacto, seguro médico y responsable', 'Profesionales y accesos del equipo', 'Historial de citas, con valor y estado', 'Historias clínicas y evoluciones, con el profesional como autor', 'Servicios, salas, especialidades y seguros médicos'],
-      pontos: [
-        { titulo: 'Tal como lo exporta tu sistema anterior', texto: 'Las columnas se reconocen por el nombre: solo revisas y ajustas.' },
-        { titulo: 'Sin duplicar nada', texto: '¿Importaste de nuevo? Lo que ya estaba se omite.' },
-        { titulo: 'Ves lo que no entró', texto: 'Cada fila con problema aparece con el motivo, para corregirla y enviarla de nuevo.' },
-        { titulo: 'La historia clínica sigue siendo confidencial', texto: 'Cada atención queda con el profesional que la escribió y la importación queda en la auditoría.' },
-      ],
-      comecar: 'Empezar gratis e importar',
-    },
     passosCab: { selo: 'Cómo funciona', titulo: 'Empieza hoy en tres pasos', criar: 'Crear mi cuenta gratis' },
     passos: [
       { titulo: 'Crea tu cuenta', texto: 'Toma dos minutos y no pide tarjeta. Puedes entrar con Google.' },
